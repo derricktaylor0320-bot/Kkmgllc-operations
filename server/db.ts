@@ -1,20 +1,19 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
+import pg from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "@shared/schema";
 import * as fs from "fs";
 import { sql } from "drizzle-orm";
 
-neonConfig.webSocketConstructor = ws;
+const { Pool } = pg;
 
 function getDatabaseUrl(): string {
-  // For production deployments, check /tmp/replitdb first
+  // For Replit production deployments, check /tmp/replitdb first
   try {
-    const replitDbPath = '/tmp/replitdb';
+    const replitDbPath = "/tmp/replitdb";
     if (fs.existsSync(replitDbPath)) {
-      const url = fs.readFileSync(replitDbPath, 'utf-8').trim();
+      const url = fs.readFileSync(replitDbPath, "utf-8").trim();
       if (url) {
-        console.log('Using database URL from /tmp/replitdb');
+        console.log("Using database URL from /tmp/replitdb");
         return url;
       }
     }
@@ -22,9 +21,9 @@ function getDatabaseUrl(): string {
     // Ignore errors reading the file
   }
 
-  // Fall back to environment variable
+  // Fall back to environment variable (Railway, Neon, local, etc.)
   if (process.env.DATABASE_URL) {
-    console.log('Using database URL from environment variable');
+    console.log("Using database URL from environment variable");
     return process.env.DATABASE_URL;
   }
 
@@ -33,8 +32,33 @@ function getDatabaseUrl(): string {
   );
 }
 
+// Decide whether to use SSL based on the connection target.
+// Internal/local hosts (Railway private network, localhost) don't use SSL;
+// hosted providers (Neon, Replit, Railway public proxy) require it.
+function shouldUseSSL(url: string): boolean {
+  if (/sslmode=disable/.test(url)) return false;
+  try {
+    const host = new URL(url).hostname;
+    if (
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      host.endsWith(".railway.internal")
+    ) {
+      return false;
+    }
+  } catch (e) {
+    // If parsing fails, default to SSL for safety with hosted databases
+  }
+  return true;
+}
+
 const databaseUrl = getDatabaseUrl();
-export const pool = new Pool({ connectionString: databaseUrl });
+
+export const pool = new Pool({
+  connectionString: databaseUrl,
+  ssl: shouldUseSSL(databaseUrl) ? { rejectUnauthorized: false } : undefined,
+});
+
 export const db = drizzle({ client: pool, schema });
 
 export async function ensureTablesExist() {
@@ -47,8 +71,8 @@ export async function ensureTablesExist() {
         created_at TIMESTAMP DEFAULT NOW()
       )
     `);
-    console.log('Database tables verified/created');
+    console.log("Database tables verified/created");
   } catch (error) {
-    console.error('Error ensuring tables exist:', error);
+    console.error("Error ensuring tables exist:", error);
   }
 }

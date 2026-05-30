@@ -50,16 +50,32 @@ async function initStripe() {
 
     const stripeSync = await getStripeSync();
 
-    console.log('Setting up managed webhook...');
-    const webhookBaseUrl = `https://${process.env.REPLIT_DOMAINS?.split(',')[0]}`;
-    const { webhook, uuid } = await stripeSync.findOrCreateManagedWebhook(
-      `${webhookBaseUrl}/api/stripe/webhook`,
-      {
-        enabled_events: ['*'],
-        description: 'Managed webhook for Stripe sync',
-      }
-    );
-    console.log(`Webhook configured: ${webhook.url} (UUID: ${uuid})`);
+    // Determine the public URL for the Stripe webhook.
+    // On Railway/other hosts set APP_URL (e.g. https://your-app.up.railway.app).
+    // On Replit, REPLIT_DOMAINS is provided automatically.
+    const explicitUrl = process.env.APP_URL || process.env.PUBLIC_URL;
+    const replitDomain = process.env.REPLIT_DOMAINS?.split(',')[0];
+    const webhookBaseUrl = explicitUrl
+      ? explicitUrl.replace(/\/$/, '')
+      : replitDomain
+        ? `https://${replitDomain}`
+        : '';
+
+    if (!webhookBaseUrl) {
+      console.warn(
+        'No public URL configured (set APP_URL) — skipping Stripe webhook setup. Data sync will still run.',
+      );
+    } else {
+      console.log('Setting up managed webhook...');
+      const { webhook, uuid } = await stripeSync.findOrCreateManagedWebhook(
+        `${webhookBaseUrl}/api/stripe/webhook`,
+        {
+          enabled_events: ['*'],
+          description: 'Managed webhook for Stripe sync',
+        }
+      );
+      console.log(`Webhook configured: ${webhook.url} (UUID: ${uuid})`);
+    }
 
     console.log('Starting Stripe data sync in background...');
     stripeSync.syncBackfill()
