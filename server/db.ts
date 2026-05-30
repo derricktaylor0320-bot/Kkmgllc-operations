@@ -54,9 +54,15 @@ function shouldUseSSL(url: string): boolean {
 
 const databaseUrl = getDatabaseUrl();
 
+// Shared SSL config so the main pool, Stripe migrations, and Stripe sync
+// all connect the same way (important for hosted Postgres like Railway/Neon).
+export const dbSsl = shouldUseSSL(databaseUrl)
+  ? { rejectUnauthorized: false }
+  : undefined;
+
 export const pool = new Pool({
   connectionString: databaseUrl,
-  ssl: shouldUseSSL(databaseUrl) ? { rejectUnauthorized: false } : undefined,
+  ssl: dbSsl,
 });
 
 export const db = drizzle({ client: pool, schema });

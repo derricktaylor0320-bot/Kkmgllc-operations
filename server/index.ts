@@ -5,7 +5,7 @@ import { createServer } from "http";
 import { runMigrations } from 'stripe-replit-sync';
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
-import { ensureTablesExist } from "./db";
+import { ensureTablesExist, dbSsl } from "./db";
 import * as fs from 'fs';
 
 const app = express();
@@ -44,7 +44,7 @@ async function initStripe() {
     console.log('Initializing Stripe schema...');
     await runMigrations({ 
       databaseUrl,
-      schema: 'stripe'
+      ssl: dbSsl,
     });
     console.log('Stripe schema ready');
 

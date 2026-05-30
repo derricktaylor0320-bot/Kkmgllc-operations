@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import * as fs from 'fs';
+import { dbSsl } from './db';
 
 let connectionSettings: any;
 
@@ -99,6 +100,7 @@ export async function getStripeSync() {
     stripeSync = new StripeSync({
       poolConfig: {
         connectionString: getDatabaseUrl(),
+        ssl: dbSsl,
         max: 2,
       },
       stripeSecretKey: secretKey,
