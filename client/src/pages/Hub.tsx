@@ -51,12 +51,18 @@ export default function Hub() {
   const points = useRef(fibonacciSphere(APPS.length));
 
   useEffect(() => {
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduceMotion) return;
     let raf = 0;
     let last = performance.now();
     const loop = (t: number) => {
       const dt = (t - last) / 1000;
       last = t;
-      if (!pausedRef.current) setAngle((a) => a + dt * 0.35);
+      if (!pausedRef.current && document.visibilityState === "visible") {
+        setAngle((a) => a + dt * 0.35);
+      }
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
@@ -145,7 +151,7 @@ export default function Hub() {
                   onClick={() => setLocation(n.href)}
                   onMouseEnter={() => setHovered(n.href)}
                   onMouseLeave={() => setHovered(null)}
-                  className="absolute left-1/2 top-1/2 flex flex-col items-center gap-1.5 focus:outline-none"
+                  className="absolute left-1/2 top-1/2 flex flex-col items-center gap-1.5 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   style={{
                     transform: `translate(-50%, -50%) translate(${n.left}px, ${n.top}px) scale(${
                       isHover ? n.scale * 1.25 : n.scale
