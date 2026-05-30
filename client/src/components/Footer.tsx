@@ -26,7 +26,7 @@ export default function Footer() {
               <li><Link href="/canvas" className="hover:text-primary transition-colors">Our Story</Link></li>
               <li><Link href="/apparel" className="hover:text-primary transition-colors">Apparel</Link></li>
               <li><Link href="/accessories" className="hover:text-primary transition-colors">Accessories</Link></li>
-              <li><Link href="/studio" className="hover:text-primary transition-colors">Studio</Link></li>
+              <li><Link href="/hub" className="hover:text-primary transition-colors">Centralized Hub</Link></li>
             </ul>
           </div>
 

@@ -12,13 +12,13 @@ export default function Navbar() {
 
   const links = [
     { href: "/", label: "Home" },
+    { href: "/hub", label: "Centralized Hub" },
     { href: "/about", label: "About Us" },
     { href: "/canvas", label: "Branded Logo Collection" },
     { href: "/apparel", label: "Apparel" },
     { href: "/accessories", label: "Accessories" },
     { href: "/vintage", label: "Vintage Baltimore" },
     { href: "/poetry", label: "Poetry on a Plaque" },
-    { href: "/studio", label: "Studio" },
     { href: "/fr2p", label: "The FR2P Club" },
     { href: "/guardconnect", label: "GuardConnect" },
     { href: "/pocket-booster", label: "Pocket Booster" },
