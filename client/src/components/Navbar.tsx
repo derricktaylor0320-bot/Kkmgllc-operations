@@ -21,6 +21,8 @@ export default function Navbar() {
     { href: "/studio", label: "Studio" },
     { href: "/fr2p", label: "The FR2P Club" },
     { href: "/guardconnect", label: "GuardConnect" },
+    { href: "/pocket-booster", label: "Pocket Booster" },
+    { href: "/prospect-identity", label: "Prospect Identity" },
   ];
 
   return (
@@ -32,12 +34,12 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6 mx-6 flex-1 min-w-0 overflow-x-auto">
           {links.map((link) => (
             <Link 
               key={link.href} 
               href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-primary uppercase tracking-widest ${
+              className={`text-sm font-medium transition-colors hover:text-primary uppercase tracking-widest whitespace-nowrap shrink-0 ${
                 location === link.href ? "text-primary" : "text-muted-foreground"
               }`}
             >

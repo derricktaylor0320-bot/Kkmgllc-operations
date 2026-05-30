@@ -12,6 +12,8 @@ import Apparel from "@/pages/Apparel";
 import Accessories from "@/pages/Accessories";
 import Studio from "@/pages/Studio";
 import GuardConnect from "@/pages/GuardConnect";
+import PocketBooster from "@/pages/PocketBooster";
+import ProspectIdentity from "@/pages/ProspectIdentity";
 import CheckoutSuccess from "@/pages/CheckoutSuccess";
 import CheckoutCancel from "@/pages/CheckoutCancel";
 import LogoCustomizer from "@/pages/LogoCustomizer";
@@ -29,6 +31,8 @@ function Router() {
       <Route path="/customize/:logoId" component={LogoCustomizer} />
       <Route path="/fr2p" component={FR2P} />
       <Route path="/guardconnect" component={GuardConnect} />
+      <Route path="/pocket-booster" component={PocketBooster} />
+      <Route path="/prospect-identity" component={ProspectIdentity} />
       <Route path="/apparel" component={Apparel} />
       <Route path="/accessories" component={Accessories} />
       <Route path="/studio" component={Studio} />
