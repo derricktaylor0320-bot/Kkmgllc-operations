@@ -1,6 +1,12 @@
-import type { CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link, useLocation } from "wouter";
-import { Compass, LogIn, LogOut, User as UserIcon } from "lucide-react";
+import {
+  ChevronDown,
+  Compass,
+  LogIn,
+  LogOut,
+  User as UserIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -22,13 +28,28 @@ type CompassNavigationProps = {
 };
 
 type CompassLinkStyle = CSSProperties & {
-  "--angle": string;
-  "--counter-angle": string;
+  "--base-angle": string;
+  "--base-counter-angle": string;
   "--distance": string;
 };
 
 const START_ANGLE = -90;
 const FULL_CIRCLE = 360;
+const ROTATION_DEGREES_PER_SECOND = 8;
+const POINTER_WINDOW_RATIO = 0.3;
+
+function getPointedIndex(rotation: number, linkCount: number) {
+  const step = FULL_CIRCLE / linkCount;
+  const candidate =
+    ((Math.round(-rotation / step) % linkCount) + linkCount) % linkCount;
+  const candidateAngle = candidate * step + rotation;
+  const distanceFromPointer =
+    ((candidateAngle + 180) % FULL_CIRCLE + FULL_CIRCLE) % FULL_CIRCLE - 180;
+
+  return Math.abs(distanceFromPointer) <= step * POINTER_WINDOW_RATIO
+    ? candidate
+    : null;
+}
 
 export default function CompassNavigation({
   accountName,
@@ -38,6 +59,73 @@ export default function CompassNavigation({
   onOpenChange,
 }: CompassNavigationProps) {
   const [location] = useLocation();
+  const compassRoseRef = useRef<HTMLDivElement>(null);
+  const rotationRef = useRef(0);
+  const pausedRef = useRef(false);
+  const [pointedIndex, setPointedIndex] = useState<number | null>(0);
+
+  useEffect(() => {
+    pausedRef.current = false;
+
+    if (!isOpen) {
+      return;
+    }
+
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (motionQuery.matches) {
+      rotationRef.current = 0;
+      compassRoseRef.current?.style.setProperty("--compass-rotation", "0deg");
+      compassRoseRef.current?.style.setProperty(
+        "--compass-counter-rotation",
+        "0deg",
+      );
+      setPointedIndex(0);
+      return;
+    }
+
+    let animationFrame = 0;
+    let previousTime: number | null = null;
+
+    const rotateCompass = (time: number) => {
+      if (previousTime === null) {
+        previousTime = time;
+      }
+
+      const elapsed = Math.min(time - previousTime, 64);
+      previousTime = time;
+
+      if (!pausedRef.current) {
+        const rotation =
+          (rotationRef.current +
+            (elapsed * ROTATION_DEGREES_PER_SECOND) / 1000) %
+          FULL_CIRCLE;
+        rotationRef.current = rotation;
+
+        compassRoseRef.current?.style.setProperty(
+          "--compass-rotation",
+          `${rotation}deg`,
+        );
+        compassRoseRef.current?.style.setProperty(
+          "--compass-counter-rotation",
+          `${-rotation}deg`,
+        );
+
+        const nextPointedIndex = getPointedIndex(rotation, SITE_LINKS.length);
+        setPointedIndex((currentIndex) =>
+          currentIndex === nextPointedIndex ? currentIndex : nextPointedIndex,
+        );
+      }
+
+      animationFrame = window.requestAnimationFrame(rotateCompass);
+    };
+
+    animationFrame = window.requestAnimationFrame(rotateCompass);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      pausedRef.current = false;
+    };
+  }, [isOpen]);
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -71,7 +159,8 @@ export default function CompassNavigation({
               Explore the Empire
             </SheetTitle>
             <SheetDescription className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:text-xs">
-              {SITE_LINKS.length} destinations — choose any golden point
+              {SITE_LINKS.length} destinations — follow the golden pointer or
+              choose any point
             </SheetDescription>
           </SheetHeader>
 
@@ -79,7 +168,20 @@ export default function CompassNavigation({
             className="flex min-h-0 flex-1 items-center justify-center"
             aria-label="Empire compass"
           >
-            <div className="compass-rose" data-testid="compass-rose">
+            <div
+              ref={compassRoseRef}
+              className="compass-rose"
+              data-testid="compass-rose"
+            >
+              <div
+                className="compass-pointer"
+                aria-hidden="true"
+                data-testid="compass-pointer"
+              >
+                <ChevronDown />
+              </div>
+              <div className="compass-pointer-axis" aria-hidden="true" />
+
               <svg
                 viewBox="0 0 100 100"
                 className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
@@ -118,32 +220,34 @@ export default function CompassNavigation({
                   strokeDasharray="1.4 1.4"
                 />
 
-                {SITE_LINKS.map((link, index) => {
-                  const angle =
-                    START_ANGLE + (index * FULL_CIRCLE) / SITE_LINKS.length;
-                  const radians = (angle * Math.PI) / 180;
-                  const endX = 50 + Math.cos(radians) * 44;
-                  const endY = 50 + Math.sin(radians) * 44;
+                <g className="compass-rotating-rays">
+                  {SITE_LINKS.map((link, index) => {
+                    const angle =
+                      START_ANGLE + (index * FULL_CIRCLE) / SITE_LINKS.length;
+                    const radians = (angle * Math.PI) / 180;
+                    const endX = 50 + Math.cos(radians) * 44;
+                    const endY = 50 + Math.sin(radians) * 44;
 
-                  return (
-                    <g key={link.href}>
-                      <line
-                        x1="50"
-                        y1="50"
-                        x2={endX}
-                        y2={endY}
-                        stroke="url(#compassRay)"
-                        strokeWidth={index % 2 === 0 ? "0.42" : "0.25"}
-                      />
-                      <circle
-                        cx={endX}
-                        cy={endY}
-                        r={index % 2 === 0 ? "0.9" : "0.65"}
-                        fill="hsl(var(--primary))"
-                      />
-                    </g>
-                  );
-                })}
+                    return (
+                      <g key={link.href}>
+                        <line
+                          x1="50"
+                          y1="50"
+                          x2={endX}
+                          y2={endY}
+                          stroke="url(#compassRay)"
+                          strokeWidth={index % 2 === 0 ? "0.42" : "0.25"}
+                        />
+                        <circle
+                          cx={endX}
+                          cy={endY}
+                          r={index % 2 === 0 ? "0.9" : "0.65"}
+                          fill="hsl(var(--primary))"
+                        />
+                      </g>
+                    );
+                  })}
+                </g>
               </svg>
 
               <div className="compass-center" aria-hidden="true">
@@ -160,14 +264,15 @@ export default function CompassNavigation({
                 const angle =
                   START_ANGLE + (index * FULL_CIRCLE) / SITE_LINKS.length;
                 const style: CompassLinkStyle = {
-                  "--angle": `${angle}deg`,
-                  "--counter-angle": `${-angle}deg`,
+                  "--base-angle": `${angle}deg`,
+                  "--base-counter-angle": `${-angle}deg`,
                   "--distance":
                     index % 2 === 0
                       ? "var(--compass-outer-radius)"
                       : "var(--compass-inner-radius)",
                 };
                 const isActive = location === link.href;
+                const isPointed = pointedIndex === index;
 
                 return (
                   <Link
@@ -175,14 +280,25 @@ export default function CompassNavigation({
                     href={link.href}
                     style={style}
                     className={`compass-nav-link ${
-                      isActive
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-primary/55 bg-background/90 text-primary hover:border-primary hover:bg-primary hover:text-primary-foreground"
-                    }`}
+                      isPointed ? "compass-nav-link-pointed" : ""
+                    } ${isActive ? "compass-nav-link-current" : ""}`}
+                    onMouseEnter={() => {
+                      pausedRef.current = true;
+                    }}
+                    onMouseLeave={() => {
+                      pausedRef.current = false;
+                    }}
+                    onFocus={() => {
+                      pausedRef.current = true;
+                    }}
+                    onBlur={() => {
+                      pausedRef.current = false;
+                    }}
                     onClick={() => onOpenChange(false)}
                     aria-label={`${index + 1}. ${link.label}`}
                     aria-current={isActive ? "page" : undefined}
                     title={link.label}
+                    data-pointer-active={isPointed ? "true" : "false"}
                     data-testid={`link-compass-${link.href === "/" ? "home" : link.href.slice(1)}`}
                   >
                     <span className="compass-link-number">

@@ -182,6 +182,8 @@
   .compass-rose {
     --compass-outer-radius: 40cqw;
     --compass-inner-radius: 27cqw;
+    --compass-rotation: 0deg;
+    --compass-counter-rotation: 0deg;
     container-type: size;
     position: relative;
     width: min(92vw, calc(100dvh - 9.5rem), 46rem);
@@ -189,6 +191,65 @@
     min-width: 17rem;
     min-height: 17rem;
     isolation: isolate;
+  }
+
+  .compass-pointer {
+    position: absolute;
+    left: 50%;
+    top: -0.5rem;
+    z-index: 40;
+    display: grid;
+    width: clamp(1.8rem, 6cqw, 2.6rem);
+    height: clamp(1.8rem, 6cqw, 2.6rem);
+    transform: translateX(-50%);
+    place-items: center;
+    border: 1px solid hsl(var(--primary) / 0.8);
+    border-radius: 9999px;
+    background: hsl(var(--background) / 0.95);
+    color: hsl(var(--primary));
+    filter: drop-shadow(0 0 0.7rem hsl(var(--primary) / 0.7));
+    pointer-events: none;
+    animation: compass-pointer-pulse 1.8s ease-in-out infinite;
+  }
+
+  .compass-pointer svg {
+    width: 70%;
+    height: 70%;
+    stroke-width: 3;
+  }
+
+  .compass-pointer-axis {
+    position: absolute;
+    left: 50%;
+    top: clamp(1.6rem, 4.6cqw, 2.3rem);
+    bottom: 50%;
+    z-index: 15;
+    width: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--primary) / 0.9),
+      hsl(var(--primary) / 0.12) 72%,
+      transparent
+    );
+    box-shadow: 0 0 0.55rem hsl(var(--primary) / 0.48);
+    pointer-events: none;
+  }
+
+  @keyframes compass-pointer-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0.1);
+    }
+    50% {
+      box-shadow: 0 0 0 0.35rem hsl(var(--primary) / 0.16);
+    }
+  }
+
+  .compass-rotating-rays {
+    transform: rotate(var(--compass-rotation));
+    transform-origin: 50px 50px;
+    will-change: transform;
   }
 
   .compass-center {
@@ -222,14 +283,18 @@
     min-height: clamp(2rem, 7.5cqw, 2.8rem);
     transform:
       translate(-50%, -50%)
-      rotate(var(--angle))
+      rotate(calc(var(--base-angle) + var(--compass-rotation)))
       translateX(var(--distance))
-      rotate(var(--counter-angle));
+      rotate(
+        calc(var(--base-counter-angle) + var(--compass-counter-rotation))
+      );
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
-    border-width: 1px;
+    border: 1px solid hsl(var(--primary) / 0.55);
     border-radius: 9999px;
+    background: hsl(var(--background) / 0.9);
+    color: hsl(var(--primary));
     padding: 0.2rem 0.35rem;
     text-align: center;
     font-family: var(--font-display);
@@ -238,19 +303,47 @@
     line-height: 1.05;
     letter-spacing: 0.035em;
     text-transform: uppercase;
+    opacity: 0.28;
+    filter: saturate(0.55);
     box-shadow:
       0 0.2rem 0.8rem hsl(var(--background) / 0.75),
       0 0 1rem hsl(var(--primary) / 0.12);
     transition:
+      opacity 180ms ease,
+      filter 180ms ease,
       color 180ms ease,
       background-color 180ms ease,
       border-color 180ms ease,
       box-shadow 180ms ease;
+    will-change: transform;
+  }
+
+  .compass-nav-link-pointed {
+    z-index: 30;
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    opacity: 1;
+    filter: none;
+    box-shadow:
+      0 0 0 0.12rem hsl(var(--background)),
+      0 0 0 0.24rem hsl(var(--primary)),
+      0 0 1.6rem hsl(var(--primary) / 0.65);
+  }
+
+  .compass-nav-link-current:not(.compass-nav-link-pointed) {
+    border-color: hsl(var(--primary) / 0.8);
+    opacity: 0.48;
   }
 
   .compass-nav-link:hover,
   .compass-nav-link:focus-visible {
     z-index: 30;
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    opacity: 1;
+    filter: none;
     box-shadow:
       0 0 0 0.12rem hsl(var(--background)),
       0 0 0 0.24rem hsl(var(--primary)),
@@ -270,6 +363,12 @@
     .compass-rose {
       min-width: 15rem;
       min-height: 15rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .compass-pointer {
+      animation: none;
     }
   }
 
