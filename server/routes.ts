@@ -673,6 +673,7 @@ export async function registerRoutes(
             productType: metadata.productType || 'general',
             sortOrder: parseInt(metadata.sortOrder || '99'),
             soldOut: metadata.soldOut === 'true',
+            comingSoon: metadata.comingSoon === 'true',
             gender: metadata.gender || null,
             logoOptions: metadata.logoOptions || (isDefaultLogoCustomizable(metadata) ? FULL_LOGO_CATALOG_OPTION : null),
             colors: metadata.colors || null,
@@ -759,6 +760,11 @@ export async function registerRoutes(
       if (productMetadata.soldOut === 'true') {
         return res.status(400).json({
           error: `"${(priceRow.product_name as string) || productName || "This item"}" is sold out.`,
+        });
+      }
+      if (productMetadata.comingSoon === 'true') {
+        return res.status(400).json({
+          error: `"${(priceRow.product_name as string) || productName || "This item"}" is coming soon.`,
         });
       }
       const check = checkCustomization(productMetadata, selectedLogo, req.body?.selectedColor, req.body?.selectedSize, priceRow.product_name, req.body?.selectedScent);
@@ -960,6 +966,11 @@ export async function registerRoutes(
         if (productMetadata.soldOut === 'true') {
           return res.status(400).json({
             error: `"${priceRow.product_name || "One of your items"}" is sold out.`,
+          });
+        }
+        if (productMetadata.comingSoon === 'true') {
+          return res.status(400).json({
+            error: `"${priceRow.product_name || "One of your items"}" is coming soon.`,
           });
         }
         const check = checkCustomization(productMetadata, item?.selectedLogo, item?.selectedColor, item?.selectedSize, priceRow.product_name, item?.selectedScent);
