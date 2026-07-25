@@ -60,6 +60,7 @@ export default function Elements() {
                 image={product.imageUrl}
                 priceId={product.priceId}
                 soldOut={product.soldOut}
+                comingSoon={product.comingSoon}
                 description={product.description}
                 logoOptions={product.logoOptions}
                 handleColors={product.handleColors}

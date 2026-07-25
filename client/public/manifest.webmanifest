@@ -1,0 +1,53 @@
+{
+  "id": "/",
+  "name": "The Consolidatus Empire",
+  "short_name": "TCE Empire",
+  "description": "The home of Khomplete Khemistri apparel, accessories, programs, and Empire experiences.",
+  "start_url": "/hub?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#2c170f",
+  "theme_color": "#2c170f",
+  "categories": ["shopping", "business", "lifestyle"],
+  "icons": [
+    {
+      "src": "/pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Empire Directory",
+      "short_name": "Directory",
+      "url": "/hub?source=shortcut",
+      "icons": [
+        {
+          "src": "/pwa-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Shop Apparel",
+      "short_name": "Apparel",
+      "url": "/apparel?source=shortcut",
+      "icons": [
+        {
+          "src": "/pwa-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

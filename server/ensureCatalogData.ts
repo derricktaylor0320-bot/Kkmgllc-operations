@@ -829,8 +829,7 @@ const ELEMENTS_PRODUCTS: {
     productId: "prod_kkelemsnaturalspringwater",
     priceId: "price_kkelemsnaturalspringwater",
     name: "Natural Spring Water",
-    description:
-      "Khomplete Khemistri Natural Spring Water — Don’t just hydrate—upgrade your chemistry. Most bottled water at big-box stores is recycled, processed tap water with a fancy label. We provide 100% natural spring water, sourced from the earth’s own filtration system—not a city facility. True purity with no industrial processing or chemical recycling. Pure H2O that supports your body’s health and your skin’s vitality from the inside out. Elite, naturally sourced quality that stands above the crowd. Taste the difference that nature makes. $3.00.",
+    description: "Coming Soon",
     priceCents: 300,
     meta: {
       category: "Elements",
@@ -838,6 +837,7 @@ const ELEMENTS_PRODUCTS: {
       sortOrder: "118",
       imageUrl: "/assets/kk_elements_natural_spring_water.png",
       customize: "none",
+      comingSoon: "true",
     },
   },
 ];

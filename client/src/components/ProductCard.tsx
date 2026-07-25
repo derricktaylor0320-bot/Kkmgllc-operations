@@ -20,6 +20,7 @@ interface ProductCardProps {
   category: string;
   priceId?: string;
   soldOut?: boolean;
+  comingSoon?: boolean;
   description?: string;
   logoOptions?: string;
   handleColors?: string;
@@ -33,7 +34,7 @@ interface ProductCardProps {
   variants?: ProductVariant[];
 }
 
-export default function ProductCard({ image: baseImage, title: baseTitle, price: basePrice, category, priceId: basePriceId, soldOut: baseSoldOut, description, logoOptions, handleColors: _handleColors, caseType, sizes, apparelSizes, colors, soldOutColors, scents, imageFit = "cover", variants }: ProductCardProps) {
+export default function ProductCard({ image: baseImage, title: baseTitle, price: basePrice, category, priceId: basePriceId, soldOut: baseSoldOut, comingSoon = false, description, logoOptions, handleColors: _handleColors, caseType, sizes, apparelSizes, colors, soldOutColors, scents, imageFit = "cover", variants }: ProductCardProps) {
   const hasVariants = !!variants && variants.length > 1;
   const [variantIdx, setVariantIdx] = useState(0);
   const activeVariant = hasVariants ? variants![Math.min(variantIdx, variants!.length - 1)] : undefined;
@@ -151,6 +152,57 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
     setQuantity(1);
     setTimeout(() => setAdded(false), 1800);
   };
+
+  if (comingSoon) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+      >
+        <Card className="overflow-hidden border-none shadow-none group">
+          <CardContent className="p-0 relative aspect-square overflow-hidden bg-muted">
+            <img
+              src={image}
+              alt={title}
+              className={`${fitClass} w-full h-full transition-transform duration-500 group-hover:scale-105`}
+              data-testid={`img-product-${title.toLowerCase().replace(/\s+/g, '-')}`}
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+            <div
+              className="absolute top-3 right-3 rounded bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-lg"
+              data-testid={`badge-coming-soon-${title.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              Coming Soon
+            </div>
+          </CardContent>
+          <CardFooter className="flex flex-col items-start p-4 gap-2">
+            <span
+              className="text-xs font-medium text-muted-foreground uppercase tracking-widest"
+              data-testid={`text-category-${title.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              {category}
+            </span>
+            <div className="flex w-full items-center justify-between gap-3">
+              <h3
+                className="font-display font-semibold text-lg uppercase truncate"
+                data-testid={`text-title-${title.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                {title}
+              </h3>
+              <span
+                className="shrink-0 font-display text-sm font-semibold uppercase tracking-wide text-primary"
+                data-testid={`text-price-${title.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                Coming Soon
+              </span>
+            </div>
+          </CardFooter>
+        </Card>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div

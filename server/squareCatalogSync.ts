@@ -103,8 +103,14 @@ export async function syncStorefrontToSquare(): Promise<SquareSyncResult> {
     const title = String(p.title || "").trim();
     const amountCents = Math.round(parseFloat(p.price ?? "0") * 100);
 
-    // Skip anything we can't price as a real fixed-price item.
-    if (!id || !title || !Number.isFinite(amountCents) || amountCents <= 0) {
+    // Skip anything that is not currently available as a fixed-price item.
+    if (
+      p.comingSoon ||
+      !id ||
+      !title ||
+      !Number.isFinite(amountCents) ||
+      amountCents <= 0
+    ) {
       skipped++;
       continue;
     }

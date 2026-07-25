@@ -4,13 +4,16 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
+import EmpireDirectory from "@/components/EmpireDirectory";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import {
+  BedDouble,
   Shirt,
   Watch,
   Landmark,
   Feather,
+  HeartPulse,
   Palette,
   TrendingUp,
   Rocket,
@@ -27,6 +30,8 @@ type AppNode = { href: string; label: string; Icon: typeof Shirt };
 const APPS: AppNode[] = [
   { href: "/apparel", label: "Apparel", Icon: Shirt },
   { href: "/accessories", label: "Accessories", Icon: Watch },
+  { href: "/bedding", label: "Bedding & Intimates", Icon: BedDouble },
+  { href: "/elements", label: "Elements", Icon: HeartPulse },
   { href: "/vintage", label: "Vintage Baltimore", Icon: Landmark },
   { href: "/poetry", label: "Poetry on a Plaque", Icon: Feather },
   { href: "/hot-dogs", label: "Hot Dogs", Icon: Beef },
@@ -161,6 +166,11 @@ export default function Hub() {
             </div>
           )}
 
+          <EmpireDirectory />
+
+          <p className="mb-2 text-xs uppercase tracking-[0.3em] text-muted-foreground">
+            Or explore the interactive app map
+          </p>
           <div
             className="relative mx-auto"
             style={{ width: "100%", maxWidth: 620, height: 540 }}

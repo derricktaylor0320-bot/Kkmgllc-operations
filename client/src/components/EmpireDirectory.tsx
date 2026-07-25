@@ -1,0 +1,183 @@
+import { Link } from "wouter";
+import type { LucideIcon } from "lucide-react";
+import {
+  BedDouble,
+  Beef,
+  Feather,
+  HeartPulse,
+  Landmark,
+  Music,
+  Palette,
+  Rocket,
+  Shirt,
+  Sparkles,
+  TrendingUp,
+  WalletCards,
+  Watch,
+} from "lucide-react";
+import InstallAppButton from "@/components/InstallAppButton";
+
+type DirectoryItem = {
+  href: string;
+  title: string;
+  description: string;
+  Icon: LucideIcon;
+  comingSoon?: boolean;
+};
+
+const DIRECTORY_ITEMS: DirectoryItem[] = [
+  {
+    href: "/apparel",
+    title: "Apparel",
+    description: "Branded clothing for men, women, and kids in sizes XS–6XL.",
+    Icon: Shirt,
+  },
+  {
+    href: "/accessories",
+    title: "Accessories",
+    description: "Mugs, tumblers, bags, umbrellas, candles, cases, and more.",
+    Icon: Watch,
+  },
+  {
+    href: "/bedding",
+    title: "Bedding & Intimates",
+    description: "Bedding sets, loungewear, pajamas, slippers, and intimates.",
+    Icon: BedDouble,
+  },
+  {
+    href: "/elements",
+    title: "Elements",
+    description: "Khomplete Khemistri health, supplements, and skin care.",
+    Icon: HeartPulse,
+  },
+  {
+    href: "/canvas",
+    title: "Branded Logo Collection",
+    description: "Choose a signature collection and customize select products.",
+    Icon: Palette,
+  },
+  {
+    href: "/vintage",
+    title: "Vintage Baltimore",
+    description: "Nostalgic Baltimore-themed apparel and memorabilia.",
+    Icon: Landmark,
+  },
+  {
+    href: "/media",
+    title: "Media & Music",
+    description: "Artwork, singing clips, audio projects, and creative releases.",
+    Icon: Music,
+  },
+  {
+    href: "/poetry",
+    title: "Poetry on a Plaque",
+    description: "Custom poems created for weddings, memorials, and milestones.",
+    Icon: Feather,
+  },
+  {
+    href: "/hot-dogs",
+    title: "Premium Choice Hot Dogs",
+    description: "A premium street-food experience with quality choices.",
+    Icon: Beef,
+    comingSoon: true,
+  },
+  {
+    href: "/pocket-booster",
+    title: "Pocket Booster",
+    description: "Community-focused funding designed to help small businesses grow.",
+    Icon: Rocket,
+  },
+  {
+    href: "/fr2p",
+    title: "The FR2P Club",
+    description: "A connected program in the Empire investment ecosystem.",
+    Icon: TrendingUp,
+  },
+  {
+    href: "/invest",
+    title: "Empire Invest",
+    description: "Explore Empire programs, opportunities, and investor resources.",
+    Icon: WalletCards,
+  },
+];
+
+export default function EmpireDirectory() {
+  return (
+    <section
+      className="mx-auto mb-12 max-w-6xl overflow-hidden rounded-2xl border border-primary/60 bg-[radial-gradient(circle_at_top,hsl(var(--primary)/0.16),transparent_38%),linear-gradient(145deg,hsl(var(--card)),hsl(var(--background)))] p-1 shadow-[0_20px_70px_rgba(0,0,0,0.35)]"
+      aria-labelledby="empire-directory-title"
+      data-testid="section-empire-directory"
+    >
+      <div className="rounded-xl border-2 border-primary/35 px-4 py-8 sm:px-7 lg:px-10">
+        <div className="text-center">
+          <Sparkles className="mx-auto mb-3 h-5 w-5 text-primary" />
+          <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.38em] text-primary sm:text-xs">
+            Your guide to the full experience
+          </p>
+          <h2
+            id="empire-directory-title"
+            className="font-brand text-2xl font-bold tracking-wide text-foreground sm:text-4xl"
+          >
+            The Consolidatus Empire
+          </h2>
+          <p className="mt-2 font-display text-sm uppercase tracking-[0.16em] text-muted-foreground sm:text-base">
+            Khomplete Khemistri Apparel &amp; Accessories
+          </p>
+          <a
+            href="https://tceholdings.org"
+            className="mt-2 inline-block text-sm font-semibold text-primary hover:underline"
+          >
+            tceholdings.org
+          </a>
+        </div>
+
+        <div className="my-7 flex items-center gap-3" aria-hidden="true">
+          <span className="h-px flex-1 bg-gradient-to-r from-transparent to-primary/60" />
+          <span className="h-2 w-2 rotate-45 border border-primary/70" />
+          <span className="h-px flex-1 bg-gradient-to-l from-transparent to-primary/60" />
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {DIRECTORY_ITEMS.map(({ href, title, description, Icon, comingSoon }) => (
+            <Link
+              key={href}
+              href={href}
+              className="group flex min-h-32 gap-4 rounded-xl border border-primary/20 bg-background/45 p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/60 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              data-testid={`link-directory-${href.replace(/\//g, "")}`}
+            >
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/35 bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
+                <Icon className="h-5 w-5" />
+              </span>
+              <span>
+                <span className="flex flex-wrap items-center gap-2">
+                  <span className="font-display text-base font-bold uppercase tracking-wide text-foreground">
+                    {title}
+                  </span>
+                  {comingSoon && (
+                    <span className="rounded-full border border-primary/35 bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+                      Coming Soon
+                    </span>
+                  )}
+                </span>
+                <span className="mt-1.5 block text-xs leading-relaxed text-muted-foreground">
+                  {description}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-8 rounded-xl border border-primary/30 bg-black/15 px-4 py-6 text-center sm:px-8">
+          <h3 className="font-display text-xl font-bold uppercase tracking-wider text-primary">
+            Take the Empire With You
+          </h3>
+          <p className="mx-auto mb-4 mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Install the app for one-tap access to the directory, shopping, and
+            Empire programs from your phone or computer.
+          </p>
+          <InstallAppButton />
+        </div>
+      </div>
+    </section>
+  );
+}

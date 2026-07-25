@@ -17,6 +17,7 @@ export interface StorefrontProduct {
   productType: string;
   sortOrder?: number;
   soldOut: boolean;
+  comingSoon: boolean;
   gender: string | null;
   logoOptions: string | null;
   colors: string | null;
@@ -107,6 +108,7 @@ export async function getStorefrontProductsDetailed(): Promise<StorefrontProduct
         imageUrl: metadata.imageUrl || (images.length > 0 ? images[0] : ''),
         productType: metadata.productType || 'general',
         soldOut: metadata.soldOut === 'true',
+        comingSoon: metadata.comingSoon === 'true',
         gender: metadata.gender || null,
         logoOptions: metadata.logoOptions || (isDefaultLogoCustomizable(metadata) ? FULL_LOGO_CATALOG_OPTION : null),
         colors: metadata.colors || null,

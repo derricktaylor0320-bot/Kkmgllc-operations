@@ -26,6 +26,7 @@ interface ApiProduct {
   productType?: string;
   gender?: string | null;
   soldOut?: boolean;
+  comingSoon?: boolean;
   price: string;
   priceId: string | null;
   logoOptions?: string | null;
@@ -111,6 +112,7 @@ function ProductDetailContent({
   const price = parseFloat(product.price);
   const listing = listingForType(product.productType);
   const soldOut = !!product.soldOut;
+  const comingSoon = !!product.comingSoon;
   const supplementInfo = getSupplementInfo(product.title);
 
   const usesCaseType = !!product.caseType && product.caseType.trim().length > 0;
@@ -134,6 +136,7 @@ function ProductDetailContent({
         p.priceId &&
         p.priceId !== product.priceId &&
         !p.soldOut &&
+        !p.comingSoon &&
         inDepartment(p),
     );
 
@@ -214,6 +217,7 @@ function ProductDetailContent({
           p.priceId &&
           p.priceId !== product.priceId &&
           !p.soldOut &&
+          !p.comingSoon &&
           parseFloat(p.price) <= price,
       )
       .sort((a, b) => parseFloat(b.price) - parseFloat(a.price))
@@ -273,7 +277,7 @@ function ProductDetailContent({
   const clampQty = (n: number) => Math.max(1, Math.min(MAX_QTY, Math.round(n)));
 
   const handleAddToCart = () => {
-    if (!product.priceId || soldOut) return;
+    if (!product.priceId || soldOut || comingSoon) return;
     if (needsLogo && !selectedLogo) {
       setErrorMessage("Please select a logo variation.");
       return;
@@ -319,6 +323,66 @@ function ProductDetailContent({
     setQuantity(1);
     setTimeout(() => setAdded(false), 1800);
   };
+
+  if (comingSoon) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className="mb-8">
+          <Link href={listing.href}>
+            <Button
+              variant="ghost"
+              className="uppercase tracking-wider font-display text-sm text-muted-foreground hover:text-primary px-0"
+              data-testid="link-back-to-listing"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to {listing.label}
+            </Button>
+          </Link>
+        </div>
+
+        <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="relative aspect-square overflow-hidden rounded-xl bg-muted shadow-2xl">
+            <img
+              src={product.imageUrl}
+              alt={product.title}
+              className="h-full w-full object-cover"
+              data-testid="img-product-detail"
+            />
+            <div
+              className="absolute right-4 top-4 rounded bg-primary px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-primary-foreground shadow-lg"
+              data-testid="badge-detail-coming-soon"
+            >
+              Coming Soon
+            </div>
+          </div>
+          <div className="text-center lg:text-left">
+            <span
+              className="text-xs font-medium uppercase tracking-widest text-muted-foreground"
+              data-testid="text-detail-category"
+            >
+              {product.category}
+            </span>
+            <h1
+              className="mt-2 font-display text-3xl font-bold uppercase tracking-tight md:text-4xl"
+              data-testid="text-detail-title"
+            >
+              {product.title}
+            </h1>
+            <p
+              className="mt-5 font-display text-2xl font-semibold uppercase tracking-wider text-primary"
+              data-testid="text-detail-price"
+            >
+              Coming Soon
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
