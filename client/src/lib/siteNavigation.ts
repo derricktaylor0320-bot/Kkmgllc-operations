@@ -23,6 +23,11 @@ export const SITE_LINKS: SiteLink[] = [
     compactLabel: "Logo Collection",
   },
   { href: "/apparel", label: "Apparel", compactLabel: "Apparel" },
+  {
+    href: "/feminine",
+    label: "Feminine Collection",
+    compactLabel: "Feminine",
+  },
   { href: "/accessories", label: "Accessories", compactLabel: "Accessories" },
   {
     href: "/bedding",

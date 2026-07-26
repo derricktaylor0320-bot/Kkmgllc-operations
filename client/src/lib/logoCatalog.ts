@@ -144,6 +144,11 @@ export const allLogos: Record<string, LogoEntry> = {
   "403": { src: compassSunburst, alt: "Khomplete Khemistri Apparel Sunburst Emblem", color: "Apparel Sunburst", section: "Compass Collection" },
 };
 
+// Curated, non-exclusive suggestions for the Feminine Collection. The pearl
+// border and botanical details lead the collection, alongside the colorful
+// Pride/tie-dye crest that also represents the LGBTQ+ community.
+export const FEMININE_LOGO_IDS = ["124", "121"] as const;
+
 // The full logo catalog grouped into its named collections, preserving the
 // insertion order of `allLogos`. Used by the image-first logo pickers (phone
 // case and the dropdown custom products) to render a browsable grid organized
