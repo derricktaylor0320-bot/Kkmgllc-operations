@@ -41,6 +41,7 @@ export const LOGO_ALTS: string[] = [
   "Brown & Gold Ornate Crest",
   "Purple Ornate Crest",
   "Navy & Silver Crest",
+  "Navy & Gold Crest",
   "Purple with Swords",
   "Green with Swords",
   "Red & Gold with Swords",
