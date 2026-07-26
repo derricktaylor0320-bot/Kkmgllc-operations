@@ -28,6 +28,7 @@ import shieldSilver from "@assets/Screenshot_20251126_205037_Photos_176421799554
 import badgeBrownGoldOrnate from "@assets/badge_brown_gold_ornate.jpg";
 import badgePurpleOrnate from "@assets/badge_purple_ornate.jpg";
 import badgeNavySilver from "@assets/badge_navy_silver.jpg";
+import badgeNavyGold from "@assets/1784461717502.png";
 import badgePurpleSwords from "@assets/badge_purple_swords.jpg";
 import badgeGreenSwords from "@assets/badge_green_swords.jpg";
 import badgeRedGoldSwords from "@assets/badge_red_gold_swords.jpg";
@@ -110,7 +111,7 @@ export const allLogos: Record<string, LogoEntry> = {
   "208": { src: badgeBrownGoldOrnate, alt: "Brown & Gold Ornate Crest", color: "Brown & Gold Ornate", section: "Badge of Honor" },
   "209": { src: badgePurpleOrnate, alt: "Purple Ornate Crest", color: "Purple Ornate", section: "Badge of Honor" },
   "210": { src: badgeNavySilver, alt: "Navy & Silver Crest", color: "Navy & Silver", section: "Badge of Honor" },
-  "211": { src: shieldCyanGold, alt: "Cyan & Gold Crest", color: "Cyan & Gold", section: "Badge of Honor" },
+  "211": { src: badgeNavyGold, alt: "Navy & Gold Crest", color: "Navy & Gold", section: "Badge of Honor" },
   "212": { src: badgePurpleSwords, alt: "Purple with Swords", color: "Purple Swords", section: "Badge of Honor" },
   "213": { src: badgeGreenSwords, alt: "Green with Swords", color: "Emerald Swords", section: "Badge of Honor" },
   "214": { src: badgeRedGoldSwords, alt: "Red & Gold with Swords", color: "Red & Gold Swords", section: "Badge of Honor" },

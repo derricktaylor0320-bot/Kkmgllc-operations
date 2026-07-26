@@ -35,6 +35,7 @@ import shieldSilver from "@assets/Screenshot_20251126_205037_Photos_176421799554
 import badgeBrownGoldOrnate from "@assets/badge_brown_gold_ornate.jpg";
 import badgePurpleOrnate from "@assets/badge_purple_ornate.jpg";
 import badgeNavySilver from "@assets/badge_navy_silver.jpg";
+import badgeNavyGold from "@assets/1784461717502.png";
 import badgePurpleSwords from "@assets/badge_purple_swords.jpg";
 import badgeGreenSwords from "@assets/badge_green_swords.jpg";
 import badgeRedGoldSwords from "@assets/badge_red_gold_swords.jpg";
@@ -135,7 +136,7 @@ export default function Canvas() {
     { id: "208", src: badgeBrownGoldOrnate, alt: "Brown & Gold Ornate Crest", color: "Brown & Gold Ornate" },
     { id: "209", src: badgePurpleOrnate, alt: "Purple Ornate Crest", color: "Purple Ornate" },
     { id: "210", src: badgeNavySilver, alt: "Navy & Silver Crest", color: "Navy & Silver" },
-    { id: "211", src: shieldCyanGold, alt: "Cyan & Gold Crest", color: "Cyan & Gold" },
+    { id: "211", src: badgeNavyGold, alt: "Navy & Gold Crest", color: "Navy & Gold", featured: true },
     { id: "212", src: badgePurpleSwords, alt: "Purple with Swords", color: "Purple Swords" },
     { id: "213", src: badgeGreenSwords, alt: "Green with Swords", color: "Emerald Swords" },
     { id: "214", src: badgeRedGoldSwords, alt: "Red & Gold with Swords", color: "Red & Gold Swords" },
