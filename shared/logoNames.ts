@@ -27,8 +27,6 @@ export const LOGO_ALTS: string[] = [
   "Masterpiece Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.",
   "10 Core Principles Medallion",
   "Khomplete Khemistri Apparel & Accessories Eagle",
-  "Crossed Swords with Khomplete Khemistri",
-  "KKA Crossed Swords Logo",
   "Golden Eagle Circular Emblem",
   "Khomplete Khemistri Elements Gold Seal",
   // Badge of Honor
@@ -46,6 +44,8 @@ export const LOGO_ALTS: string[] = [
   "Purple with Swords",
   "Green with Swords",
   "Red & Gold with Swords",
+  "Crossed Swords with Khomplete Khemistri",
+  "KKA Crossed Swords Logo",
   "Khomplete Khemistri Apparel Gold Crest",
   "KKMG LLC Eagle Shield of Honor",
   "Apparel Eagle Crest - Maroon & Gold",
