@@ -11,6 +11,7 @@ import NumberThree from "@/pages/NumberThree";
 import Canvas from "@/pages/Canvas";
 import FR2P from "@/pages/FR2P";
 import Apparel from "@/pages/Apparel";
+import Feminine from "@/pages/Feminine";
 import Accessories from "@/pages/Accessories";
 import Bedding from "@/pages/Bedding";
 import Elements from "@/pages/Elements";
@@ -55,6 +56,7 @@ function Router() {
       <Route path="/pocket-booster" component={PocketBooster} />
       <Route path="/invest" component={Invest} />
       <Route path="/apparel" component={Apparel} />
+      <Route path="/feminine" component={Feminine} />
       <Route path="/accessories" component={Accessories} />
       <Route path="/bedding" component={Bedding} />
       <Route path="/elements" component={Elements} />

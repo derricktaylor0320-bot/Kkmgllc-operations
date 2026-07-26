@@ -4,6 +4,7 @@ import {
   BedDouble,
   Beef,
   Feather,
+  Heart,
   HeartPulse,
   Landmark,
   Music,
@@ -31,6 +32,12 @@ const DIRECTORY_ITEMS: DirectoryItem[] = [
     title: "Apparel",
     description: "Branded clothing for men, women, and kids in sizes XS–6XL.",
     Icon: Shirt,
+  },
+  {
+    href: "/feminine",
+    title: "Feminine Collection",
+    description: "Feminine apparel, lounge picks, and customizable crest suggestions.",
+    Icon: Heart,
   },
   {
     href: "/accessories",

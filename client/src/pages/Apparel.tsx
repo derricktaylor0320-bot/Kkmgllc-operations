@@ -4,6 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 
 export default function Apparel() {
   const { data: products, isLoading } = useQuery({
@@ -111,7 +112,16 @@ export default function Apparel() {
                   <h2 className="font-display text-3xl font-bold uppercase tracking-wider text-center mb-8 text-primary" data-testid="section-womens">
                     Women's Collection
                   </h2>
-                  <p className="text-center text-muted-foreground mb-8">Designed for Her</p>
+                  <p className="text-center text-muted-foreground mb-3">Designed for Her</p>
+                  <div className="mb-8 text-center">
+                    <Link
+                      href="/feminine"
+                      className="inline-flex items-center rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground"
+                      data-testid="link-full-feminine-collection"
+                    >
+                      Shop the full Feminine Collection →
+                    </Link>
+                  </div>
                   {renderProductGrid(womensProducts)}
                 </div>
               </section>
