@@ -4,7 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import elementsSectionArt from "@assets/logo_kk_elements_badge.png";
+import elementsHealthSectionArt from "@assets/khomplete_khemistri_elements_health_skin_section.png";
 
 export default function Elements() {
   const { data: products, isLoading: loadingElements } = useQuery({
@@ -25,8 +25,8 @@ export default function Elements() {
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-12">
         <BrandSectionBanner
-          imageSrc={elementsSectionArt}
-          imageAlt="Khomplete Khemistri Elements — Health and Skin Care"
+          imageSrc={elementsHealthSectionArt}
+          imageAlt="Khomplete Khemistri Elements — The Skin Care | Health Section"
         />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
