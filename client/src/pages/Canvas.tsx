@@ -69,6 +69,7 @@ import badgeApparelAccessoriesEst2020 from "@assets/badge_apparel_accessories_es
 import badgeApparelAccessoriesRoyalty from "@assets/1781697764383_1781711765541.png";
 import badgeKhompleteLionsEst2020 from "@assets/badge_khomplete_lions_est2020_218.png";
 import badgeConsolidatusEmpireStandalone from "@assets/badge_consolidatus_empire_standalone_218.png";
+import logoKkElementsBadge from "@assets/logo_kk_elements_badge.png";
 import logoKkApparelLeatherCrest from "@assets/logo_kk_apparel_leather_swords_crest.png";
 
 // Import Luxury Banners
@@ -120,6 +121,7 @@ export default function Canvas() {
     { id: "121", src: logoPrideRainbow, alt: "Khomplete Khemistri Apparel Pride Rainbow Crest", color: "Pride Rainbow" },
     { id: "122", src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident" },
     { id: "123", src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular" },
+    { id: "124", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal" },
   ];
 
   const badges = [

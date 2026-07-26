@@ -32,6 +32,12 @@ const FEMININE_LOGO_COPY: Record<
   (typeof FEMININE_LOGO_IDS)[number],
   { name: string; label: string; description: string }
 > = {
+  "124": {
+    name: "Pearl Gold Seal",
+    label: "Pearl-detailed feminine crest",
+    description:
+      "A refined gold seal framed by a pearl-inspired border and softened with botanical details.",
+  },
   "121": {
     name: "Pride / Tie-Dye Crest",
     label: "Colorful and inclusive",

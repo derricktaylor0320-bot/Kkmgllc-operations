@@ -52,6 +52,7 @@ import badgeLionsRedGold from "@assets/1784057184105.png";
 import badgeLionsBurgundyGold from "@assets/copilot_image_1784057746825.jpeg";
 import badgeLionsSilverGold from "@assets/copilot_image_1784057980009.jpeg";
 import badgeLionsAllGold from "@assets/image_1784058373332.jpeg";
+import logoKkElementsBadge from "@assets/logo_kk_elements_badge.png";
 import logoKkApparelLeatherCrest from "@assets/logo_kk_apparel_leather_swords_crest.png";
 import compassKKApparel from "@assets/copilot_image_1781366430242_1781369724345.jpeg";
 import compassKMG1 from "@assets/image_1781365445486_1781369761822.jpeg";
@@ -99,6 +100,7 @@ export const allLogos: Record<string, LogoEntry> = {
   "121": { src: logoPrideRainbow, alt: "Khomplete Khemistri Apparel Pride Rainbow Crest", color: "Pride Rainbow", section: "Canvas Collection" },
   "122": { src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident", section: "Canvas Collection" },
   "123": { src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular", section: "Canvas Collection" },
+  "124": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal", section: "Canvas Collection" },
   "200": { src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", section: "Badge of Honor" },
   "201": { src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", section: "Badge of Honor" },
   "202": { src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold", section: "Badge of Honor" },
@@ -142,9 +144,10 @@ export const allLogos: Record<string, LogoEntry> = {
   "403": { src: compassSunburst, alt: "Khomplete Khemistri Apparel Sunburst Emblem", color: "Apparel Sunburst", section: "Compass Collection" },
 };
 
-// Curated, non-exclusive suggestions for the Feminine Collection. The colorful
-// Pride/tie-dye crest also represents the LGBTQ+ community.
-export const FEMININE_LOGO_IDS = ["121"] as const;
+// Curated, non-exclusive suggestions for the Feminine Collection. The pearl
+// border and botanical details lead the collection, alongside the colorful
+// Pride/tie-dye crest that also represents the LGBTQ+ community.
+export const FEMININE_LOGO_IDS = ["124", "121"] as const;
 
 // The full logo catalog grouped into its named collections, preserving the
 // insertion order of `allLogos`. Used by the image-first logo pickers (phone
