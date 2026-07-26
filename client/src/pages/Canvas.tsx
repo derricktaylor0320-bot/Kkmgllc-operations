@@ -23,7 +23,7 @@ import logoLimeGreen from "@assets/logo_lime_green.jpg";
 import logoMasterpieceTrident from "@assets/logo_masterpiece_trident_three.png";
 import medallionCorePrinciples from "@assets/copilot_image_1781210586301_1781211927468.jpeg";
 
-// Badge of Honor Collection — crests 200-225
+// Badge of Honor Collection — crests 200-226
 import shieldBlackWhite from "@assets/Screenshot_20251126_205145_Photos_1764208360832.jpg";
 import shieldBlueGold from "@assets/Screenshot_20251126_205125_Photos_1764208373884.jpg";
 import crestBlueValuesSwords from "@assets/image000009_1781214860404.jpg";
@@ -59,11 +59,11 @@ import honorWhiteGold from "@assets/shield_white_gold.jpg";
 // Import Legacy Collage
 import legacyCollage from "@assets/Screenshot_20251126_202634_Photos_1764214454254.jpg";
 
-// Import KKMG LLC Eagle Shield (#214)
+// Import KKMG LLC Eagle Shield (#215)
 import kkmgEagleShield from "@assets/1781665131814_1781665574938.png";
 
-// Import Apparel Eagle Crest (#216) + Est. 2020 crest (#217) + Lions crest (#218)
-// + Lions colorways (#219-224) + Consolidatus Empire standalone (#225)
+// Import Apparel Eagle Crest (#217) + Est. 2020 crest (#218) + Lions crest (#219)
+// + Lions colorways (#220-225) + Consolidatus Empire standalone (#226)
 import eagleCrestMaroonGold from "@assets/IMG_20260628_234856_1782729067418.png";
 import badgeApparelAccessoriesEst2020 from "@assets/badge_apparel_accessories_est2020_polished.png";
 import badgeApparelAccessoriesRoyalty from "@assets/1781697764383_1781711765541.png";
@@ -136,21 +136,22 @@ export default function Canvas() {
     { id: "208", src: badgeBrownGoldOrnate, alt: "Brown & Gold Ornate Crest", color: "Brown & Gold Ornate" },
     { id: "209", src: badgePurpleOrnate, alt: "Purple Ornate Crest", color: "Purple Ornate" },
     { id: "210", src: badgeNavySilver, alt: "Navy & Silver Crest", color: "Navy & Silver" },
-    { id: "211", src: badgePurpleSwords, alt: "Purple with Swords", color: "Purple Swords" },
-    { id: "212", src: badgeGreenSwords, alt: "Green with Swords", color: "Emerald Swords" },
-    { id: "213", src: badgeRedGoldSwords, alt: "Red & Gold with Swords", color: "Red & Gold Swords" },
-    { id: "214", src: crestGoldApparel, alt: "Khomplete Khemistri Apparel Gold Crest", color: "Gold Apparel Crest", featured: true },
-    { id: "215", src: kkmgEagleShield, alt: "KKMG LLC Eagle Shield of Honor", color: "KKMG LLC Shield", featured: true },
-    { id: "216", src: eagleCrestMaroonGold, alt: "Apparel Eagle Crest - Maroon & Gold", color: "Maroon & Gold Eagle Crest", featured: true },
-    { id: "217", src: badgeApparelAccessoriesEst2020, alt: "Khomplete Khemistri Apparel & Accessories Est. 2020 Crest", color: "Est. 2020 Checkered Swords", featured: true },
-    { id: "218", src: badgeKhompleteLionsEst2020, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Est. 2020", color: "Lions Crest Est. 2020", featured: true },
-    { id: "219", src: badgeLionsPurpleGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Purple & Gold", color: "Purple & Gold Lions", featured: true },
-    { id: "220", src: badgeLionsBrownGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Brown & Gold", color: "Brown & Gold Lions", featured: true },
-    { id: "221", src: badgeLionsRedGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Red & Gold", color: "Red & Gold Lions", featured: true },
-    { id: "222", src: badgeLionsBurgundyGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Burgundy & Gold", color: "Burgundy & Gold Lions", featured: true },
-    { id: "223", src: badgeLionsSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Silver & Gold", color: "Silver & Gold Lions", featured: true },
-    { id: "224", src: badgeLionsAllGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - All Gold", color: "All Gold Lions", featured: true },
-    { id: "225", src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", featured: true },
+    { id: "211", src: shieldCyanGold, alt: "Cyan & Gold Crest", color: "Cyan & Gold" },
+    { id: "212", src: badgePurpleSwords, alt: "Purple with Swords", color: "Purple Swords" },
+    { id: "213", src: badgeGreenSwords, alt: "Green with Swords", color: "Emerald Swords" },
+    { id: "214", src: badgeRedGoldSwords, alt: "Red & Gold with Swords", color: "Red & Gold Swords" },
+    { id: "215", src: crestGoldApparel, alt: "Khomplete Khemistri Apparel Gold Crest", color: "Gold Apparel Crest", featured: true },
+    { id: "216", src: kkmgEagleShield, alt: "KKMG LLC Eagle Shield of Honor", color: "KKMG LLC Shield", featured: true },
+    { id: "217", src: eagleCrestMaroonGold, alt: "Apparel Eagle Crest - Maroon & Gold", color: "Maroon & Gold Eagle Crest", featured: true },
+    { id: "218", src: badgeApparelAccessoriesEst2020, alt: "Khomplete Khemistri Apparel & Accessories Est. 2020 Crest", color: "Est. 2020 Checkered Swords", featured: true },
+    { id: "219", src: badgeKhompleteLionsEst2020, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Est. 2020", color: "Lions Crest Est. 2020", featured: true },
+    { id: "220", src: badgeLionsPurpleGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Purple & Gold", color: "Purple & Gold Lions", featured: true },
+    { id: "221", src: badgeLionsBrownGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Brown & Gold", color: "Brown & Gold Lions", featured: true },
+    { id: "222", src: badgeLionsRedGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Red & Gold", color: "Red & Gold Lions", featured: true },
+    { id: "223", src: badgeLionsBurgundyGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Burgundy & Gold", color: "Burgundy & Gold Lions", featured: true },
+    { id: "224", src: badgeLionsSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - Silver & Gold", color: "Silver & Gold Lions", featured: true },
+    { id: "225", src: badgeLionsAllGold, alt: "Khomplete Khemistri Apparel & Accessories Lions Crest - All Gold", color: "All Gold Lions", featured: true },
+    { id: "226", src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", featured: true },
   ];
 
   const honorShields = [
