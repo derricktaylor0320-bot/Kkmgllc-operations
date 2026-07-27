@@ -96,6 +96,7 @@ import compassKMG1 from "@assets/image_1781365445486_1781369761822.jpeg";
 import compassKMG2 from "@assets/image_1781365494182_1781369761833.jpeg";
 import compassSunburst from "@assets/1781351981898_1781369761839.png";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
+import logoSilverPinkFeminine from "@assets/logo_silver_pink_feminine_medallion.png";
 
 export default function Canvas() {
   const logos = [
@@ -122,6 +123,7 @@ export default function Canvas() {
     { id: "122", src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident" },
     { id: "123", src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular" },
     { id: "124", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal" },
+    { id: "125", src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink" },
   ];
 
   const badges = [
@@ -182,13 +184,8 @@ export default function Canvas() {
       <Navbar />
       <main className="flex-grow">
         
-        {/* Section 1: Canvas Collection */}
-        <section className="py-24 bg-secondary text-secondary-foreground relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
-            <div className="absolute right-0 top-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-            <div className="absolute left-0 bottom-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-          </div>
-          
+        {/* Collection intro */}
+        <section className="pt-16 pb-8 bg-secondary text-secondary-foreground">
           <div className="container mx-auto px-4">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -202,6 +199,71 @@ export default function Canvas() {
                 className="w-full h-auto object-contain rounded-lg shadow-2xl"
               />
             </motion.div>
+          </div>
+        </section>
+
+        {/* Section 1: Badge of Honor Collection — #1 seller (29 logos) */}
+        <section className="py-24 bg-muted/20">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <img 
+                src={badgeApparelAccessoriesRoyalty} 
+                alt="Our Royalty Badge of Honor — Khomplete Khemistri Apparel & Accessories" 
+                className="w-full max-w-4xl mx-auto h-auto object-contain drop-shadow-2xl mb-4"
+                data-testid="img-royalty-badge-honor-intro"
+              />
+              <h2 className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-6 mb-2">
+                Our Royalty Badge of Honor
+              </h2>
+              <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
+                #1 Seller Collection · 29 Logos
+              </p>
+              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
+                The crests that symbolize our bond. Brotherhood, Unity, and Strength.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {badges.map((badge, index) => (
+                <Link key={badge.id} href={`/customize/${badge.id}`} data-testid={`link-badge-${badge.id}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.05, duration: 0.5 }}
+                    className={`group relative flex flex-col items-center justify-center bg-background rounded-xl p-4 border border-border hover:border-primary/40 overflow-hidden shadow-lg cursor-pointer ${badge.featured ? 'bg-gradient-to-b from-background to-primary/5' : ''}`}
+                  >
+                    <div className="relative w-full aspect-square flex items-center justify-center">
+                      <img 
+                        src={badge.src} 
+                        alt={badge.alt}
+                        className="w-full h-full object-contain drop-shadow-2xl transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="mt-4 text-center">
+                      <span className="text-primary/60 text-sm font-mono">#{badge.id}</span>
+                      <p className="text-foreground font-display text-sm uppercase tracking-wide mt-1">{badge.color}</p>
+                      <span className="text-xs text-primary/80 uppercase tracking-widest mt-2 block">Badge of Honor</span>
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 rounded-xl">
+                      <span className="text-white font-display text-lg uppercase tracking-wide">Customize</span>
+                    </div>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+
+        {/* Section 2: Canvas Collection — #2 seller (24 logos) */}
+        <section className="py-24 bg-secondary text-secondary-foreground relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+            <div className="absolute right-0 top-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+            <div className="absolute left-0 bottom-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+          </div>
+          
+          <div className="container mx-auto px-4">
 
             <div className="text-center mb-16">
               <img 
@@ -209,8 +271,14 @@ export default function Canvas() {
                 alt="Color to Match Your Mood and Vibe" 
                 className="w-full max-w-4xl mx-auto h-auto object-contain rounded-lg shadow-xl mb-4"
               />
+              <h2 className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-6 mb-2">
+                Canvas Collection
+              </h2>
+              <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
+                #2 Seller Collection · 24 Logos
+              </p>
               <p className="text-secondary-foreground/60 mt-4 max-w-2xl mx-auto">
-                24 vibrant variations. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
+                24 vibrant variations, including the new silver &amp; pink feminine medallion. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
               </p>
             </div>
 
@@ -274,56 +342,6 @@ export default function Canvas() {
               </p>
             </motion.div>
 
-          </div>
-        </section>
-
-        {/* Section 2: Badge of Honor Collection */}
-        <section className="py-24 bg-muted/20">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
-              <img 
-                src={badgeApparelAccessoriesRoyalty} 
-                alt="Our Royalty Badge of Honor — Khomplete Khemistri Apparel & Accessories" 
-                className="w-full max-w-4xl mx-auto h-auto object-contain drop-shadow-2xl mb-4"
-                data-testid="img-royalty-badge-honor-intro"
-              />
-              <h2 className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-6 mb-2">
-                Our Royalty Badge of Honor
-              </h2>
-              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-                The crests that symbolize our bond. Brotherhood, Unity, and Strength.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {badges.map((badge, index) => (
-                <Link key={badge.id} href={`/customize/${badge.id}`} data-testid={`link-badge-${badge.id}`}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05, duration: 0.5 }}
-                    className={`group relative flex flex-col items-center justify-center bg-background rounded-xl p-4 border border-border hover:border-primary/40 overflow-hidden shadow-lg cursor-pointer ${badge.featured ? 'bg-gradient-to-b from-background to-primary/5' : ''}`}
-                  >
-                    <div className="relative w-full aspect-square flex items-center justify-center">
-                      <img 
-                        src={badge.src} 
-                        alt={badge.alt}
-                        className="w-full h-full object-contain drop-shadow-2xl transition-transform duration-700 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="mt-4 text-center">
-                      <span className="text-primary/60 text-sm font-mono">#{badge.id}</span>
-                      <p className="text-foreground font-display text-sm uppercase tracking-wide mt-1">{badge.color}</p>
-                      <span className="text-xs text-primary/80 uppercase tracking-widest mt-2 block">Badge of Honor</span>
-                    </div>
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 rounded-xl">
-                      <span className="text-white font-display text-lg uppercase tracking-wide">Customize</span>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
           </div>
         </section>
 

@@ -68,6 +68,7 @@ import logoPrideRainbow from "@assets/1781582068026_1781668463902.png";
 import logoKKAShield from "@assets/kka_shield_apparel_logo.jpg";
 import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
+import logoSilverPinkFeminine from "@assets/logo_silver_pink_feminine_medallion.png";
 
 export interface LogoEntry {
   src: string;
@@ -100,6 +101,7 @@ export const allLogos: Record<string, LogoEntry> = {
   "122": { src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident", section: "Canvas Collection" },
   "123": { src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular", section: "Canvas Collection" },
   "124": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal", section: "Canvas Collection" },
+  "125": { src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink", section: "Canvas Collection" },
   "200": { src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", section: "Badge of Honor" },
   "201": { src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", section: "Badge of Honor" },
   "202": { src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold", section: "Badge of Honor" },
@@ -146,10 +148,9 @@ export const allLogos: Record<string, LogoEntry> = {
   "403": { src: compassSunburst, alt: "Khomplete Khemistri Apparel Sunburst Emblem", color: "Apparel Sunburst", section: "Compass Collection" },
 };
 
-// Curated, non-exclusive suggestions for the Feminine Collection. The pearl
-// border and botanical details lead the collection, alongside the colorful
-// Pride/tie-dye crest that also represents the LGBTQ+ community.
-export const FEMININE_LOGO_IDS = ["124", "121"] as const;
+// Curated feminine crest suggestions: silver/pink and neon pink sword medallions,
+// pearl seal, Pride/tie-dye, deep purple sword colorway, and silver elite crest.
+export const FEMININE_LOGO_IDS = ["125", "107", "124", "121", "110", "205"] as const;
 
 // The full logo catalog grouped into its named collections, preserving the
 // insertion order of `allLogos`. Used by the image-first logo pickers (phone
