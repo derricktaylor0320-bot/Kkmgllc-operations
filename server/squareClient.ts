@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import type { ShippingAddress } from '@shared/schema';
 
 // Square REST API base. Defaults to production; set SQUARE_ENVIRONMENT=sandbox to test.
 const SQUARE_BASE =
@@ -68,6 +69,10 @@ export interface OrderLineItem {
   quantity: number;
   amountCents: number; // per-unit price in cents
   note?: string;
+  catalogPriceId?: string;
+  selectedLogo?: string;
+  selectedColor?: string;
+  selectedSize?: string;
 }
 
 export interface OrderPaymentLinkInput {
@@ -109,6 +114,23 @@ export async function createSquareOrderPaymentLink(
     };
     if (li.note) {
       item.note = li.note.slice(0, 500);
+    }
+    // Square metadata is private to this application. Preserve the catalog
+    // identity and validated selections through hosted checkout so the paid
+    // order can be routed to the correct fulfillment variant.
+    const metadata = Object.fromEntries(
+      [
+        ['catalog_price_id', li.catalogPriceId],
+        ['selected_logo', li.selectedLogo],
+        ['selected_color', li.selectedColor],
+        ['selected_size', li.selectedSize],
+      ].filter(
+        (entry): entry is [string, string] =>
+          typeof entry[1] === 'string' && entry[1].length > 0,
+      ),
+    );
+    if (Object.keys(metadata).length > 0) {
+      item.metadata = metadata;
     }
     return item;
   });
@@ -182,6 +204,7 @@ export interface RetrievedOrder {
   // The owner uses these to place the order with the fulfilling company.
   buyerName: string | null;
   shippingAddress: string | null;
+  shippingDetails: ShippingAddress | null;
 }
 
 function looksLikeEmail(value: unknown): value is string {
@@ -224,17 +247,60 @@ function findRecipient(order: any): any | null {
   return null;
 }
 
-function formatAddress(address: any): string | null {
+function toShippingDetails(
+  recipient: any,
+  email: string | null,
+): ShippingAddress | null {
+  const address = recipient?.address;
   if (!address || typeof address !== 'object') return null;
-  const cityLine = [address.locality, address.administrative_district_level_1]
+  const addressLine1 =
+    typeof address.address_line_1 === 'string'
+      ? address.address_line_1.trim()
+      : '';
+  const city = typeof address.locality === 'string' ? address.locality.trim() : '';
+  const postalCode =
+    typeof address.postal_code === 'string' ? address.postal_code.trim() : '';
+  const countryCode =
+    typeof address.country === 'string' ? address.country.trim().toUpperCase() : '';
+  if (!addressLine1 || !city || !postalCode || !countryCode) return null;
+
+  const name =
+    typeof recipient.display_name === 'string' && recipient.display_name.trim()
+      ? recipient.display_name.trim()
+      : 'Customer';
+  const details: ShippingAddress = {
+    name,
+    addressLine1,
+    city,
+    postalCode,
+    countryCode,
+  };
+  if (typeof address.address_line_2 === 'string' && address.address_line_2.trim()) {
+    details.addressLine2 = address.address_line_2.trim();
+  }
+  if (
+    typeof address.administrative_district_level_1 === 'string' &&
+    address.administrative_district_level_1.trim()
+  ) {
+    details.stateCode = address.administrative_district_level_1.trim();
+  }
+  if (typeof recipient.phone_number === 'string' && recipient.phone_number.trim()) {
+    details.phone = recipient.phone_number.trim();
+  }
+  if (email) details.email = email;
+  return details;
+}
+
+function formatAddress(address: ShippingAddress | null): string | null {
+  if (!address) return null;
+  const cityLine = [address.city, address.stateCode]
     .filter(Boolean)
     .join(', ');
   const parts = [
-    address.address_line_1,
-    address.address_line_2,
-    address.address_line_3,
-    [cityLine, address.postal_code].filter(Boolean).join(' ').trim(),
-    address.country,
+    address.addressLine1,
+    address.addressLine2,
+    [cityLine, address.postalCode].filter(Boolean).join(' ').trim(),
+    address.countryCode,
   ]
     .map((p) => (typeof p === 'string' ? p.trim() : ''))
     .filter((p) => p.length > 0);
@@ -281,12 +347,35 @@ export async function retrieveSquareOrder(
   const rawLineItems: any[] = Array.isArray(order.line_items)
     ? order.line_items
     : [];
-  const items: OrderLineItem[] = rawLineItems.map((li) => ({
-    name: typeof li?.name === 'string' && li.name ? li.name : 'Item',
-    quantity: Math.max(1, Math.round(Number(li?.quantity) || 1)),
-    amountCents: Math.max(0, Math.round(Number(li?.base_price_money?.amount) || 0)),
-    note: typeof li?.note === 'string' && li.note ? li.note : undefined,
-  }));
+  const items: OrderLineItem[] = rawLineItems.map((li) => {
+    const metadata =
+      li?.metadata && typeof li.metadata === 'object' ? li.metadata : {};
+    return {
+      name: typeof li?.name === 'string' && li.name ? li.name : 'Item',
+      quantity: Math.max(1, Math.round(Number(li?.quantity) || 1)),
+      amountCents: Math.max(
+        0,
+        Math.round(Number(li?.base_price_money?.amount) || 0),
+      ),
+      note: typeof li?.note === 'string' && li.note ? li.note : undefined,
+      catalogPriceId:
+        typeof metadata.catalog_price_id === 'string'
+          ? metadata.catalog_price_id
+          : undefined,
+      selectedLogo:
+        typeof metadata.selected_logo === 'string'
+          ? metadata.selected_logo
+          : undefined,
+      selectedColor:
+        typeof metadata.selected_color === 'string'
+          ? metadata.selected_color
+          : undefined,
+      selectedSize:
+        typeof metadata.selected_size === 'string'
+          ? metadata.selected_size
+          : undefined,
+    };
+  });
 
   const totalCents = Math.max(
     0,
@@ -314,7 +403,8 @@ export async function retrieveSquareOrder(
     typeof recipient?.display_name === 'string' && recipient.display_name.trim()
       ? recipient.display_name.trim()
       : null;
-  const shippingAddress = formatAddress(recipient?.address);
+  const shippingDetails = toShippingDetails(recipient, buyerEmail);
+  const shippingAddress = formatAddress(shippingDetails);
 
   return {
     orderId: order.id,
@@ -325,6 +415,7 @@ export async function retrieveSquareOrder(
     buyerEmail,
     buyerName,
     shippingAddress,
+    shippingDetails,
   };
 }
 

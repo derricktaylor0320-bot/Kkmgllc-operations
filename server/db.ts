@@ -128,6 +128,7 @@ export async function ensureTablesExist() {
     await db.execute(sql`ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_email TEXT`);
     await db.execute(sql`ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_name TEXT`);
     await db.execute(sql`ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_address TEXT`);
+    await db.execute(sql`ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_details JSONB`);
     await db.execute(sql`ALTER TABLE orders ADD COLUMN IF NOT EXISTS carrier TEXT`);
     await db.execute(sql`ALTER TABLE orders ADD COLUMN IF NOT EXISTS tracking_number TEXT`);
     await db.execute(sql`ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipped_at TIMESTAMP`);
@@ -136,6 +137,30 @@ export async function ensureTablesExist() {
     await db.execute(sql`
       CREATE UNIQUE INDEX IF NOT EXISTS "IDX_orders_square_order_id"
       ON orders (square_order_id)
+    `);
+
+    // Durable, idempotent submissions to external fulfillment providers. A
+    // mixed cart can have one row per provider; failures remain visible and can
+    // be safely retried because external_id is deterministic.
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS order_fulfillments (
+        id VARCHAR(255) PRIMARY KEY DEFAULT gen_random_uuid(),
+        order_id VARCHAR(255) NOT NULL,
+        provider TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        external_id TEXT NOT NULL,
+        provider_order_id TEXT,
+        items JSONB NOT NULL,
+        attempts INTEGER NOT NULL DEFAULT 0,
+        last_error TEXT,
+        submitted_at TIMESTAMP,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+    await db.execute(sql`
+      CREATE UNIQUE INDEX IF NOT EXISTS "IDX_order_fulfillments_order_provider"
+      ON order_fulfillments (order_id, provider)
     `);
 
     // Media gallery items (singing video clips + audio projects). Created here

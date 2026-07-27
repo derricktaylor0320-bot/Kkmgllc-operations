@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, products, type Subscriber, type InsertSubscriber, subscribers, type User, type InsertUser, users, type PasswordResetToken, type InsertPasswordResetToken, passwordResetTokens, type Order, type OrderItem, type FulfillmentStatus, orders, type MediaItem, mediaItems, type Review, reviews, discountRedemptions } from "@shared/schema";
+import { type Product, type InsertProduct, products, type Subscriber, type InsertSubscriber, subscribers, type User, type InsertUser, users, type PasswordResetToken, type InsertPasswordResetToken, passwordResetTokens, type Order, type OrderItem, type FulfillmentStatus, orders, type ShippingAddress, type FulfillmentProvider, type ProviderFulfillmentItem, type OrderFulfillment, orderFulfillments, type MediaItem, mediaItems, type Review, reviews, discountRedemptions } from "@shared/schema";
 import { DISCOUNT_CODES } from "@shared/discounts";
 
 // Review row joined with the reviewer's current profile photo + location.
@@ -7,7 +7,7 @@ export type ReviewWithReviewer = Review & {
   reviewerLocation: string | null;
 };
 import { db } from "./db";
-import { and, eq, ne, isNull, desc, sql } from "drizzle-orm";
+import { and, eq, ne, isNull, desc, sql, or, inArray, lt } from "drizzle-orm";
 
 export interface IStorage {
   // Product operations
@@ -39,7 +39,25 @@ export interface IStorage {
     customerEmail?: string | null;
     customerName?: string | null;
     shippingAddress?: string | null;
+    shippingDetails?: ShippingAddress | null;
   }): Promise<Order>;
+  saveOrderFulfillmentPlan(input: {
+    orderId: string;
+    provider: FulfillmentProvider;
+    externalId: string;
+    items: ProviderFulfillmentItem[];
+    blockedReason?: string;
+  }): Promise<OrderFulfillment>;
+  claimOrderFulfillment(id: string): Promise<OrderFulfillment | undefined>;
+  completeOrderFulfillment(
+    id: string,
+    providerOrderId: string,
+  ): Promise<OrderFulfillment | undefined>;
+  failOrderFulfillment(
+    id: string,
+    error: string,
+  ): Promise<OrderFulfillment | undefined>;
+  getOrderFulfillments(orderId: string): Promise<OrderFulfillment[]>;
 
   // User / auth operations
   createUser(user: InsertUser): Promise<User>;
@@ -247,12 +265,14 @@ export class DatabaseStorage implements IStorage {
     customerEmail?: string | null;
     customerName?: string | null;
     shippingAddress?: string | null;
+    shippingDetails?: ShippingAddress | null;
   }): Promise<Order> {
     // Idempotent: if the buyer refreshes the success page we update the same
     // row (keyed by the Square order id) instead of inserting a duplicate.
     const customerEmail = input.customerEmail ?? null;
     const customerName = input.customerName ?? null;
     const shippingAddress = input.shippingAddress ?? null;
+    const shippingDetails = input.shippingDetails ?? null;
     const [order] = await db
       .insert(orders)
       .values({
@@ -263,6 +283,7 @@ export class DatabaseStorage implements IStorage {
         customerEmail,
         customerName,
         shippingAddress,
+        shippingDetails,
       })
       .onConflictDoUpdate({
         target: orders.squareOrderId,
@@ -273,10 +294,149 @@ export class DatabaseStorage implements IStorage {
           customerEmail,
           customerName,
           shippingAddress,
+          shippingDetails,
         },
       })
       .returning();
     return order;
+  }
+
+  async saveOrderFulfillmentPlan(input: {
+    orderId: string;
+    provider: FulfillmentProvider;
+    externalId: string;
+    items: ProviderFulfillmentItem[];
+    blockedReason?: string;
+  }): Promise<OrderFulfillment> {
+    const status = input.blockedReason ? "blocked" : "pending";
+    const [existing] = await db
+      .select()
+      .from(orderFulfillments)
+      .where(
+        and(
+          eq(orderFulfillments.orderId, input.orderId),
+          eq(orderFulfillments.provider, input.provider),
+        ),
+      );
+    if (
+      existing?.status === "submitted" ||
+      existing?.status === "submitting"
+    ) {
+      return existing;
+    }
+
+    if (existing) {
+      const [updated] = await db
+        .update(orderFulfillments)
+        .set({
+          externalId: input.externalId,
+          items: input.items,
+          status,
+          lastError: input.blockedReason ?? null,
+          updatedAt: new Date(),
+        })
+        .where(eq(orderFulfillments.id, existing.id))
+        .returning();
+      return updated;
+    }
+
+    const [inserted] = await db
+      .insert(orderFulfillments)
+      .values({
+        orderId: input.orderId,
+        provider: input.provider,
+        externalId: input.externalId,
+        items: input.items,
+        status,
+        lastError: input.blockedReason ?? null,
+      })
+      .onConflictDoNothing()
+      .returning();
+    if (inserted) return inserted;
+
+    // Another confirmation request inserted the same provider row first.
+    const [raced] = await db
+      .select()
+      .from(orderFulfillments)
+      .where(
+        and(
+          eq(orderFulfillments.orderId, input.orderId),
+          eq(orderFulfillments.provider, input.provider),
+        ),
+      );
+    if (!raced) throw new Error("Failed to persist fulfillment plan");
+    return raced;
+  }
+
+  async claimOrderFulfillment(
+    id: string,
+  ): Promise<OrderFulfillment | undefined> {
+    const staleBefore = new Date(Date.now() - 5 * 60 * 1000);
+    const [claimed] = await db
+      .update(orderFulfillments)
+      .set({
+        status: "submitting",
+        attempts: sql`${orderFulfillments.attempts} + 1`,
+        lastError: null,
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(orderFulfillments.id, id),
+          or(
+            inArray(orderFulfillments.status, ["pending", "failed"]),
+            and(
+              eq(orderFulfillments.status, "submitting"),
+              lt(orderFulfillments.updatedAt, staleBefore),
+            ),
+          ),
+        ),
+      )
+      .returning();
+    return claimed;
+  }
+
+  async completeOrderFulfillment(
+    id: string,
+    providerOrderId: string,
+  ): Promise<OrderFulfillment | undefined> {
+    const now = new Date();
+    const [completed] = await db
+      .update(orderFulfillments)
+      .set({
+        status: "submitted",
+        providerOrderId,
+        lastError: null,
+        submittedAt: now,
+        updatedAt: now,
+      })
+      .where(eq(orderFulfillments.id, id))
+      .returning();
+    return completed;
+  }
+
+  async failOrderFulfillment(
+    id: string,
+    error: string,
+  ): Promise<OrderFulfillment | undefined> {
+    const [failed] = await db
+      .update(orderFulfillments)
+      .set({
+        status: "failed",
+        lastError: error.slice(0, 2000),
+        updatedAt: new Date(),
+      })
+      .where(eq(orderFulfillments.id, id))
+      .returning();
+    return failed;
+  }
+
+  async getOrderFulfillments(orderId: string): Promise<OrderFulfillment[]> {
+    return db
+      .select()
+      .from(orderFulfillments)
+      .where(eq(orderFulfillments.orderId, orderId))
+      .orderBy(orderFulfillments.createdAt);
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
