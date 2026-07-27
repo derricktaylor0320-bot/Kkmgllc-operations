@@ -210,7 +210,7 @@ export default function Canvas() {
                 className="w-full max-w-4xl mx-auto h-auto object-contain rounded-lg shadow-xl mb-4"
               />
               <p className="text-secondary-foreground/60 mt-4 max-w-2xl mx-auto">
-                Sixteen vibrant variations. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
+                24 vibrant variations. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
               </p>
             </div>
 
