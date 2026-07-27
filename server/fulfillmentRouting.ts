@@ -83,7 +83,7 @@ export function selectionKeys(item: OrderItem): string[] {
   if (item.selectedColor) keys.push(`color=${item.selectedColor}`, item.selectedColor);
   if (item.selectedLogo) keys.push(`logo=${item.selectedLogo}`, item.selectedLogo);
   keys.push("default");
-  return [...new Set(keys.map((key) => key.trim()).filter(Boolean))];
+  return Array.from(new Set(keys.map((key) => key.trim()).filter(Boolean)));
 }
 
 function productMapping(

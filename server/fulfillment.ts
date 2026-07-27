@@ -102,7 +102,8 @@ async function planGroups(order: Order): Promise<GroupPlan[]> {
   const groups = new Map<FulfillmentProvider, GroupPlan>();
   const printfulDiscovery = new Map<string, Awaited<ReturnType<typeof discoverPrintfulVariant>>>();
 
-  for (const [orderItemIndex, rawItem] of order.items.entries()) {
+  for (let orderItemIndex = 0; orderItemIndex < order.items.length; orderItemIndex += 1) {
+    const rawItem = order.items[orderItemIndex];
     const item = selectionsFromLegacyNote(rawItem);
     const product = await catalogProductFor(item);
     if (!product) continue;
@@ -188,11 +189,11 @@ async function planGroups(order: Order): Promise<GroupPlan[]> {
     }
     group.items.push(planned);
   }
-  return [...groups.values()];
+  return Array.from(groups.values());
 }
 
 function uniqueReasons(reasons: string[]): string | undefined {
-  const unique = [...new Set(reasons.filter(Boolean))];
+  const unique = Array.from(new Set(reasons.filter(Boolean)));
   return unique.length ? unique.join("; ") : undefined;
 }
 
