@@ -315,23 +315,23 @@ export const CLAIM_SUBMISSION_POLICY = {
   intro:
     "To maintain fairness and prevent fraudulent activity, all claims must follow the rules below.",
   filingRequirements: [
-    "A clear photo or scan of the receipt (or detailed verification notes while upload rolls out)",
-    "The business name and phone number",
+    "A clear photo or scan of a legitimate receipt (or detailed verification notes while upload rolls out)",
+    "The business name and a reachable phone number so we can verify by call or fax",
     "The business address or location when available",
     "The date of service or purchase",
     "The amount paid out-of-pocket",
-    "A brief description of the expense",
-    "The member’s correct contact information / name (or pet’s name) on the receipt",
+    "A brief description of the expense and why it qualifies (work commute, enrolled-student supplies, etc.)",
+    "The member’s name on the receipt (or pet’s name for veterinary claims)",
   ],
   verificationWindow: {
     minHours: EXPENSE_RELIEF_DEFAULTS.reviewHoursMin,
     maxHours: EXPENSE_RELIEF_DEFAULTS.reviewHoursMax,
     checks: [
-      "Receipt authenticity",
-      "Business legitimacy",
+      "Receipt authenticity (not AI-generated, altered, or fabricated)",
+      "Business legitimacy — phone call, fax, or merchant lookup when needed",
       "Accuracy of the information provided",
-      "That the receipt is not AI-generated, altered, or fabricated",
-      "That the expense qualifies under the member’s tier",
+      "That the expense is verifiable and not personal lifestyle spending",
+      "That the expense qualifies under the member’s tier and program rules",
     ],
   },
   approvedNotes: [
@@ -341,7 +341,8 @@ export const CLAIM_SUBMISSION_POLICY = {
   ],
   deniedReasons: [
     "Receipts are fake, altered, or AI-generated",
-    "Information is incomplete or unverifiable",
+    "Information is incomplete or cannot be verified by phone, fax, or merchant records",
+    "The expense is personal lifestyle (haircuts, nails, lunch money, children’s school supplies, etc.)",
     "The expense does not qualify under the program",
     "The member’s subscription is inactive",
     "The member attempts to file before activation without Early Activation",
@@ -351,96 +352,89 @@ export const CLAIM_SUBMISSION_POLICY = {
 
 export const ACCEPTABLE_CLAIMS = [
   {
-    group: "Healthcare & medical",
+    group: "Healthcare, dental & veterinary (verifiable)",
     items: [
-      "Copays, deductibles, and coinsurance you paid",
-      "Prescription and qualifying OTC medications",
-      "Mental health therapy, chiropractic, physical therapy sessions",
-      "Vision care — exams, glasses, contacts",
-      "Medical supplies (bandages, braces, glucose strips, etc.)",
-    ],
-  },
-  {
-    group: "Dental",
-    items: [
-      "Cleanings, exams, fillings, crowns, bridges",
-      "Root canals, extractions, orthodontics with paid invoices",
-    ],
-  },
-  {
-    group: "Veterinary",
-    items: [
-      "Wellness visits, vaccinations, medications",
-      "Emergency visits, diagnostics, surgery, dental cleaning for pets",
-      "Specialty care with itemized paid receipts",
-    ],
-  },
-  {
-    group: "Insurance-related out-of-pocket",
-    items: [
-      "Non-covered or partially covered services you paid yourself",
-      "Out-of-network fees and higher prescription tiers you paid",
+      "Copays, deductibles, coinsurance, prescriptions with pharmacy/clinic receipt",
+      "Dental and medical visits with provider invoice you can verify by phone",
+      "Veterinary care with clinic receipt showing pet/member info",
+      "Vision care and medical supplies with legitimate merchant proof",
     ],
   },
   {
     group: "Tolls, tickets & violations",
     items: [
-      "Paid toll bills",
-      "Paid parking tickets and traffic fines",
-      "Paid administrative / court processing fees tied to those fines",
+      "Paid toll bills with statement or agency receipt",
+      "Paid parking tickets and traffic fines with proof of payment",
+      "Paid administrative / court fees tied to those fines",
     ],
   },
   {
-    group: "Household, work & fees",
+    group: "Work commute & required work costs",
     items: [
-      "Essential utility shortfalls and necessary repairs you paid",
-      "Required childcare gaps, commuting, work/school supplies, uniforms",
-      "Bank, late, and documented service/processing fees you paid",
+      "Commute to and from work — transit, tolls, parking — with proof of the back-and-forth",
+      "Required work uniforms or employer-required gear with verifiable receipt",
+      "Required work supplies purchased for your job with merchant proof",
+    ],
+  },
+  {
+    group: "Member’s own school / education",
+    items: [
+      "School supplies for yourself when you are currently enrolled and on an active plan",
+      "Required course materials with school/bookstore receipt in your name",
+    ],
+  },
+  {
+    group: "Other verifiable paid costs",
+    items: [
+      "Insurance out-of-pocket amounts with EOBs / itemized paid bills",
+      "Documented utility shortfalls or essential repairs with bill + proof of payment",
+      "Bank, late, or service fees with statement proof",
     ],
   },
 ] as const;
 
 export const NOT_ACCEPTABLE_CLAIMS = [
   {
-    group: "Not real paid expenses",
+    group: "Personal lifestyle (not covered)",
     items: [
-      "Estimates, quotes, or unpaid invoices",
-      "Expenses someone else paid for you with no proof you reimbursed them",
-      "Duplicate claims for the same receipt",
-      "Altered, photoshopped, or incomplete receipts",
+      "Haircuts, barbershop, nail salon, spa, or personal grooming",
+      "Lunch money, café runs, fast food, snacks, or everyday meals",
+      "Entertainment, streaming, hobbies, vacations, luxury goods",
+      "Elective cosmetic procedures that are not medically necessary",
     ],
   },
   {
-    group: "Lifestyle & luxury",
+    group: "Family / kids personal shopping",
     items: [
-      "Vacations, entertainment, streaming, gaming, hobbies",
-      "Luxury goods, jewelry, designer fashion",
-      "Elective cosmetic procedures not medically necessary",
-      "Alcohol, tobacco, recreational cannabis, illegal purchases",
+      "School supplies bought for your children (personal family expense)",
+      "Kids’ lunch money, allowances, or personal care for household members",
+      "Personal shopping that cannot be tied to your own enrolled education or job requirement",
+    ],
+  },
+  {
+    group: "Not real or not verifiable",
+    items: [
+      "Estimates, quotes, or unpaid invoices",
+      "Receipts we cannot confirm by phone, fax, or legitimate merchant records",
+      "Altered, photoshopped, AI-generated, or incomplete receipts",
+      "Expenses someone else paid with no proof you reimbursed them",
+      "Duplicate claims for the same receipt",
     ],
   },
   {
     group: "Money transfers & debt",
     items: [
-      "Cash advances, payday loans, credit-card payments, or loan principal (use Pocket Booster cushions for bridge cash)",
+      "Cash advances, payday loans, credit-card payments, or loan principal (use Pocket Booster for bridge cash)",
       "Investments, crypto, gambling losses, money sent to friends/family",
-      "Rent or mortgage as a blanket claim without an eligible documented shortfall category",
+      "Rent or mortgage as a blanket claim",
     ],
   },
   {
-    group: "Insurance premiums & program fees",
+    group: "Program fees & premiums",
     items: [
-      "Monthly insurance premiums (health, auto, life, pet) as the claim itself",
-      "Out-of-Pocket Booster membership fees or the $125 Early Activation fee",
-      "Pocket Booster subscription fees or FR2P / FARSUP program fees",
-    ],
-  },
-  {
-    group: "Fraud & non-verification",
-    items: [
-      "Claims without merchant name, service date, recipient name, and proof of payment",
-      "Expenses from businesses that cannot be verified as legitimate",
-      "Charges that do not match the member or pet named on the receipt",
+      "Monthly insurance premiums as the claim itself",
+      "Out-of-Pocket Booster membership or $125 Early Activation fees",
+      "Pocket Booster, FR2P, or FARSUP program fees",
     ],
   },
 ] as const;
