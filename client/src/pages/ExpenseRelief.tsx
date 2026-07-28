@@ -4,9 +4,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
   CheckCircle2,
+  CircleX,
   ClipboardList,
   Clock3,
-  CircleX,
   FileCheck2,
   Landmark,
   Loader2,
@@ -26,14 +26,19 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import {
   ACCEPTABLE_CLAIMS,
+  ACTIVATION_POLICY,
+  CLAIM_SUBMISSION_POLICY,
   EXPENSE_CATEGORIES,
-  EXPENSE_RELIEF_PLAN,
+  EXPENSE_RELIEF_DEFAULTS,
   EXPENSE_RELIEF_PLATFORM,
   EXPENSE_RELIEF_RULES,
-  HISTORICAL_UDS_STYLE_TIERS,
+  EXPENSE_RELIEF_TIERS,
   NOT_ACCEPTABLE_CLAIMS,
+  earlyActivationBreakdown,
   reimbursementForAmount,
   type ExpenseCategoryId,
+  type ExpenseReliefTier,
+  type ExpenseReliefTierId,
 } from "@shared/expenseRelief";
 import {
   P2P_INVESTMENT_AMOUNT_STEP,
@@ -47,12 +52,15 @@ type PlanResponse = {
   shortName: string;
   fundingStrategy: string;
   tagline: string;
-  plan: typeof EXPENSE_RELIEF_PLAN;
+  tiers: ExpenseReliefTier[];
+  defaults: typeof EXPENSE_RELIEF_DEFAULTS;
+  earlyActivationTotal: number;
   categories: typeof EXPENSE_CATEGORIES;
   rules: typeof EXPENSE_RELIEF_RULES;
   acceptable: typeof ACCEPTABLE_CLAIMS;
   notAcceptable: typeof NOT_ACCEPTABLE_CLAIMS;
-  historicalTiers: typeof HISTORICAL_UDS_STYLE_TIERS;
+  activationPolicy: typeof ACTIVATION_POLICY;
+  claimSubmissionPolicy: typeof CLAIM_SUBMISSION_POLICY;
   note: string;
 };
 
@@ -69,13 +77,15 @@ type MeResponse = {
     accelerationFeePaid: string | null;
     createdAt: string | null;
   } | null;
-  plan: typeof EXPENSE_RELIEF_PLAN;
+  tier: ExpenseReliefTier;
   eligibility: {
     canFile: boolean;
     reason: string;
     waitingDaysRemaining: number;
     accelerationFeeRequired: boolean;
     accelerationFee: number;
+    earlyActivationFee: number;
+    processingFee: number;
     membershipActive: boolean;
   };
   claims: Array<{
@@ -98,11 +108,8 @@ type MeResponse = {
 };
 
 type VaultResponse = {
-  projectTag: string;
-  totalVaultContribution: number;
   availableCompensationCapital: number;
-  positions: number;
-  fundingStrategy: string;
+  totalVaultContribution: number;
 };
 
 function formatMoney(value: number | string) {
@@ -141,21 +148,33 @@ export default function ExpenseRelief() {
     queryKey: ["/api/expense-relief/vault"],
   });
 
-  const plan = catalog?.plan ?? EXPENSE_RELIEF_PLAN;
-  const categories = catalog?.categories ?? EXPENSE_CATEGORIES;
+  const tiers = catalog?.tiers ?? EXPENSE_RELIEF_TIERS;
   const rules = catalog?.rules ?? EXPENSE_RELIEF_RULES;
   const acceptable = catalog?.acceptable ?? ACCEPTABLE_CLAIMS;
   const notAcceptable = catalog?.notAcceptable ?? NOT_ACCEPTABLE_CLAIMS;
-  const historical = catalog?.historicalTiers ?? HISTORICAL_UDS_STYLE_TIERS;
+  const activationPolicy = catalog?.activationPolicy ?? ACTIVATION_POLICY;
+  const claimPolicy = catalog?.claimSubmissionPolicy ?? CLAIM_SUBMISSION_POLICY;
+  const categories = catalog?.categories ?? EXPENSE_CATEGORIES;
+  const earlyTotal =
+    catalog?.earlyActivationTotal ??
+    EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal;
   const membership = me?.membership ?? null;
   const eligibility = me?.eligibility;
+  const activeTier = me?.tier ?? null;
   const vaultAvailable =
     vault?.availableCompensationCapital ?? me?.vaultAvailable ?? 0;
   const vaultCanPay = vaultAvailable > 0;
 
+  const [selectedTierId, setSelectedTierId] =
+    useState<ExpenseReliefTierId>("premium");
+  const selectedTier =
+    tiers.find((t) => t.id === selectedTierId) ?? tiers[2] ?? tiers[0];
+
   const [categoryId, setCategoryId] = useState<ExpenseCategoryId>("healthcare");
   const [expenseAmount, setExpenseAmount] = useState("");
   const [merchantName, setMerchantName] = useState("");
+  const [businessPhone, setBusinessPhone] = useState("");
+  const [businessAddress, setBusinessAddress] = useState("");
   const [serviceDate, setServiceDate] = useState("");
   const [recipientName, setRecipientName] = useState("");
   const [description, setDescription] = useState("");
@@ -164,9 +183,12 @@ export default function ExpenseRelief() {
     String(P2P_MIN_INVESTMENT_AMOUNT),
   );
 
+  const rateForPreview = activeTier
+    ? activeTier.reimbursementRate
+    : selectedTier.reimbursementRate;
   const parsedExpense = Number(expenseAmount);
   const previewPayout = Number.isFinite(parsedExpense)
-    ? reimbursementForAmount(parsedExpense)
+    ? reimbursementForAmount(parsedExpense, rateForPreview)
     : 0;
 
   const parsedInvestAmount = Number(investAmount);
@@ -174,10 +196,12 @@ export default function ExpenseRelief() {
     investAmount.trim() !== "" &&
     p2pInvestmentAmountSchema.safeParse(parsedInvestAmount).success;
 
+  const earlyBreakdown = earlyActivationBreakdown(selectedTier.monthlyFee);
+
   const activateMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (planId: ExpenseReliefTierId) => {
       const res = await apiRequest("POST", "/api/expense-relief/activate", {
-        planId: "premier",
+        planId,
       });
       return res.json();
     },
@@ -207,11 +231,11 @@ export default function ExpenseRelief() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/expense-relief/me"] });
       queryClient.invalidateQueries({ queryKey: ["/api/expense-relief/vault"] });
-      toast({ title: "Acceleration on file", description: data.message });
+      toast({ title: "Early Activation on file", description: data.message });
     },
     onError: (err: unknown) => {
       toast({
-        title: "Acceleration failed",
+        title: "Early Activation failed",
         description: errorMessage(err, "Could not record fee."),
         variant: "destructive",
       });
@@ -224,6 +248,8 @@ export default function ExpenseRelief() {
         categoryId,
         expenseAmount: parsedExpense,
         merchantName,
+        businessPhone: businessPhone || undefined,
+        businessAddress: businessAddress || undefined,
         serviceDate,
         recipientName,
         description,
@@ -235,11 +261,13 @@ export default function ExpenseRelief() {
       queryClient.invalidateQueries({ queryKey: ["/api/expense-relief/me"] });
       setExpenseAmount("");
       setMerchantName("");
+      setBusinessPhone("");
+      setBusinessAddress("");
       setServiceDate("");
       setRecipientName("");
       setDescription("");
       setEvidenceNotes("");
-      toast({ title: "Claim submitted", description: data.message });
+      toast({ title: "Application submitted", description: data.message });
     },
     onError: (err: unknown) => {
       toast({
@@ -265,7 +293,7 @@ export default function ExpenseRelief() {
         title: "Vault capital added",
         description:
           data.message ||
-          "Your RPUs went into the Expense Relief Compensation Vault.",
+          "Your RPUs went into the Out-of-Pocket Booster Compensation Vault.",
       });
     },
     onError: (err: unknown) => {
@@ -281,26 +309,26 @@ export default function ExpenseRelief() {
     () => [
       {
         icon: Wallet,
-        title: "One Premier membership",
-        body: `$${plan.monthlyMembershipFee.toFixed(0)}/mo — up to ${(plan.reimbursementRate * 100).toFixed(0)}% back on verified out-of-pocket costs. No $10/$20/$30 maze.`,
+        title: "Four clean tiers",
+        body: "$10 Starter (25%), $20 Basic (40%), $40 Premium (55%), $60 Elite (65%). Pick the coverage that fits.",
       },
       {
         icon: TimerReset,
-        title: "Don't want to wait 30 days?",
-        body: `First claim opens after ${plan.firstClaimWaitDays} days. Prefer not to wait? Pay membership + the $${plan.accelerationFee.toFixed(0)} acceleration fee to file early. That $100 unlocks filing only — it is not a payout.`,
+        title: "30 days — or $125 Early Activation",
+        body: `Wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days, or pay $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing = $${earlyTotal.toFixed(0)} one-time (any tier). Early Activation does not raise your %.`,
       },
       {
         icon: FileCheck2,
-        title: "Submit a claim application",
-        body: `Fill out the in-app application with merchant, receipt details, and proof you paid. Review takes ${plan.reviewHoursMin} hours to about a week.`,
+        title: "Claim application + verification",
+        body: "Submit receipt details. Review runs 72 hours to about a week before any payout.",
       },
       {
         icon: Landmark,
         title: "No vault money = no payout",
-        body: "Membership fees, the $100 acceleration fee, and Empire Invest capital fund the Compensation Vault. If the vault is empty, approved claims wait — nobody gets paid until capital is there. Works beside Pocket Booster cushions.",
+        body: "Membership fees and Early Activation seed the Compensation Vault. Empty vault means approved claims wait. Companion to Pocket Booster cushions.",
       },
     ],
-    [plan],
+    [earlyTotal],
   );
 
   return (
@@ -316,89 +344,44 @@ export default function ExpenseRelief() {
                 "radial-gradient(ellipse 80% 60% at 20% 20%, hsl(var(--primary)/0.22), transparent 55%), radial-gradient(ellipse 70% 50% at 90% 10%, hsl(38 70% 40% / 0.18), transparent 50%), linear-gradient(165deg, hsl(345 45% 7%), hsl(345 40% 11%) 45%, hsl(220 25% 8%))",
             }}
           />
-          <div
-            className="pointer-events-none absolute inset-0 opacity-[0.07]"
-            aria-hidden="true"
-            style={{
-              backgroundImage:
-                "repeating-linear-gradient(135deg, hsl(var(--primary)) 0 1px, transparent 1px 14px)",
-            }}
-          />
-
           <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
             <BrandSectionBanner compact />
             <motion.div
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55 }}
               className="mt-8 max-w-3xl"
             >
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-primary">
-                Standalone Empire program · later FR2P-ready
+                The Consolidatus Empire · companion to Pocket Booster
               </p>
-              <h1 className="font-brand text-4xl font-bold tracking-wide text-foreground sm:text-5xl lg:text-6xl">
-                Consolidated{" "}
-                <span className="gold-shine">Expense Relief</span>
+              <h1 className="font-brand text-4xl font-bold tracking-wide sm:text-5xl lg:text-6xl">
+                Out-of-Pocket{" "}
+                <span className="gold-shine">Booster</span>
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {catalog?.tagline ?? EXPENSE_RELIEF_PLATFORM.tagline} One solid
-                Premier plan — inspired by the old UDS model that kept the
-                strongest membership and dropped the rest.
+                {catalog?.tagline ?? EXPENSE_RELIEF_PLATFORM.tagline} Four
+                membership tiers. Optional $125 Early Activation. Claims pay
+                only when the Compensation Vault has capital.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                {isAuthenticated ? (
-                  membership?.subscriptionStatus === "active" ? (
-                    <Button
-                      asChild
-                      className="bg-primary text-primary-foreground"
-                    >
-                      <a href="#claim-application">Open claim application</a>
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => activateMutation.mutate()}
-                      disabled={activateMutation.isPending}
-                      className="bg-primary text-primary-foreground"
-                      data-testid="button-activate-expense-relief"
-                    >
-                      {activateMutation.isPending ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : null}
-                      Activate Premier · {formatMoney(plan.monthlyMembershipFee)}
-                      /mo
-                    </Button>
-                  )
-                ) : (
-                  <Button asChild className="bg-primary text-primary-foreground">
-                    <Link href="/auth">Sign in to join</Link>
-                  </Button>
-                )}
+                <Button asChild className="bg-primary text-primary-foreground">
+                  <a href="#tiers">Compare tiers</a>
+                </Button>
                 <Button asChild variant="outline">
-                  <a href="#claim-application">Claim application</a>
+                  <a href="#activation-policy">Activation policy</a>
                 </Button>
                 <Button asChild variant="ghost">
                   <Link href="/pocket-booster">Pocket Booster</Link>
                 </Button>
-                <Button asChild variant="ghost">
-                  <Link href="/invest">Empire Invest</Link>
-                </Button>
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.55 }}
-              className="mt-12 grid gap-4 sm:grid-cols-3"
-            >
+            <div className="mt-12 grid gap-4 sm:grid-cols-3">
               {[
+                { label: "Early Activation", value: formatMoney(earlyTotal) },
                 {
-                  label: "Reimbursement",
-                  value: `Up to ${(plan.reimbursementRate * 100).toFixed(0)}%`,
-                },
-                {
-                  label: "Monthly payout cap",
-                  value: formatMoney(plan.monthlyPayoutCap),
+                  label: "Top reimbursement",
+                  value: "Up to 65%",
                 },
                 {
                   label: "Vault available",
@@ -412,38 +395,105 @@ export default function ExpenseRelief() {
                   <p className="text-[10px] uppercase tracking-[0.22em] text-primary">
                     {stat.label}
                   </p>
-                  <p className="mt-1 font-display text-2xl font-bold text-foreground">
+                  <p className="mt-1 font-display text-2xl font-bold">
                     {stat.value}
                   </p>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </section>
 
         <section
-          id="how-it-works"
+          id="tiers"
           className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8"
+          data-testid="section-tier-comparison"
         >
-          <div className="mb-10 max-w-2xl">
-            <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-primary">
-              Why one plan — not four
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              UDS once sold $10 / $20 / $30 / $40 memberships. The $40 plan paid
-              the biggest share back, so the lower tiers got retired. We start
-              there: one Premier offer, clear rules, real verification.
-            </p>
+          <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-primary">
+            Membership tiers
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            Reimbursement % rises with the tier. Early Activation ($125) sits
+            outside the tiers and works with any plan.
+          </p>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {tiers.map((tier) => {
+              const selected = selectedTierId === tier.id;
+              const active = membership?.planId === tier.id;
+              return (
+                <button
+                  key={tier.id}
+                  type="button"
+                  onClick={() => setSelectedTierId(tier.id)}
+                  className={`rounded-xl border p-5 text-left transition ${
+                    selected || active
+                      ? "border-primary bg-primary/10 shadow-[0_0_0_1px_hsl(var(--primary)/0.35)]"
+                      : "border-primary/20 bg-card/40 hover:border-primary/50"
+                  }`}
+                  data-testid={`button-select-tier-${tier.id}`}
+                >
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+                    {tier.name}
+                    {active ? " · Active" : ""}
+                  </p>
+                  <p className="mt-2 font-display text-3xl font-bold">
+                    ${tier.monthlyFee}
+                    <span className="text-sm font-normal text-muted-foreground">
+                      /mo
+                    </span>
+                  </p>
+                  <p className="mt-1 text-lg font-semibold text-foreground">
+                    {(tier.reimbursementRate * 100).toFixed(0)}% back
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    {tier.bestFor}
+                  </p>
+                  <p className="mt-3 text-[11px] text-muted-foreground">
+                    Caps {formatMoney(tier.monthlyPayoutCap)}/mo ·{" "}
+                    {formatMoney(tier.annualPayoutCap)}/yr
+                  </p>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="mt-6 flex flex-wrap items-center gap-3 rounded-xl border border-primary/25 bg-black/20 p-4">
+            <div className="flex-1 text-sm text-muted-foreground">
+              Selected: <strong className="text-foreground">{selectedTier.name}</strong>{" "}
+              — first month with Early Activation:{" "}
+              <strong className="text-foreground">
+                {formatMoney(earlyBreakdown.firstMonthWithEarlyActivation)}
+              </strong>{" "}
+              (${selectedTier.monthlyFee} + ${earlyTotal})
+            </div>
+            {isAuthenticated && membership?.subscriptionStatus !== "active" && (
+              <Button
+                onClick={() => activateMutation.mutate(selectedTier.id)}
+                disabled={activateMutation.isPending}
+                data-testid="button-activate-selected-tier"
+              >
+                {activateMutation.isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                Activate {selectedTier.name}
+              </Button>
+            )}
+            {!isAuthenticated && (
+              <Button asChild>
+                <Link href="/auth">Sign in to join</Link>
+              </Button>
+            )}
+          </div>
+
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
             {howItWorks.map((item, index) => (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ delay: index * 0.06 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
                 className="flex gap-4 rounded-xl border border-primary/20 bg-card/40 p-5"
               >
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-primary/35 bg-primary/10 text-primary">
@@ -453,39 +503,130 @@ export default function ExpenseRelief() {
                   <h3 className="font-display text-lg font-bold uppercase tracking-wide">
                     {item.title}
                   </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-1.5 text-sm text-muted-foreground">
                     {item.body}
                   </p>
                 </div>
               </motion.div>
             ))}
           </div>
+        </section>
 
-          <div className="mt-10 overflow-x-auto rounded-xl border border-dashed border-primary/30 bg-black/20 p-4">
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-primary">
-              Historical UDS-style ladder (not offered)
+        <section
+          id="activation-policy"
+          className="border-y border-primary/15 bg-black/20 py-16"
+          data-testid="section-activation-policy"
+        >
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-primary">
+              {activationPolicy.title}
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+              {activationPolicy.intro}
             </p>
-            <div className="grid min-w-[520px] grid-cols-4 gap-2">
-              {historical.map((tier) => (
-                <div
-                  key={tier.monthlyFee}
-                  className={`rounded-lg border px-3 py-3 ${
-                    tier.monthlyFee === 40
-                      ? "border-primary/50 bg-primary/10"
-                      : "border-border/60 bg-background/30 opacity-70"
-                  }`}
-                >
-                  <p className="font-display text-sm font-bold">
-                    ${tier.monthlyFee}/mo
+            <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
+              {activationPolicy.requirements.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-8 rounded-xl border border-primary/30 bg-background/40 p-6">
+              <h3 className="font-display text-xl font-bold uppercase tracking-wide">
+                {activationPolicy.earlyActivation.title}
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {activationPolicy.earlyActivation.body}
+              </p>
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                {activationPolicy.earlyActivation.lineItems.map((line) => (
+                  <div
+                    key={line.label}
+                    className="rounded-lg border border-border/60 bg-black/20 px-4 py-3"
+                  >
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      {line.label}
+                    </p>
+                    <p className="font-display text-xl font-bold">
+                      {formatMoney(line.amount)}
+                    </p>
+                  </div>
+                ))}
+                <div className="rounded-lg border border-primary/40 bg-primary/10 px-4 py-3">
+                  <p className="text-[10px] uppercase tracking-wider text-primary">
+                    Total one-time
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    ~{(tier.reimbursementRate * 100).toFixed(0)}% back
-                  </p>
-                  <p className="mt-2 text-[10px] leading-snug text-muted-foreground">
-                    {tier.note}
+                  <p className="font-display text-xl font-bold">
+                    {formatMoney(activationPolicy.earlyActivation.total)}
                   </p>
                 </div>
-              ))}
+              </div>
+              <ul className="mt-4 space-y-1.5 text-xs text-muted-foreground">
+                {activationPolicy.earlyActivation.notes.map((note) => (
+                  <li key={note}>· {note}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="claim-policy"
+          className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8"
+          data-testid="section-claim-policy"
+        >
+          <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-primary">
+            {claimPolicy.title}
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+            {claimPolicy.intro}
+          </p>
+          <div className="mt-8 grid gap-6 lg:grid-cols-2">
+            <div className="rounded-xl border border-primary/20 bg-card/40 p-5">
+              <h3 className="font-display text-lg font-bold uppercase tracking-wide">
+                Filing requirements
+              </h3>
+              <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                {claimPolicy.filingRequirements.map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <ClipboardList className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-xl border border-primary/20 bg-card/40 p-5">
+              <h3 className="font-display text-lg font-bold uppercase tracking-wide">
+                Verification window
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {claimPolicy.verificationWindow.minHours} hours to{" "}
+                {Math.round(claimPolicy.verificationWindow.maxHours / 24)} days.
+                We check:
+              </p>
+              <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
+                {claimPolicy.verificationWindow.checks.map((item) => (
+                  <li key={item}>· {item}</li>
+                ))}
+              </ul>
+              <h4 className="mt-5 font-display text-sm font-bold uppercase tracking-wide text-primary">
+                Approved
+              </h4>
+              <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+                {claimPolicy.approvedNotes.map((n) => (
+                  <li key={n}>· {n}</li>
+                ))}
+              </ul>
+              <h4 className="mt-4 font-display text-sm font-bold uppercase tracking-wide text-red-400">
+                Denied when
+              </h4>
+              <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+                {claimPolicy.deniedReasons.map((n) => (
+                  <li key={n}>· {n}</li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
@@ -493,26 +634,18 @@ export default function ExpenseRelief() {
         <section
           id="acceptable"
           className="border-y border-primary/15 bg-black/20 py-16"
-          data-testid="section-acceptable-claims"
         >
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-primary">
               What&apos;s acceptable — and what&apos;s not
             </h2>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Expense Relief only reimburses verified out-of-pocket costs you
-              already paid. It is not FR2P rewards and not a Pocket Booster
-              cash cushion.
-            </p>
-
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {rules.map((rule) => (
                 <div
                   key={rule.id}
                   className="rounded-xl border border-primary/25 bg-background/35 p-4"
-                  data-testid={`rule-${rule.id}`}
                 >
-                  <h3 className="font-display text-sm font-bold uppercase tracking-wide text-foreground">
+                  <h3 className="font-display text-sm font-bold uppercase tracking-wide">
                     {rule.title}
                   </h3>
                   <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
@@ -521,7 +654,6 @@ export default function ExpenseRelief() {
                 </div>
               ))}
             </div>
-
             <div className="mt-10 grid gap-6 lg:grid-cols-2">
               <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-5">
                 <div className="mb-4 flex items-center gap-2 text-emerald-400">
@@ -530,22 +662,19 @@ export default function ExpenseRelief() {
                     Acceptable
                   </h3>
                 </div>
-                <div className="space-y-4">
-                  {acceptable.map((group) => (
-                    <div key={group.group}>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-400/90">
-                        {group.group}
-                      </p>
-                      <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">
-                        {group.items.map((item) => (
-                          <li key={item}>· {item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
+                {acceptable.map((group) => (
+                  <div key={group.group} className="mb-4">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-400/90">
+                      {group.group}
+                    </p>
+                    <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">
+                      {group.items.map((item) => (
+                        <li key={item}>· {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
-
               <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-5">
                 <div className="mb-4 flex items-center gap-2 text-red-400">
                   <CircleX className="h-5 w-5" />
@@ -553,20 +682,18 @@ export default function ExpenseRelief() {
                     Not acceptable
                   </h3>
                 </div>
-                <div className="space-y-4">
-                  {notAcceptable.map((group) => (
-                    <div key={group.group}>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-red-400/90">
-                        {group.group}
-                      </p>
-                      <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">
-                        {group.items.map((item) => (
-                          <li key={item}>· {item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
+                {notAcceptable.map((group) => (
+                  <div key={group.group} className="mb-4">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-red-400/90">
+                      {group.group}
+                    </p>
+                    <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">
+                      {group.items.map((item) => (
+                        <li key={item}>· {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -585,9 +712,8 @@ export default function ExpenseRelief() {
                   </h2>
                   <p className="mt-1 max-w-xl text-sm text-muted-foreground">
                     Need bridge cash before payday? Use Pocket Booster cushions.
-                    Already paid a medical, dental, vet, or toll bill out of
-                    pocket? File an Expense Relief claim application here.
-                    Same Empire hub login — two tools, different jobs.
+                    Already paid a bill out of pocket? File here. Same Empire
+                    hub login.
                   </p>
                 </div>
               </div>
@@ -602,40 +728,32 @@ export default function ExpenseRelief() {
           id="member-desk"
           className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8"
         >
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-primary">
-                Member desk
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Activate, wait or accelerate, then file a verified claim.
-              </p>
-            </div>
-            {membership?.subscriptionStatus === "active" && (
-              <div className="flex items-center gap-2 rounded-full border border-primary/35 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                Premier active
-              </div>
-            )}
-          </div>
+          <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-primary">
+            Member desk
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Activate a tier, wait or buy Early Activation, then submit a claim
+            application.
+          </p>
 
           {authLoading || (isAuthenticated && meLoading) ? (
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="mt-6 flex items-center gap-2 text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin" />
               Loading membership…
             </div>
           ) : !isAuthenticated ? (
-            <div className="rounded-xl border border-primary/25 bg-card/40 p-8 text-center">
+            <div className="mt-6 rounded-xl border border-primary/25 bg-card/40 p-8 text-center">
               <ShieldCheck className="mx-auto h-10 w-10 text-primary" />
               <p className="mt-3 text-sm text-muted-foreground">
-                Sign in with your Empire hub account to activate Expense Relief.
+                Sign in with your Empire hub account to activate Out-of-Pocket
+                Booster.
               </p>
               <Button asChild className="mt-4">
                 <Link href="/auth">Sign in</Link>
               </Button>
             </div>
           ) : (
-            <div className="grid gap-6 lg:grid-cols-2">
+            <div className="mt-8 grid gap-6 lg:grid-cols-2">
               <div className="space-y-4 rounded-xl border border-primary/25 bg-card/40 p-6">
                 <h3 className="font-display text-xl font-bold uppercase tracking-wide">
                   Membership status
@@ -643,17 +761,17 @@ export default function ExpenseRelief() {
                 {membership?.subscriptionStatus === "active" ? (
                   <>
                     <p className="text-sm text-muted-foreground">
+                      {activeTier?.name ?? membership.planId} ·{" "}
                       {formatMoney(membership.monthlyFee)}/mo · up to{" "}
-                      {(parseFloat(membership.reimbursementRate) * 100).toFixed(
-                        0,
-                      )}
-                      % back · caps{" "}
-                      {formatMoney(membership.monthlyPayoutCap)}/mo and{" "}
-                      {formatMoney(membership.annualPayoutCap)}/yr
+                      {(
+                        parseFloat(membership.reimbursementRate) * 100
+                      ).toFixed(0)}
+                      % back · caps {formatMoney(membership.monthlyPayoutCap)}
+                      /mo
                     </p>
                     {eligibility && (
                       <div className="rounded-lg border border-primary/20 bg-background/40 p-4 text-sm">
-                        <div className="mb-1 flex items-center gap-2 font-semibold text-foreground">
+                        <div className="mb-1 flex items-center gap-2 font-semibold">
                           <Clock3 className="h-4 w-4 text-primary" />
                           First-claim gate
                         </div>
@@ -670,8 +788,8 @@ export default function ExpenseRelief() {
                             {accelerationMutation.isPending ? (
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : null}
-                            Pay ${eligibility.accelerationFee.toFixed(0)} early
-                            filing (on top of membership)
+                            Pay Early Activation ·{" "}
+                            {formatMoney(eligibility.accelerationFee)}
                           </Button>
                         )}
                       </div>
@@ -679,29 +797,26 @@ export default function ExpenseRelief() {
                     {me && (
                       <p className="text-xs text-muted-foreground">
                         Used this month: {formatMoney(me.usage.paidThisMonth)} /{" "}
-                        {formatMoney(me.usage.monthlyPayoutCap)} · Year:{" "}
-                        {formatMoney(me.usage.paidThisYear)} /{" "}
-                        {formatMoney(me.usage.annualPayoutCap)}
+                        {formatMoney(me.usage.monthlyPayoutCap)}
                       </p>
                     )}
                   </>
                 ) : (
                   <>
                     <p className="text-sm text-muted-foreground">
-                      Join the Premier plan. Your first month seeds the
-                      Compensation Vault so claims can be paid without founder
-                      capital.
+                      Choose a tier above, then activate. Your first month seeds
+                      the Compensation Vault.
                     </p>
                     <Button
-                      onClick={() => activateMutation.mutate()}
+                      onClick={() => activateMutation.mutate(selectedTier.id)}
                       disabled={activateMutation.isPending}
                       data-testid="button-activate-expense-relief-desk"
                     >
                       {activateMutation.isPending ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       ) : null}
-                      Activate Premier · {formatMoney(plan.monthlyMembershipFee)}
-                      /mo
+                      Activate {selectedTier.name} ·{" "}
+                      {formatMoney(selectedTier.monthlyFee)}/mo
                     </Button>
                   </>
                 )}
@@ -715,24 +830,15 @@ export default function ExpenseRelief() {
                   <ClipboardList className="h-5 w-5 text-primary" />
                   Claim application
                 </h3>
-                <p className="text-xs text-muted-foreground">
-                  This is your in-app application. Incomplete applications are
-                  denied. Read{" "}
-                  <a href="#acceptable" className="text-primary underline">
-                    what&apos;s acceptable
-                  </a>{" "}
-                  first.
-                </p>
                 {!vaultCanPay && (
                   <div
                     className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-amber-100"
                     data-testid="banner-vault-empty"
                   >
-                    Compensation Vault available: {formatMoney(vaultAvailable)}.
-                    You can still submit an application for review, but{" "}
+                    Vault available: {formatMoney(vaultAvailable)}. You can
+                    still apply, but{" "}
                     <strong>you cannot get paid while the vault is empty</strong>
-                    . Membership and the $100 early-file fee do not force a
-                    payout.
+                    .
                   </div>
                 )}
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -745,7 +851,6 @@ export default function ExpenseRelief() {
                       onChange={(e) =>
                         setCategoryId(e.target.value as ExpenseCategoryId)
                       }
-                      data-testid="select-claim-category"
                     >
                       {categories.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -763,12 +868,10 @@ export default function ExpenseRelief() {
                       step="0.01"
                       value={expenseAmount}
                       onChange={(e) => setExpenseAmount(e.target.value)}
-                      placeholder="125.00"
-                      data-testid="input-claim-amount"
                     />
                     <p className="mt-1 text-[11px] text-muted-foreground">
-                      Est. back: {formatMoney(previewPayout)} at{" "}
-                      {(plan.reimbursementRate * 100).toFixed(0)}%
+                      Est. back at {(rateForPreview * 100).toFixed(0)}%:{" "}
+                      {formatMoney(previewPayout)}
                     </p>
                   </div>
                   <div>
@@ -778,49 +881,60 @@ export default function ExpenseRelief() {
                       type="date"
                       value={serviceDate}
                       onChange={(e) => setServiceDate(e.target.value)}
-                      data-testid="input-claim-service-date"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="merchant">Merchant / provider</Label>
+                    <Label htmlFor="merchant">Business name</Label>
                     <Input
                       id="merchant"
                       value={merchantName}
                       onChange={(e) => setMerchantName(e.target.value)}
-                      placeholder="Clinic, pharmacy, toll authority…"
-                      data-testid="input-claim-merchant"
                     />
                   </div>
                   <div>
+                    <Label htmlFor="phone">Business phone</Label>
+                    <Input
+                      id="phone"
+                      value={businessPhone}
+                      onChange={(e) => setBusinessPhone(e.target.value)}
+                      placeholder="Optional but recommended"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <Label htmlFor="address">Business address / location</Label>
+                    <Input
+                      id="address"
+                      value={businessAddress}
+                      onChange={(e) => setBusinessAddress(e.target.value)}
+                      placeholder="Optional but recommended"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
                     <Label htmlFor="recipient">Name on receipt</Label>
                     <Input
                       id="recipient"
                       value={recipientName}
                       onChange={(e) => setRecipientName(e.target.value)}
                       placeholder="Your name or pet's name"
-                      data-testid="input-claim-recipient"
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <Label htmlFor="description">What was this for?</Label>
+                    <Label htmlFor="description">Expense description</Label>
                     <textarea
                       id="description"
                       className="mt-1 min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Short description of the expense"
-                      data-testid="input-claim-description"
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <Label htmlFor="evidence">Verification notes</Label>
+                    <Label htmlFor="evidence">Verification / receipt notes</Label>
                     <textarea
                       id="evidence"
                       className="mt-1 min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                       value={evidenceNotes}
                       onChange={(e) => setEvidenceNotes(e.target.value)}
-                      placeholder="Invoice #, how we can verify the merchant paid status, etc."
-                      data-testid="input-claim-evidence"
+                      placeholder="Invoice #, how we verify the merchant, receipt details…"
                     />
                   </div>
                 </div>
@@ -838,11 +952,6 @@ export default function ExpenseRelief() {
                   ) : null}
                   Submit claim application
                 </Button>
-                <p className="text-[11px] text-muted-foreground">
-                  Review window: {plan.reviewHoursMin} hours typical, up to{" "}
-                  {Math.round(plan.reviewHoursMax / 24)} days. No vault capital
-                  means no payout after approval.
-                </p>
               </div>
             </div>
           )}
@@ -859,16 +968,14 @@ export default function ExpenseRelief() {
                     className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm"
                   >
                     <div>
-                      <p className="font-medium text-foreground">
-                        {claim.merchantName} · {claim.categoryId}
-                      </p>
+                      <p className="font-medium">{claim.merchantName}</p>
                       <p className="text-xs text-muted-foreground">
                         Paid {formatMoney(claim.expenseAmount)} · requested{" "}
                         {formatMoney(claim.requestedPayout)}
                       </p>
                     </div>
                     <span className="rounded-full border border-primary/30 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
-                      {claim.status.replace("_", " ")}
+                      {claim.status.replaceAll("_", " ")}
                     </span>
                   </div>
                 ))}
@@ -884,12 +991,10 @@ export default function ExpenseRelief() {
                 <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-primary">
                   Compensation Vault
                 </h2>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  Same spirit as Pocket Booster&apos;s reserve — but for
-                  reimbursements, not loans. Membership and acceleration fees
-                  go in first. Empire Invest RPUs can expand the pool. Yield
-                  comes from subscription revenue, not your personal bank
-                  account.
+                <p className="mt-3 max-w-xl text-sm text-muted-foreground">
+                  Membership fees and $125 Early Activation fees seed this
+                  vault. Grants and Empire Invest RPUs can expand it. No vault
+                  capital means no member payouts.
                 </p>
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-xl border border-primary/25 bg-background/40 p-4">
@@ -905,20 +1010,15 @@ export default function ExpenseRelief() {
                       Available to pay claims
                     </p>
                     <p className="font-display text-2xl font-bold">
-                      {formatMoney(vault?.availableCompensationCapital ?? 0)}
+                      {formatMoney(vaultAvailable)}
                     </p>
                   </div>
                 </div>
               </div>
-
               <div className="rounded-xl border border-primary/25 bg-card/40 p-6">
                 <h3 className="font-display text-lg font-bold uppercase tracking-wide">
                   Back the vault
                 </h3>
-                <p className="mt-2 text-xs text-muted-foreground">
-                  Optional. Minimum {formatMoney(P2P_MIN_INVESTMENT_AMOUNT)}.
-                  Non-equity Revenue Participation Units only.
-                </p>
                 {!isAuthenticated ? (
                   <Button asChild className="mt-4 w-full">
                     <Link href="/auth">Sign in to invest</Link>
@@ -934,21 +1034,16 @@ export default function ExpenseRelief() {
                       step={P2P_INVESTMENT_AMOUNT_STEP}
                       value={investAmount}
                       onChange={(e) => setInvestAmount(e.target.value)}
-                      data-testid="input-expense-relief-invest"
                     />
                     <Button
                       className="w-full"
                       disabled={!isInvestAmountValid || investMutation.isPending}
                       onClick={() => investMutation.mutate()}
-                      data-testid="button-expense-relief-invest"
                     >
                       {investMutation.isPending ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       ) : null}
-                      Issue RPUs to Expense Relief Vault
-                    </Button>
-                    <Button asChild variant="outline" className="w-full">
-                      <Link href="/invest">Compare Empire programs</Link>
+                      Issue RPUs to OOP Booster Vault
                     </Button>
                   </div>
                 )}

@@ -12,15 +12,19 @@ import {
 } from "@shared/schema";
 import {
   EXPENSE_CATEGORIES,
+  EXPENSE_RELIEF_DEFAULTS,
   EXPENSE_RELIEF_PLAN,
   EXPENSE_RELIEF_PLATFORM,
   EXPENSE_RELIEF_RULES,
+  EXPENSE_RELIEF_TIERS,
   ACCEPTABLE_CLAIMS,
+  ACTIVATION_POLICY,
+  CLAIM_SUBMISSION_POLICY,
   NOT_ACCEPTABLE_CLAIMS,
-  HISTORICAL_UDS_STYLE_TIERS,
   activateExpenseReliefSchema,
   applyPayoutCaps,
   evaluateFirstClaimEligibility,
+  getTierById,
   payAccelerationSchema,
   reimbursementForAmount,
   reviewExpenseClaimSchema,
@@ -135,7 +139,11 @@ async function sumPaidSince(
     .where(
       and(
         eq(expenseReliefClaims.userId, userId),
-        inArray(expenseReliefClaims.status, ["approved", "paid"]),
+        inArray(expenseReliefClaims.status, [
+          "approved",
+          "approved_pending_funds",
+          "paid",
+        ]),
         gte(expenseReliefClaims.createdAt, since),
       ),
     );
@@ -163,13 +171,17 @@ export function registerExpenseReliefRoutes(app: Express): void {
     res.json({
       ...EXPENSE_RELIEF_PLATFORM,
       plan: EXPENSE_RELIEF_PLAN,
+      tiers: EXPENSE_RELIEF_TIERS,
+      defaults: EXPENSE_RELIEF_DEFAULTS,
+      earlyActivationTotal: EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal,
       categories: EXPENSE_CATEGORIES,
       rules: EXPENSE_RELIEF_RULES,
       acceptable: ACCEPTABLE_CLAIMS,
       notAcceptable: NOT_ACCEPTABLE_CLAIMS,
-      historicalTiers: HISTORICAL_UDS_STYLE_TIERS,
+      activationPolicy: ACTIVATION_POLICY,
+      claimSubmissionPolicy: CLAIM_SUBMISSION_POLICY,
       note:
-        "One solid Premier plan — the old $10/$20/$30/$40 ladder is shown for history only and is not offered. The $100 acceleration fee unlocks early filing only; empty vault means no payout.",
+        "Four tiers ($10 / $20 / $40 / $60). Optional $125 Early Activation ($100 + $25 processing) unlocks filing before 30 days. Empty vault means no payout.",
     });
   });
 
@@ -215,16 +227,23 @@ export function registerExpenseReliefRoutes(app: Express): void {
         const paidThisYear = await sumPaidSince(user.id, startOfYear());
         const vaultAvailable = await getExpenseReliefVaultAvailable();
 
+        const tier = getTierById(membership?.planId) ?? EXPENSE_RELIEF_TIERS[3];
         res.json({
           membership: membershipPayload(membership),
           plan: EXPENSE_RELIEF_PLAN,
+          tier,
+          tiers: EXPENSE_RELIEF_TIERS,
           eligibility,
           claims,
           usage: {
             paidThisMonth,
             paidThisYear,
-            monthlyPayoutCap: EXPENSE_RELIEF_PLAN.monthlyPayoutCap,
-            annualPayoutCap: EXPENSE_RELIEF_PLAN.annualPayoutCap,
+            monthlyPayoutCap: membership
+              ? parseFloat(membership.monthlyPayoutCap)
+              : tier.monthlyPayoutCap,
+            annualPayoutCap: membership
+              ? parseFloat(membership.annualPayoutCap)
+              : tier.annualPayoutCap,
           },
           vaultAvailable,
         });
@@ -245,22 +264,27 @@ export function registerExpenseReliefRoutes(app: Express): void {
           return res.status(400).json({ error: "Invalid plan selection." });
         }
 
+        const tier = getTierById(parsed.data.planId);
+        if (!tier) {
+          return res.status(400).json({ error: "Unknown membership tier." });
+        }
+
         const user = currentUser(req);
         const existing = await getMembership(user.id);
         if (existing?.subscriptionStatus === "active") {
           return res.json({
             membership: membershipPayload(existing),
-            message: "Premier Expense Relief is already active.",
+            message: `${getTierById(existing.planId)?.name ?? "Membership"} is already active.`,
           });
         }
 
         const values = {
           userId: user.id,
-          planId: EXPENSE_RELIEF_PLAN.id,
-          monthlyFee: money(EXPENSE_RELIEF_PLAN.monthlyMembershipFee),
-          reimbursementRate: money(EXPENSE_RELIEF_PLAN.reimbursementRate, 4),
-          monthlyPayoutCap: money(EXPENSE_RELIEF_PLAN.monthlyPayoutCap),
-          annualPayoutCap: money(EXPENSE_RELIEF_PLAN.annualPayoutCap),
+          planId: tier.id,
+          monthlyFee: money(tier.monthlyFee),
+          reimbursementRate: money(tier.reimbursementRate, 4),
+          monthlyPayoutCap: money(tier.monthlyPayoutCap),
+          annualPayoutCap: money(tier.annualPayoutCap),
           subscriptionStatus: "active" as const,
           updatedAt: new Date(),
         };
@@ -281,17 +305,16 @@ export function registerExpenseReliefRoutes(app: Express): void {
           membership = created;
         }
 
-        // First month's membership seeds the Compensation Vault (zero founder capital).
         await creditExpenseReliefVault({
-          amount: EXPENSE_RELIEF_PLAN.monthlyMembershipFee,
+          amount: tier.monthlyFee,
           source: "MEMBERSHIP",
-          description: `Premier membership activation — $${EXPENSE_RELIEF_PLAN.monthlyMembershipFee.toFixed(2)} into Compensation Vault`,
+          description: `${tier.name} activation — $${tier.monthlyFee.toFixed(2)} into Compensation Vault`,
         });
 
         res.json({
           membership: membershipPayload(membership),
-          message:
-            "Premier Expense Relief activated. First claim opens after 30 days, or pay the $100 acceleration fee to file sooner.",
+          tier,
+          message: `${tier.name} activated at $${tier.monthlyFee.toFixed(0)}/mo (${(tier.reimbursementRate * 100).toFixed(0)}% back). First claim opens after 30 days, or pay $${EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal.toFixed(0)} Early Activation to file sooner.`,
         });
       } catch (err) {
         console.error("[expense-relief] activate failed", err);
@@ -317,16 +340,16 @@ export function registerExpenseReliefRoutes(app: Express): void {
         if (!membership || membership.subscriptionStatus !== "active") {
           return res
             .status(400)
-            .json({ error: "Activate Premier membership first." });
+            .json({ error: "Activate a membership tier first." });
         }
         if (membership.accelerationPaidAt) {
           return res.json({
             membership: membershipPayload(membership),
-            message: "Acceleration fee already on file.",
+            message: "Early Activation already on file.",
           });
         }
 
-        const fee = EXPENSE_RELIEF_PLAN.accelerationFee;
+        const fee = EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal;
         const [updated] = await db
           .update(expenseReliefMemberships)
           .set({
@@ -340,17 +363,22 @@ export function registerExpenseReliefRoutes(app: Express): void {
         await creditExpenseReliefVault({
           amount: fee,
           source: "ACCELERATION",
-          description: `Early-claim acceleration fee — $${fee.toFixed(2)} into Compensation Vault`,
+          description: `Early Activation ($${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing) — $${fee.toFixed(2)} into Compensation Vault`,
         });
 
         res.json({
           membership: membershipPayload(updated),
+          earlyActivation: {
+            earlyActivationFee: EXPENSE_RELIEF_DEFAULTS.earlyActivationFee,
+            processingFee: EXPENSE_RELIEF_DEFAULTS.processingFee,
+            total: fee,
+          },
           message:
-            "Acceleration paid. Early filing is unlocked (membership + $100). Claims still need verification, and payouts only happen when the Compensation Vault has capital.",
+            "Early Activation paid ($125). You may file claims now. Verification still takes 72 hours to about a week, and payouts only happen when the Compensation Vault has capital.",
         });
       } catch (err) {
         console.error("[expense-relief] acceleration failed", err);
-        res.status(500).json({ error: "Could not record acceleration fee." });
+        res.status(500).json({ error: "Could not record Early Activation." });
       }
     },
   );
@@ -372,7 +400,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
         if (!membership || membership.subscriptionStatus !== "active") {
           return res
             .status(400)
-            .json({ error: "Activate Premier membership before filing." });
+            .json({ error: "Activate a membership tier before filing." });
         }
 
         const priorClaims = await listClaimsForUser(user.id);
@@ -386,18 +414,32 @@ export function registerExpenseReliefRoutes(app: Express): void {
           return res.status(400).json({ error: eligibility.reason });
         }
 
-        const requested = reimbursementForAmount(parsed.data.expenseAmount);
+        const rate = parseFloat(membership.reimbursementRate);
+        const requested = reimbursementForAmount(
+          parsed.data.expenseAmount,
+          rate,
+        );
         const paidThisMonth = await sumPaidSince(user.id, startOfMonth());
         const paidThisYear = await sumPaidSince(user.id, startOfYear());
         const capped = applyPayoutCaps({
           requestedPayout: requested,
           paidThisMonth,
           paidThisYear,
+          monthlyPayoutCap: parseFloat(membership.monthlyPayoutCap),
+          annualPayoutCap: parseFloat(membership.annualPayoutCap),
         });
         if (capped.allowedPayout <= 0) {
           return res.status(400).json({
             error: capped.reason ?? "Payout cap reached for this period.",
           });
+        }
+
+        const evidenceParts = [parsed.data.evidenceNotes];
+        if (parsed.data.businessPhone) {
+          evidenceParts.push(`Business phone: ${parsed.data.businessPhone}`);
+        }
+        if (parsed.data.businessAddress) {
+          evidenceParts.push(`Business address: ${parsed.data.businessAddress}`);
         }
 
         const vaultAvailable = await getExpenseReliefVaultAvailable();
@@ -413,7 +455,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
             serviceDate: parsed.data.serviceDate,
             recipientName: parsed.data.recipientName,
             description: parsed.data.description,
-            evidenceNotes: parsed.data.evidenceNotes,
+            evidenceNotes: evidenceParts.join("\n"),
             status: "under_review",
             updatedAt: new Date(),
           })

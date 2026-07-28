@@ -442,12 +442,8 @@ export default function PocketBooster() {
               <Button asChild variant="outline" data-testid="button-open-pay-to-learn">
                 <a href="#pay-to-learn">Take a Program</a>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                data-testid="button-open-expense-relief"
-              >
-                <Link href="/expense-relief">Expense Relief Claims</Link>
+              <Button asChild data-testid="button-open-expense-relief">
+                <Link href="/expense-relief">Out-of-Pocket Booster</Link>
               </Button>
               <Button
                 asChild
@@ -479,16 +475,16 @@ export default function PocketBooster() {
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 Pocket Booster gives interest-free cushions when you need cash
-                now. Consolidated Expense Relief is separate — members file a
-                claim application to get a portion of verified medical, dental,
-                vet, toll, and similar expenses back. Same hub login. If that
-                program&apos;s Compensation Vault is empty, claims cannot be
-                paid until it is funded.
+                now. Out-of-Pocket Booster is separate — four membership tiers
+                reimburse a portion of verified medical, dental, vet, toll, and
+                similar expenses. Optional $125 Early Activation skips the
+                30-day wait. If that program&apos;s Compensation Vault is empty,
+                claims cannot be paid until it is funded.
               </p>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:items-end">
               <Button asChild data-testid="button-pb-to-expense-relief">
-                <Link href="/expense-relief">Open Expense Relief</Link>
+                <Link href="/expense-relief">Open Out-of-Pocket Booster</Link>
               </Button>
               <Button asChild variant="ghost" size="sm">
                 <Link href="/expense-relief#claim-application">
@@ -868,13 +864,13 @@ export default function PocketBooster() {
               >
                 Empire Invest
               </Link>
-              . For verified out-of-pocket reimbursements (not cushions), open{" "}
+              .               For verified out-of-pocket reimbursements (not cushions), open{" "}
               <Link
                 href="/expense-relief"
                 className="text-primary underline underline-offset-2"
                 data-testid="link-expense-relief-from-pb-reserve"
               >
-                Expense Relief
+                Out-of-Pocket Booster
               </Link>
               .
             </p>
