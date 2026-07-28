@@ -32,6 +32,18 @@ const FEMININE_LOGO_COPY: Record<
   (typeof FEMININE_LOGO_IDS)[number],
   { name: string; label: string; description: string }
 > = {
+  "125": {
+    name: "Silver & Pink Medallion",
+    label: "Feminine sword medallion",
+    description:
+      "A brushed silver medallion with rose-pink shield, sword, and laurel details — the signature feminine edition.",
+  },
+  "107": {
+    name: "Neon Pink Emblem",
+    label: "Bold pink sword crest",
+    description:
+      "The classic Khomplete Khemistri sword medallion in neon pink for a strong feminine statement.",
+  },
   "124": {
     name: "Pearl Gold Seal",
     label: "Pearl-detailed feminine crest",
@@ -43,6 +55,18 @@ const FEMININE_LOGO_COPY: Record<
     label: "Colorful and inclusive",
     description:
       "A vibrant tie-dye rainbow crest that celebrates feminine expression and the LGBTQ+ community.",
+  },
+  "110": {
+    name: "Deep Purple Emblem",
+    label: "Purple sword colorway",
+    description:
+      "A deep purple take on the sword medallion with a rich, feminine color story.",
+  },
+  "205": {
+    name: "Silver Elite Crest",
+    label: "Polished silver crest",
+    description:
+      "A sleek silver Badge of Honor crest that pairs cleanly with feminine apparel and accessories.",
   },
 };
 
@@ -280,7 +304,7 @@ export default function Feminine() {
                   id="customizable-favorites"
                   eyebrow="Make it yours"
                   title="Customizable Favorites"
-                  description="Pair the pearl or Pride/tie-dye crest with these feminine styles for a personalized look."
+                  description="Pair a silver & pink, pearl, Pride, or purple crest with these feminine styles for a personalized look."
                   products={customizableFavorites}
                 />
                 <ProductSection
