@@ -1,6 +1,6 @@
 import express, { type Express } from "express";
 import { createServer, type Server } from "http";
-import { createSquareOrderPaymentLink, retrieveSquareOrder } from "./squareClient";
+import { createSquareOrderPaymentLink, retrieveSquareOrder, type OrderLineItem } from "./squareClient";
 import { stateTaxInfo } from "@shared/salesTax";
 import { getStorefrontProducts, dedupeByName } from "./storefrontProducts";
 import { catalogStorage } from "./catalogStorage";
@@ -13,6 +13,10 @@ import { storage } from "./storage";
 import { setupAuth, requireAuth, requireOwner, toPublicUser } from "./auth";
 import { registerPocketBoosterRoutes } from "./pocketBooster";
 import { registerLiquidityRoutes } from "./liquidityRouter";
+import {
+  fulfillmentConfigurationStatus,
+  submitOrderFulfillment,
+} from "./fulfillment";
 import { PROGRAM_PATHWAY, PROGRAM_STAGES } from "@shared/programStages";
 import { checkCustomization, customizationErrorMessage, isDefaultLogoCustomizable, apparelSizesFor, scentsFor, FULL_LOGO_CATALOG_OPTION } from "@shared/customization";
 import { updateOrderFulfillmentSchema, insertMediaLinkSchema, mediaUploadFieldsSchema, insertReviewSchema, updateProfileSchema, type Review, type User } from "@shared/schema";
@@ -795,6 +799,17 @@ export async function registerRoutes(
             quantity: 1,
             amountCents,
             note: check.note,
+            catalogPriceId: String(priceId),
+            selectedLogo:
+              typeof selectedLogo === "string" ? selectedLogo : undefined,
+            selectedColor:
+              typeof req.body?.selectedColor === "string"
+                ? req.body.selectedColor
+                : undefined,
+            selectedSize:
+              typeof req.body?.selectedSize === "string"
+                ? req.body.selectedSize
+                : undefined,
           },
         ],
         tax: taxResult.tax,
@@ -939,7 +954,7 @@ export async function registerRoutes(
         };
       }
 
-      const lineItems: { name: string; quantity: number; amountCents: number; note?: string }[] = [];
+      const lineItems: OrderLineItem[] = [];
 
       for (const item of items) {
         const priceId = item?.priceId;
@@ -1020,6 +1035,19 @@ export async function registerRoutes(
           quantity,
           amountCents,
           note: noteParts.length ? noteParts.join(" | ") : undefined,
+          catalogPriceId: String(priceId),
+          selectedLogo:
+            typeof item?.selectedLogo === "string"
+              ? item.selectedLogo
+              : undefined,
+          selectedColor:
+            typeof item?.selectedColor === "string"
+              ? item.selectedColor
+              : undefined,
+          selectedSize:
+            typeof item?.selectedSize === "string"
+              ? item.selectedSize
+              : undefined,
         });
       }
 
@@ -1063,7 +1091,16 @@ export async function registerRoutes(
       // Already recorded (e.g. the buyer refreshed) — return what we have.
       const existing = await storage.getOrderBySquareId(ref);
       if (existing && existing.status === "paid") {
-        return res.json(existing);
+        try {
+          const providerFulfillments = await submitOrderFulfillment(existing);
+          return res.json({ ...existing, providerFulfillments });
+        } catch (fulfillmentError) {
+          console.error(
+            `Failed to retry fulfillment for Square order ${ref}:`,
+            fulfillmentError,
+          );
+          return res.json(existing);
+        }
       }
 
       const squareOrder = await retrieveSquareOrder(ref);
@@ -1089,6 +1126,7 @@ export async function registerRoutes(
         customerEmail: squareOrder.buyerEmail,
         customerName: squareOrder.buyerName,
         shippingAddress: squareOrder.shippingAddress,
+        shippingDetails: squareOrder.shippingDetails,
       });
 
       // Redeem one-time photo-review discount after payment is confirmed.
@@ -1108,6 +1146,21 @@ export async function registerRoutes(
         } catch (redeemError) {
           console.error("Failed to record discount redemption:", redeemError);
         }
+      }
+
+      // Submit eligible tees / polos only after Square has confirmed payment
+      // and the durable local order exists. Provider failures are recorded for
+      // owner retry and must never turn a successful payment into a 500.
+      let providerFulfillments: Awaited<
+        ReturnType<typeof submitOrderFulfillment>
+      > = [];
+      try {
+        providerFulfillments = await submitOrderFulfillment(recorded);
+      } catch (fulfillmentError) {
+        console.error(
+          `Failed to plan fulfillment for Square order ${squareOrder.orderId}:`,
+          fulfillmentError,
+        );
       }
 
       // Send the buyer an itemized receipt. This runs only on the first
@@ -1136,7 +1189,7 @@ export async function registerRoutes(
         );
       }
 
-      res.json(recorded);
+      res.json({ ...recorded, providerFulfillments });
     } catch (error: any) {
       console.error("Error confirming order:", error);
       res.status(500).json({ error: "Failed to confirm order." });
@@ -1214,6 +1267,45 @@ export async function registerRoutes(
     } catch (error: any) {
       console.error('Error fetching orders:', error);
       res.status(500).json({ error: "Failed to fetch orders" });
+    }
+  });
+
+  // Protected provider configuration/status endpoints. They expose only
+  // booleans and persisted attempts—never API tokens or OAuth credentials.
+  app.get("/api/admin/fulfillment/config", requireOwner, (_req, res) => {
+    res.json(fulfillmentConfigurationStatus());
+  });
+
+  app.get(
+    "/api/orders/:id/provider-fulfillments",
+    requireOwner,
+    async (req, res) => {
+      try {
+        const order = await storage.getOrderById(req.params.id);
+        if (!order) return res.status(404).json({ error: "Order not found" });
+        res.json(await storage.getOrderFulfillments(order.id));
+      } catch (error) {
+        console.error("Failed to fetch provider fulfillments:", error);
+        res.status(500).json({ error: "Failed to fetch provider fulfillments" });
+      }
+    },
+  );
+
+  // Safe manual retry for blocked/failed provider submissions. Submitted jobs
+  // are immutable and each provider also receives a deterministic external ID.
+  app.post("/api/orders/:id/fulfill", requireOwner, async (req, res) => {
+    try {
+      const order = await storage.getOrderById(req.params.id);
+      if (!order) return res.status(404).json({ error: "Order not found" });
+      if (order.status !== "paid") {
+        return res.status(409).json({ error: "Only paid orders can be fulfilled" });
+      }
+      res.json(await submitOrderFulfillment(order));
+    } catch (error: any) {
+      console.error("Provider fulfillment retry failed:", error);
+      res.status(500).json({
+        error: error?.message || "Provider fulfillment retry failed",
+      });
     }
   });
 

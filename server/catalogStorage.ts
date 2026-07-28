@@ -92,6 +92,30 @@ export class CatalogStorage {
     );
     return result.rows[0] || null;
   }
+
+  // Compatibility lookup for orders created before checkout started attaching
+  // the private catalog price ID to each Square line item. Product names are
+  // unique in the active catalog after ensureCatalogData() deduplicates them.
+  async getProductWithPriceByName(productName: string) {
+    const result = await db.execute(
+      sql`
+        SELECT
+          pr.id as price_id,
+          pr.unit_amount,
+          pr.currency,
+          p.name as product_name,
+          p.description as product_description,
+          p.metadata as product_metadata
+        FROM stripe.products p
+        LEFT JOIN stripe.prices pr ON pr.product = p.id AND pr.active = true
+        WHERE p.active = true
+          AND lower(p.name) = lower(${productName})
+        ORDER BY pr.unit_amount NULLS LAST
+        LIMIT 1
+      `,
+    );
+    return result.rows[0] || null;
+  }
 }
 
 export const catalogStorage = new CatalogStorage();

@@ -20,12 +20,34 @@ export const insertProductSchema = createInsertSchema(products).omit({
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type Product = typeof products.$inferSelect;
 
+// Structured ship-to data captured from Square. Keep the legacy formatted
+// `shippingAddress` string for the owner UI, but fulfillment providers need
+// these individual fields to create an order without reparsing display text.
+export interface ShippingAddress {
+  name: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  stateCode?: string;
+  postalCode: string;
+  countryCode: string;
+  phone?: string;
+  email?: string;
+}
+
 // A single purchased line item, stored inside the order's `items` jsonb column.
 export interface OrderItem {
   name: string;
   quantity: number;
   amountCents: number; // per-unit price in cents
   note?: string;
+  // Private Square line-item metadata copied back after payment confirmation.
+  // These fields let fulfillment resolve the exact catalog product and variant
+  // without trusting names or reparsing a customer-visible receipt note.
+  catalogPriceId?: string;
+  selectedLogo?: string;
+  selectedColor?: string;
+  selectedSize?: string;
 }
 
 // Paid orders captured at checkout. We do NOT persist anything when the buyer
@@ -47,6 +69,7 @@ export const orders = pgTable("orders", {
   customerEmail: text("customer_email"),
   customerName: text("customer_name"),
   shippingAddress: text("shipping_address"),
+  shippingDetails: jsonb("shipping_details").$type<ShippingAddress>(),
   // Tracking info entered by the owner when they mark the order shipped.
   carrier: text("carrier"),
   trackingNumber: text("tracking_number"),
@@ -79,6 +102,65 @@ export const insertOrderSchema = z.object({
 
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
 export type Order = typeof orders.$inferSelect;
+
+export const FULFILLMENT_PROVIDERS = ["printful", "amazon"] as const;
+export type FulfillmentProvider = (typeof FULFILLMENT_PROVIDERS)[number];
+
+export const PROVIDER_FULFILLMENT_STATUSES = [
+  "blocked",
+  "pending",
+  "submitting",
+  "submitted",
+  "failed",
+] as const;
+export type ProviderFulfillmentStatus =
+  (typeof PROVIDER_FULFILLMENT_STATUSES)[number];
+
+export interface ProviderFulfillmentItem {
+  orderItemIndex: number;
+  name: string;
+  quantity: number;
+  amountCents: number;
+  catalogPriceId?: string;
+  selectedLogo?: string;
+  selectedColor?: string;
+  selectedSize?: string;
+  providerVariantId?: number;
+  providerExternalVariantId?: string;
+  sellerSku?: string;
+}
+
+// One durable provider submission per paid order. Mixed carts can create one
+// Printful row and one Amazon MCF row. The unique index plus deterministic
+// external IDs makes retries safe across refreshes and process restarts.
+export const orderFulfillments = pgTable(
+  "order_fulfillments",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    orderId: varchar("order_id").notNull(),
+    provider: text("provider").$type<FulfillmentProvider>().notNull(),
+    status: text("status")
+      .$type<ProviderFulfillmentStatus>()
+      .notNull()
+      .default("pending"),
+    externalId: text("external_id").notNull(),
+    providerOrderId: text("provider_order_id"),
+    items: jsonb("items").$type<ProviderFulfillmentItem[]>().notNull(),
+    attempts: integer("attempts").notNull().default(0),
+    lastError: text("last_error"),
+    submittedAt: timestamp("submitted_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("IDX_order_fulfillments_order_provider").on(
+      table.orderId,
+      table.provider,
+    ),
+  ],
+);
+
+export type OrderFulfillment = typeof orderFulfillments.$inferSelect;
 
 export const subscribers = pgTable("subscribers", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
