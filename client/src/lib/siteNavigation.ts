@@ -68,8 +68,8 @@ export const SITE_LINKS: SiteLink[] = [
   },
   {
     href: "/expense-relief",
-    label: "Expense Relief",
-    compactLabel: "Expense Relief",
+    label: "Out-of-Pocket Booster",
+    compactLabel: "OOP Booster",
   },
   {
     href: "/invest",

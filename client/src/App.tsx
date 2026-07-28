@@ -57,6 +57,7 @@ function Router() {
       </Route>
       <Route path="/pocket-booster" component={PocketBooster} />
       <Route path="/expense-relief" component={ExpenseRelief} />
+      <Route path="/out-of-pocket-booster" component={ExpenseRelief} />
       <Route path="/consolidated-expense-relief" component={ExpenseRelief} />
       <Route path="/invest" component={Invest} />
       <Route path="/apparel" component={Apparel} />

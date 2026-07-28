@@ -1,92 +1,143 @@
 import { z } from "zod";
 
 /**
- * Consolidated Expense Relief (CER)
- * ----------------------------------
- * Standalone Empire program inspired by the old UDS (Ultimate Discount Services)
- * model — one solid membership that puts a portion of verified out-of-pocket
- * expenses back in members' pockets.
+ * Out-of-Pocket Booster (Consolidated Expense Relief)
+ * ----------------------------------------------------
+ * Empire benefit program: membership tiers reimburse a portion of verified
+ * out-of-pocket expenses. Companion to Pocket Booster (cushions) — this program
+ * pays back after you already spent, subject to vault capital.
  *
- * This is NOT FR2P / FARSUP rewards. Those stay separate. CER is expense
- * compensation only. Later it can sit beside FR2P inside Empire Invest.
- *
- * Funding strategy: Zero-Capital (Subscription + Vault Powered)
+ * Funding: Zero-Capital (Subscription + Vault Powered)
  *  - Monthly membership fees seed the Compensation Vault
- *  - Optional $100 early-claim acceleration fees also seed the vault
- *  - Empire Invest RPUs can expand the vault (same loop as Pocket Booster)
- *  - Founder personal capital is never required
+ *  - Optional $125 Early Activation ($100 + $25 processing) seeds the vault
+ *  - Empire Invest RPUs can expand the vault
+ *  - No vault capital = no payout
  */
 
 export const EXPENSE_RELIEF_PLATFORM = {
-  platformName: "Consolidated Expense Relief",
-  shortName: "Expense Relief",
+  platformName: "Out-of-Pocket Booster",
+  shortName: "OOP Booster",
   programTag: "EXPENSE_RELIEF_VAULT",
   fundingStrategy: "Zero-Capital (Subscription + Vault Powered)",
   tagline: "Money back in your pocket for real out-of-pocket costs.",
+  companionProgram: "Pocket Booster",
 } as const;
 
-/**
- * Historical UDS-style tiers — kept for education / future reference only.
- * We do NOT offer all four. UDS itself retired 10/20/30 and kept the top plan
- * because that was the one members actually wanted.
- */
-export const HISTORICAL_UDS_STYLE_TIERS = [
-  {
-    monthlyFee: 10,
-    reimbursementRate: 0.25,
-    label: "Starter",
-    note: "Retired — too little benefit for the complexity of four plans.",
-  },
-  {
-    monthlyFee: 20,
-    reimbursementRate: 0.35,
-    label: "Builder",
-    note: "Retired — middle tiers confused buyers.",
-  },
-  {
-    monthlyFee: 30,
-    reimbursementRate: 0.5,
-    label: "Plus",
-    note: "Retired — members still upgraded toward the top plan.",
-  },
-  {
-    monthlyFee: 40,
-    reimbursementRate: 0.65,
-    label: "Premier",
-    note: "The plan that stuck — biggest reimbursement, one clear offer.",
-  },
-] as const;
-
-/** The one solid plan we actually sell. */
-export const EXPENSE_RELIEF_PLAN = {
-  id: "premier",
-  name: "Premier Expense Relief",
-  monthlyMembershipFee: 40.0,
-  /** Up to 65% of verified out-of-pocket spend (capped below). */
-  reimbursementRate: 0.65,
-  /** Hard monthly payout ceiling so the vault stays solvent. */
-  monthlyPayoutCap: 260.0,
-  /** Hard annual payout ceiling per member. */
-  annualPayoutCap: 1560.0,
-  /**
-   * Days a new member must wait before filing the first claim —
-   * unless they pay the acceleration fee.
-   */
+/** Shared timing / fee constants across all tiers */
+export const EXPENSE_RELIEF_DEFAULTS = {
   firstClaimWaitDays: 30,
-  /**
-   * One-time fee (on top of membership) to unlock claims inside the
-   * waiting window. Goes straight into the Compensation Vault.
-   */
-  accelerationFee: 100.0,
-  /** Typical review window once a claim is submitted. */
+  /** $100 early activation + $25 processing — flat, outside tier pricing */
+  earlyActivationFee: 100.0,
+  processingFee: 25.0,
+  get earlyActivationTotal() {
+    return this.earlyActivationFee + this.processingFee;
+  },
   reviewHoursMin: 72,
-  /** Outer bound for verification / legitimacy checks. */
   reviewHoursMax: 168, // 7 days
+} as const;
+
+export type ExpenseReliefTierId =
+  | "starter"
+  | "basic"
+  | "premium"
+  | "elite";
+
+export type ExpenseReliefTier = {
+  id: ExpenseReliefTierId;
+  name: string;
+  monthlyFee: number;
+  reimbursementRate: number;
+  monthlyPayoutCap: number;
+  annualPayoutCap: number;
+  bestFor: string;
+};
+
+/**
+ * Four membership tiers — reimbursement rises with price.
+ * Early Activation ($125) sits outside these tiers.
+ */
+export const EXPENSE_RELIEF_TIERS: ExpenseReliefTier[] = [
+  {
+    id: "starter",
+    name: "Starter Tier",
+    monthlyFee: 10.0,
+    reimbursementRate: 0.25,
+    monthlyPayoutCap: 100.0,
+    annualPayoutCap: 600.0,
+    bestFor: "Light expenses, basic coverage",
+  },
+  {
+    id: "basic",
+    name: "Basic Tier",
+    monthlyFee: 20.0,
+    reimbursementRate: 0.4,
+    monthlyPayoutCap: 160.0,
+    annualPayoutCap: 960.0,
+    bestFor: "Moderate daily expenses",
+  },
+  {
+    id: "premium",
+    name: "Premium Tier",
+    monthlyFee: 40.0,
+    reimbursementRate: 0.55,
+    monthlyPayoutCap: 220.0,
+    annualPayoutCap: 1320.0,
+    bestFor: "Higher out-of-pocket costs",
+  },
+  {
+    id: "elite",
+    name: "Elite Tier",
+    monthlyFee: 60.0,
+    reimbursementRate: 0.65,
+    monthlyPayoutCap: 260.0,
+    annualPayoutCap: 1560.0,
+    bestFor: "Maximum reimbursement & frequent expenses",
+  },
+];
+
+export const EXPENSE_RELIEF_TIER_IDS = EXPENSE_RELIEF_TIERS.map(
+  (t) => t.id,
+) as unknown as [ExpenseReliefTierId, ...ExpenseReliefTierId[]];
+
+/** @deprecated Prefer EXPENSE_RELIEF_TIERS — kept as Elite defaults for helpers */
+export const EXPENSE_RELIEF_PLAN = {
+  id: "elite" as const,
+  name: "Elite Tier",
+  monthlyMembershipFee: 60.0,
+  reimbursementRate: 0.65,
+  monthlyPayoutCap: 260.0,
+  annualPayoutCap: 1560.0,
+  firstClaimWaitDays: EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays,
+  accelerationFee: EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal,
+  earlyActivationFee: EXPENSE_RELIEF_DEFAULTS.earlyActivationFee,
+  processingFee: EXPENSE_RELIEF_DEFAULTS.processingFee,
+  reviewHoursMin: EXPENSE_RELIEF_DEFAULTS.reviewHoursMin,
+  reviewHoursMax: EXPENSE_RELIEF_DEFAULTS.reviewHoursMax,
   description:
-    "One solid plan — up to 65% back on verified out-of-pocket expenses. No maze of $10 / $20 / $30 / $40 tiers.",
+    "Four tiers ($10 / $20 / $40 / $60). Optional $125 Early Activation unlocks filing before 30 days.",
 } as const;
 
 export type ExpenseReliefPlan = typeof EXPENSE_RELIEF_PLAN;
+
+export function getTierById(
+  id: string | null | undefined,
+): ExpenseReliefTier | undefined {
+  return EXPENSE_RELIEF_TIERS.find((t) => t.id === id);
+}
+
+export function earlyActivationBreakdown(monthlyFee: number) {
+  const early = EXPENSE_RELIEF_DEFAULTS.earlyActivationFee;
+  const processing = EXPENSE_RELIEF_DEFAULTS.processingFee;
+  const addOn = early + processing;
+  return {
+    monthlyFee,
+    earlyActivationFee: early,
+    processingFee: processing,
+    earlyActivationTotal: addOn,
+    /** First-month total if member buys Early Activation with membership */
+    firstMonthWithEarlyActivation: monthlyFee + addOn,
+  };
+}
 
 /** Eligible out-of-pocket categories (not FR2P rewards — real paid costs). */
 export const EXPENSE_CATEGORIES = [
@@ -150,31 +201,29 @@ export const EXPENSE_CATEGORIES = [
   },
   {
     id: "household",
-    label: "Household & Living Essentials",
+    label: "Household Essentials (verifiable)",
     examples: [
-      "Utilities shortfalls",
-      "Essential repairs",
-      "Childcare gaps",
-      "Pet food & supplies tied to care",
+      "Documented utility shortfalls with bill + proof of payment",
+      "Essential repairs with contractor invoice you can verify by phone",
     ],
   },
   {
     id: "work_education",
-    label: "Work & Education",
+    label: "Work commute & member education",
     examples: [
-      "Commuting costs",
-      "Required work supplies",
-      "School supplies",
-      "Uniform fees",
+      "Commute to/from work (transit, tolls, parking) with proof",
+      "Required work uniforms / employer-required gear with receipt",
+      "School supplies for yourself if you are currently enrolled",
+      "Required work supplies with verifiable merchant receipt",
     ],
   },
   {
     id: "admin_fees",
     label: "Financial & Administrative Fees",
     examples: [
-      "Bank fees",
-      "Late fees",
-      "Service / processing fees",
+      "Bank fees with statement proof",
+      "Late fees with bill + proof of payment",
+      "Documented service / processing fees",
     ],
   },
 ] as const;
@@ -197,148 +246,206 @@ export const CLAIM_STATUSES = [
 
 export type ClaimStatus = (typeof CLAIM_STATUSES)[number];
 
-/**
- * Hard program rules members must understand before joining or filing.
- * The $100 is ONLY an early-claim unlock — it does not guarantee a payout.
- * If the Compensation Vault is empty, nobody gets paid.
- */
 export const EXPENSE_RELIEF_RULES = [
   {
     id: "membership",
-    title: "Premier membership required",
-    body: `Active $${EXPENSE_RELIEF_PLAN.monthlyMembershipFee.toFixed(0)}/mo Premier membership is required to file claims.`,
+    title: "Active tier membership required",
+    body: "Choose Starter, Basic, Premium, or Elite. Your reimbursement % and payout caps follow that tier. Keep the subscription active to file claims.",
   },
   {
     id: "wait_or_accelerate",
-    title: "30-day wait — or pay $100 to file early",
-    body: `New members wait ${EXPENSE_RELIEF_PLAN.firstClaimWaitDays} days before the first claim. Do not want to wait? Pay the $${EXPENSE_RELIEF_PLAN.accelerationFee.toFixed(0)} acceleration fee on top of the membership fee, then you may file inside that window. The $100 is not a payout — it only unlocks early filing and seeds the vault.`,
+    title: "30-day activation — or $125 Early Activation",
+    body: `New memberships wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days before the first claim. Skip the wait with Early Activation: $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} early activation + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing = $${EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal.toFixed(0)} one-time (any tier). Early Activation does not raise your reimbursement %.`,
   },
   {
     id: "vault_required",
     title: "No vault money = no payout",
-    body: "Approved claims are paid only from the Compensation Vault. If the vault has no available capital, you cannot get paid — even with an active membership or the $100 acceleration fee. Your claim can still be verified and held until funds are available.",
+    body: "Approved claims pay only from the Compensation Vault. If the vault has no available capital, you cannot get paid — even with Early Activation. Verified claims can wait as pending-funds until the vault is funded.",
   },
   {
     id: "verification",
-    title: "Verify before pay",
-    body: `Every claim is reviewed for legitimacy (${EXPENSE_RELIEF_PLAN.reviewHoursMin} hours typical, up to about a week). Receipts must show a real merchant, your name or your pet's name, service date, and proof you paid.`,
+    title: "Must be verifiable — not personal lifestyle",
+    body: `Claims are reviewed ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours to about a week. We need a legitimate receipt we can confirm by phone, fax, or merchant lookup — business name, phone, amount, date, and who paid. Personal lifestyle (haircuts, nails, lunch money, kids’ school supplies) is not covered.`,
   },
   {
     id: "caps",
-    title: "Payout caps protect the pool",
-    body: `Up to ${(EXPENSE_RELIEF_PLAN.reimbursementRate * 100).toFixed(0)}% back, capped at $${EXPENSE_RELIEF_PLAN.monthlyPayoutCap.toFixed(0)}/mo and $${EXPENSE_RELIEF_PLAN.annualPayoutCap.toFixed(0)}/yr per member.`,
+    title: "Tier payout caps protect the pool",
+    body: "Each tier has its own monthly and annual payout ceiling. Higher tiers unlock higher reimbursement % and higher caps.",
   },
   {
     id: "not_fr2p",
     title: "Not a rewards / affiliate program",
-    body: "Expense Relief reimburses verified out-of-pocket costs. FR2P Club and FARSUP stay separate for rewards and affiliate growth.",
+    body: "Out-of-Pocket Booster reimburses verified expenses. Pocket Booster handles cash cushions. FR2P / FARSUP stay separate for rewards.",
   },
 ] as const;
 
-/** What members may file — real money they already paid out of pocket. */
+/** Official Activation Policy copy for the website */
+export const ACTIVATION_POLICY = {
+  title: "Out-of-Pocket Booster Activation Policy",
+  intro:
+    "Members must complete a 30-day activation period before filing their first reimbursement claim. This activation period ensures program integrity, prevents fraud, and allows time for verification of member information.",
+  requirements: [
+    "Membership begins immediately upon purchase.",
+    "Claims cannot be filed until 30 days after activation, unless Early Activation is purchased.",
+    "Members must maintain an active subscription during the activation period.",
+  ],
+  earlyActivation: {
+    title: "Early Activation Option",
+    body: "Members who wish to file a claim before 30 days may choose Early Activation, which requires a one-time fee:",
+    lineItems: [
+      { label: "Processing Fee", amount: EXPENSE_RELIEF_DEFAULTS.processingFee },
+      {
+        label: "Early Activation Fee",
+        amount: EXPENSE_RELIEF_DEFAULTS.earlyActivationFee,
+      },
+    ],
+    total: EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal,
+    notes: [
+      "Early Activation is optional.",
+      "Early Activation does not increase reimbursement percentages.",
+      "Early Activation applies to all four tiers.",
+      "Early Activation unlocks claim eligibility only — payouts still require Compensation Vault capital.",
+    ],
+  },
+} as const;
+
+/** Official Claim Submission Policy copy */
+export const CLAIM_SUBMISSION_POLICY = {
+  title: "Out-of-Pocket Booster Claim Submission Policy",
+  intro:
+    "To maintain fairness and prevent fraudulent activity, all claims must follow the rules below.",
+  filingRequirements: [
+    "A clear photo or scan of a legitimate receipt (or detailed verification notes while upload rolls out)",
+    "The business name and a reachable phone number so we can verify by call or fax",
+    "The business address or location when available",
+    "The date of service or purchase",
+    "The amount paid out-of-pocket",
+    "A brief description of the expense and why it qualifies (work commute, enrolled-student supplies, etc.)",
+    "The member’s name on the receipt (or pet’s name for veterinary claims)",
+  ],
+  verificationWindow: {
+    minHours: EXPENSE_RELIEF_DEFAULTS.reviewHoursMin,
+    maxHours: EXPENSE_RELIEF_DEFAULTS.reviewHoursMax,
+    checks: [
+      "Receipt authenticity (not AI-generated, altered, or fabricated)",
+      "Business legitimacy — phone call, fax, or merchant lookup when needed",
+      "Accuracy of the information provided",
+      "That the expense is verifiable and not personal lifestyle spending",
+      "That the expense qualifies under the member’s tier and program rules",
+    ],
+  },
+  approvedNotes: [
+    "Reimbursement is released according to the member’s tier percentage (and caps).",
+    "Payout issues only when the Compensation Vault has available capital.",
+    "Members receive confirmation in the app (and email when configured).",
+  ],
+  deniedReasons: [
+    "Receipts are fake, altered, or AI-generated",
+    "Information is incomplete or cannot be verified by phone, fax, or merchant records",
+    "The expense is personal lifestyle (haircuts, nails, lunch money, children’s school supplies, etc.)",
+    "The expense does not qualify under the program",
+    "The member’s subscription is inactive",
+    "The member attempts to file before activation without Early Activation",
+    "The Compensation Vault cannot fund the payout yet (claim may be held pending funds after verification)",
+  ],
+} as const;
+
 export const ACCEPTABLE_CLAIMS = [
   {
-    group: "Healthcare & medical",
+    group: "Healthcare, dental & veterinary (verifiable)",
     items: [
-      "Copays, deductibles, and coinsurance you paid",
-      "Prescription and qualifying OTC medications",
-      "Mental health therapy, chiropractic, physical therapy sessions",
-      "Vision care — exams, glasses, contacts",
-      "Medical supplies (bandages, braces, glucose strips, etc.)",
-    ],
-  },
-  {
-    group: "Dental",
-    items: [
-      "Cleanings, exams, fillings, crowns, bridges",
-      "Root canals, extractions, orthodontics with paid invoices",
-    ],
-  },
-  {
-    group: "Veterinary",
-    items: [
-      "Wellness visits, vaccinations, medications",
-      "Emergency visits, diagnostics, surgery, dental cleaning for pets",
-      "Specialty care with itemized paid receipts",
-    ],
-  },
-  {
-    group: "Insurance-related out-of-pocket",
-    items: [
-      "Non-covered or partially covered services you paid yourself",
-      "Out-of-network fees and higher prescription tiers you paid",
+      "Copays, deductibles, coinsurance, prescriptions with pharmacy/clinic receipt",
+      "Dental and medical visits with provider invoice you can verify by phone",
+      "Veterinary care with clinic receipt showing pet/member info",
+      "Vision care and medical supplies with legitimate merchant proof",
     ],
   },
   {
     group: "Tolls, tickets & violations",
     items: [
-      "Paid toll bills",
-      "Paid parking tickets and traffic fines",
-      "Paid administrative / court processing fees tied to those fines",
+      "Paid toll bills with statement or agency receipt",
+      "Paid parking tickets and traffic fines with proof of payment",
+      "Paid administrative / court fees tied to those fines",
     ],
   },
   {
-    group: "Household, work & fees",
+    group: "Work commute & required work costs",
     items: [
-      "Essential utility shortfalls and necessary repairs you paid",
-      "Required childcare gaps, commuting, work/school supplies, uniforms",
-      "Bank, late, and documented service/processing fees you paid",
+      "Commute to and from work — transit, tolls, parking — with proof of the back-and-forth",
+      "Required work uniforms or employer-required gear with verifiable receipt",
+      "Required work supplies purchased for your job with merchant proof",
+    ],
+  },
+  {
+    group: "Member’s own school / education",
+    items: [
+      "School supplies for yourself when you are currently enrolled and on an active plan",
+      "Required course materials with school/bookstore receipt in your name",
+    ],
+  },
+  {
+    group: "Other verifiable paid costs",
+    items: [
+      "Insurance out-of-pocket amounts with EOBs / itemized paid bills",
+      "Documented utility shortfalls or essential repairs with bill + proof of payment",
+      "Bank, late, or service fees with statement proof",
     ],
   },
 ] as const;
 
-/** What is not eligible — keeps the program from becoming a catch-all cash grab. */
 export const NOT_ACCEPTABLE_CLAIMS = [
   {
-    group: "Not real paid expenses",
+    group: "Personal lifestyle (not covered)",
     items: [
-      "Estimates, quotes, or unpaid invoices",
-      "Expenses someone else paid for you with no proof you reimbursed them",
-      "Duplicate claims for the same receipt",
-      "Altered, photoshopped, or incomplete receipts",
+      "Haircuts, barbershop, nail salon, spa, or personal grooming",
+      "Lunch money, café runs, fast food, snacks, or everyday meals",
+      "Entertainment, streaming, hobbies, vacations, luxury goods",
+      "Elective cosmetic procedures that are not medically necessary",
     ],
   },
   {
-    group: "Lifestyle & luxury",
+    group: "Family / kids personal shopping",
     items: [
-      "Vacations, entertainment, streaming, gaming, hobbies",
-      "Luxury goods, jewelry, designer fashion",
-      "Elective cosmetic procedures not medically necessary",
-      "Alcohol, tobacco, recreational cannabis, illegal purchases",
+      "School supplies bought for your children (personal family expense)",
+      "Kids’ lunch money, allowances, or personal care for household members",
+      "Personal shopping that cannot be tied to your own enrolled education or job requirement",
+    ],
+  },
+  {
+    group: "Not real or not verifiable",
+    items: [
+      "Estimates, quotes, or unpaid invoices",
+      "Receipts we cannot confirm by phone, fax, or legitimate merchant records",
+      "Altered, photoshopped, AI-generated, or incomplete receipts",
+      "Expenses someone else paid with no proof you reimbursed them",
+      "Duplicate claims for the same receipt",
     ],
   },
   {
     group: "Money transfers & debt",
     items: [
-      "Cash advances, payday loans, credit-card payments, or loan principal (use Pocket Booster cushions for bridge cash)",
+      "Cash advances, payday loans, credit-card payments, or loan principal (use Pocket Booster for bridge cash)",
       "Investments, crypto, gambling losses, money sent to friends/family",
-      "Rent or mortgage as a blanket claim without an eligible documented shortfall category",
+      "Rent or mortgage as a blanket claim",
     ],
   },
   {
-    group: "Insurance premiums & program fees",
+    group: "Program fees & premiums",
     items: [
-      "Monthly insurance premiums (health, auto, life, pet) as the claim itself",
-      "Expense Relief membership fees or the $100 acceleration fee",
-      "Pocket Booster subscription fees or FR2P / FARSUP program fees",
-    ],
-  },
-  {
-    group: "Fraud & non-verification",
-    items: [
-      "Claims without merchant name, service date, recipient name, and proof of payment",
-      "Expenses from businesses that cannot be verified as legitimate",
-      "Charges that do not match the member or pet named on the receipt",
+      "Monthly insurance premiums as the claim itself",
+      "Out-of-Pocket Booster membership or $125 Early Activation fees",
+      "Pocket Booster, FR2P, or FARSUP program fees",
     ],
   },
 ] as const;
 
-export function reimbursementForAmount(expenseAmount: number): number {
+export function reimbursementForAmount(
+  expenseAmount: number,
+  rate: number = EXPENSE_RELIEF_PLAN.reimbursementRate,
+): number {
   if (!Number.isFinite(expenseAmount) || expenseAmount <= 0) return 0;
-  return (
-    Math.round(expenseAmount * EXPENSE_RELIEF_PLAN.reimbursementRate * 100) /
-    100
-  );
+  if (!Number.isFinite(rate) || rate <= 0) return 0;
+  return Math.round(expenseAmount * rate * 100) / 100;
 }
 
 export function daysSince(from: Date | string, to: Date = new Date()): number {
@@ -353,14 +460,17 @@ export type ClaimEligibility = {
   reason: string;
   waitingDaysRemaining: number;
   accelerationFeeRequired: boolean;
+  /** Flat $125 Early Activation total */
   accelerationFee: number;
+  earlyActivationFee: number;
+  processingFee: number;
   membershipActive: boolean;
 };
 
 /**
- * First-claim gate modeled on UDS:
+ * First-claim gate:
  * - Active membership required
- * - Wait firstClaimWaitDays, OR pay accelerationFee to file early
+ * - Wait 30 days, OR pay flat $125 Early Activation
  */
 export function evaluateFirstClaimEligibility(input: {
   membershipActive: boolean;
@@ -369,29 +479,34 @@ export function evaluateFirstClaimEligibility(input: {
   hasPriorClaim: boolean;
   now?: Date;
 }): ClaimEligibility {
-  const accelerationFee = EXPENSE_RELIEF_PLAN.accelerationFee;
+  const earlyActivationFee = EXPENSE_RELIEF_DEFAULTS.earlyActivationFee;
+  const processingFee = EXPENSE_RELIEF_DEFAULTS.processingFee;
+  const accelerationFee = EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal;
+
   if (!input.membershipActive) {
     return {
       canFile: false,
-      reason: "Activate the Premier membership before filing a claim.",
-      waitingDaysRemaining: EXPENSE_RELIEF_PLAN.firstClaimWaitDays,
+      reason: "Activate a membership tier before filing a claim.",
+      waitingDaysRemaining: EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays,
       accelerationFeeRequired: false,
       accelerationFee,
+      earlyActivationFee,
+      processingFee,
       membershipActive: false,
     };
   }
 
-  // After the first claim (or once wait is satisfied / acceleration paid),
-  // subsequent claims only need an active membership + caps / vault checks.
   if (input.hasPriorClaim || input.accelerationPaid) {
     return {
       canFile: true,
       reason: input.accelerationPaid
-        ? "Acceleration fee on file — early filing unlocked. Payouts still require vault capital after verification."
-        : "Waiting period satisfied — you may submit claims. Payouts still require vault capital after verification.",
+        ? "Early Activation on file — you may submit claims. Payouts still require vault capital after verification."
+        : "Activation period satisfied — you may submit claims. Payouts still require vault capital after verification.",
       waitingDaysRemaining: 0,
       accelerationFeeRequired: false,
       accelerationFee,
+      earlyActivationFee,
+      processingFee,
       membershipActive: true,
     };
   }
@@ -401,26 +516,30 @@ export function evaluateFirstClaimEligibility(input: {
     : 0;
   const remaining = Math.max(
     0,
-    EXPENSE_RELIEF_PLAN.firstClaimWaitDays - elapsed,
+    EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays - elapsed,
   );
 
   if (remaining <= 0) {
     return {
       canFile: true,
-      reason: "30-day seasoning complete — you may submit your first claim.",
+      reason: "30-day activation complete — you may submit your first claim.",
       waitingDaysRemaining: 0,
       accelerationFeeRequired: false,
       accelerationFee,
+      earlyActivationFee,
+      processingFee,
       membershipActive: true,
     };
   }
 
   return {
     canFile: false,
-    reason: `First claim opens in ${remaining} day${remaining === 1 ? "" : "s"}. Do not want to wait? Pay the $${accelerationFee.toFixed(0)} acceleration fee on top of your membership fee to file now. That fee unlocks early filing only — payouts still need vault capital.`,
+    reason: `First claim opens in ${remaining} day${remaining === 1 ? "" : "s"}. Prefer not to wait? Pay Early Activation: $${earlyActivationFee.toFixed(0)} + $${processingFee.toFixed(0)} processing = $${accelerationFee.toFixed(0)} one-time (any tier). That fee unlocks filing only — payouts still need vault capital.`,
     waitingDaysRemaining: remaining,
     accelerationFeeRequired: true,
     accelerationFee,
+    earlyActivationFee,
+    processingFee,
     membershipActive: true,
   };
 }
@@ -429,15 +548,15 @@ export function applyPayoutCaps(input: {
   requestedPayout: number;
   paidThisMonth: number;
   paidThisYear: number;
+  monthlyPayoutCap?: number;
+  annualPayoutCap?: number;
 }): { allowedPayout: number; capped: boolean; reason?: string } {
-  const monthlyRoom = Math.max(
-    0,
-    EXPENSE_RELIEF_PLAN.monthlyPayoutCap - input.paidThisMonth,
-  );
-  const annualRoom = Math.max(
-    0,
-    EXPENSE_RELIEF_PLAN.annualPayoutCap - input.paidThisYear,
-  );
+  const monthlyCap =
+    input.monthlyPayoutCap ?? EXPENSE_RELIEF_PLAN.monthlyPayoutCap;
+  const annualCap =
+    input.annualPayoutCap ?? EXPENSE_RELIEF_PLAN.annualPayoutCap;
+  const monthlyRoom = Math.max(0, monthlyCap - input.paidThisMonth);
+  const annualRoom = Math.max(0, annualCap - input.paidThisYear);
   const room = Math.min(monthlyRoom, annualRoom);
   const allowed = Math.min(input.requestedPayout, room);
   if (allowed <= 0) {
@@ -446,8 +565,8 @@ export function applyPayoutCaps(input: {
       capped: true,
       reason:
         monthlyRoom <= 0
-          ? `Monthly payout cap of $${EXPENSE_RELIEF_PLAN.monthlyPayoutCap.toFixed(0)} reached.`
-          : `Annual payout cap of $${EXPENSE_RELIEF_PLAN.annualPayoutCap.toFixed(0)} reached.`,
+          ? `Monthly payout cap of $${monthlyCap.toFixed(0)} reached.`
+          : `Annual payout cap of $${annualCap.toFixed(0)} reached.`,
     };
   }
   if (allowed < input.requestedPayout) {
@@ -461,8 +580,7 @@ export function applyPayoutCaps(input: {
 }
 
 export const activateExpenseReliefSchema = z.object({
-  /** Reserved for future plan ids — today only "premier" exists. */
-  planId: z.literal("premier").default("premier"),
+  planId: z.enum(EXPENSE_RELIEF_TIER_IDS),
 });
 
 export const payAccelerationSchema = z.object({
@@ -477,6 +595,8 @@ export const submitExpenseClaimSchema = z.object({
     .positive()
     .max(50_000, "Expense amount looks too large for a single claim."),
   merchantName: z.string().trim().min(2).max(200),
+  businessPhone: z.string().trim().min(7).max(40).optional(),
+  businessAddress: z.string().trim().min(4).max(300).optional(),
   serviceDate: z.string().trim().min(4).max(40),
   recipientName: z
     .string()
@@ -502,3 +622,11 @@ export const reviewExpenseClaimSchema = z.object({
 });
 
 export type ReviewExpenseClaimInput = z.infer<typeof reviewExpenseClaimSchema>;
+
+/** Legacy alias — old single-plan history chart */
+export const HISTORICAL_UDS_STYLE_TIERS = EXPENSE_RELIEF_TIERS.map((t) => ({
+  monthlyFee: t.monthlyFee,
+  reimbursementRate: t.reimbursementRate,
+  label: t.name.replace(" Tier", ""),
+  note: t.bestFor,
+}));

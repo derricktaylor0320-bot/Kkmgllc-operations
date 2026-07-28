@@ -103,9 +103,9 @@ const DIRECTORY_ITEMS: DirectoryItem[] = [
   },
   {
     href: "/expense-relief",
-    title: "Expense Relief",
+    title: "Out-of-Pocket Booster",
     description:
-      "One Premier plan — get a portion of verified out-of-pocket expenses back.",
+      "Four tiers — get a portion of verified out-of-pocket expenses back.",
     Icon: WalletCards,
   },
   {
