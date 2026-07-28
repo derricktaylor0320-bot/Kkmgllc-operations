@@ -44,14 +44,16 @@ import honorPurpleGold from "@assets/shield_purple_gold.jpg";
 import honorWhiteGold from "@assets/shield_white_gold.jpg";
 import kkmgEagleShield from "@assets/masculine/logo_kkmg_eagle_shield.png";
 import eagleCrestMaroonGold from "@assets/masculine/logo_apparel_eagle_maroon_gold.png";
-import badgeEaglesBlackWhite from "@assets/masculine/logo_eagles_black_white.png";
-import badgeEaglesNavyGold from "@assets/masculine/logo_eagles_navy_gold.png";
-import badgeEaglesPurpleGold from "@assets/1785106948168.png";
-import badgeEaglesBrownGold from "@assets/1785106800127.png";
-import badgeEaglesRedGold from "@assets/1785106870967.png";
-import badgeEaglesBurgundyGold from "@assets/1785107423638.png";
-import badgeEaglesSilverGold from "@assets/1785107065086.png";
-import badgeEaglesAllGold from "@assets/masculine/logo_eagles_all_gold.png";
+// Male premium polo emblems (eagle + swords). Canonical folder:
+// attached_assets/male-polo-shirts/ — polos use fixed placement (no customizer).
+import badgeEaglesBlackWhite from "@assets/male-polo-shirts/logo_eagle_swords_black_white.png";
+import badgeEaglesNavyGold from "@assets/male-polo-shirts/logo_eagle_swords_navy_gold.png";
+import badgeEaglesPurpleGold from "@assets/male-polo-shirts/logo_eagle_swords_purple_gold.png";
+import badgeEaglesBrownGold from "@assets/male-polo-shirts/logo_eagle_swords_brown_gold.png";
+import badgeEaglesRedGold from "@assets/male-polo-shirts/logo_eagle_swords_red_gold.png";
+import badgeEaglesBurgundyGold from "@assets/male-polo-shirts/logo_eagle_swords_burgundy_gold.png";
+import badgeEaglesSilverGold from "@assets/male-polo-shirts/logo_eagle_swords_silver_gold.png";
+import badgeEaglesAllGold from "@assets/male-polo-shirts/logo_eagle_swords_all_gold.png";
 import badgeConsolidatusEmpireStandalone from "@assets/masculine/badge_consolidatus_empire_standalone_218.png";
 import logoKkElementsBadge from "@assets/feminine/logo_kk_elements_badge.png";
 import logoKkApparelLeatherCrest from "@assets/masculine/logo_kk_apparel_leather_swords_crest.png";
@@ -70,12 +72,15 @@ import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
 import logoSilverPinkFeminine from "@assets/feminine/logo_silver_pink_feminine_medallion.png";
 import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroidered_crest.png";
-import logoPearlGriffinBlueDenim from "@assets/feminine/logo_pearl_griffin_blue_denim.png";
-import logoPearlGriffinGrey from "@assets/feminine/logo_pearl_griffin_grey.png";
-import logoPearlGriffinTieDye from "@assets/feminine/logo_pearl_griffin_tie_dye.png";
-import logoPearlGriffinMagenta from "@assets/feminine/logo_pearl_griffin_magenta.png";
-import logoPearlGriffinPurple from "@assets/feminine/logo_pearl_griffin_purple.png";
-import logoPearlGriffinNavy from "@assets/feminine/logo_pearl_griffin_navy.png";
+// Female premium polo emblems (Female Logos · pearl griffin). Canonical polo
+// folder: attached_assets/female-polo-shirts/ — polos use fixed placement.
+// Copies also remain under attached_assets/feminine/ for the Feminine Collection.
+import logoPearlGriffinBlueDenim from "@assets/female-polo-shirts/logo_pearl_griffin_blue_denim.png";
+import logoPearlGriffinGrey from "@assets/female-polo-shirts/logo_pearl_griffin_grey.png";
+import logoPearlGriffinTieDye from "@assets/female-polo-shirts/logo_pearl_griffin_tie_dye.png";
+import logoPearlGriffinMagenta from "@assets/female-polo-shirts/logo_pearl_griffin_magenta.png";
+import logoPearlGriffinPurple from "@assets/female-polo-shirts/logo_pearl_griffin_purple.png";
+import logoPearlGriffinNavy from "@assets/female-polo-shirts/logo_pearl_griffin_navy.png";
 
 export interface LogoEntry {
   src: string;
@@ -164,8 +169,16 @@ export const allLogos: Record<string, LogoEntry> = {
 };
 
 // Featured feminine pearl griffin crests for /feminine — Royalty Badge of Honor
-// Female Logos subgroup (IDs 229–234) in attached_assets/feminine/.
+// Female Logos subgroup (IDs 229–234). Also the six women’s premium polo emblems
+// (see attached_assets/female-polo-shirts/).
 export const FEMININE_LOGO_IDS = ["229", "230", "231", "232", "233", "234"] as const;
+
+// Eight men’s eagle-and-swords crests used for premium polos (fixed placement).
+// Files: attached_assets/male-polo-shirts/.
+export const MALE_POLO_LOGO_IDS = ["220", "221", "222", "223", "224", "225", "226", "227"] as const;
+
+// Six women’s pearl-griffin Female Logos used for premium polos (fixed placement).
+export const FEMALE_POLO_LOGO_IDS = FEMININE_LOGO_IDS;
 
 // Full feminine folder — every crest available under the Feminine Collection
 // filter in logo pickers (featured six plus additional feminine colorways).
@@ -193,9 +206,7 @@ export const MASCULINE_LOGO_IDS = ["214", "201", "215", "216", "219", "300"] as 
 export const MASCULINE_FOLDER_LOGO_IDS = [
   ...MASCULINE_LOGO_IDS,
   "218",
-  "220",
-  "221",
-  "227",
+  ...MALE_POLO_LOGO_IDS,
   "228",
   "301",
   "309",
