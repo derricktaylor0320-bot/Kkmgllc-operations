@@ -23,7 +23,7 @@ import logoLimeGreen from "@assets/logo_lime_green.jpg";
 import logoMasterpieceTrident from "@assets/logo_masterpiece_trident_three.png";
 import medallionCorePrinciples from "@assets/copilot_image_1781210586301_1781211927468.jpeg";
 
-// Badge of Honor Collection — crests 200-228
+// Badge of Honor Collection — crests 200-228 + Female Logos 229-234
 import shieldBlackWhite from "@assets/Screenshot_20251126_205145_Photos_1764208360832.jpg";
 import shieldBlueGold from "@assets/Screenshot_20251126_205125_Photos_1764208373884.jpg";
 import crestBlueValuesSwords from "@assets/image000009_1781214860404.jpg";
@@ -132,12 +132,17 @@ export default function Canvas() {
     { id: "124", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal" },
     { id: "125", src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink" },
     { id: "126", src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest" },
-    { id: "127", src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim" },
-    { id: "128", src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey" },
-    { id: "129", src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye" },
-    { id: "130", src: logoPearlGriffinMagenta, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta", color: "Pearl Griffin Magenta" },
-    { id: "131", src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple" },
-    { id: "132", src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy" },
+  ];
+
+  // Female Logos — pearl-crown griffin crests belong to Royalty Badge of Honor
+  // (not the circular Canvas Collection).
+  const femaleBadges = [
+    { id: "229", src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim" },
+    { id: "230", src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey" },
+    { id: "231", src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye" },
+    { id: "232", src: logoPearlGriffinMagenta, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta", color: "Pearl Griffin Magenta" },
+    { id: "233", src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple" },
+    { id: "234", src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy" },
   ];
 
   const badges = [
@@ -216,7 +221,7 @@ export default function Canvas() {
           </div>
         </section>
 
-        {/* Section 1: Badge of Honor Collection — #1 seller (29 logos) */}
+        {/* Section 1: Royalty Badge of Honor — biggest collection (35 logos) */}
         <section className="py-24 bg-muted/20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
@@ -230,10 +235,10 @@ export default function Canvas() {
                 Our Royalty Badge of Honor
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
-                #1 Seller Collection · 29 Logos
+                Our Biggest Collection · 35 Logos
               </p>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-                The crests that symbolize our bond. Brotherhood, Unity, and Strength.
+                Male and female crests to match your mood and your vibe — which one do you want to ride with? Brotherhood, Unity, and Strength.
               </p>
             </div>
 
@@ -266,11 +271,53 @@ export default function Canvas() {
                 </Link>
               ))}
             </div>
+
+            {/* Female Logos — pearl-crown griffin crests within Royalty Badge of Honor */}
+            <div className="mt-20 text-center mb-10">
+              <h3
+                className="text-2xl md:text-3xl font-display uppercase tracking-wide text-primary"
+                data-testid="heading-female-logos"
+              >
+                Female Logos
+              </h3>
+              <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
+                Pearl-crown griffin crests from the Feminine Collection — part of Our Royalty Badge of Honor.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {femaleBadges.map((badge, index) => (
+                <Link key={badge.id} href={`/customize/${badge.id}`} data-testid={`link-badge-${badge.id}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.05, duration: 0.5 }}
+                    className="group relative flex flex-col items-center justify-center bg-background rounded-xl p-4 border border-border hover:border-primary/40 overflow-hidden shadow-lg cursor-pointer bg-gradient-to-b from-background to-primary/5"
+                  >
+                    <div className="relative w-full aspect-square flex items-center justify-center">
+                      <img
+                        src={badge.src}
+                        alt={badge.alt}
+                        className="w-full h-full object-contain drop-shadow-2xl transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="mt-4 text-center">
+                      <span className="text-primary/60 text-sm font-mono">#{badge.id}</span>
+                      <p className="text-foreground font-display text-sm uppercase tracking-wide mt-1">{badge.color}</p>
+                      <span className="text-xs text-primary/80 uppercase tracking-widest mt-2 block">Badge of Honor · Female</span>
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 rounded-xl">
+                      <span className="text-white font-display text-lg uppercase tracking-wide">Customize</span>
+                    </div>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
 
 
-        {/* Section 2: Canvas Collection — #2 seller (31 logos) */}
+        {/* Section 2: Canvas Collection — circular logos to match your mood & vibe */}
         <section className="py-24 bg-secondary text-secondary-foreground relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
             <div className="absolute right-0 top-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
@@ -289,10 +336,10 @@ export default function Canvas() {
                 Canvas Collection
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
-                #2 Seller Collection · 31 Logos
+                25 Logos · Match Your Mood & Vibe
               </p>
               <p className="text-secondary-foreground/60 mt-4 max-w-2xl mx-auto">
-                31 vibrant variations, including the six pearl-crown griffin crests for the Feminine Collection. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
+                25 vibrant circular logos to match your mood and your vibe — which one do you want to ride with? One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
               </p>
             </div>
 

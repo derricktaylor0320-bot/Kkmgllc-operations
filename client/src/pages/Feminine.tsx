@@ -32,39 +32,39 @@ const FEMININE_LOGO_COPY: Record<
   (typeof FEMININE_LOGO_IDS)[number],
   { name: string; label: string; description: string }
 > = {
-  "127": {
+  "229": {
     name: "Pearl Griffin — Blue Denim",
-    label: "Pearl crown crest",
+    label: "Royalty Badge · Female",
     description:
       "Apparel & Accessories griffin crest with a pearl-adorned crown on blue denim — feminine edition with crossed swords.",
   },
-  "128": {
+  "230": {
     name: "Pearl Griffin — Grey",
-    label: "Pearl crown crest",
+    label: "Royalty Badge · Female",
     description:
       "Silver and gold griffin crest with pearl crown detailing on grey — soft, polished feminine presentation.",
   },
-  "129": {
+  "231": {
     name: "Pearl Griffin — Tie-Dye",
-    label: "Pearl crown crest",
+    label: "Royalty Badge · Female",
     description:
       "Pearl-crowned griffin crest on vibrant tie-dye — colorful feminine energy with crossed swords.",
   },
-  "130": {
+  "232": {
     name: "Pearl Griffin — Magenta",
-    label: "Pearl crown crest",
+    label: "Royalty Badge · Female",
     description:
       "Gold griffin crest with pearl crown on magenta — bold feminine colorway for apparel and loungewear.",
   },
-  "131": {
+  "233": {
     name: "Pearl Griffin — Purple",
-    label: "Pearl crown crest",
+    label: "Royalty Badge · Female",
     description:
       "Gold and navy griffin crest with pearl crown on purple — regal feminine edition.",
   },
-  "132": {
+  "234": {
     name: "Pearl Griffin — Navy",
-    label: "Pearl crown crest",
+    label: "Royalty Badge · Female",
     description:
       "All-gold griffin crest with pearl crown on navy — classic feminine Apparel & Accessories mark.",
   },
@@ -240,9 +240,9 @@ export default function Feminine() {
                 Feminine Crest Options
               </h2>
               <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-                These six pearl-crown griffin crests live in the feminine folder
-                so you can pick them all in one place — on this page or in any
-                logo picker under Feminine Collection.
+                These six pearl-crown griffin crests are the Female Logos group
+                within Our Royalty Badge of Honor — pick them here or under Badge
+                of Honor / Feminine Collection in any logo picker.
               </p>
             </div>
 

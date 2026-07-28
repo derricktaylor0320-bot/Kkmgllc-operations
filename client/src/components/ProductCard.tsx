@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { useCart } from "@/hooks/useCart";
 import CaseCustomizer from "@/components/CaseCustomizer";
-import { allLogos, LOGO_SECTIONS, recommendedLogoIdsForColor } from "@/lib/logoCatalog";
+import { allLogos, LOGO_SECTIONS, logoSectionGroups, recommendedLogoIdsForColor } from "@/lib/logoCatalog";
 import { sizeUpchargeDollars } from "@shared/customization";
 import type { ProductVariant } from "@/lib/productVariants";
 import { Check, Minus, Plus, PenLine } from "lucide-react";
@@ -394,13 +394,14 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                           );
                         }
                         return section.name === logoCollection;
-                      }).map((section) => (
-                        <div key={section.name} className="space-y-2">
+                      }).flatMap((section) =>
+                        logoSectionGroups(section).map((group) => (
+                        <div key={`${section.name}-${group.label}`} className="space-y-2">
                           <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
-                            {section.name}
+                            {group.label}
                           </p>
                           <div className="grid grid-cols-4 gap-2">
-                            {section.ids.map((id) => {
+                            {group.ids.map((id) => {
                               const logo = allLogos[id];
                               if (!logo) return null;
                               const isSelected = selectedLogo === logo.alt;
@@ -425,7 +426,8 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                             })}
                           </div>
                         </div>
-                      ))}
+                        )),
+                      )}
                     </div>
                   </div>
                   {selectedLogo && (
