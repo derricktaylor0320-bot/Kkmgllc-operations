@@ -97,6 +97,7 @@ import compassKMG2 from "@assets/image_1781365494182_1781369761833.jpeg";
 import compassSunburst from "@assets/1781351981898_1781369761839.png";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
 import logoSilverPinkFeminine from "@assets/logo_silver_pink_feminine_medallion.png";
+import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroidered_crest.png";
 
 export default function Canvas() {
   const logos = [
@@ -124,6 +125,7 @@ export default function Canvas() {
     { id: "123", src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular" },
     { id: "124", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal" },
     { id: "125", src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink" },
+    { id: "126", src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest" },
   ];
 
   const badges = [
@@ -256,7 +258,7 @@ export default function Canvas() {
         </section>
 
 
-        {/* Section 2: Canvas Collection — #2 seller (24 logos) */}
+        {/* Section 2: Canvas Collection — #2 seller (25 logos) */}
         <section className="py-24 bg-secondary text-secondary-foreground relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
             <div className="absolute right-0 top-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
@@ -275,10 +277,10 @@ export default function Canvas() {
                 Canvas Collection
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
-                #2 Seller Collection · 24 Logos
+                #2 Seller Collection · 25 Logos
               </p>
               <p className="text-secondary-foreground/60 mt-4 max-w-2xl mx-auto">
-                24 vibrant variations, including the new silver &amp; pink feminine medallion. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
+                25 vibrant variations, including the Elements embroidered crest for bedroom &amp; loungewear. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
               </p>
             </div>
 

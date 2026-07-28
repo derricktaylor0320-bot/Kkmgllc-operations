@@ -69,6 +69,7 @@ import logoKKAShield from "@assets/masculine/kka_shield_apparel_logo.jpg";
 import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
 import logoSilverPinkFeminine from "@assets/feminine/logo_silver_pink_feminine_medallion.png";
+import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroidered_crest.png";
 
 export interface LogoEntry {
   src: string;
@@ -102,6 +103,7 @@ export const allLogos: Record<string, LogoEntry> = {
   "123": { src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular", section: "Canvas Collection" },
   "124": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal", section: "Canvas Collection" },
   "125": { src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink", section: "Canvas Collection" },
+  "126": { src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest", section: "Canvas Collection" },
   "200": { src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", section: "Badge of Honor" },
   "201": { src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", section: "Badge of Honor" },
   "202": { src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold", section: "Badge of Honor" },
@@ -150,12 +152,13 @@ export const allLogos: Record<string, LogoEntry> = {
 
 // Featured feminine pearl / ornate sword crests for /feminine.
 // Files live in attached_assets/feminine/ so the collection stays organized.
-export const FEMININE_LOGO_IDS = ["208", "205", "209", "212", "213", "124"] as const;
+export const FEMININE_LOGO_IDS = ["126", "208", "205", "209", "212", "124"] as const;
 
 // Full feminine folder — every crest available under the Feminine Collection
 // filter in logo pickers (featured six plus additional feminine colorways).
 export const FEMININE_FOLDER_LOGO_IDS = [
   ...FEMININE_LOGO_IDS,
+  "213",
   "210",
   "125",
   "107",

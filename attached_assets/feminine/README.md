@@ -3,15 +3,16 @@
 Pearl-detailed and feminine-leaning crests for the Feminine Collection (`/feminine`)
 and the "Feminine Collection" filter in logo pickers.
 
-Featured pearl / ornate sword crests (site showcase):
+Featured feminine crests (site showcase):
+- `logo_kk_elements_embroidered_crest.png` — Elements embroidered crest for robes / pajamas / loungewear
 - `badge_brown_gold_ornate.jpg` — Brown & Gold Ornate (pearl accents)
 - `logo_silver_elite_pearl_crest.jpg` — Silver Elite Crest (pearl accents)
 - `badge_purple_ornate.jpg` — Purple Ornate Crest
 - `badge_purple_swords.jpg` — Purple with Swords
-- `badge_green_swords.jpg` — Green with Swords
 - `logo_kk_elements_badge.png` — Pearl Gold Seal
 
 Also kept here for easy picking:
+- `badge_green_swords.jpg`
 - `badge_navy_silver.jpg`
 - `logo_silver_pink_feminine_medallion.png`
 - `logo_neon_pink_emblem.jpg`

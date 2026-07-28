@@ -32,6 +32,12 @@ const FEMININE_LOGO_COPY: Record<
   (typeof FEMININE_LOGO_IDS)[number],
   { name: string; label: string; description: string }
 > = {
+  "126": {
+    name: "Elements Embroidered Crest",
+    label: "Bedroom & lounge crest",
+    description:
+      "The gold embroidered KK Elements crest shown on our satin robe — made for robes, pajamas, and feminine loungewear.",
+  },
   "208": {
     name: "Brown & Gold Ornate Crest",
     label: "Pearl ornate sword crest",
@@ -55,12 +61,6 @@ const FEMININE_LOGO_COPY: Record<
     label: "Pearl violet sword crest",
     description:
       "A bold purple shield and crossed swords edged with pearl-inspired bead accents.",
-  },
-  "213": {
-    name: "Green with Swords",
-    label: "Pearl emerald sword crest",
-    description:
-      "Emerald green crossed swords with ornate pearl nodes — feminine strength in a rich colorway.",
   },
   "124": {
     name: "Pearl Gold Seal",
@@ -157,15 +157,16 @@ export default function Feminine() {
   const womensProducts = apparelProducts.filter(
     (product) => product.gender === "Women",
   );
+  const isLoungeCategory = (product: StorefrontProduct) =>
+    product.category === "Sleepwear" || product.category === "Intimates";
   const customizableFavorites = womensProducts.filter(
-    (product) => product.logoOptions,
+    (product) => product.logoOptions && !isLoungeCategory(product),
   );
   const womensApparel = womensProducts.filter(
-    (product) => !product.logoOptions,
+    (product) => !product.logoOptions && !isLoungeCategory(product),
   );
   const loungeAndIntimates = [...apparelProducts, ...accessoryProducts].filter(
-    (product) =>
-      product.category === "Sleepwear" || product.category === "Intimates",
+    isLoungeCategory,
   );
   const isLoading = apparelLoading || accessoriesLoading;
   const hasProducts =

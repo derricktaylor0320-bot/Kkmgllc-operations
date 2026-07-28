@@ -896,9 +896,17 @@ const EXTRA_ACCESSORY_PRODUCTS: {
     priceId: "price_kksatinrobe",
     name: "Khomplete Khemistri Elements Satin Robe",
     description:
-      "Luxurious satin robe featuring the Khomplete Khemistri Elements emblem embroidered in gold, finished with elegant gold piping, a self-tie belt, and side pockets. Smooth, lightweight satin in a relaxed unisex fit. One flat price for every size, XS to 6XL. SELECT YOUR COLOR AND SIZE at checkout! Available in 41 colors.",
+      "Luxurious satin robe for women's bedroom and loungewear, finished with elegant gold piping, a self-tie belt, and side pockets. Brand it with the Khomplete Khemistri Elements Embroidered Crest (or any logo from our Feminine Collection). Smooth, lightweight satin. One flat price for every size, XS to 6XL. SELECT YOUR COLOR, SIZE, AND LOGO at checkout! Available in 41 colors.",
     priceCents: 4000,
-    meta: { category: "Sleepwear", productType: "accessory", sortOrder: "24", imageUrl: "/assets/satin_robe_kk_elements.png", gender: "Unisex", sizes: "XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL, 6XL", colors: "Black, White, Ivory, Champagne, Gold, Silver, Grey Silver, Navy, Royal, Sky Blue, Turquoise, Teal, Aqua, Mint, Eucalyptus, Sage Green, Olive, Emerald Green, Green, Lime, Yellow, Lemon Yellow, Antique Gold, Copper, Burnt Orange, Orange, Coral, Red, Wine, Hot Pink, Blush, Light Pink, Dusty Rose, Mauve, Lavender, Dusty Plum, Plum, Purple, Dark Purple, Brown, Dark Brown" },
+    meta: {
+      category: "Sleepwear",
+      productType: "apparel",
+      sortOrder: "24",
+      imageUrl: "/assets/satin_robe_kk_elements.png",
+      gender: "Women",
+      apparelSizes: "XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL, 6XL",
+      colors: "Black, White, Ivory, Champagne, Gold, Silver, Grey Silver, Navy, Royal, Sky Blue, Turquoise, Teal, Aqua, Mint, Eucalyptus, Sage Green, Olive, Emerald Green, Green, Lime, Yellow, Lemon Yellow, Antique Gold, Copper, Burnt Orange, Orange, Coral, Red, Wine, Hot Pink, Blush, Light Pink, Dusty Rose, Mauve, Lavender, Dusty Plum, Plum, Purple, Dark Purple, Brown, Dark Brown",
+    },
   },
   {
     productId: "prod_kksneakergrey",
@@ -2644,13 +2652,23 @@ export async function ensureCatalogData() {
           AND EXISTS (SELECT 1 FROM stripe.products WHERE id = ${e.productId})
       `);
 
+      // When a product moves from bedding-style `sizes` to wearable `apparelSizes`
+      // (so logo + size can both be chosen), drop the stale `sizes` key so the
+      // size-only checkout path doesn't keep winning.
+      const stripSizes = Boolean(e.meta.apparelSizes);
       await db.execute(sql`
         UPDATE stripe.products
         SET _raw_data = jsonb_set(
               jsonb_set(_raw_data, '{description}', ${JSON.stringify(e.description)}::jsonb, true),
               '{metadata}',
-              (COALESCE(_raw_data->'metadata', '{}'::jsonb) - 'etsyLink' - 'cost' - 'profitMargin')
-                || ${JSON.stringify(e.meta)}::jsonb,
+              (
+                CASE
+                  WHEN ${stripSizes} THEN
+                    (COALESCE(_raw_data->'metadata', '{}'::jsonb) - 'etsyLink' - 'cost' - 'profitMargin' - 'sizes')
+                  ELSE
+                    (COALESCE(_raw_data->'metadata', '{}'::jsonb) - 'etsyLink' - 'cost' - 'profitMargin')
+                END
+              ) || ${JSON.stringify(e.meta)}::jsonb,
               true
             ),
             _updated_at = now()
