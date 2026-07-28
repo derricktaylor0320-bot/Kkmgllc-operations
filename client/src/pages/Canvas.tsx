@@ -98,6 +98,12 @@ import compassSunburst from "@assets/1781351981898_1781369761839.png";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
 import logoSilverPinkFeminine from "@assets/logo_silver_pink_feminine_medallion.png";
 import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroidered_crest.png";
+import logoPearlGriffinBlueDenim from "@assets/feminine/logo_pearl_griffin_blue_denim.png";
+import logoPearlGriffinGrey from "@assets/feminine/logo_pearl_griffin_grey.png";
+import logoPearlGriffinTieDye from "@assets/feminine/logo_pearl_griffin_tie_dye.png";
+import logoPearlGriffinMagenta from "@assets/feminine/logo_pearl_griffin_magenta.png";
+import logoPearlGriffinPurple from "@assets/feminine/logo_pearl_griffin_purple.png";
+import logoPearlGriffinNavy from "@assets/feminine/logo_pearl_griffin_navy.png";
 
 export default function Canvas() {
   const logos = [
@@ -126,6 +132,12 @@ export default function Canvas() {
     { id: "124", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal" },
     { id: "125", src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink" },
     { id: "126", src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest" },
+    { id: "127", src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim" },
+    { id: "128", src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey" },
+    { id: "129", src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye" },
+    { id: "130", src: logoPearlGriffinMagenta, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta", color: "Pearl Griffin Magenta" },
+    { id: "131", src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple" },
+    { id: "132", src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy" },
   ];
 
   const badges = [
@@ -258,7 +270,7 @@ export default function Canvas() {
         </section>
 
 
-        {/* Section 2: Canvas Collection — #2 seller (25 logos) */}
+        {/* Section 2: Canvas Collection — #2 seller (31 logos) */}
         <section className="py-24 bg-secondary text-secondary-foreground relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
             <div className="absolute right-0 top-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
@@ -277,10 +289,10 @@ export default function Canvas() {
                 Canvas Collection
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
-                #2 Seller Collection · 25 Logos
+                #2 Seller Collection · 31 Logos
               </p>
               <p className="text-secondary-foreground/60 mt-4 max-w-2xl mx-auto">
-                25 vibrant variations, including the Elements embroidered crest for bedroom &amp; loungewear. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
+                31 vibrant variations, including the six pearl-crown griffin crests for the Feminine Collection. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
               </p>
             </div>
 

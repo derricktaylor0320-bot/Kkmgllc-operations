@@ -32,41 +32,41 @@ const FEMININE_LOGO_COPY: Record<
   (typeof FEMININE_LOGO_IDS)[number],
   { name: string; label: string; description: string }
 > = {
-  "126": {
-    name: "Elements Embroidered Crest",
-    label: "Bedroom & lounge crest",
+  "127": {
+    name: "Pearl Griffin — Blue Denim",
+    label: "Pearl crown crest",
     description:
-      "The gold embroidered KK Elements crest shown on our satin robe — made for robes, pajamas, and feminine loungewear.",
+      "Apparel & Accessories griffin crest with a pearl-adorned crown on blue denim — feminine edition with crossed swords.",
   },
-  "208": {
-    name: "Brown & Gold Ornate Crest",
-    label: "Pearl ornate sword crest",
+  "128": {
+    name: "Pearl Griffin — Grey",
+    label: "Pearl crown crest",
     description:
-      "Crossed swords framed by ornate scrollwork with pearl accents — the feminine edition of the Badge of Honor crest.",
+      "Silver and gold griffin crest with pearl crown detailing on grey — soft, polished feminine presentation.",
   },
-  "205": {
-    name: "Silver Elite Crest",
-    label: "Pearl silver sword crest",
+  "129": {
+    name: "Pearl Griffin — Tie-Dye",
+    label: "Pearl crown crest",
     description:
-      "A polished silver crest with pearl bead details and a heart flourish for a refined feminine look.",
+      "Pearl-crowned griffin crest on vibrant tie-dye — colorful feminine energy with crossed swords.",
   },
-  "209": {
-    name: "Purple Ornate Crest",
-    label: "Pearl purple sword crest",
+  "130": {
+    name: "Pearl Griffin — Magenta",
+    label: "Pearl crown crest",
     description:
-      "Royal purple crossed swords with ornate pearl-dotted filigree made for the feminine collection.",
+      "Gold griffin crest with pearl crown on magenta — bold feminine colorway for apparel and loungewear.",
   },
-  "212": {
-    name: "Purple with Swords",
-    label: "Pearl violet sword crest",
+  "131": {
+    name: "Pearl Griffin — Purple",
+    label: "Pearl crown crest",
     description:
-      "A bold purple shield and crossed swords edged with pearl-inspired bead accents.",
+      "Gold and navy griffin crest with pearl crown on purple — regal feminine edition.",
   },
-  "124": {
-    name: "Pearl Gold Seal",
-    label: "Signature pearl seal",
+  "132": {
+    name: "Pearl Griffin — Navy",
+    label: "Pearl crown crest",
     description:
-      "A refined gold seal framed by a continuous pearl border — the signature feminine pearl crest.",
+      "All-gold griffin crest with pearl crown on navy — classic feminine Apparel & Accessories mark.",
   },
 };
 
@@ -240,9 +240,9 @@ export default function Feminine() {
                 Feminine Crest Options
               </h2>
               <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-                These six pearl-detailed feminine sword crests live in the
-                feminine folder so you can pick them all in one place — on this
-                page or in any logo picker under Feminine Collection.
+                These six pearl-crown griffin crests live in the feminine folder
+                so you can pick them all in one place — on this page or in any
+                logo picker under Feminine Collection.
               </p>
             </div>
 
@@ -306,7 +306,7 @@ export default function Feminine() {
                   id="customizable-favorites"
                   eyebrow="Make it yours"
                   title="Customizable Favorites"
-                  description="Pair a pearl ornate sword crest or Pearl Gold Seal with these feminine styles for a personalized look."
+                  description="Pair a pearl-crown griffin crest with these feminine styles for a personalized look."
                   products={customizableFavorites}
                 />
                 <ProductSection

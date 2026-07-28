@@ -31,6 +31,12 @@ export const LOGO_ALTS: string[] = [
   "Khomplete Khemistri Elements Pearl Gold Seal",
   "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion",
   "Khomplete Khemistri Elements Embroidered Crest",
+  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim",
+  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey",
+  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye",
+  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta",
+  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple",
+  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy",
   // Badge of Honor
   "Blue & Gold Values Crest - Friendship, Trust, Harmony",
   "Khomplete Khemistri Apparel Leather Swords Crest",
