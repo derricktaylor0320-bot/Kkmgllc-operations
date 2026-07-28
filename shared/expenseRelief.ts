@@ -201,31 +201,29 @@ export const EXPENSE_CATEGORIES = [
   },
   {
     id: "household",
-    label: "Household & Living Essentials",
+    label: "Household Essentials (verifiable)",
     examples: [
-      "Utilities shortfalls",
-      "Essential repairs",
-      "Childcare gaps",
-      "Pet food & supplies tied to care",
+      "Documented utility shortfalls with bill + proof of payment",
+      "Essential repairs with contractor invoice you can verify by phone",
     ],
   },
   {
     id: "work_education",
-    label: "Work & Education",
+    label: "Work commute & member education",
     examples: [
-      "Commuting costs",
-      "Required work supplies",
-      "School supplies",
-      "Uniform fees",
+      "Commute to/from work (transit, tolls, parking) with proof",
+      "Required work uniforms / employer-required gear with receipt",
+      "School supplies for yourself if you are currently enrolled",
+      "Required work supplies with verifiable merchant receipt",
     ],
   },
   {
     id: "admin_fees",
     label: "Financial & Administrative Fees",
     examples: [
-      "Bank fees",
-      "Late fees",
-      "Service / processing fees",
+      "Bank fees with statement proof",
+      "Late fees with bill + proof of payment",
+      "Documented service / processing fees",
     ],
   },
 ] as const;
@@ -266,8 +264,8 @@ export const EXPENSE_RELIEF_RULES = [
   },
   {
     id: "verification",
-    title: "Verify before pay",
-    body: `Claims are reviewed ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours to about a week. Receipts must show a real merchant, your name or pet's name, service date, and proof you paid.`,
+    title: "Must be verifiable — not personal lifestyle",
+    body: `Claims are reviewed ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours to about a week. We need a legitimate receipt we can confirm by phone, fax, or merchant lookup — business name, phone, amount, date, and who paid. Personal lifestyle (haircuts, nails, lunch money, kids’ school supplies) is not covered.`,
   },
   {
     id: "caps",

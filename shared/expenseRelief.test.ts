@@ -111,4 +111,14 @@ describe("Out-of-Pocket Booster", () => {
     assert.ok(ACCEPTABLE_CLAIMS.length > 0);
     assert.ok(NOT_ACCEPTABLE_CLAIMS.length > 0);
   });
+
+  it("allows verifiable work commute and member school supplies, blocks personal lifestyle", () => {
+    const acceptableText = ACCEPTABLE_CLAIMS.flatMap((g) => g.items).join(" ");
+    const notText = NOT_ACCEPTABLE_CLAIMS.flatMap((g) => g.items).join(" ");
+    assert.match(acceptableText, /Commute to and from work/i);
+    assert.match(acceptableText, /School supplies for yourself/i);
+    assert.match(notText, /Haircuts|barbershop|nail salon/i);
+    assert.match(notText, /Lunch money/i);
+    assert.match(notText, /School supplies bought for your children/i);
+  });
 });
