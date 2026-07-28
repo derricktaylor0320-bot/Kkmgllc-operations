@@ -13,6 +13,7 @@ import { storage } from "./storage";
 import { setupAuth, requireAuth, requireOwner, toPublicUser } from "./auth";
 import { registerPocketBoosterRoutes } from "./pocketBooster";
 import { registerLiquidityRoutes } from "./liquidityRouter";
+import { registerExpenseReliefRoutes } from "./expenseRelief";
 import { PROGRAM_PATHWAY, PROGRAM_STAGES } from "@shared/programStages";
 import { checkCustomization, customizationErrorMessage, isDefaultLogoCustomizable, apparelSizesFor, scentsFor, FULL_LOGO_CATALOG_OPTION } from "@shared/customization";
 import { updateOrderFulfillmentSchema, insertMediaLinkSchema, mediaUploadFieldsSchema, insertReviewSchema, updateProfileSchema, type Review, type User } from "@shared/schema";
@@ -192,6 +193,9 @@ export async function registerRoutes(
 
   // Pocket Booster — subscription tiers, cushion autopilot, Pay-to-Learn rewards
   registerPocketBoosterRoutes(app);
+
+  // Consolidated Expense Relief — one Premier plan, OOP claim compensation vault
+  registerExpenseReliefRoutes(app);
 
   // P2P Liquidity Loop — bridge investor capital into Pocket Booster vault + yield
   registerLiquidityRoutes(app);

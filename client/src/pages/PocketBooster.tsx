@@ -445,12 +445,55 @@ export default function PocketBooster() {
               <Button
                 asChild
                 variant="outline"
+                data-testid="button-open-expense-relief"
+              >
+                <Link href="/expense-relief">Expense Relief Claims</Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
                 data-testid="button-download-pdf-application"
               >
                 <a href="/assets/pocket-booster-application.pdf" download>
                   <FileDown className="h-4 w-4" />
                   Download PDF Application
                 </a>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Companion: Consolidated Expense Relief */}
+        <section
+          id="expense-relief-companion"
+          className="border-b border-primary/15 bg-secondary/25"
+          data-testid="section-expense-relief-companion"
+        >
+          <div className="mx-auto flex max-w-5xl flex-col gap-5 px-6 py-10 sm:flex-row sm:items-center sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="mb-1 font-display text-xs uppercase tracking-[0.28em] text-primary">
+                Companion Empire program
+              </p>
+              <h2 className="font-display text-2xl font-bold uppercase tracking-wide text-primary md:text-3xl">
+                Already paid out of pocket?
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Pocket Booster gives interest-free cushions when you need cash
+                now. Consolidated Expense Relief is separate — members file a
+                claim application to get a portion of verified medical, dental,
+                vet, toll, and similar expenses back. Same hub login. If that
+                program&apos;s Compensation Vault is empty, claims cannot be
+                paid until it is funded.
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-col gap-2 sm:items-end">
+              <Button asChild data-testid="button-pb-to-expense-relief">
+                <Link href="/expense-relief">Open Expense Relief</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/expense-relief#claim-application">
+                  Claim application
+                </Link>
               </Button>
             </div>
           </div>
@@ -816,14 +859,22 @@ export default function PocketBooster() {
               starting at {formatMoney(minimumInvestmentAmount)} — 100% goes
               into the Pocket Booster Instant-Disbursal Vault. Member
               subscription fees fund your {(yieldRate * 100).toFixed(1)}%
-              compounding daily yield. Prefer apparel, The FR2P Club, or another
-              Empire program? Use{" "}
+              compounding daily yield. Prefer apparel, The FR2P Club, Expense
+              Relief vault capital, or another Empire program? Use{" "}
               <Link
                 href="/invest"
                 className="text-primary underline underline-offset-2"
                 data-testid="link-empire-invest-from-pb"
               >
                 Empire Invest
+              </Link>
+              . For verified out-of-pocket reimbursements (not cushions), open{" "}
+              <Link
+                href="/expense-relief"
+                className="text-primary underline underline-offset-2"
+                data-testid="link-expense-relief-from-pb-reserve"
+              >
+                Expense Relief
               </Link>
               .
             </p>

@@ -102,6 +102,13 @@ const DIRECTORY_ITEMS: DirectoryItem[] = [
     Icon: Rocket,
   },
   {
+    href: "/expense-relief",
+    title: "Expense Relief",
+    description:
+      "One Premier plan — get a portion of verified out-of-pocket expenses back.",
+    Icon: WalletCards,
+  },
+  {
     href: "/fr2p",
     title: "The FR2P Club",
     description: "A connected program in the Empire investment ecosystem.",
@@ -111,7 +118,7 @@ const DIRECTORY_ITEMS: DirectoryItem[] = [
     href: "/invest",
     title: "Empire Invest",
     description: "Explore Empire programs, opportunities, and investor resources.",
-    Icon: WalletCards,
+    Icon: Landmark,
   },
 ];
 

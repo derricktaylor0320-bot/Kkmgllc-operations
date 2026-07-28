@@ -42,6 +42,8 @@ export type HubInvestmentProgram = {
   status: HubProgramStatus;
   /** When true, capital also expands the Pocket Booster lending vault */
   fundsPocketBoosterVault: boolean;
+  /** When true, capital expands the Consolidated Expense Relief vault */
+  fundsExpenseReliefVault?: boolean;
   href?: string;
 };
 
@@ -63,7 +65,24 @@ export const HUB_INVESTMENT_PROGRAMS: HubInvestmentProgram[] = [
     annualYieldRate: 0.085,
     status: "open",
     fundsPocketBoosterVault: true,
+    fundsExpenseReliefVault: false,
     href: "/pocket-booster",
+  },
+  {
+    tag: "EXPENSE_RELIEF_VAULT",
+    name: "Consolidated Expense Relief Vault",
+    shortName: "Expense Relief",
+    description:
+      "Compensation Vault for verified out-of-pocket expense claims — membership fees and investor capital put money back in members' pockets (medical, dental, vet, tolls, and more).",
+    allocationSummary:
+      "100% into the Consolidated Expense Relief Compensation Vault",
+    ledgerDescription:
+      "100% allocated to the Consolidated Expense Relief Compensation Vault to back verified member reimbursements on out-of-pocket expenses.",
+    annualYieldRate: 0.08,
+    status: "open",
+    fundsPocketBoosterVault: false,
+    fundsExpenseReliefVault: true,
+    href: "/expense-relief",
   },
   {
     tag: "FR2P_CLUB_GROWTH",
@@ -78,6 +97,7 @@ export const HUB_INVESTMENT_PROGRAMS: HubInvestmentProgram[] = [
     annualYieldRate: 0.08,
     status: "open",
     fundsPocketBoosterVault: false,
+    fundsExpenseReliefVault: false,
     href: "/fr2p",
   },
   {
@@ -93,6 +113,7 @@ export const HUB_INVESTMENT_PROGRAMS: HubInvestmentProgram[] = [
     annualYieldRate: 0.075,
     status: "open",
     fundsPocketBoosterVault: false,
+    fundsExpenseReliefVault: false,
     href: "/apparel",
   },
   {
@@ -108,6 +129,7 @@ export const HUB_INVESTMENT_PROGRAMS: HubInvestmentProgram[] = [
     annualYieldRate: 0.07,
     status: "open",
     fundsPocketBoosterVault: false,
+    fundsExpenseReliefVault: false,
     href: "/hot-dogs",
   },
   {
@@ -123,6 +145,7 @@ export const HUB_INVESTMENT_PROGRAMS: HubInvestmentProgram[] = [
     annualYieldRate: 0.09,
     status: "coming_soon",
     fundsPocketBoosterVault: false,
+    fundsExpenseReliefVault: false,
   },
 ];
 
