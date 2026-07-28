@@ -6,6 +6,7 @@ import {
   Feather,
   Heart,
   HeartPulse,
+  Shield,
   Landmark,
   Music,
   Palette,
@@ -36,8 +37,14 @@ const DIRECTORY_ITEMS: DirectoryItem[] = [
   {
     href: "/feminine",
     title: "Feminine Collection",
-    description: "Feminine apparel, lounge picks, and customizable crest suggestions.",
+    description: "Feminine apparel, lounge picks, and pearl crest suggestions.",
     Icon: Heart,
+  },
+  {
+    href: "/masculine",
+    title: "Masculine Collection",
+    description: "Masculine apparel and sword/eagle crest suggestions.",
+    Icon: Shield,
   },
   {
     href: "/accessories",

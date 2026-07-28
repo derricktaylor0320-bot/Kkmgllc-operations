@@ -385,7 +385,16 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                     data-testid={`picker-logo-${title.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     <div className="space-y-4">
-                      {LOGO_SECTIONS.filter((section) => logoCollection === "All" || section.name === logoCollection).map((section) => (
+                      {LOGO_SECTIONS.filter((section) => {
+                        // Gender folders are pick filters; skip them in "All" so logos aren't duplicated.
+                        if (logoCollection === "All") {
+                          return (
+                            section.name !== "Feminine Collection" &&
+                            section.name !== "Masculine Collection"
+                          );
+                        }
+                        return section.name === logoCollection;
+                      }).map((section) => (
                         <div key={section.name} className="space-y-2">
                           <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
                             {section.name}

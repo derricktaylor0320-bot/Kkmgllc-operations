@@ -100,7 +100,16 @@ export default function Apparel() {
                   <h2 className="font-display text-3xl font-bold uppercase tracking-wider text-center mb-8 text-primary" data-testid="section-mens">
                     Men's Collection
                   </h2>
-                  <p className="text-center text-muted-foreground mb-8">Designed for Him</p>
+                  <p className="text-center text-muted-foreground mb-3">Designed for Him</p>
+                  <div className="mb-8 text-center">
+                    <Link
+                      href="/masculine"
+                      className="inline-flex items-center rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground"
+                      data-testid="link-full-masculine-collection"
+                    >
+                      Shop the full Masculine Collection →
+                    </Link>
+                  </div>
                   {renderProductGrid(mensProducts)}
                 </div>
               </section>

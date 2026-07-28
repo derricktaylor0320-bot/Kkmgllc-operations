@@ -634,7 +634,16 @@ function ProductDetailContent({
                     data-testid="picker-detail-logo"
                   >
                     <div className="space-y-5">
-                      {LOGO_SECTIONS.filter((section) => logoCollection === "All" || section.name === logoCollection).map((section) => (
+                      {LOGO_SECTIONS.filter((section) => {
+                        // Gender folders are pick filters; skip them in "All" so logos aren't duplicated.
+                        if (logoCollection === "All") {
+                          return (
+                            section.name !== "Feminine Collection" &&
+                            section.name !== "Masculine Collection"
+                          );
+                        }
+                        return section.name === logoCollection;
+                      }).map((section) => (
                         <div key={section.name} className="space-y-2">
                           <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
                             {section.name}
