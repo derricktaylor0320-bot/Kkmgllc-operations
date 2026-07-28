@@ -110,12 +110,6 @@ export const allLogos: Record<string, LogoEntry> = {
   "124": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal", section: "Canvas Collection" },
   "125": { src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink", section: "Canvas Collection" },
   "126": { src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest", section: "Canvas Collection" },
-  "127": { src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim", section: "Canvas Collection" },
-  "128": { src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey", section: "Canvas Collection" },
-  "129": { src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye", section: "Canvas Collection" },
-  "130": { src: logoPearlGriffinMagenta, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta", color: "Pearl Griffin Magenta", section: "Canvas Collection" },
-  "131": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Canvas Collection" },
-  "132": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Canvas Collection" },
   "200": { src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", section: "Badge of Honor" },
   "201": { src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", section: "Badge of Honor" },
   "202": { src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold", section: "Badge of Honor" },
@@ -145,6 +139,13 @@ export const allLogos: Record<string, LogoEntry> = {
   "226": { src: badgeEaglesSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold", color: "Silver & Gold Eagles", section: "Badge of Honor" },
   "227": { src: badgeEaglesAllGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold", color: "All Gold Eagles", section: "Badge of Honor" },
   "228": { src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", section: "Badge of Honor" },
+  // Female Logos — pearl-crown griffin crests (Royalty Badge of Honor; not Canvas circles)
+  "229": { src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim", section: "Badge of Honor" },
+  "230": { src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey", section: "Badge of Honor" },
+  "231": { src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye", section: "Badge of Honor" },
+  "232": { src: logoPearlGriffinMagenta, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta", color: "Pearl Griffin Magenta", section: "Badge of Honor" },
+  "233": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Badge of Honor" },
+  "234": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Badge of Honor" },
   "300": { src: honorAllGold, alt: "The Golden Eagle Shield", color: "All Gold", section: "Shield of Honor" },
   "301": { src: honorNavyGold, alt: "Navy & Gold Eagle Shield", color: "Navy & Gold", section: "Shield of Honor" },
   "302": { src: honorSilverGold, alt: "Silver & Gold Eagle Shield", color: "Silver & Gold", section: "Shield of Honor" },
@@ -162,9 +163,9 @@ export const allLogos: Record<string, LogoEntry> = {
   "403": { src: compassSunburst, alt: "Khomplete Khemistri Apparel Sunburst Emblem", color: "Apparel Sunburst", section: "Compass Collection" },
 };
 
-// Featured feminine pearl griffin crests for /feminine — the six pearl-crown
-// uploads in attached_assets/feminine/.
-export const FEMININE_LOGO_IDS = ["127", "128", "129", "130", "131", "132"] as const;
+// Featured feminine pearl griffin crests for /feminine — Royalty Badge of Honor
+// Female Logos subgroup (IDs 229–234) in attached_assets/feminine/.
+export const FEMININE_LOGO_IDS = ["229", "230", "231", "232", "233", "234"] as const;
 
 // Full feminine folder — every crest available under the Feminine Collection
 // filter in logo pickers (featured six plus additional feminine colorways).
@@ -221,6 +222,27 @@ export const LOGO_SECTIONS: { name: string; ids: string[] }[] = (() => {
     ...order.map((name) => ({ name, ids: bySection[name] })),
   ];
 })();
+
+// Within Badge of Honor, surface the pearl griffin Female Logos as their own
+// labeled subgroup (gallery + tool selector). Other sections stay as one group.
+export function logoSectionGroups(section: {
+  name: string;
+  ids: string[];
+}): { label: string; ids: string[] }[] {
+  if (section.name !== "Badge of Honor") {
+    return [{ label: section.name, ids: section.ids }];
+  }
+  const femaleSet = new Set<string>(FEMININE_LOGO_IDS);
+  const main = section.ids.filter((id) => !femaleSet.has(id));
+  const female = section.ids.filter((id) => femaleSet.has(id));
+  const groups: { label: string; ids: string[] }[] = [
+    { label: section.name, ids: main },
+  ];
+  if (female.length > 0) {
+    groups.push({ label: "Female Logos", ids: female });
+  }
+  return groups;
+}
 
 // For general products, the customer's chosen product color maps to color
 // keywords; any logo whose color/name mentions one of those keywords is

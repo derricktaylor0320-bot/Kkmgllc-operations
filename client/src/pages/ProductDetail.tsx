@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Check, Minus, Plus } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { useRecentlyViewed, readRecentlyViewed } from "@/hooks/useRecentlyViewed";
-import { allLogos, LOGO_SECTIONS, recommendedLogoIdsForColor } from "@/lib/logoCatalog";
+import { allLogos, LOGO_SECTIONS, logoSectionGroups, recommendedLogoIdsForColor } from "@/lib/logoCatalog";
 import { sizeUpchargeDollars } from "@shared/customization";
 import { getSupplementInfo } from "@shared/supplementBenefits";
 
@@ -643,13 +643,14 @@ function ProductDetailContent({
                           );
                         }
                         return section.name === logoCollection;
-                      }).map((section) => (
-                        <div key={section.name} className="space-y-2">
+                      }).flatMap((section) =>
+                        logoSectionGroups(section).map((group) => (
+                        <div key={`${section.name}-${group.label}`} className="space-y-2">
                           <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                            {section.name}
+                            {group.label}
                           </p>
                           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                            {section.ids.map((id) => {
+                            {group.ids.map((id) => {
                               const logo = allLogos[id];
                               if (!logo) return null;
                               const isSelected = selectedLogo === logo.alt;
@@ -686,7 +687,8 @@ function ProductDetailContent({
                             })}
                           </div>
                         </div>
-                      ))}
+                        )),
+                      )}
                     </div>
                   </div>
                   <p className="text-sm" data-testid="text-detail-logo-selection">
