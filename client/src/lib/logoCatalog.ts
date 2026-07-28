@@ -70,6 +70,12 @@ import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
 import logoSilverPinkFeminine from "@assets/feminine/logo_silver_pink_feminine_medallion.png";
 import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroidered_crest.png";
+import logoPearlGriffinBlueDenim from "@assets/feminine/logo_pearl_griffin_blue_denim.png";
+import logoPearlGriffinGrey from "@assets/feminine/logo_pearl_griffin_grey.png";
+import logoPearlGriffinTieDye from "@assets/feminine/logo_pearl_griffin_tie_dye.png";
+import logoPearlGriffinMagenta from "@assets/feminine/logo_pearl_griffin_magenta.png";
+import logoPearlGriffinPurple from "@assets/feminine/logo_pearl_griffin_purple.png";
+import logoPearlGriffinNavy from "@assets/feminine/logo_pearl_griffin_navy.png";
 
 export interface LogoEntry {
   src: string;
@@ -104,6 +110,12 @@ export const allLogos: Record<string, LogoEntry> = {
   "124": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal", section: "Canvas Collection" },
   "125": { src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink", section: "Canvas Collection" },
   "126": { src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest", section: "Canvas Collection" },
+  "127": { src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim", section: "Canvas Collection" },
+  "128": { src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey", section: "Canvas Collection" },
+  "129": { src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye", section: "Canvas Collection" },
+  "130": { src: logoPearlGriffinMagenta, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta", color: "Pearl Griffin Magenta", section: "Canvas Collection" },
+  "131": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Canvas Collection" },
+  "132": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Canvas Collection" },
   "200": { src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", section: "Badge of Honor" },
   "201": { src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", section: "Badge of Honor" },
   "202": { src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold", section: "Badge of Honor" },
@@ -150,17 +162,23 @@ export const allLogos: Record<string, LogoEntry> = {
   "403": { src: compassSunburst, alt: "Khomplete Khemistri Apparel Sunburst Emblem", color: "Apparel Sunburst", section: "Compass Collection" },
 };
 
-// Featured feminine pearl / ornate sword crests for /feminine.
-// Files live in attached_assets/feminine/ so the collection stays organized.
-export const FEMININE_LOGO_IDS = ["126", "208", "205", "209", "212", "124"] as const;
+// Featured feminine pearl griffin crests for /feminine — the six pearl-crown
+// uploads in attached_assets/feminine/.
+export const FEMININE_LOGO_IDS = ["127", "128", "129", "130", "131", "132"] as const;
 
 // Full feminine folder — every crest available under the Feminine Collection
 // filter in logo pickers (featured six plus additional feminine colorways).
 export const FEMININE_FOLDER_LOGO_IDS = [
   ...FEMININE_LOGO_IDS,
+  "126",
+  "124",
+  "125",
+  "208",
+  "205",
+  "209",
+  "212",
   "213",
   "210",
-  "125",
   "107",
   "110",
   "121",
