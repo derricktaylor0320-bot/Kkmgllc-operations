@@ -202,24 +202,36 @@ export const MASCULINE_FOLDER_LOGO_IDS = [
   "310",
 ] as const;
 
-// The full logo catalog grouped into its named collections. Feminine and
-// Masculine folders are listed first so shoppers can pick by gender folder;
-// Canvas / Badge / Shield / Compass collections follow afterward.
+// Brand collections lead with Our Royalty Badge of Honor (biggest — male +
+// female), then Canvas, then Shield / Compass. Feminine and Masculine folders
+// follow as gender pick-filters.
+const BRAND_SECTION_ORDER = [
+  "Badge of Honor",
+  "Canvas Collection",
+  "Shield of Honor",
+  "Compass Collection",
+] as const;
+
 export const LOGO_SECTIONS: { name: string; ids: string[] }[] = (() => {
-  const order: string[] = [];
   const bySection: Record<string, string[]> = {};
   for (const id of Object.keys(allLogos)) {
     const section = allLogos[id].section;
-    if (!bySection[section]) {
-      bySection[section] = [];
-      order.push(section);
-    }
+    if (!bySection[section]) bySection[section] = [];
     bySection[section].push(id);
   }
+  const brandSections = BRAND_SECTION_ORDER
+    .filter((name) => bySection[name]?.length)
+    .map((name) => ({ name, ids: bySection[name] }));
+  // Any unexpected section names append after the known brand order.
+  for (const name of Object.keys(bySection)) {
+    if (!BRAND_SECTION_ORDER.includes(name as (typeof BRAND_SECTION_ORDER)[number])) {
+      brandSections.push({ name, ids: bySection[name] });
+    }
+  }
   return [
+    ...brandSections,
     { name: "Feminine Collection", ids: [...FEMININE_FOLDER_LOGO_IDS] },
     { name: "Masculine Collection", ids: [...MASCULINE_FOLDER_LOGO_IDS] },
-    ...order.map((name) => ({ name, ids: bySection[name] })),
   ];
 })();
 

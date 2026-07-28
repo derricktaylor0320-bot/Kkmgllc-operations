@@ -221,7 +221,7 @@ export default function Canvas() {
           </div>
         </section>
 
-        {/* Section 1: Badge of Honor Collection — #1 seller (29 logos) */}
+        {/* Section 1: Royalty Badge of Honor — biggest collection (35 logos) */}
         <section className="py-24 bg-muted/20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
@@ -235,10 +235,10 @@ export default function Canvas() {
                 Our Royalty Badge of Honor
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
-                #1 Seller Collection · 35 Logos
+                Our Biggest Collection · 35 Logos
               </p>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-                The crests that symbolize our bond. Brotherhood, Unity, and Strength.
+                Male and female crests to match your mood and your vibe — which one do you want to ride with? Brotherhood, Unity, and Strength.
               </p>
             </div>
 
@@ -317,7 +317,7 @@ export default function Canvas() {
         </section>
 
 
-        {/* Section 2: Canvas Collection — #2 seller (25 logos) */}
+        {/* Section 2: Canvas Collection — circular logos to match your mood & vibe */}
         <section className="py-24 bg-secondary text-secondary-foreground relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
             <div className="absolute right-0 top-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
@@ -336,10 +336,10 @@ export default function Canvas() {
                 Canvas Collection
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
-                #2 Seller Collection · 25 Logos
+                25 Logos · Match Your Mood & Vibe
               </p>
               <p className="text-secondary-foreground/60 mt-4 max-w-2xl mx-auto">
-                25 vibrant circular variations. One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
+                25 vibrant circular logos to match your mood and your vibe — which one do you want to ride with? One vision. Representing the multifaceted nature of our empire and celebrating our diverse community.
               </p>
             </div>
 
