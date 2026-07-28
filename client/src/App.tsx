@@ -17,6 +17,7 @@ import Accessories from "@/pages/Accessories";
 import Bedding from "@/pages/Bedding";
 import Elements from "@/pages/Elements";
 import PocketBooster from "@/pages/PocketBooster";
+import ExpenseRelief from "@/pages/ExpenseRelief";
 import Invest from "@/pages/Invest";
 import Hub from "@/pages/Hub";
 import CheckoutSuccess from "@/pages/CheckoutSuccess";
@@ -55,6 +56,8 @@ function Router() {
         <Redirect to="/pocket-booster#building-blocks" replace />
       </Route>
       <Route path="/pocket-booster" component={PocketBooster} />
+      <Route path="/expense-relief" component={ExpenseRelief} />
+      <Route path="/consolidated-expense-relief" component={ExpenseRelief} />
       <Route path="/invest" component={Invest} />
       <Route path="/apparel" component={Apparel} />
       <Route path="/feminine" component={Feminine} />

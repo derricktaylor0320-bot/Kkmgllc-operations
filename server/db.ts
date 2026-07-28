@@ -437,6 +437,72 @@ export async function ensureTablesExist() {
       ON investment_notifications (user_id, created_at DESC)
     `);
 
+    // Consolidated Expense Relief — membership + verified OOP compensation vault
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS expense_relief_memberships (
+        id VARCHAR(255) PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id VARCHAR(255) NOT NULL UNIQUE,
+        plan_id TEXT NOT NULL DEFAULT 'premier',
+        monthly_fee DECIMAL(10, 2) NOT NULL,
+        reimbursement_rate DECIMAL(5, 4) NOT NULL,
+        monthly_payout_cap DECIMAL(10, 2) NOT NULL,
+        annual_payout_cap DECIMAL(10, 2) NOT NULL,
+        subscription_status TEXT NOT NULL DEFAULT 'active',
+        acceleration_paid_at TIMESTAMP,
+        acceleration_fee_paid DECIMAL(10, 2),
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS expense_relief_claims (
+        id VARCHAR(255) PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id VARCHAR(255) NOT NULL,
+        membership_id VARCHAR(255) NOT NULL,
+        category_id TEXT NOT NULL,
+        expense_amount DECIMAL(12, 2) NOT NULL,
+        requested_payout DECIMAL(12, 2) NOT NULL,
+        approved_payout DECIMAL(12, 2),
+        merchant_name TEXT NOT NULL,
+        service_date TEXT NOT NULL,
+        recipient_name TEXT NOT NULL,
+        description TEXT NOT NULL,
+        evidence_notes TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'submitted',
+        review_notes TEXT,
+        reviewed_at TIMESTAMP,
+        paid_at TIMESTAMP,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+    await db.execute(sql`
+      CREATE INDEX IF NOT EXISTS "IDX_expense_relief_claims_user"
+      ON expense_relief_claims (user_id, created_at DESC)
+    `);
+    await db.execute(sql`
+      CREATE INDEX IF NOT EXISTS "IDX_expense_relief_claims_status"
+      ON expense_relief_claims (status, created_at)
+    `);
+
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS expense_relief_vault (
+        id VARCHAR(255) PRIMARY KEY DEFAULT gen_random_uuid(),
+        investment_id VARCHAR(255) UNIQUE,
+        source TEXT NOT NULL,
+        contribution_amount DECIMAL(12, 2) NOT NULL,
+        available_capital DECIMAL(12, 2) NOT NULL,
+        description TEXT,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+    await db.execute(sql`
+      CREATE INDEX IF NOT EXISTS "IDX_expense_relief_vault_available"
+      ON expense_relief_vault (created_at)
+    `);
+
     console.log("Database tables verified/created");
   } catch (error) {
     console.error("Error ensuring tables exist:", error);

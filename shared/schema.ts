@@ -502,3 +502,90 @@ export const investmentNotifications = pgTable("investment_notifications", {
 });
 
 export type InvestmentNotification = typeof investmentNotifications.$inferSelect;
+
+// ---------------------------------------------------------------------------
+// Consolidated Expense Relief — membership + verified OOP claim compensation
+// ---------------------------------------------------------------------------
+
+export const expenseReliefMemberships = pgTable("expense_relief_memberships", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().unique(),
+  planId: text("plan_id").notNull().default("premier"),
+  monthlyFee: decimal("monthly_fee", { precision: 10, scale: 2 }).notNull(),
+  reimbursementRate: decimal("reimbursement_rate", {
+    precision: 5,
+    scale: 4,
+  }).notNull(),
+  monthlyPayoutCap: decimal("monthly_payout_cap", {
+    precision: 10,
+    scale: 2,
+  }).notNull(),
+  annualPayoutCap: decimal("annual_payout_cap", {
+    precision: 10,
+    scale: 2,
+  }).notNull(),
+  subscriptionStatus: text("subscription_status").notNull().default("active"), // active | paused | cancelled
+  accelerationPaidAt: timestamp("acceleration_paid_at"),
+  accelerationFeePaid: decimal("acceleration_fee_paid", {
+    precision: 10,
+    scale: 2,
+  }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type ExpenseReliefMembership =
+  typeof expenseReliefMemberships.$inferSelect;
+
+export const expenseReliefClaims = pgTable("expense_relief_claims", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  membershipId: varchar("membership_id").notNull(),
+  categoryId: text("category_id").notNull(),
+  expenseAmount: decimal("expense_amount", {
+    precision: 12,
+    scale: 2,
+  }).notNull(),
+  requestedPayout: decimal("requested_payout", {
+    precision: 12,
+    scale: 2,
+  }).notNull(),
+  approvedPayout: decimal("approved_payout", {
+    precision: 12,
+    scale: 2,
+  }),
+  merchantName: text("merchant_name").notNull(),
+  serviceDate: text("service_date").notNull(),
+  recipientName: text("recipient_name").notNull(),
+  description: text("description").notNull(),
+  evidenceNotes: text("evidence_notes").notNull(),
+  status: text("status").notNull().default("submitted"), // submitted | under_review | approved | paid | denied | cancelled
+  reviewNotes: text("review_notes"),
+  reviewedAt: timestamp("reviewed_at"),
+  paidAt: timestamp("paid_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type ExpenseReliefClaim = typeof expenseReliefClaims.$inferSelect;
+
+/** Compensation Vault — membership + acceleration + investor capital */
+export const expenseReliefVault = pgTable("expense_relief_vault", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  /** Optional link when capital came from an Empire Invest RPU */
+  investmentId: varchar("investment_id").unique(),
+  source: text("source").notNull(), // MEMBERSHIP | ACCELERATION | INVESTOR_RPU | ADJUSTMENT
+  contributionAmount: decimal("contribution_amount", {
+    precision: 12,
+    scale: 2,
+  }).notNull(),
+  availableCapital: decimal("available_capital", {
+    precision: 12,
+    scale: 2,
+  }).notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type ExpenseReliefVault = typeof expenseReliefVault.$inferSelect;

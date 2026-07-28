@@ -5,6 +5,7 @@ import { requireAuth, requireOwner } from "./auth";
 import type { User } from "@shared/schema";
 import {
   companyEquity,
+  expenseReliefVault,
   investmentNotifications,
   pocketBoosterVault,
   projectLedger,
@@ -13,6 +14,7 @@ import {
   yieldPayouts,
   type UserInvestment,
 } from "@shared/schema";
+import { creditExpenseReliefVault } from "./expenseRelief";
 import {
   CORE_LLC_MEMBERS,
   HUB_INVESTMENT_PROGRAMS,
@@ -361,6 +363,15 @@ async function bridgeInvestment(params: {
       investmentId,
       totalVaultContribution: amountStr,
       availableLendingCapital: amountStr,
+    });
+  }
+
+  if (program.fundsExpenseReliefVault) {
+    await creditExpenseReliefVault({
+      amount: params.investmentAmount,
+      source: "INVESTOR_RPU",
+      investmentId,
+      description: program.ledgerDescription,
     });
   }
 
