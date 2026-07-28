@@ -219,12 +219,13 @@ export const LOGO_SECTIONS: { name: string; ids: string[] }[] = (() => {
     if (!bySection[section]) bySection[section] = [];
     bySection[section].push(id);
   }
-  const brandSections = BRAND_SECTION_ORDER
+  const known = new Set<string>(BRAND_SECTION_ORDER);
+  const brandSections: { name: string; ids: string[] }[] = BRAND_SECTION_ORDER
     .filter((name) => bySection[name]?.length)
     .map((name) => ({ name, ids: bySection[name] }));
   // Any unexpected section names append after the known brand order.
   for (const name of Object.keys(bySection)) {
-    if (!BRAND_SECTION_ORDER.includes(name as (typeof BRAND_SECTION_ORDER)[number])) {
+    if (!known.has(name)) {
       brandSections.push({ name, ids: bySection[name] });
     }
   }
