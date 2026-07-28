@@ -118,6 +118,9 @@ const RETIRED_PRODUCT_NAMES = [
   "Baby Romper",
   "Baby Beanie",
   "Branded Scrunchies",
+  // Replaced by 14 fixed-design premium polos (8 men’s eagle/swords + 6 women’s
+  // pearl griffin). Polos no longer offer logo/placement customization.
+  "Personalized Polo Shirt",
   // Old per-size bedding products, consolidated into a single Comforter Set and
   // Sheet Set (each with a size selector). Fleece blankets retired entirely.
   "Khomplete Khemistri Accessories Bed Sheet Set - Twin",
@@ -456,14 +459,134 @@ const BRANDED_APPAREL_PRODUCTS: {
     priceCents: 6000,
     meta: { category: "Hoodies", productType: "apparel", sortOrder: "70", gender: "Unisex", customize: "none", imageUrl: "/assets/kk_forging_future_hoodie_green.jpg" },
   },
+  // Premium polos — fixed emblem + shirt color (no logo/placement customization).
+  // Standard placements on every polo: left chest, right sleeve, inside neck tag.
+  // Emblems: attached_assets/male-polo-shirts/ (8) + female-polo-shirts/ (6).
   {
-    productId: "prod_kkpolotrident",
-    priceId: "price_kkpolotrident",
-    name: "Personalized Polo Shirt",
+    productId: "prod_kkpolomaleblackwhite",
+    priceId: "price_kkpolomaleblackwhite",
+    name: "Premium Polo \u2014 Men\u2019s Eagle Crest Black & White",
     description:
-      "Personalized embroidered polo shirt on soft, breathable pique knit with a classic three-button collar. CHOOSE YOUR LOGO, COLOR, AND SIZE at checkout \u2014 pick any logo from our full Branded Logo Collection. Available in 15 colors and sizes XS through 6XL.",
+      "Men\u2019s premium pique polo with the shiny Black & White eagle-and-swords crest. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Black.",
     priceCents: 4500,
-    meta: { category: "Polos", productType: "apparel", sortOrder: "71", gender: "Unisex", imageUrl: "/assets/kk_polo_trident_three.jpg", colors: "Black, Green, Bright Green, Grey, Lake Blue, Light Blue, Navy Blue, Orange, Pink, Purple, Red, Rose Red, Royal Blue, Wine Red, Yellow" },
+    meta: { category: "Polos", productType: "apparel", sortOrder: "71", gender: "Men", customize: "none", imageUrl: "/attached_assets/male-polo-shirts/logo_eagle_swords_black_white.png", poloEmblem: "220" },
+  },
+  {
+    productId: "prod_kkpolomalenavygold",
+    priceId: "price_kkpolomalenavygold",
+    name: "Premium Polo \u2014 Men\u2019s Eagle Crest Navy & Gold",
+    description:
+      "Men\u2019s premium pique polo with the shiny Navy & Gold eagle-and-swords crest. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Navy Blue.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "72", gender: "Men", customize: "none", imageUrl: "/attached_assets/male-polo-shirts/logo_eagle_swords_navy_gold.png", poloEmblem: "221" },
+  },
+  {
+    productId: "prod_kkpolomalepurplegold",
+    priceId: "price_kkpolomalepurplegold",
+    name: "Premium Polo \u2014 Men\u2019s Eagle Crest Purple & Gold",
+    description:
+      "Men\u2019s premium pique polo with the shiny Purple & Gold eagle-and-swords crest. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Purple.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "73", gender: "Men", customize: "none", imageUrl: "/attached_assets/male-polo-shirts/logo_eagle_swords_purple_gold.png", poloEmblem: "222" },
+  },
+  {
+    productId: "prod_kkpolomalebrowngold",
+    priceId: "price_kkpolomalebrowngold",
+    name: "Premium Polo \u2014 Men\u2019s Eagle Crest Brown & Gold",
+    description:
+      "Men\u2019s premium pique polo with the shiny Brown & Gold eagle-and-swords crest. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Brown.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "74", gender: "Men", customize: "none", imageUrl: "/attached_assets/male-polo-shirts/logo_eagle_swords_brown_gold.png", poloEmblem: "223" },
+  },
+  {
+    productId: "prod_kkpolomaleredgold",
+    priceId: "price_kkpolomaleredgold",
+    name: "Premium Polo \u2014 Men\u2019s Eagle Crest Red & Gold",
+    description:
+      "Men\u2019s premium pique polo with the shiny Red & Gold eagle-and-swords crest. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Red.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "75", gender: "Men", customize: "none", imageUrl: "/attached_assets/male-polo-shirts/logo_eagle_swords_red_gold.png", poloEmblem: "224" },
+  },
+  {
+    productId: "prod_kkpolomaleburgundygold",
+    priceId: "price_kkpolomaleburgundygold",
+    name: "Premium Polo \u2014 Men\u2019s Eagle Crest Burgundy & Gold",
+    description:
+      "Men\u2019s premium pique polo with the shiny Burgundy & Gold eagle-and-swords crest. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Wine Red.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "76", gender: "Men", customize: "none", imageUrl: "/attached_assets/male-polo-shirts/logo_eagle_swords_burgundy_gold.png", poloEmblem: "225" },
+  },
+  {
+    productId: "prod_kkpolomalesilvergold",
+    priceId: "price_kkpolomalesilvergold",
+    name: "Premium Polo \u2014 Men\u2019s Eagle Crest Silver & Gold",
+    description:
+      "Men\u2019s premium pique polo with the shiny Silver & Gold eagle-and-swords crest. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Grey.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "77", gender: "Men", customize: "none", imageUrl: "/attached_assets/male-polo-shirts/logo_eagle_swords_silver_gold.png", poloEmblem: "226" },
+  },
+  {
+    productId: "prod_kkpolomaleallgold",
+    priceId: "price_kkpolomaleallgold",
+    name: "Premium Polo \u2014 Men\u2019s Eagle Crest All Gold",
+    description:
+      "Men\u2019s premium pique polo with the shiny All Gold eagle-and-swords crest. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Black.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "78", gender: "Men", customize: "none", imageUrl: "/attached_assets/male-polo-shirts/logo_eagle_swords_all_gold.png", poloEmblem: "227" },
+  },
+  {
+    productId: "prod_kkpolofemalebluedenim",
+    priceId: "price_kkpolofemalebluedenim",
+    name: "Premium Polo \u2014 Women\u2019s Pearl Griffin Blue Denim",
+    description:
+      "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Blue Denim. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Lake Blue.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "79", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_blue_denim.png", poloEmblem: "229" },
+  },
+  {
+    productId: "prod_kkpolofemalegrey",
+    priceId: "price_kkpolofemalegrey",
+    name: "Premium Polo \u2014 Women\u2019s Pearl Griffin Grey",
+    description:
+      "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Grey. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Grey.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "80", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_grey.png", poloEmblem: "230" },
+  },
+  {
+    productId: "prod_kkpolofemaletiedye",
+    priceId: "price_kkpolofemaletiedye",
+    name: "Premium Polo \u2014 Women\u2019s Pearl Griffin Tie-Dye",
+    description:
+      "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Tie-Dye. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Light Blue.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "81", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_tie_dye.png", poloEmblem: "231" },
+  },
+  {
+    productId: "prod_kkpolofemalemagenta",
+    priceId: "price_kkpolofemalemagenta",
+    name: "Premium Polo \u2014 Women\u2019s Pearl Griffin Magenta",
+    description:
+      "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Magenta. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Rose Red.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "82", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_magenta.png", poloEmblem: "232" },
+  },
+  {
+    productId: "prod_kkpolofemalepurple",
+    priceId: "price_kkpolofemalepurple",
+    name: "Premium Polo \u2014 Women\u2019s Pearl Griffin Purple",
+    description:
+      "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Purple. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Purple.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "83", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_purple.png", poloEmblem: "233" },
+  },
+  {
+    productId: "prod_kkpolofemalenavy",
+    priceId: "price_kkpolofemalenavy",
+    name: "Premium Polo \u2014 Women\u2019s Pearl Griffin Navy",
+    description:
+      "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Navy. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Navy Blue.",
+    priceCents: 4500,
+    meta: { category: "Polos", productType: "apparel", sortOrder: "84", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_navy.png", poloEmblem: "234" },
   },
 ];
 

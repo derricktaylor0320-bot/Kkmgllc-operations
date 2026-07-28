@@ -21,6 +21,11 @@ Royalty Badge of Honor collection (not the circular Canvas Collection):
 | `logo_pearl_griffin_purple.png` | Purple | #233 |
 | `logo_pearl_griffin_navy.png` | Navy | #234 |
 
+**Female premium polos:** these same six Female Logos are the emblems for
+women’s premium polo shirts (copies + notes in `attached_assets/female-polo-shirts/`).
+Polos ship fixed — left chest, right sleeve, and inside tag — with no placement
+customization.
+
 ## Also kept here for easy picking
 - `logo_kk_elements_embroidered_crest.png` — Elements embroidered crest for robes / pajamas
 - `logo_kk_elements_badge.png` — Pearl Gold Seal (Canvas Collection)
