@@ -6,9 +6,11 @@ import {
   CheckCircle2,
   ClipboardList,
   Clock3,
+  CircleX,
   FileCheck2,
   Landmark,
   Loader2,
+  Rocket,
   ShieldCheck,
   TimerReset,
   Wallet,
@@ -23,10 +25,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import {
+  ACCEPTABLE_CLAIMS,
   EXPENSE_CATEGORIES,
   EXPENSE_RELIEF_PLAN,
   EXPENSE_RELIEF_PLATFORM,
+  EXPENSE_RELIEF_RULES,
   HISTORICAL_UDS_STYLE_TIERS,
+  NOT_ACCEPTABLE_CLAIMS,
   reimbursementForAmount,
   type ExpenseCategoryId,
 } from "@shared/expenseRelief";
@@ -44,6 +49,9 @@ type PlanResponse = {
   tagline: string;
   plan: typeof EXPENSE_RELIEF_PLAN;
   categories: typeof EXPENSE_CATEGORIES;
+  rules: typeof EXPENSE_RELIEF_RULES;
+  acceptable: typeof ACCEPTABLE_CLAIMS;
+  notAcceptable: typeof NOT_ACCEPTABLE_CLAIMS;
   historicalTiers: typeof HISTORICAL_UDS_STYLE_TIERS;
   note: string;
 };
@@ -135,9 +143,15 @@ export default function ExpenseRelief() {
 
   const plan = catalog?.plan ?? EXPENSE_RELIEF_PLAN;
   const categories = catalog?.categories ?? EXPENSE_CATEGORIES;
+  const rules = catalog?.rules ?? EXPENSE_RELIEF_RULES;
+  const acceptable = catalog?.acceptable ?? ACCEPTABLE_CLAIMS;
+  const notAcceptable = catalog?.notAcceptable ?? NOT_ACCEPTABLE_CLAIMS;
   const historical = catalog?.historicalTiers ?? HISTORICAL_UDS_STYLE_TIERS;
   const membership = me?.membership ?? null;
   const eligibility = me?.eligibility;
+  const vaultAvailable =
+    vault?.availableCompensationCapital ?? me?.vaultAvailable ?? 0;
+  const vaultCanPay = vaultAvailable > 0;
 
   const [categoryId, setCategoryId] = useState<ExpenseCategoryId>("healthcare");
   const [expenseAmount, setExpenseAmount] = useState("");
@@ -272,18 +286,18 @@ export default function ExpenseRelief() {
       },
       {
         icon: TimerReset,
-        title: "30-day wait or $100 early unlock",
-        body: `First claim opens after ${plan.firstClaimWaitDays} days. Need it sooner? Pay the $${plan.accelerationFee.toFixed(0)} acceleration fee (on top of membership) — that fee also seeds the vault.`,
+        title: "Don't want to wait 30 days?",
+        body: `First claim opens after ${plan.firstClaimWaitDays} days. Prefer not to wait? Pay membership + the $${plan.accelerationFee.toFixed(0)} acceleration fee to file early. That $100 unlocks filing only — it is not a payout.`,
       },
       {
         icon: FileCheck2,
-        title: "Verify, then pay",
-        body: `Claims go under review for ${plan.reviewHoursMin} hours up to about a week. Receipts must show a real merchant, your name (or pet's name), and proof you paid.`,
+        title: "Submit a claim application",
+        body: `Fill out the in-app application with merchant, receipt details, and proof you paid. Review takes ${plan.reviewHoursMin} hours to about a week.`,
       },
       {
         icon: Landmark,
-        title: "Self-funded Compensation Vault",
-        body: "Membership fees, acceleration fees, and optional Empire Invest capital fill the vault — no founder personal funding required.",
+        title: "No vault money = no payout",
+        body: "Membership fees, the $100 acceleration fee, and Empire Invest capital fund the Compensation Vault. If the vault is empty, approved claims wait — nobody gets paid until capital is there. Works beside Pocket Booster cushions.",
       },
     ],
     [plan],
@@ -338,7 +352,7 @@ export default function ExpenseRelief() {
                       asChild
                       className="bg-primary text-primary-foreground"
                     >
-                      <a href="#file-claim">File a claim</a>
+                      <a href="#claim-application">Open claim application</a>
                     </Button>
                   ) : (
                     <Button
@@ -360,7 +374,10 @@ export default function ExpenseRelief() {
                   </Button>
                 )}
                 <Button asChild variant="outline">
-                  <a href="#how-it-works">See how it works</a>
+                  <a href="#claim-application">Claim application</a>
+                </Button>
+                <Button asChild variant="ghost">
+                  <Link href="/pocket-booster">Pocket Booster</Link>
                 </Button>
                 <Button asChild variant="ghost">
                   <Link href="/invest">Empire Invest</Link>
@@ -385,11 +402,7 @@ export default function ExpenseRelief() {
                 },
                 {
                   label: "Vault available",
-                  value: formatMoney(
-                    vault?.availableCompensationCapital ??
-                      me?.vaultAvailable ??
-                      0,
-                  ),
+                  value: formatMoney(vaultAvailable),
                 },
               ].map((stat) => (
                 <div
@@ -477,31 +490,110 @@ export default function ExpenseRelief() {
           </div>
         </section>
 
-        <section className="border-y border-primary/15 bg-black/20 py-16">
+        <section
+          id="acceptable"
+          className="border-y border-primary/15 bg-black/20 py-16"
+          data-testid="section-acceptable-claims"
+        >
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-primary">
-              Covered out-of-pocket costs
+              What&apos;s acceptable — and what&apos;s not
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              This is expense compensation — not FR2P / FARSUP rewards. File with
-              proof for costs you actually paid.
+              Expense Relief only reimburses verified out-of-pocket costs you
+              already paid. It is not FR2P rewards and not a Pocket Booster
+              cash cushion.
             </p>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {categories.map((cat) => (
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {rules.map((rule) => (
                 <div
-                  key={cat.id}
-                  className="rounded-xl border border-primary/20 bg-background/35 p-4"
+                  key={rule.id}
+                  className="rounded-xl border border-primary/25 bg-background/35 p-4"
+                  data-testid={`rule-${rule.id}`}
                 >
                   <h3 className="font-display text-sm font-bold uppercase tracking-wide text-foreground">
-                    {cat.label}
+                    {rule.title}
                   </h3>
-                  <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
-                    {cat.examples.slice(0, 4).map((ex) => (
-                      <li key={ex}>· {ex}</li>
-                    ))}
-                  </ul>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {rule.body}
+                  </p>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-10 grid gap-6 lg:grid-cols-2">
+              <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-5">
+                <div className="mb-4 flex items-center gap-2 text-emerald-400">
+                  <CheckCircle2 className="h-5 w-5" />
+                  <h3 className="font-display text-lg font-bold uppercase tracking-wide">
+                    Acceptable
+                  </h3>
+                </div>
+                <div className="space-y-4">
+                  {acceptable.map((group) => (
+                    <div key={group.group}>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-400/90">
+                        {group.group}
+                      </p>
+                      <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">
+                        {group.items.map((item) => (
+                          <li key={item}>· {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-5">
+                <div className="mb-4 flex items-center gap-2 text-red-400">
+                  <CircleX className="h-5 w-5" />
+                  <h3 className="font-display text-lg font-bold uppercase tracking-wide">
+                    Not acceptable
+                  </h3>
+                </div>
+                <div className="space-y-4">
+                  {notAcceptable.map((group) => (
+                    <div key={group.group}>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-red-400/90">
+                        {group.group}
+                      </p>
+                      <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">
+                        {group.items.map((item) => (
+                          <li key={item}>· {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-primary/15 py-12">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-5 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card/40 to-background p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-primary/40 bg-primary/15 text-primary">
+                  <Rocket className="h-6 w-6" />
+                </span>
+                <div>
+                  <h2 className="font-display text-xl font-bold uppercase tracking-wide text-primary">
+                    Works with Pocket Booster
+                  </h2>
+                  <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+                    Need bridge cash before payday? Use Pocket Booster cushions.
+                    Already paid a medical, dental, vet, or toll bill out of
+                    pocket? File an Expense Relief claim application here.
+                    Same Empire hub login — two tools, different jobs.
+                  </p>
+                </div>
+              </div>
+              <Button asChild data-testid="button-open-pocket-booster-from-cer">
+                <Link href="/pocket-booster">Open Pocket Booster</Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -578,8 +670,8 @@ export default function ExpenseRelief() {
                             {accelerationMutation.isPending ? (
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : null}
-                            Pay ${eligibility.accelerationFee.toFixed(0)}{" "}
-                            acceleration
+                            Pay ${eligibility.accelerationFee.toFixed(0)} early
+                            filing (on top of membership)
                           </Button>
                         )}
                       </div>
@@ -616,13 +708,33 @@ export default function ExpenseRelief() {
               </div>
 
               <div
-                id="file-claim"
+                id="claim-application"
                 className="space-y-4 rounded-xl border border-primary/25 bg-card/40 p-6"
               >
                 <h3 className="flex items-center gap-2 font-display text-xl font-bold uppercase tracking-wide">
                   <ClipboardList className="h-5 w-5 text-primary" />
-                  File a claim
+                  Claim application
                 </h3>
+                <p className="text-xs text-muted-foreground">
+                  This is your in-app application. Incomplete applications are
+                  denied. Read{" "}
+                  <a href="#acceptable" className="text-primary underline">
+                    what&apos;s acceptable
+                  </a>{" "}
+                  first.
+                </p>
+                {!vaultCanPay && (
+                  <div
+                    className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-amber-100"
+                    data-testid="banner-vault-empty"
+                  >
+                    Compensation Vault available: {formatMoney(vaultAvailable)}.
+                    You can still submit an application for review, but{" "}
+                    <strong>you cannot get paid while the vault is empty</strong>
+                    . Membership and the $100 early-file fee do not force a
+                    payout.
+                  </div>
+                )}
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="sm:col-span-2">
                     <Label htmlFor="category">Category</Label>
@@ -724,12 +836,12 @@ export default function ExpenseRelief() {
                   {claimMutation.isPending ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : null}
-                  Submit for review
+                  Submit claim application
                 </Button>
                 <p className="text-[11px] text-muted-foreground">
                   Review window: {plan.reviewHoursMin} hours typical, up to{" "}
-                  {Math.round(plan.reviewHoursMax / 24)} days for legitimacy
-                  checks.
+                  {Math.round(plan.reviewHoursMax / 24)} days. No vault capital
+                  means no payout after approval.
                 </p>
               </div>
             </div>

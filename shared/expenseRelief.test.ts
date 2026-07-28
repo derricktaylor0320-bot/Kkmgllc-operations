@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  ACCEPTABLE_CLAIMS,
   EXPENSE_RELIEF_PLAN,
+  EXPENSE_RELIEF_RULES,
+  NOT_ACCEPTABLE_CLAIMS,
   applyPayoutCaps,
   evaluateFirstClaimEligibility,
   reimbursementForAmount,
@@ -73,5 +76,12 @@ describe("Consolidated Expense Relief", () => {
     });
     assert.equal(trimmed.allowedPayout, 40);
     assert.equal(trimmed.capped, true);
+  });
+
+  it("documents vault-empty and early-file rules for members", () => {
+    assert.ok(EXPENSE_RELIEF_RULES.some((r) => r.id === "vault_required"));
+    assert.ok(EXPENSE_RELIEF_RULES.some((r) => r.id === "wait_or_accelerate"));
+    assert.ok(ACCEPTABLE_CLAIMS.length > 0);
+    assert.ok(NOT_ACCEPTABLE_CLAIMS.length > 0);
   });
 });

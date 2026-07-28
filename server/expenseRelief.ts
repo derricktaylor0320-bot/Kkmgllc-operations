@@ -14,6 +14,9 @@ import {
   EXPENSE_CATEGORIES,
   EXPENSE_RELIEF_PLAN,
   EXPENSE_RELIEF_PLATFORM,
+  EXPENSE_RELIEF_RULES,
+  ACCEPTABLE_CLAIMS,
+  NOT_ACCEPTABLE_CLAIMS,
   HISTORICAL_UDS_STYLE_TIERS,
   activateExpenseReliefSchema,
   applyPayoutCaps,
@@ -161,9 +164,12 @@ export function registerExpenseReliefRoutes(app: Express): void {
       ...EXPENSE_RELIEF_PLATFORM,
       plan: EXPENSE_RELIEF_PLAN,
       categories: EXPENSE_CATEGORIES,
+      rules: EXPENSE_RELIEF_RULES,
+      acceptable: ACCEPTABLE_CLAIMS,
+      notAcceptable: NOT_ACCEPTABLE_CLAIMS,
       historicalTiers: HISTORICAL_UDS_STYLE_TIERS,
       note:
-        "One solid Premier plan — the old $10/$20/$30/$40 ladder is shown for history only and is not offered.",
+        "One solid Premier plan — the old $10/$20/$30/$40 ladder is shown for history only and is not offered. The $100 acceleration fee unlocks early filing only; empty vault means no payout.",
     });
   });
 
@@ -340,7 +346,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
         res.json({
           membership: membershipPayload(updated),
           message:
-            "Acceleration paid. You can file claims now while verification still takes 72 hours to about a week.",
+            "Acceleration paid. Early filing is unlocked (membership + $100). Claims still need verification, and payouts only happen when the Compensation Vault has capital.",
         });
       } catch (err) {
         console.error("[expense-relief] acceleration failed", err);
@@ -394,6 +400,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
           });
         }
 
+        const vaultAvailable = await getExpenseReliefVaultAvailable();
         const [claim] = await db
           .insert(expenseReliefClaims)
           .values({
@@ -412,15 +419,22 @@ export function registerExpenseReliefRoutes(app: Express): void {
           })
           .returning();
 
+        const vaultNote =
+          vaultAvailable < capped.allowedPayout
+            ? " Application accepted for review, but the Compensation Vault does not currently have enough capital to pay this claim — payout waits until the vault is funded."
+            : "";
+
         res.json({
           claim,
+          vaultAvailable,
           message: capped.capped
-            ? `Claim submitted for review (72 hours–7 days). ${capped.reason}`
-            : "Claim submitted for review. Typical approval is 72 hours; verification can take up to a week.",
+            ? `Claim application submitted for review (72 hours–7 days). ${capped.reason}${vaultNote}`
+            : `Claim application submitted for review. Typical approval is 72 hours; verification can take up to a week.${vaultNote}`,
           reviewWindow: {
             minHours: EXPENSE_RELIEF_PLAN.reviewHoursMin,
             maxHours: EXPENSE_RELIEF_PLAN.reviewHoursMax,
           },
+          payoutRequiresVault: true,
         });
       } catch (err) {
         console.error("[expense-relief] claim submit failed", err);
@@ -476,9 +490,24 @@ export function registerExpenseReliefRoutes(app: Express): void {
         const payout = parseFloat(claim.requestedPayout);
         const debited = await debitExpenseReliefVault(payout);
         if (!debited) {
-          return res.status(409).json({
-            error:
-              "Compensation Vault does not have enough available capital for this payout yet.",
+          const [pending] = await db
+            .update(expenseReliefClaims)
+            .set({
+              status: "approved_pending_funds",
+              approvedPayout: money(payout),
+              reviewNotes:
+                parsed.data.reviewNotes ??
+                "Verified legitimate — waiting on Compensation Vault capital before payout.",
+              reviewedAt: new Date(),
+              updatedAt: new Date(),
+            })
+            .where(eq(expenseReliefClaims.id, claim.id))
+            .returning();
+          return res.json({
+            claim: pending,
+            message:
+              "Claim verified and approved, but the vault has no available capital — member cannot be paid until the vault is funded.",
+            payoutRequiresVault: true,
           });
         }
 
@@ -518,13 +547,80 @@ export function registerExpenseReliefRoutes(app: Express): void {
           .select()
           .from(expenseReliefClaims)
           .where(
-            inArray(expenseReliefClaims.status, ["submitted", "under_review"]),
+            inArray(expenseReliefClaims.status, [
+              "submitted",
+              "under_review",
+              "approved_pending_funds",
+            ]),
           )
           .orderBy(expenseReliefClaims.createdAt);
         res.json({ queue });
       } catch (err) {
         console.error("[expense-relief] queue failed", err);
         res.status(500).json({ error: "Could not load claim queue." });
+      }
+    },
+  );
+
+  /** Pay an approved claim once the Compensation Vault has capital. */
+  app.post(
+    "/api/expense-relief/claims/pay-pending",
+    requireAuth,
+    requireOwner,
+    async (req: Request, res: Response) => {
+      try {
+        const claimId =
+          typeof req.body?.claimId === "string" ? req.body.claimId : "";
+        if (!claimId) {
+          return res.status(400).json({ error: "claimId is required." });
+        }
+
+        const [claim] = await db
+          .select()
+          .from(expenseReliefClaims)
+          .where(eq(expenseReliefClaims.id, claimId))
+          .limit(1);
+        if (!claim) {
+          return res.status(404).json({ error: "Claim not found." });
+        }
+        if (claim.status !== "approved_pending_funds") {
+          return res.status(400).json({
+            error: "Only approved-pending-funds claims can be paid from the vault.",
+          });
+        }
+
+        const payout = parseFloat(
+          claim.approvedPayout ?? claim.requestedPayout,
+        );
+        const debited = await debitExpenseReliefVault(payout);
+        if (!debited) {
+          return res.status(409).json({
+            error:
+              "Compensation Vault still does not have enough capital. Member cannot be paid yet.",
+          });
+        }
+
+        const [updated] = await db
+          .update(expenseReliefClaims)
+          .set({
+            status: "paid",
+            approvedPayout: money(payout),
+            paidAt: new Date(),
+            updatedAt: new Date(),
+            reviewNotes:
+              (claim.reviewNotes ? `${claim.reviewNotes} ` : "") +
+              "Payout released when vault capital became available.",
+          })
+          .where(eq(expenseReliefClaims.id, claim.id))
+          .returning();
+
+        res.json({
+          claim: updated,
+          message: `Paid $${payout.toFixed(2)} from the Compensation Vault.`,
+        });
+      } catch (err) {
+        console.error("[expense-relief] pay-pending failed", err);
+        res.status(500).json({ error: "Could not pay pending claim." });
       }
     },
   );

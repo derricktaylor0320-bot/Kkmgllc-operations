@@ -559,7 +559,7 @@ export const expenseReliefClaims = pgTable("expense_relief_claims", {
   recipientName: text("recipient_name").notNull(),
   description: text("description").notNull(),
   evidenceNotes: text("evidence_notes").notNull(),
-  status: text("status").notNull().default("submitted"), // submitted | under_review | approved | paid | denied | cancelled
+  status: text("status").notNull().default("submitted"), // submitted | under_review | approved | approved_pending_funds | paid | denied | cancelled
   reviewNotes: text("review_notes"),
   reviewedAt: timestamp("reviewed_at"),
   paidAt: timestamp("paid_at"),

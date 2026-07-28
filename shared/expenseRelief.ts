@@ -189,12 +189,149 @@ export const CLAIM_STATUSES = [
   "submitted",
   "under_review",
   "approved",
+  "approved_pending_funds",
   "paid",
   "denied",
   "cancelled",
 ] as const;
 
 export type ClaimStatus = (typeof CLAIM_STATUSES)[number];
+
+/**
+ * Hard program rules members must understand before joining or filing.
+ * The $100 is ONLY an early-claim unlock — it does not guarantee a payout.
+ * If the Compensation Vault is empty, nobody gets paid.
+ */
+export const EXPENSE_RELIEF_RULES = [
+  {
+    id: "membership",
+    title: "Premier membership required",
+    body: `Active $${EXPENSE_RELIEF_PLAN.monthlyMembershipFee.toFixed(0)}/mo Premier membership is required to file claims.`,
+  },
+  {
+    id: "wait_or_accelerate",
+    title: "30-day wait — or pay $100 to file early",
+    body: `New members wait ${EXPENSE_RELIEF_PLAN.firstClaimWaitDays} days before the first claim. Do not want to wait? Pay the $${EXPENSE_RELIEF_PLAN.accelerationFee.toFixed(0)} acceleration fee on top of the membership fee, then you may file inside that window. The $100 is not a payout — it only unlocks early filing and seeds the vault.`,
+  },
+  {
+    id: "vault_required",
+    title: "No vault money = no payout",
+    body: "Approved claims are paid only from the Compensation Vault. If the vault has no available capital, you cannot get paid — even with an active membership or the $100 acceleration fee. Your claim can still be verified and held until funds are available.",
+  },
+  {
+    id: "verification",
+    title: "Verify before pay",
+    body: `Every claim is reviewed for legitimacy (${EXPENSE_RELIEF_PLAN.reviewHoursMin} hours typical, up to about a week). Receipts must show a real merchant, your name or your pet's name, service date, and proof you paid.`,
+  },
+  {
+    id: "caps",
+    title: "Payout caps protect the pool",
+    body: `Up to ${(EXPENSE_RELIEF_PLAN.reimbursementRate * 100).toFixed(0)}% back, capped at $${EXPENSE_RELIEF_PLAN.monthlyPayoutCap.toFixed(0)}/mo and $${EXPENSE_RELIEF_PLAN.annualPayoutCap.toFixed(0)}/yr per member.`,
+  },
+  {
+    id: "not_fr2p",
+    title: "Not a rewards / affiliate program",
+    body: "Expense Relief reimburses verified out-of-pocket costs. FR2P Club and FARSUP stay separate for rewards and affiliate growth.",
+  },
+] as const;
+
+/** What members may file — real money they already paid out of pocket. */
+export const ACCEPTABLE_CLAIMS = [
+  {
+    group: "Healthcare & medical",
+    items: [
+      "Copays, deductibles, and coinsurance you paid",
+      "Prescription and qualifying OTC medications",
+      "Mental health therapy, chiropractic, physical therapy sessions",
+      "Vision care — exams, glasses, contacts",
+      "Medical supplies (bandages, braces, glucose strips, etc.)",
+    ],
+  },
+  {
+    group: "Dental",
+    items: [
+      "Cleanings, exams, fillings, crowns, bridges",
+      "Root canals, extractions, orthodontics with paid invoices",
+    ],
+  },
+  {
+    group: "Veterinary",
+    items: [
+      "Wellness visits, vaccinations, medications",
+      "Emergency visits, diagnostics, surgery, dental cleaning for pets",
+      "Specialty care with itemized paid receipts",
+    ],
+  },
+  {
+    group: "Insurance-related out-of-pocket",
+    items: [
+      "Non-covered or partially covered services you paid yourself",
+      "Out-of-network fees and higher prescription tiers you paid",
+    ],
+  },
+  {
+    group: "Tolls, tickets & violations",
+    items: [
+      "Paid toll bills",
+      "Paid parking tickets and traffic fines",
+      "Paid administrative / court processing fees tied to those fines",
+    ],
+  },
+  {
+    group: "Household, work & fees",
+    items: [
+      "Essential utility shortfalls and necessary repairs you paid",
+      "Required childcare gaps, commuting, work/school supplies, uniforms",
+      "Bank, late, and documented service/processing fees you paid",
+    ],
+  },
+] as const;
+
+/** What is not eligible — keeps the program from becoming a catch-all cash grab. */
+export const NOT_ACCEPTABLE_CLAIMS = [
+  {
+    group: "Not real paid expenses",
+    items: [
+      "Estimates, quotes, or unpaid invoices",
+      "Expenses someone else paid for you with no proof you reimbursed them",
+      "Duplicate claims for the same receipt",
+      "Altered, photoshopped, or incomplete receipts",
+    ],
+  },
+  {
+    group: "Lifestyle & luxury",
+    items: [
+      "Vacations, entertainment, streaming, gaming, hobbies",
+      "Luxury goods, jewelry, designer fashion",
+      "Elective cosmetic procedures not medically necessary",
+      "Alcohol, tobacco, recreational cannabis, illegal purchases",
+    ],
+  },
+  {
+    group: "Money transfers & debt",
+    items: [
+      "Cash advances, payday loans, credit-card payments, or loan principal (use Pocket Booster cushions for bridge cash)",
+      "Investments, crypto, gambling losses, money sent to friends/family",
+      "Rent or mortgage as a blanket claim without an eligible documented shortfall category",
+    ],
+  },
+  {
+    group: "Insurance premiums & program fees",
+    items: [
+      "Monthly insurance premiums (health, auto, life, pet) as the claim itself",
+      "Expense Relief membership fees or the $100 acceleration fee",
+      "Pocket Booster subscription fees or FR2P / FARSUP program fees",
+    ],
+  },
+  {
+    group: "Fraud & non-verification",
+    items: [
+      "Claims without merchant name, service date, recipient name, and proof of payment",
+      "Expenses from businesses that cannot be verified as legitimate",
+      "Charges that do not match the member or pet named on the receipt",
+    ],
+  },
+] as const;
 
 export function reimbursementForAmount(expenseAmount: number): number {
   if (!Number.isFinite(expenseAmount) || expenseAmount <= 0) return 0;
@@ -250,8 +387,8 @@ export function evaluateFirstClaimEligibility(input: {
     return {
       canFile: true,
       reason: input.accelerationPaid
-        ? "Early-claim acceleration is on file — you may submit claims."
-        : "Waiting period satisfied — you may submit claims.",
+        ? "Acceleration fee on file — early filing unlocked. Payouts still require vault capital after verification."
+        : "Waiting period satisfied — you may submit claims. Payouts still require vault capital after verification.",
       waitingDaysRemaining: 0,
       accelerationFeeRequired: false,
       accelerationFee,
@@ -280,7 +417,7 @@ export function evaluateFirstClaimEligibility(input: {
 
   return {
     canFile: false,
-    reason: `First claim opens in ${remaining} day${remaining === 1 ? "" : "s"}, or pay the $${accelerationFee.toFixed(0)} acceleration fee to file now.`,
+    reason: `First claim opens in ${remaining} day${remaining === 1 ? "" : "s"}. Do not want to wait? Pay the $${accelerationFee.toFixed(0)} acceleration fee on top of your membership fee to file now. That fee unlocks early filing only — payouts still need vault capital.`,
     waitingDaysRemaining: remaining,
     accelerationFeeRequired: true,
     accelerationFee,
