@@ -3,12 +3,12 @@ import logoBlueWhite from "@assets/Screenshot_20251126_202727_Photos_17642074041
 import logoBlackWhite from "@assets/Screenshot_20251126_202703_Photos_1764207404162.jpg";
 import logoRedBlack from "@assets/image000004_1764207404172.jpg";
 import logoBWInverted from "@assets/image000005_1764207404180.jpg";
-import logoPinkBlack from "@assets/image000006_1764207404188.jpg";
+import logoPinkBlack from "@assets/feminine/logo_neon_pink_emblem.jpg";
 import logoGoldWhite from "@assets/Screenshot_20250423_101841_Drive_1764207404197.jpg";
 import logoLightBlue from "@assets/image000008_1764207404205.jpg";
 import logoGreyWhite from "@assets/image000007_1764207404213.jpg";
 import logoForestGreen from "@assets/logo_forest_green.jpg";
-import logoDeepPurple from "@assets/logo_deep_purple.jpg";
+import logoDeepPurple from "@assets/feminine/logo_deep_purple.jpg";
 import logoBlackGoldCircle from "@assets/logo_black_gold.jpg";
 import logoOrange from "@assets/logo_orange.jpg";
 import logoBrownGold from "@assets/logo_brown_gold.jpg";
@@ -24,51 +24,51 @@ import shieldGoldBrown from "@assets/Screenshot_20251126_205108_Photos_176420838
 import shieldCyanGold from "@assets/Screenshot_20251126_204843_Photos_1764208390801.jpg";
 import badgeBlueValues from "@assets/copilot_image_1781211230575_1781211851159.jpeg";
 import crestGoldApparel from "@assets/1781208988886_1781211764006.png";
-import shieldSilver from "@assets/Screenshot_20251126_205037_Photos_1764217995547.jpg";
-import badgeBrownGoldOrnate from "@assets/badge_brown_gold_ornate.jpg";
-import badgePurpleOrnate from "@assets/badge_purple_ornate.jpg";
-import badgeNavySilver from "@assets/badge_navy_silver.jpg";
+import shieldSilver from "@assets/feminine/logo_silver_elite_pearl_crest.jpg";
+import badgeBrownGoldOrnate from "@assets/feminine/badge_brown_gold_ornate.jpg";
+import badgePurpleOrnate from "@assets/feminine/badge_purple_ornate.jpg";
+import badgeNavySilver from "@assets/feminine/badge_navy_silver.jpg";
 import badgeNavyGold from "@assets/1784461717502.png";
-import badgePurpleSwords from "@assets/badge_purple_swords.jpg";
-import badgeGreenSwords from "@assets/badge_green_swords.jpg";
-import badgeRedGoldSwords from "@assets/badge_red_gold_swords.jpg";
+import badgePurpleSwords from "@assets/feminine/badge_purple_swords.jpg";
+import badgeGreenSwords from "@assets/feminine/badge_green_swords.jpg";
+import badgeRedGoldSwords from "@assets/masculine/badge_red_gold_swords.jpg";
 
 import honorBrownGold from "@assets/1764209713521_1764218036651.jpg";
 import honorSilverGold from "@assets/1764210798224_1764211139124.jpg";
-import honorNavyGold from "@assets/1764210111747_1764211158691.jpg";
+import honorNavyGold from "@assets/masculine/logo_navy_gold_eagle_shield.jpg";
 import honorBlackGold from "@assets/1764209965710_1764211158709.jpg";
 import honorMaroonGold from "@assets/1764209907665_1764211158717.jpg";
 import honorNavySilver from "@assets/1764209634941_1764211158726.jpg";
-import honorAllGold from "@assets/1764210327974_1764211486802.jpg";
+import honorAllGold from "@assets/masculine/logo_golden_eagle_shield.jpg";
 import honorPurpleGold from "@assets/shield_purple_gold.jpg";
 import honorWhiteGold from "@assets/shield_white_gold.jpg";
-import kkmgEagleShield from "@assets/1781665131814_1781665574938.png";
-import eagleCrestMaroonGold from "@assets/IMG_20260628_234856_1782729067418.png";
-import badgeEaglesBlackWhite from "@assets/1785107268075.png";
-import badgeEaglesNavyGold from "@assets/1785106550052.png";
+import kkmgEagleShield from "@assets/masculine/logo_kkmg_eagle_shield.png";
+import eagleCrestMaroonGold from "@assets/masculine/logo_apparel_eagle_maroon_gold.png";
+import badgeEaglesBlackWhite from "@assets/masculine/logo_eagles_black_white.png";
+import badgeEaglesNavyGold from "@assets/masculine/logo_eagles_navy_gold.png";
 import badgeEaglesPurpleGold from "@assets/1785106948168.png";
 import badgeEaglesBrownGold from "@assets/1785106800127.png";
 import badgeEaglesRedGold from "@assets/1785106870967.png";
 import badgeEaglesBurgundyGold from "@assets/1785107423638.png";
 import badgeEaglesSilverGold from "@assets/1785107065086.png";
-import badgeEaglesAllGold from "@assets/1785107130184.png";
-import badgeConsolidatusEmpireStandalone from "@assets/badge_consolidatus_empire_standalone_218.png";
-import logoKkElementsBadge from "@assets/logo_kk_elements_badge.png";
-import logoKkApparelLeatherCrest from "@assets/logo_kk_apparel_leather_swords_crest.png";
+import badgeEaglesAllGold from "@assets/masculine/logo_eagles_all_gold.png";
+import badgeConsolidatusEmpireStandalone from "@assets/masculine/badge_consolidatus_empire_standalone_218.png";
+import logoKkElementsBadge from "@assets/feminine/logo_kk_elements_badge.png";
+import logoKkApparelLeatherCrest from "@assets/masculine/logo_kk_apparel_leather_swords_crest.png";
 import compassKKApparel from "@assets/copilot_image_1781366430242_1781369724345.jpeg";
 import compassKMG1 from "@assets/image_1781365445486_1781369761822.jpeg";
 import compassKMG2 from "@assets/image_1781365494182_1781369761833.jpeg";
 import compassSunburst from "@assets/1781351981898_1781369761839.png";
 
 import logoAccessoriesEagle from "@assets/generated_images/logo_accessories_eagle_burgundy_gold.png";
-import logoCrossedSwords from "@assets/generated_images/crossed_swords_kk_logo.png";
-import logoKKShieldSwords from "@assets/generated_images/kk_shield_with_swords.png";
-import logoKKACrossedSwords from "@assets/generated_images/kka_crossed_swords_logo.png";
-import logoPrideRainbow from "@assets/1781582068026_1781668463902.png";
-import logoKKAShield from "@assets/kka_shield_apparel_logo.jpg";
+import logoCrossedSwords from "@assets/masculine/crossed_swords_kk_logo.png";
+import logoKKShieldSwords from "@assets/masculine/kk_shield_with_swords.png";
+import logoKKACrossedSwords from "@assets/masculine/kka_crossed_swords_logo.png";
+import logoPrideRainbow from "@assets/feminine/logo_pride_tie_dye_crest.png";
+import logoKKAShield from "@assets/masculine/kka_shield_apparel_logo.jpg";
 import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
-import logoSilverPinkFeminine from "@assets/logo_silver_pink_feminine_medallion.png";
+import logoSilverPinkFeminine from "@assets/feminine/logo_silver_pink_feminine_medallion.png";
 
 export interface LogoEntry {
   src: string;
@@ -148,14 +148,41 @@ export const allLogos: Record<string, LogoEntry> = {
   "403": { src: compassSunburst, alt: "Khomplete Khemistri Apparel Sunburst Emblem", color: "Apparel Sunburst", section: "Compass Collection" },
 };
 
-// Curated feminine crest suggestions: silver/pink and neon pink sword medallions,
-// pearl seal, Pride/tie-dye, deep purple sword colorway, and silver elite crest.
-export const FEMININE_LOGO_IDS = ["125", "107", "124", "121", "110", "205"] as const;
+// Featured feminine pearl / ornate sword crests for /feminine.
+// Files live in attached_assets/feminine/ so the collection stays organized.
+export const FEMININE_LOGO_IDS = ["208", "205", "209", "212", "213", "124"] as const;
 
-// The full logo catalog grouped into its named collections, preserving the
-// insertion order of `allLogos`. Used by the image-first logo pickers (phone
-// case and the dropdown custom products) to render a browsable grid organized
-// by collection.
+// Full feminine folder — every crest available under the Feminine Collection
+// filter in logo pickers (featured six plus additional feminine colorways).
+export const FEMININE_FOLDER_LOGO_IDS = [
+  ...FEMININE_LOGO_IDS,
+  "210",
+  "125",
+  "107",
+  "110",
+  "121",
+] as const;
+
+// Featured masculine sword / eagle crests for /masculine.
+// Files live in attached_assets/masculine/.
+export const MASCULINE_LOGO_IDS = ["214", "201", "215", "216", "219", "300"] as const;
+
+// Full masculine folder for the Masculine Collection logo-picker filter.
+export const MASCULINE_FOLDER_LOGO_IDS = [
+  ...MASCULINE_LOGO_IDS,
+  "218",
+  "220",
+  "221",
+  "227",
+  "228",
+  "301",
+  "309",
+  "310",
+] as const;
+
+// The full logo catalog grouped into its named collections. Feminine and
+// Masculine folders are listed first so shoppers can pick by gender folder;
+// Canvas / Badge / Shield / Compass collections follow afterward.
 export const LOGO_SECTIONS: { name: string; ids: string[] }[] = (() => {
   const order: string[] = [];
   const bySection: Record<string, string[]> = {};
@@ -167,7 +194,11 @@ export const LOGO_SECTIONS: { name: string; ids: string[] }[] = (() => {
     }
     bySection[section].push(id);
   }
-  return order.map((name) => ({ name, ids: bySection[name] }));
+  return [
+    { name: "Feminine Collection", ids: [...FEMININE_FOLDER_LOGO_IDS] },
+    { name: "Masculine Collection", ids: [...MASCULINE_FOLDER_LOGO_IDS] },
+    ...order.map((name) => ({ name, ids: bySection[name] })),
+  ];
 })();
 
 // For general products, the customer's chosen product color maps to color

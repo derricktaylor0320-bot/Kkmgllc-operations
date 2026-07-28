@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Heart, Sparkles } from "lucide-react";
+import { ArrowRight, Shield, Sparkles } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { allLogos, FEMININE_LOGO_IDS } from "@/lib/logoCatalog";
+import { allLogos, MASCULINE_LOGO_IDS } from "@/lib/logoCatalog";
 
 type StorefrontProduct = {
   id: string;
@@ -28,45 +28,45 @@ type StorefrontProduct = {
   scents: string | null;
 };
 
-const FEMININE_LOGO_COPY: Record<
-  (typeof FEMININE_LOGO_IDS)[number],
+const MASCULINE_LOGO_COPY: Record<
+  (typeof MASCULINE_LOGO_IDS)[number],
   { name: string; label: string; description: string }
 > = {
-  "208": {
-    name: "Brown & Gold Ornate Crest",
-    label: "Pearl ornate sword crest",
+  "214": {
+    name: "Red & Gold with Swords",
+    label: "Bold sword crest",
     description:
-      "Crossed swords framed by ornate scrollwork with pearl accents — the feminine edition of the Badge of Honor crest.",
+      "A striking red shield with crossed gold swords — classic masculine Badge of Honor energy.",
   },
-  "205": {
-    name: "Silver Elite Crest",
-    label: "Pearl silver sword crest",
+  "201": {
+    name: "Apparel Leather Swords Crest",
+    label: "Leather sword crest",
     description:
-      "A polished silver crest with pearl bead details and a heart flourish for a refined feminine look.",
+      "The Khomplete Khemistri Apparel leather swords crest built for strong custom gear.",
   },
-  "209": {
-    name: "Purple Ornate Crest",
-    label: "Pearl purple sword crest",
+  "215": {
+    name: "Crossed Swords",
+    label: "Crossed swords emblem",
     description:
-      "Royal purple crossed swords with ornate pearl-dotted filigree made for the feminine collection.",
+      "A direct crossed-swords mark that reads clean on jackets, tees, and accessories.",
   },
-  "212": {
-    name: "Purple with Swords",
-    label: "Pearl violet sword crest",
+  "216": {
+    name: "KKA Crossed Swords",
+    label: "KKA sword mark",
     description:
-      "A bold purple shield and crossed swords edged with pearl-inspired bead accents.",
+      "The KKA crossed-swords logo — sharp, compact, and ready for masculine apparel.",
   },
-  "213": {
-    name: "Green with Swords",
-    label: "Pearl emerald sword crest",
+  "219": {
+    name: "Maroon & Gold Eagle Crest",
+    label: "Eagle crest",
     description:
-      "Emerald green crossed swords with ornate pearl nodes — feminine strength in a rich colorway.",
+      "A maroon and gold apparel eagle crest with brotherhood presence.",
   },
-  "124": {
-    name: "Pearl Gold Seal",
-    label: "Signature pearl seal",
+  "300": {
+    name: "The Golden Eagle Shield",
+    label: "Golden eagle shield",
     description:
-      "A refined gold seal framed by a continuous pearl border — the signature feminine pearl crest.",
+      "The all-gold eagle Shield of Honor — a signature masculine empire crest.",
   },
 };
 
@@ -142,76 +142,63 @@ function ProductSection({
   );
 }
 
-export default function Feminine() {
+export default function Masculine() {
   const { data: apparel, isLoading: apparelLoading } = useQuery({
     queryKey: ["/api/products/type/apparel"],
-  });
-  const { data: accessories, isLoading: accessoriesLoading } = useQuery({
-    queryKey: ["/api/products/type/accessory"],
   });
 
   const apparelProducts =
     (apparel as StorefrontProduct[] | undefined) ?? [];
-  const accessoryProducts =
-    (accessories as StorefrontProduct[] | undefined) ?? [];
-  const womensProducts = apparelProducts.filter(
-    (product) => product.gender === "Women",
+  const mensProducts = apparelProducts.filter(
+    (product) => product.gender === "Men",
   );
-  const customizableFavorites = womensProducts.filter(
+  const customizableFavorites = mensProducts.filter(
     (product) => product.logoOptions,
   );
-  const womensApparel = womensProducts.filter(
-    (product) => !product.logoOptions,
-  );
-  const loungeAndIntimates = [...apparelProducts, ...accessoryProducts].filter(
-    (product) =>
-      product.category === "Sleepwear" || product.category === "Intimates",
-  );
-  const isLoading = apparelLoading || accessoriesLoading;
-  const hasProducts =
-    customizableFavorites.length + womensApparel.length + loungeAndIntimates.length >
-    0;
+  const mensApparel = mensProducts.filter((product) => !product.logoOptions);
+  const isLoading = apparelLoading;
+  const hasProducts = customizableFavorites.length + mensApparel.length > 0;
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <section className="relative overflow-hidden border-b border-primary/20 bg-[radial-gradient(circle_at_20%_20%,rgba(244,114,182,0.18),transparent_34%),radial-gradient(circle_at_80%_0%,hsl(var(--primary)/0.2),transparent_38%),linear-gradient(145deg,hsl(var(--background)),hsl(var(--secondary)))] px-4 py-20 md:py-28">
+        <section className="relative overflow-hidden border-b border-primary/20 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.14),transparent_34%),radial-gradient(circle_at_80%_0%,hsl(var(--primary)/0.22),transparent_38%),linear-gradient(145deg,hsl(var(--background)),hsl(var(--secondary)))] px-4 py-20 md:py-28">
           <div className="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true">
-            <div className="absolute -left-16 top-12 h-40 w-40 rounded-full border border-pink-300/30" />
-            <div className="absolute -left-6 top-24 h-40 w-40 rounded-full border border-primary/25" />
-            <div className="absolute -right-12 bottom-8 h-56 w-56 rounded-full border border-pink-200/20" />
+            <div className="absolute -left-16 top-12 h-40 w-40 rounded-full border border-primary/30" />
+            <div className="absolute -left-6 top-24 h-40 w-40 rounded-full border border-blue-300/20" />
+            <div className="absolute -right-12 bottom-8 h-56 w-56 rounded-full border border-primary/20" />
           </div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="relative mx-auto max-w-4xl text-center"
           >
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-pink-300/40 bg-pink-300/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-pink-200">
-              <Heart className="h-4 w-4" />
-              Curated with her in mind
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-primary">
+              <Shield className="h-4 w-4" />
+              Curated with him in mind
             </span>
             <h1
               className="font-brand text-5xl font-bold tracking-wide text-primary md:text-7xl"
-              data-testid="heading-feminine-collection"
+              data-testid="heading-masculine-collection"
             >
-              Feminine Collection
+              Masculine Collection
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-secondary-foreground/80 md:text-lg">
-              Feminine apparel, lounge essentials, and expressive crests in one
-              place. Choose a ready-to-wear design or make a piece your own.
-              Every style is open to everyone.
+              Masculine apparel and sword-and-eagle crests in one place. Choose a
+              ready-to-wear design or make a piece your own. Every style is open
+              to everyone.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <a href="#feminine-logos">
+              <a href="#masculine-logos">
                 <Button className="w-full bg-primary text-primary-foreground sm:w-auto">
-                  Choose a feminine crest
+                  Choose a masculine crest
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </a>
-              <a href="#feminine-products">
+              <a href="#masculine-products">
                 <Button variant="outline" className="w-full sm:w-auto">
-                  Shop feminine styles
+                  Shop masculine styles
                 </Button>
               </a>
             </div>
@@ -220,9 +207,9 @@ export default function Feminine() {
 
         <div className="container mx-auto px-4 py-16">
           <section
-            id="feminine-logos"
+            id="masculine-logos"
             className="scroll-mt-28"
-            aria-labelledby="feminine-logo-heading"
+            aria-labelledby="masculine-logo-heading"
           >
             <div className="mb-10 text-center">
               <div className="mb-3 flex items-center justify-center gap-2 text-primary">
@@ -233,22 +220,22 @@ export default function Feminine() {
                 <Sparkles className="h-5 w-5" />
               </div>
               <h2
-                id="feminine-logo-heading"
+                id="masculine-logo-heading"
                 className="font-display text-3xl font-bold uppercase tracking-wider text-primary md:text-4xl"
               >
-                Feminine Crest Options
+                Masculine Crest Options
               </h2>
               <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-                These six pearl-detailed feminine sword crests live in the
-                feminine folder so you can pick them all in one place — on this
-                page or in any logo picker under Feminine Collection.
+                These masculine sword and eagle crests live in the masculine
+                folder so you can pick them all in one place — on this page or
+                in any logo picker under Masculine Collection.
               </p>
             </div>
 
             <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
-              {FEMININE_LOGO_IDS.map((id, index) => {
+              {MASCULINE_LOGO_IDS.map((id, index) => {
                 const logo = allLogos[id];
-                const copy = FEMININE_LOGO_COPY[id];
+                const copy = MASCULINE_LOGO_COPY[id];
 
                 return (
                   <motion.article
@@ -258,7 +245,7 @@ export default function Feminine() {
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
                     className="overflow-hidden rounded-2xl border border-primary/30 bg-card/80 shadow-2xl"
-                    data-testid={`card-feminine-logo-${id}`}
+                    data-testid={`card-masculine-logo-${id}`}
                   >
                     <div className="aspect-square bg-[radial-gradient(circle,hsl(var(--primary)/0.15),transparent_68%)] p-7">
                       <img
@@ -268,7 +255,7 @@ export default function Feminine() {
                       />
                     </div>
                     <div className="border-t border-primary/20 p-6">
-                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-pink-200">
+                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary/80">
                         {copy.label}
                       </p>
                       <h3 className="mt-2 text-2xl font-bold text-primary">
@@ -280,7 +267,7 @@ export default function Feminine() {
                       <Link
                         href={`/customize/${id}`}
                         className="mt-5 inline-flex w-full"
-                        data-testid={`link-customize-feminine-logo-${id}`}
+                        data-testid={`link-customize-masculine-logo-${id}`}
                       >
                         <Button className="w-full">
                           Customize with this crest
@@ -294,10 +281,10 @@ export default function Feminine() {
             </div>
           </section>
 
-          <div id="feminine-products" className="scroll-mt-28 space-y-16 pt-20">
+          <div id="masculine-products" className="scroll-mt-28 space-y-16 pt-20">
             {isLoading ? (
               <div className="py-16 text-center text-muted-foreground">
-                Loading feminine styles...
+                Loading masculine styles...
               </div>
             ) : hasProducts ? (
               <>
@@ -305,28 +292,21 @@ export default function Feminine() {
                   id="customizable-favorites"
                   eyebrow="Make it yours"
                   title="Customizable Favorites"
-                  description="Pair a pearl ornate sword crest or Pearl Gold Seal with these feminine styles for a personalized look."
+                  description="Pair a sword or eagle crest from the masculine folder with these styles."
                   products={customizableFavorites}
                 />
                 <ProductSection
-                  id="womens-apparel"
+                  id="mens-apparel"
                   eyebrow="Ready-to-wear suggestions"
-                  title="Women's Apparel"
-                  description="Graphic tees and clothing designed with feminine color, artwork, and fit in mind."
-                  products={womensApparel}
-                />
-                <ProductSection
-                  id="lounge-and-intimates"
-                  eyebrow="Comfort and confidence"
-                  title="Lounge & Intimates"
-                  description="Relaxed essentials and intimate styles gathered into the same easy-to-shop collection."
-                  products={loungeAndIntimates}
+                  title="Men's Apparel"
+                  description="Graphic tees and clothing designed with masculine color, artwork, and fit in mind."
+                  products={mensApparel}
                 />
               </>
             ) : (
               <div className="rounded-xl border border-primary/20 bg-card/50 px-6 py-12 text-center">
                 <h2 className="text-2xl font-bold text-primary">
-                  More feminine styles are coming
+                  More masculine styles are coming
                 </h2>
                 <p className="mt-3 text-muted-foreground">
                   New shirts and customized choices will appear here as they

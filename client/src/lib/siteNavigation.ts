@@ -28,6 +28,11 @@ export const SITE_LINKS: SiteLink[] = [
     label: "Feminine Collection",
     compactLabel: "Feminine",
   },
+  {
+    href: "/masculine",
+    label: "Masculine Collection",
+    compactLabel: "Masculine",
+  },
   { href: "/accessories", label: "Accessories", compactLabel: "Accessories" },
   {
     href: "/bedding",
