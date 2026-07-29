@@ -17,7 +17,7 @@ const garmentTypes = [
   { id: "short-sleeve", name: "Short Sleeve T-Shirt", basePrice: 30, category: "tops" },
   { id: "long-sleeve", name: "Long Sleeve T-Shirt", basePrice: 35, category: "tops" },
   { id: "pullover-hoodie", name: "Pullover Hoodie", basePrice: 50, category: "tops" },
-  { id: "full-zip-hoodie", name: "Full-Zip Hoodie", basePrice: 60, category: "tops" },
+  { id: "full-zip-hoodie", name: "Full-Zip Hoodie", basePrice: 50, category: "tops" },
   { id: "mens-jacket", name: "Men's Softshell Jacket", basePrice: 60, category: "tops" },
   { id: "jacket", name: "Women's Softshell Jacket", basePrice: 60, category: "tops" },
   { id: "jeans", name: "Personalized Custom Logo Jeans", basePrice: 57.48, category: "bottoms" },
