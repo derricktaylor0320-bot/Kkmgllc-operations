@@ -28,7 +28,7 @@ export const LOGO_ALTS: string[] = [
   "10 Core Principles Medallion",
   "Khomplete Khemistri Apparel & Accessories Eagle",
   "Golden Eagle Circular Emblem",
-  "Khomplete Khemistri Elements Pearl Gold Seal",
+  "Khomplete Khemistri Elements Golden Shield",
   "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion",
   "Khomplete Khemistri Elements Embroidered Crest",
   // Badge of Honor
@@ -65,9 +65,10 @@ export const LOGO_ALTS: string[] = [
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim",
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey",
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye",
-  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta",
+  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy",
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple",
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy",
+  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold",
   // Shield of Honor
   "The Golden Eagle Shield",
   "Navy & Gold Eagle Shield",

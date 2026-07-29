@@ -23,7 +23,7 @@ import logoLimeGreen from "@assets/logo_lime_green.jpg";
 import logoMasterpieceTrident from "@assets/logo_masterpiece_trident_three.png";
 import medallionCorePrinciples from "@assets/copilot_image_1781210586301_1781211927468.jpeg";
 
-// Badge of Honor Collection — crests 200-228 + Female Logos 229-234
+// Badge of Honor Collection — crests 200-228 + Female Logos 229-235
 import shieldBlackWhite from "@assets/Screenshot_20251126_205145_Photos_1764208360832.jpg";
 import shieldBlueGold from "@assets/Screenshot_20251126_205125_Photos_1764208373884.jpg";
 import crestBlueValuesSwords from "@assets/image000009_1781214860404.jpg";
@@ -101,9 +101,10 @@ import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroid
 import logoPearlGriffinBlueDenim from "@assets/feminine/logo_pearl_griffin_blue_denim.png";
 import logoPearlGriffinGrey from "@assets/feminine/logo_pearl_griffin_grey.png";
 import logoPearlGriffinTieDye from "@assets/feminine/logo_pearl_griffin_tie_dye.png";
-import logoPearlGriffinMagenta from "@assets/feminine/logo_pearl_griffin_magenta.png";
+import logoPearlGriffinCottonCandy from "@assets/feminine/logo_pearl_griffin_cotton_candy.png";
 import logoPearlGriffinPurple from "@assets/feminine/logo_pearl_griffin_purple.png";
 import logoPearlGriffinNavy from "@assets/feminine/logo_pearl_griffin_navy.png";
+import logoPearlGriffinRedGold from "@assets/feminine/logo_pearl_griffin_red_gold.png";
 
 export default function Canvas() {
   const logos = [
@@ -129,7 +130,7 @@ export default function Canvas() {
     { id: "121", src: logoPrideRainbow, alt: "Khomplete Khemistri Apparel Pride Rainbow Crest", color: "Pride Rainbow" },
     { id: "122", src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident" },
     { id: "123", src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular" },
-    { id: "124", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal" },
+    { id: "124", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield" },
     { id: "125", src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink" },
     { id: "126", src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest" },
   ];
@@ -140,9 +141,10 @@ export default function Canvas() {
     { id: "229", src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim" },
     { id: "230", src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey" },
     { id: "231", src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye" },
-    { id: "232", src: logoPearlGriffinMagenta, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta", color: "Pearl Griffin Magenta" },
+    { id: "232", src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy" },
     { id: "233", src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple" },
     { id: "234", src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy" },
+    { id: "235", src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold" },
   ];
 
   const badges = [

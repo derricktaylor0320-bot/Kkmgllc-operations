@@ -51,10 +51,10 @@ const FEMININE_LOGO_COPY: Record<
       "Pearl-crowned griffin crest on vibrant tie-dye — colorful feminine energy with crossed swords.",
   },
   "232": {
-    name: "Pearl Griffin — Magenta",
+    name: "Pearl Griffin — Cotton Candy",
     label: "Royalty Badge · Female",
     description:
-      "Gold griffin crest with pearl crown on magenta — bold feminine colorway for apparel and loungewear.",
+      "Shiny gold griffin crest with pearl crown on soft cotton-candy pink — feminine colorway for apparel and loungewear.",
   },
   "233": {
     name: "Pearl Griffin — Purple",
@@ -67,6 +67,12 @@ const FEMININE_LOGO_COPY: Record<
     label: "Royalty Badge · Female",
     description:
       "All-gold griffin crest with pearl crown on navy — classic feminine Apparel & Accessories mark.",
+  },
+  "235": {
+    name: "Pearl Griffin — Red & Gold",
+    label: "Royalty Badge · Female",
+    description:
+      "Crisp red-and-gold griffin crest with pearl crown — the bold successor to the earlier dark fuchsia colorway.",
   },
 };
 
@@ -240,7 +246,7 @@ export default function Feminine() {
                 Feminine Crest Options
               </h2>
               <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-                These six pearl-crown griffin crests are the Female Logos group
+                These pearl-crown griffin crests are the Female Logos group
                 within Our Royalty Badge of Honor — pick them here or under Badge
                 of Honor / Feminine Collection in any logo picker.
               </p>
