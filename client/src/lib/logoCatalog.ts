@@ -78,9 +78,10 @@ import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroid
 import logoPearlGriffinBlueDenim from "@assets/female-polo-shirts/logo_pearl_griffin_blue_denim.png";
 import logoPearlGriffinGrey from "@assets/female-polo-shirts/logo_pearl_griffin_grey.png";
 import logoPearlGriffinTieDye from "@assets/female-polo-shirts/logo_pearl_griffin_tie_dye.png";
-import logoPearlGriffinMagenta from "@assets/female-polo-shirts/logo_pearl_griffin_magenta.png";
+import logoPearlGriffinCottonCandy from "@assets/female-polo-shirts/logo_pearl_griffin_cotton_candy.png";
 import logoPearlGriffinPurple from "@assets/female-polo-shirts/logo_pearl_griffin_purple.png";
 import logoPearlGriffinNavy from "@assets/female-polo-shirts/logo_pearl_griffin_navy.png";
+import logoPearlGriffinRedGold from "@assets/feminine/logo_pearl_griffin_red_gold.png";
 
 export interface LogoEntry {
   src: string;
@@ -112,7 +113,7 @@ export const allLogos: Record<string, LogoEntry> = {
   "121": { src: logoPrideRainbow, alt: "Khomplete Khemistri Apparel Pride Rainbow Crest", color: "Pride Rainbow", section: "Canvas Collection" },
   "122": { src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident", section: "Canvas Collection" },
   "123": { src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular", section: "Canvas Collection" },
-  "124": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Pearl Gold Seal", color: "Pearl Gold Seal", section: "Canvas Collection" },
+  "124": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", section: "Canvas Collection" },
   "125": { src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink", section: "Canvas Collection" },
   "126": { src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest", section: "Canvas Collection" },
   "200": { src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", section: "Badge of Honor" },
@@ -148,9 +149,10 @@ export const allLogos: Record<string, LogoEntry> = {
   "229": { src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim", section: "Badge of Honor" },
   "230": { src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey", section: "Badge of Honor" },
   "231": { src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye", section: "Badge of Honor" },
-  "232": { src: logoPearlGriffinMagenta, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Magenta", color: "Pearl Griffin Magenta", section: "Badge of Honor" },
+  "232": { src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy", section: "Badge of Honor" },
   "233": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Badge of Honor" },
   "234": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Badge of Honor" },
+  "235": { src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold", section: "Badge of Honor" },
   "300": { src: honorAllGold, alt: "The Golden Eagle Shield", color: "All Gold", section: "Shield of Honor" },
   "301": { src: honorNavyGold, alt: "Navy & Gold Eagle Shield", color: "Navy & Gold", section: "Shield of Honor" },
   "302": { src: honorSilverGold, alt: "Silver & Gold Eagle Shield", color: "Silver & Gold", section: "Shield of Honor" },
@@ -169,16 +171,16 @@ export const allLogos: Record<string, LogoEntry> = {
 };
 
 // Featured feminine pearl griffin crests for /feminine — Royalty Badge of Honor
-// Female Logos subgroup (IDs 229–234). Also the six women’s premium polo emblems
-// (see attached_assets/female-polo-shirts/).
-export const FEMININE_LOGO_IDS = ["229", "230", "231", "232", "233", "234"] as const;
+// Female Logos subgroup (IDs 229–235). Polo emblems use 229–234
+// (see attached_assets/female-polo-shirts/); #235 Red & Gold is gallery-only.
+export const FEMININE_LOGO_IDS = ["229", "230", "231", "232", "233", "234", "235"] as const;
 
 // Eight men’s eagle-and-swords crests used for premium polos (fixed placement).
 // Files: attached_assets/male-polo-shirts/.
 export const MALE_POLO_LOGO_IDS = ["220", "221", "222", "223", "224", "225", "226", "227"] as const;
 
 // Six women’s pearl-griffin Female Logos used for premium polos (fixed placement).
-export const FEMALE_POLO_LOGO_IDS = FEMININE_LOGO_IDS;
+export const FEMALE_POLO_LOGO_IDS = ["229", "230", "231", "232", "233", "234"] as const;
 
 // Full feminine folder — every crest available under the Feminine Collection
 // filter in logo pickers (featured six plus additional feminine colorways).
@@ -288,7 +290,7 @@ const COLOR_SYNONYMS: Record<string, string[]> = {
   olive: ["olive", "green", "forest"],
   teal: ["teal", "cyan", "green"],
   cyan: ["cyan", "sky", "teal", "blue"],
-  pink: ["pink"],
+  pink: ["pink", "cotton candy"],
   purple: ["purple", "maroon"],
   red: ["red", "maroon"],
   maroon: ["maroon", "red"],

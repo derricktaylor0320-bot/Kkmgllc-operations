@@ -564,11 +564,11 @@ const BRANDED_APPAREL_PRODUCTS: {
   {
     productId: "prod_kkpolofemalemagenta",
     priceId: "price_kkpolofemalemagenta",
-    name: "Premium Polo \u2014 Women\u2019s Pearl Griffin Magenta",
+    name: "Premium Polo \u2014 Women\u2019s Pearl Griffin Cotton Candy",
     description:
-      "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Magenta. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Rose Red.",
+      "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Cotton Candy pink. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Pink.",
     priceCents: 4500,
-    meta: { category: "Polos", productType: "apparel", sortOrder: "82", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_magenta.png", poloEmblem: "232" },
+    meta: { category: "Polos", productType: "apparel", sortOrder: "82", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_cotton_candy.png", poloEmblem: "232" },
   },
   {
     productId: "prod_kkpolofemalepurple",
