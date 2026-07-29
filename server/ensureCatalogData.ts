@@ -431,7 +431,7 @@ const WOMENS_TEE_PRODUCTS: {
 
 // Branded all-over-print apparel ("Forging the Future of Fabric"). Same
 // self-applying create/keep-current pattern as the women's tees, but each item
-// carries its own priceCents (tee $30, hoodie $60). Sizes are derived adult
+// carries its own priceCents (tee $30, hoodie currently $50). Sizes are derived adult
 // XS–6XL via apparelSizesFor (no `sizes` metadata).
 const BRANDED_APPAREL_PRODUCTS: {
   productId: string;
@@ -456,7 +456,8 @@ const BRANDED_APPAREL_PRODUCTS: {
     name: "Forging the Future Hoodie \u2014 Green",
     description:
       "Forest-green unisex pullover hoodie with an all-over print of the Khomplete Khemistri steampunk alchemy lab wrapping the hood, body, and sleeves \u2014 glowing copper pipes, flasks, and the master chemist forging garments \u2014 with KHOMPLETE KHEMISTRI APPAREL & ACCESSORIES. EST 2020, LAUNCHED IN 2023, FORGING THE FUTURE OF FABRIC. Select your size at checkout.",
-    priceCents: 6000,
+    // Current promotional price; restore to 6000 when the sale ends.
+    priceCents: 5000,
     meta: { category: "Hoodies", productType: "apparel", sortOrder: "70", gender: "Unisex", customize: "none", imageUrl: "/assets/kk_forging_future_hoodie_green.jpg" },
   },
   // Premium polos — fixed emblem + shirt color (no logo/placement customization).
@@ -2475,7 +2476,7 @@ export async function ensureCatalogData() {
 
     // 6c-iii) Branded all-over-print apparel ("Forging the Future of Fabric").
     //     Same self-applying create/keep-current pattern, but each item carries
-    //     its own price (tee $30, hoodie $60).
+    //     its own price (tee $30, hoodie currently $50).
     for (const a of BRANDED_APPAREL_PRODUCTS) {
       const aProductRaw = JSON.stringify({
         id: a.productId,
