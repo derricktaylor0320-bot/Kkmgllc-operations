@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, ShoppingCart, Check, AlertCircle } from "lucide-react";
 import { allLogos } from "@/lib/logoCatalog";
 import ShipStateTaxSummary, { useShipToState } from "@/components/ShipStateTaxSummary";
+import { placementSurchargeDollars } from "@shared/customization";
 
 const garmentTypes = [
   { id: "short-sleeve", name: "Short Sleeve T-Shirt", basePrice: 30, category: "tops" },
@@ -129,9 +130,7 @@ export default function LogoCustomizer() {
     if (!garment) return 0;
     
     let price = garment.basePrice;
-    if (selectedPlacements.length > 1) {
-      price += 10;
-    }
+    price += placementSurchargeDollars(selectedPlacements.length);
     return price;
   };
 
@@ -406,8 +405,8 @@ export default function LogoCustomizer() {
                   {selectedGarmentData?.category === "accessories"
                     ? "Your logo will be laser-etched in the position shown below."
                     : selectedGarmentData?.category === "swimwear"
-                      ? "Select one or both print styles. Additional print style adds $10."
-                      : "Select one or both placements. Additional placement adds $10."}
+                      ? "One print style is included. Selecting multiple print styles adds $3."
+                      : "One placement is included. Selecting multiple placements adds $3."}
                 </p>
                 <div className="space-y-3">
                   {placementOptions.map((placement) => (
@@ -439,7 +438,7 @@ export default function LogoCustomizer() {
                 </div>
                 {selectedPlacements.length > 1 && (
                   <p className="text-sm text-primary font-medium">
-                    +$10 for dual placement
+                    +$3 multiple-placement fee
                   </p>
                 )}
               </div>
