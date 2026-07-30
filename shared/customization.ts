@@ -26,6 +26,22 @@ const DELIM = " \u2014 ";
 // logoCatalog, so the actual string value here is only a truthy flag.
 export const FULL_LOGO_CATALOG_OPTION = "__FULL_LOGO_CATALOG__";
 
+// One print location is included in the garment price. Selecting two or more
+// locations adds one flat multiple-placement fee.
+export const MULTIPLE_PLACEMENT_SURCHARGE_CENTS = 300;
+
+export function placementSurchargeCents(placementCount: unknown): number {
+  return typeof placementCount === "number" &&
+    Number.isFinite(placementCount) &&
+    placementCount > 1
+    ? MULTIPLE_PLACEMENT_SURCHARGE_CENTS
+    : 0;
+}
+
+export function placementSurchargeDollars(placementCount: unknown): number {
+  return placementSurchargeCents(placementCount) / 100;
+}
+
 // Product types that are NOT logo-customizable (a brand logo doesn't physically
 // apply to them). The poetry plaques / glass frames are art pieces.
 const NON_LOGO_PRODUCT_TYPES = new Set(["poetry", "vintage"]);

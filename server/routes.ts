@@ -15,7 +15,7 @@ import { registerPocketBoosterRoutes } from "./pocketBooster";
 import { registerLiquidityRoutes } from "./liquidityRouter";
 import { registerExpenseReliefRoutes } from "./expenseRelief";
 import { PROGRAM_PATHWAY, PROGRAM_STAGES } from "@shared/programStages";
-import { checkCustomization, customizationErrorMessage, isDefaultLogoCustomizable, apparelSizesFor, scentsFor, FULL_LOGO_CATALOG_OPTION } from "@shared/customization";
+import { checkCustomization, customizationErrorMessage, isDefaultLogoCustomizable, apparelSizesFor, scentsFor, FULL_LOGO_CATALOG_OPTION, placementSurchargeDollars } from "@shared/customization";
 import { updateOrderFulfillmentSchema, insertMediaLinkSchema, mediaUploadFieldsSchema, insertReviewSchema, updateProfileSchema, type Review, type User } from "@shared/schema";
 import {
   DISCOUNT_CODES,
@@ -856,7 +856,8 @@ export async function registerRoutes(
       const placementCount = SINGLE_PLACEMENT_GARMENTS.has(garmentId)
         ? 1
         : (Array.isArray(placements) ? placements.length : 1);
-      const totalDollars = basePrice + (placementCount > 1 ? 10 : 0);
+      const totalDollars =
+        basePrice + placementSurchargeDollars(placementCount);
       const amountCents = Math.round(totalDollars * 100);
 
       const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
