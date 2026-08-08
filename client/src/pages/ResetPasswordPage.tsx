@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Loader2, CheckCircle2 } from "lucide-react";
-import logo from "@assets/generated_images/consolidatus_empire_logo_2020.png";
+import logo from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
 
 export default function ResetPasswordPage() {
   const [, setLocation] = useLocation();

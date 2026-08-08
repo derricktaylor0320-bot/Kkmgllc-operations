@@ -26,7 +26,7 @@ import {
   CircleDollarSign,
   Trophy,
 } from "lucide-react";
-import logo from "@assets/generated_images/consolidatus_empire_logo_2020.png";
+import logo from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
 
 type AppNode = { href: string; label: string; Icon: typeof Shirt };
 

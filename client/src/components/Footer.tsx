@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Instagram, Twitter, Facebook } from "lucide-react";
-import logo from "@assets/badge_consolidatus_empire_standalone_218.png";
+import logo from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
 
 export default function Footer() {
   return (
@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
           <div className="space-y-4">
             <div className="flex items-center gap-3 mb-2">
-               <img src={logo} alt="The Consolidatus Empire LLC Logo" className="brand-crest-chrome h-12 w-12 rounded-full object-contain drop-shadow-[0_0_10px_hsl(var(--primary)/0.3)]" data-testid="img-footer-logo" />
+               <img src={logo} alt="The Consolidatus Empire LLC Logo" className="brand-crest-glow h-12 w-12 rounded-full object-contain" data-testid="img-footer-logo" />
                <h3 className="font-display text-xl font-bold uppercase tracking-wider text-primary">
                  The Consolidatus Empire LLC
                </h3>

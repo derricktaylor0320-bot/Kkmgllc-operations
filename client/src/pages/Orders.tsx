@@ -215,7 +215,7 @@ export default function Orders() {
                         ? "bg-emerald-500/5 border-emerald-500/30"
                         : isPaid
                         ? "bg-muted/30 border-primary/10"
-                        : "bg-yellow-500/5 border-yellow-500/30 opacity-90"
+                        : "bg-sky-500/5 border-sky-500/30 opacity-90"
                     }`}
                     data-testid={`card-order-${order.id}`}
                   >
@@ -241,7 +241,7 @@ export default function Orders() {
                           className={`text-xs uppercase tracking-wider font-display px-3 py-1 rounded-full ${
                             isPaid
                               ? "bg-primary/20 text-primary"
-                              : "bg-yellow-500/20 text-yellow-500"
+                              : "bg-sky-500/20 text-sky-300"
                           }`}
                           data-testid={`status-order-${order.id}`}
                         >

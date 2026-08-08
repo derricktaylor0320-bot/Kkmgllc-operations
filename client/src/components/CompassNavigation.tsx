@@ -17,7 +17,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { SITE_LINKS } from "@/lib/siteNavigation";
-import compassLogo from "@assets/generated_images/consolidatus_empire_logo_2020.png";
+import compassLogo from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
 
 type CompassNavigationProps = {
   accountName: string;
@@ -256,12 +256,7 @@ export default function CompassNavigation({
                 <img
                   src={compassLogo}
                   alt=""
-                  className="h-[72%] w-[72%] object-contain"
-                  style={{
-                    filter:
-                      "grayscale(1) contrast(1.2) brightness(1.3) drop-shadow(0 0 10px hsl(var(--primary) / 0.6))",
-                    mixBlendMode: "screen",
-                  }}
+                  className="brand-crest-glow h-[72%] w-[72%] object-contain"
                 />
               </div>
 

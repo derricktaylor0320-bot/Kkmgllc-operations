@@ -44,7 +44,7 @@ import {
   P2P_MIN_INVESTMENT_AMOUNT,
   p2pInvestmentAmountSchema,
 } from "@shared/liquidityLoop";
-import tceLogo from "../../../image.png";
+import tceLogo from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
 
 type TiersResponse = {
   platformName: string;
@@ -372,7 +372,7 @@ export default function PocketBooster() {
       <main className="flex-grow">
         {/* Hero */}
         <section className="relative overflow-hidden border-b border-primary/20">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsl(48_100%_100%/0.95),_transparent_48%),radial-gradient(ellipse_at_20%_30%,_hsl(var(--primary)/0.16),_transparent_38%),linear-gradient(180deg,_hsl(42_58%_89%)_0%,_hsl(var(--background))_82%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsl(199_100%_45%/0.22),_transparent_48%),radial-gradient(ellipse_at_20%_30%,_hsl(var(--primary)/0.18),_transparent_38%),linear-gradient(180deg,_hsl(214_65%_14%)_0%,_hsl(var(--background))_82%)]" />
           <div className="relative max-w-5xl mx-auto px-6 py-16 md:py-20 text-center">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
@@ -411,7 +411,7 @@ export default function PocketBooster() {
               transition={{ duration: 0.5, delay: 0.12 }}
               className="text-lg md:text-xl text-foreground/85 max-w-2xl mx-auto mb-3"
             >
-              TCE introduces a cream-and-gold financial wellness environment:
+              TCE introduces a silver-blue topaz financial wellness environment:
               subscription-powered cash cushions backed by member investments,
               with {(yieldRate * 100).toFixed(1)}% yield returning to investors.
             </motion.p>
