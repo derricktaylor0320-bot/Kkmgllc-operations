@@ -12,13 +12,13 @@
   "categories": ["shopping", "business", "lifestyle"],
   "icons": [
     {
-      "src": "/pwa-192.png",
+      "src": "/pwa-blue-silver-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/pwa-512.png",
+      "src": "/pwa-blue-silver-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
@@ -31,7 +31,7 @@
       "url": "/hub?source=shortcut",
       "icons": [
         {
-          "src": "/pwa-192.png",
+          "src": "/pwa-blue-silver-192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -43,7 +43,7 @@
       "url": "/apparel?source=shortcut",
       "icons": [
         {
-          "src": "/pwa-192.png",
+          "src": "/pwa-blue-silver-192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
