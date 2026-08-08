@@ -6,6 +6,11 @@
 // client/src/lib/logoCatalog.ts (the client source of truth that also pairs each
 // logo with its image). When you add or rename a logo there, update this list
 // too — otherwise checkout will reject the new logo on customized products.
+import {
+  FOOTBALL_TEAM_DESIGNS,
+  footballTeamLogoAlt,
+} from "./footballTeams";
+
 export const LOGO_ALTS: string[] = [
   // Canvas Collection
   "Gold 3D Emblem",
@@ -90,6 +95,8 @@ export const LOGO_ALTS: string[] = [
   "Khomplete Khemistri Apparel Pride Rainbow Crest",
   // Canvas Collection (founders' trident crest)
   "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.",
+  // Seasonal Football Teams Sports Edition
+  ...FOOTBALL_TEAM_DESIGNS.map((team) => footballTeamLogoAlt(team.name)),
 ];
 
 export const LOGO_ALT_SET: Set<string> = new Set(LOGO_ALTS);

@@ -36,6 +36,7 @@ import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SsoDemo from "@/pages/SsoDemo";
 import Orders from "@/pages/Orders";
 import Profile from "@/pages/Profile";
+import FootballTeams from "@/pages/FootballTeams";
 
 function Router() {
   return (
@@ -61,6 +62,7 @@ function Router() {
       <Route path="/consolidated-expense-relief" component={ExpenseRelief} />
       <Route path="/invest" component={Invest} />
       <Route path="/apparel" component={Apparel} />
+      <Route path="/football-teams" component={FootballTeams} />
       <Route path="/feminine" component={Feminine} />
       <Route path="/masculine" component={Masculine} />
       <Route path="/accessories" component={Accessories} />

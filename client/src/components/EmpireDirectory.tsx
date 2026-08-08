@@ -14,6 +14,7 @@ import {
   Shirt,
   Sparkles,
   TrendingUp,
+  Trophy,
   WalletCards,
   Watch,
 } from "lucide-react";
@@ -33,6 +34,13 @@ const DIRECTORY_ITEMS: DirectoryItem[] = [
     title: "Apparel",
     description: "Branded clothing for men, women, and kids in sizes XS–6XL.",
     Icon: Shirt,
+  },
+  {
+    href: "/football-teams",
+    title: "Football Sports Edition",
+    description:
+      "Seasonal team-inspired crests for shirts, sweatshirts, jackets, and more.",
+    Icon: Trophy,
   },
   {
     href: "/feminine",
