@@ -66,6 +66,9 @@ export const LOGO_ALTS: string[] = [
   "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold",
   "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold",
   "The Consolidatus Empire LLC Standalone Crest - Est. 2020",
+  "The Consolidatus Empire LLC Crest - Navy & Silver Est. 2020",
+  "The Consolidatus Empire LLC Crest - Charcoal & Purple Est. 2020",
+  "The Consolidatus Empire LLC Crest - Gold & Brown Est. 2020",
   // Badge of Honor — Female Logos (pearl-crown griffin crests)
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim",
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey",

@@ -1016,6 +1016,22 @@ const EXTRA_ACCESSORY_PRODUCTS: {
     meta: { category: "Drinkware", productType: "accessory", imageUrl: "/assets/kk_coffee_sleeve.png", gender: "Unisex", colors: "White, Black, Navy Blue, Royal Blue, Pink, Deep Sky Blue, Red, Blush Pink, Maroon, Sage, Candy, Pastel, Lavender, Baby Blue, Light Grey, Charcoal, Teal, Blackish Green, Peach Yellow, Coral, Violet, Rose Red, Orange, Magenta, Bright Gold, Kelly Green, Grass Green, Turquoise, Robin Egg Blue, Aquamarine, Light Teal, Mint Green, Mint, Hot Pink" },
   },
   {
+    productId: "prod_kkhisherswatches",
+    priceId: "price_kkhisherswatches",
+    name: "Khomplete Khemistri His & Hers Watch Set",
+    description:
+      "Matching his & hers wristwatch set featuring the Khomplete Khemistri Accessories eagle crest on the dial. Classic link bracelets, quartz movement, and a paired presentation ready for gifting. One flat price for the complete two-watch set.",
+    priceCents: 12000,
+    meta: {
+      category: "Jewelry",
+      productType: "accessory",
+      sortOrder: "27",
+      gender: "Unisex",
+      imageUrl: "/assets/kk_his_hers_watch_set.jpg",
+      customize: "none",
+    },
+  },
+  {
     productId: "prod_kksatinrobe",
     priceId: "price_kksatinrobe",
     name: "Khomplete Khemistri Elements Satin Robe",
@@ -1317,9 +1333,9 @@ const LIGHTER_PRICE_ID = "price_kkbrandedlighter";
 const LIGHTER_NAME = "Custom Branded Luxury Logo Lighter";
 const LIGHTER_PRICE_CENTS = 3000;
 const LIGHTER_BLANK_COST_CENTS = 1995;
-// Square 2x2 grid so all four branded lighters fit the product-card perimeter
-// (the prior wide 4-across shot was cropped by object-cover).
-const LIGHTER_IMAGE = "/assets/kk_branded_logo_lighter_grid.png";
+// Wide four-lighter product shot — cards use object-contain for this asset so
+// every branded finish stays visible inside the product-card perimeter.
+const LIGHTER_IMAGE = "/assets/kk_branded_logo_lighter.png";
 const LIGHTER_COLORS =
   "Black, Blue, Dark Blue, Golden Yellow, Green, Metallic Silver, Pink, Red, White";
 const LIGHTER_DESCRIPTION =
