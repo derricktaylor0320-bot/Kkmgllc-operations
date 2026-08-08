@@ -176,7 +176,7 @@ export default function Profile() {
                 <Button
                   onClick={handlePickFile}
                   disabled={uploading}
-                  className="bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
                   data-testid="button-upload-avatar"
                 >
                   {uploading ? (
@@ -247,7 +247,7 @@ export default function Profile() {
               <Button
                 type="submit"
                 disabled={saving}
-                className="bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
                 data-testid="button-save-profile"
               >
                 {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}

@@ -83,7 +83,7 @@ export default function ProductDetail() {
             </p>
             <Link href="/apparel">
               <Button
-                className="bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
                 data-testid="button-back-to-shop"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -493,7 +493,7 @@ function ProductDetailContent({
                             out
                               ? "border-border text-muted-foreground line-through cursor-not-allowed"
                               : active
-                              ? "border-primary bg-primary text-black"
+                              ? "border-primary bg-primary text-primary-foreground"
                               : "border-border hover:border-primary/60"
                           }`}
                           data-testid={`button-detail-color-${color.toLowerCase().replace(/\s+/g, "-")}`}
@@ -537,7 +537,7 @@ function ProductDetailContent({
                           }}
                           className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-colors disabled:opacity-50 ${
                             active
-                              ? "border-primary bg-primary text-black"
+                              ? "border-primary bg-primary text-primary-foreground"
                               : "border-border hover:border-primary/60"
                           }`}
                           data-testid={`button-detail-scent-${scent.toLowerCase().replace(/\s+/g, "-")}`}
@@ -852,8 +852,8 @@ function ProductDetailContent({
                   soldOut
                     ? "bg-gray-400 text-white cursor-not-allowed"
                     : added
-                    ? "bg-primary text-black"
-                    : "bg-black text-white hover:bg-primary hover:text-black"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-black text-white hover:bg-primary hover:text-primary-foreground"
                 }`}
                 data-testid="button-detail-add"
               >

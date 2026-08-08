@@ -214,7 +214,7 @@ export default function Invest() {
       <Navbar />
       <main className="flex-grow">
         <section className="relative overflow-hidden border-b border-primary/20">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsl(var(--primary)/0.16),_transparent_55%),linear-gradient(180deg,_hsl(25_40%_9%)_0%,_hsl(var(--background))_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsl(var(--primary)/0.16),_transparent_55%),linear-gradient(180deg,_hsl(221_62%_14%)_0%,_hsl(var(--background))_100%)]" />
           <div className="relative max-w-5xl mx-auto px-6 py-16 md:py-20 text-center">
             <motion.div
               initial={{ opacity: 0, y: 16 }}

@@ -605,8 +605,8 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                   soldOut 
                     ? 'bg-gray-400 text-white cursor-not-allowed' 
                     : added
-                    ? 'bg-primary text-black'
-                    : 'bg-black text-white hover:bg-primary hover:text-black'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-black text-white hover:bg-primary hover:text-primary-foreground'
                 }`}
                 data-testid={`button-add-${title.toLowerCase().replace(/\s+/g, '-')}`}
               >

@@ -475,7 +475,7 @@ export function ReviewsSection({ productName }: { productName: string }) {
             </p>
           )}
           <Button
-            className="mt-4 bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+            className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
             onClick={handleSubmit}
             disabled={submitReview.isPending || uploading}
             data-testid="button-submit-review"

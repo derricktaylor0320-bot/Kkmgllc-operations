@@ -72,7 +72,7 @@ export default function ResetPasswordPage() {
         <div className="container mx-auto px-4 py-12 relative z-10">
           <div className="max-w-md mx-auto">
             <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/40 to-primary/5 flex items-center justify-center border border-primary/40 shadow-[0_0_40px_rgba(212,175,55,0.3)]">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/40 to-primary/5 flex items-center justify-center border border-primary/40 shadow-[0_0_40px_hsl(var(--primary)/0.3)]">
                 <img
                   src={logo}
                   alt="Consolidatus Empire"
@@ -101,7 +101,7 @@ export default function ResetPasswordPage() {
                     </p>
                     <Button
                       type="button"
-                      className="w-full bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
                       onClick={() => setLocation("/auth")}
                       data-testid="button-go-to-login"
                     >
@@ -156,7 +156,7 @@ export default function ResetPasswordPage() {
                     <Button
                       type="submit"
                       disabled={submitting}
-                      className="w-full bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
                       data-testid="button-submit-reset"
                     >
                       {submitting && (

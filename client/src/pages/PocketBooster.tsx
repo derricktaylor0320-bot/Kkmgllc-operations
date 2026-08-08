@@ -680,7 +680,7 @@ export default function PocketBooster() {
               },
             ].map((step) => (
               <div key={step.number} className="flex gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-display font-bold text-black">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-display font-bold text-primary-foreground">
                   {step.number}
                 </span>
                 <div>
@@ -1296,7 +1296,7 @@ export default function PocketBooster() {
                     onClick={() => setLessonIndex(idx)}
                     className={`shrink-0 px-3 py-1.5 text-xs font-display uppercase tracking-wider border ${
                       idx === lessonIndex
-                        ? "border-primary bg-primary text-black"
+                        ? "border-primary bg-primary text-primary-foreground"
                         : idx < lessonIndex
                           ? "border-primary/50 text-primary"
                           : "border-border text-muted-foreground"

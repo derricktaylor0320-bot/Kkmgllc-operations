@@ -182,7 +182,7 @@ export default function Home() {
                 )}
                 <div className="mt-8 text-center lg:text-left">
                   <Link href="/apparel">
-                    <Button className="bg-primary text-black hover:bg-white hover:text-black font-display uppercase tracking-wider px-8" data-testid="button-shop-number-three">
+                    <Button className="bg-primary text-primary-foreground hover:bg-foreground hover:text-background font-display uppercase tracking-wider px-8" data-testid="button-shop-number-three">
                       Shop All Apparel
                     </Button>
                   </Link>
@@ -231,7 +231,7 @@ export default function Home() {
               The Consolidatus Empire LLC represents more than just commerce; it's about ownership, creativity, and self-determination. From Khomplete Khemistri Apparel to our creative ventures, we are building a legacy.
             </p>
             <Link href="/hub">
-              <Button className="bg-primary text-black hover:bg-white hover:text-black font-display uppercase tracking-wider text-lg px-8 py-6 h-auto">
+              <Button className="bg-primary text-primary-foreground hover:bg-foreground hover:text-background font-display uppercase tracking-wider text-lg px-8 py-6 h-auto">
                 Explore The Hub
               </Button>
             </Link>

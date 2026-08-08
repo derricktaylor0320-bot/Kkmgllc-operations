@@ -113,7 +113,7 @@ export default function SsoDemo() {
 
         <Button
           onClick={simulateHandoff}
-          className="bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display mb-10"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display mb-10"
           data-testid="button-simulate-handoff"
         >
           Simulate hub handoff <ArrowRight className="w-4 h-4 ml-2" />

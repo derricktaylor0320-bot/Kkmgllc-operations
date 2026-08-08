@@ -82,8 +82,8 @@ export default function CaseCustomizer({
             soldOut
               ? "bg-gray-400 text-white cursor-not-allowed"
               : added
-              ? "bg-primary text-black"
-              : "bg-black text-white hover:bg-primary hover:text-black"
+              ? "bg-primary text-primary-foreground"
+              : "bg-black text-white hover:bg-primary hover:text-primary-foreground"
           }`}
           data-testid={`button-customize-${title.toLowerCase().replace(/\s+/g, "-")}`}
         >
@@ -174,7 +174,7 @@ export default function CaseCustomizer({
           <Button
             onClick={handleConfirm}
             disabled={!canConfirm}
-            className="uppercase tracking-wider font-display text-sm bg-black text-white hover:bg-primary hover:text-black disabled:opacity-50"
+            className="uppercase tracking-wider font-display text-sm bg-black text-white hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
             data-testid="button-confirm-case"
           >
             Add to Cart — ${unitPrice.toFixed(2)}

@@ -341,7 +341,7 @@ export default function ExpenseRelief() {
             aria-hidden="true"
             style={{
               background:
-                "radial-gradient(ellipse 80% 60% at 20% 20%, hsl(var(--primary)/0.22), transparent 55%), radial-gradient(ellipse 70% 50% at 90% 10%, hsl(38 70% 40% / 0.18), transparent 50%), linear-gradient(165deg, hsl(345 45% 7%), hsl(345 40% 11%) 45%, hsl(220 25% 8%))",
+                "radial-gradient(ellipse 80% 60% at 20% 20%, hsl(var(--primary)/0.22), transparent 55%), radial-gradient(ellipse 70% 50% at 90% 10%, hsl(var(--accent)/0.16), transparent 50%), linear-gradient(165deg, hsl(345 45% 7%), hsl(345 40% 11%) 45%, hsl(220 25% 8%))",
             }}
           />
           <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
@@ -356,7 +356,7 @@ export default function ExpenseRelief() {
               </p>
               <h1 className="font-brand text-4xl font-bold tracking-wide sm:text-5xl lg:text-6xl">
                 Out-of-Pocket{" "}
-                <span className="gold-shine">Booster</span>
+                <span className="silver-shine">Booster</span>
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
                 {catalog?.tagline ?? EXPENSE_RELIEF_PLATFORM.tagline} Four

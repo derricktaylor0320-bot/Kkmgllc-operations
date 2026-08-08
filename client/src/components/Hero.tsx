@@ -6,20 +6,21 @@ import heroBackground from "../../../image_1784694080293.jpeg";
 export default function Hero() {
   return (
     <section className="relative flex h-[85vh] w-full items-center justify-center overflow-hidden text-white">
-      <div className="absolute inset-0 bg-[#160d09]">
+      <div className="absolute inset-0 bg-[#020a1e]">
         <img
           src={heroBackground}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-35 blur-2xl"
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-30 blur-2xl grayscale contrast-125"
         />
         <img
           src={heroBackground}
           alt="The Consolidatus Empire Headquarters"
-          className="relative h-full w-full object-cover object-center md:object-contain"
+          className="relative h-full w-full object-cover object-center grayscale contrast-110 brightness-90 md:object-contain"
           data-testid="img-home-headquarters"
         />
-        <div className="absolute inset-0 bg-black/25" />
+        <div className="absolute inset-0 bg-[#0755c8]/35 mix-blend-color" />
+        <div className="absolute inset-0 bg-[#020a1e]/20" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_45%_at_50%_40%,rgba(0,0,0,0.35),transparent_75%)]" />
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
       </div>
@@ -45,7 +46,7 @@ export default function Hero() {
           <Link href="/apparel">
             <Button
               size="lg"
-              className="h-auto bg-primary px-8 py-6 font-display text-lg uppercase tracking-wider text-black hover:bg-white hover:text-black"
+              className="h-auto bg-primary px-8 py-6 font-display text-lg uppercase tracking-wider text-primary-foreground hover:bg-foreground hover:text-background"
             >
               Shop Khemistri
             </Button>

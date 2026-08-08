@@ -277,7 +277,7 @@ export default function NumberThree() {
             <div className="mt-12 text-center">
               <Link href="/apparel">
                 <Button
-                  className="bg-primary text-black hover:bg-white hover:text-black font-display uppercase tracking-wider px-8"
+                  className="bg-primary text-primary-foreground hover:bg-foreground hover:text-background font-display uppercase tracking-wider px-8"
                   data-testid="button-shop-number-three"
                 >
                   Shop All Apparel
