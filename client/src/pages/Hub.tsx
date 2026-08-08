@@ -31,6 +31,7 @@ type AppNode = { href: string; label: string; Icon: typeof Shirt };
 
 const APPS: AppNode[] = [
   { href: "/apparel", label: "Apparel", Icon: Shirt },
+  { href: "/feminine", label: "Feminine Collection", Icon: Heart },
   { href: "/accessories", label: "Accessories", Icon: Watch },
   { href: "/bedding", label: "Bedding & Intimates", Icon: BedDouble },
   { href: "/feminine", label: "Feminine Collection", Icon: Heart },
