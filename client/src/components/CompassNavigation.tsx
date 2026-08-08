@@ -256,7 +256,7 @@ export default function CompassNavigation({
                 <img
                   src={compassLogo}
                   alt=""
-                  className="h-[72%] w-[72%] object-contain drop-shadow-[0_0_10px_hsl(var(--primary)/0.6)]"
+                  className="brand-crest-chrome h-[72%] w-[72%] object-contain drop-shadow-[0_0_10px_hsl(var(--primary)/0.6)]"
                 />
               </div>
 
