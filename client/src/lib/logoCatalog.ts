@@ -221,7 +221,7 @@ export const allLogos: Record<string, LogoEntry> = {
   "215": { src: logoCrossedSwords, alt: "Crossed Swords with Khomplete Khemistri", color: "Crossed Swords", section: "Badge of Honor" },
   "216": { src: logoKKACrossedSwords, alt: "KKA Crossed Swords Logo", color: "KKA Swords", section: "Badge of Honor" },
   "217": { src: crestGoldApparel, alt: "Khomplete Khemistri Apparel Gold Crest", color: "Gold Apparel Crest", section: "Badge of Honor" },
-  "218": { src: kkmgEagleShield, alt: "KKMG LLC Eagle Shield of Honor", color: "KKMG LLC Shield", section: "Badge of Honor" },
+  "218": { src: kkmgEagleShield, alt: "Khomplete Khemistri Apparel Silver & Blue Values Eagle Shield", color: "Silver & Blue Values Eagle", section: "Badge of Honor" },
   "219": { src: eagleCrestMaroonGold, alt: "Apparel Eagle Crest - Maroon & Gold", color: "Maroon & Gold Eagle Crest", section: "Badge of Honor" },
   "220": { src: badgeEaglesBlackWhite, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Black & White Est. 2020", color: "Black & White Eagles", section: "Badge of Honor" },
   "221": { src: badgeEaglesNavyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Navy & Gold Est. 2020", color: "Navy & Gold Eagles", section: "Badge of Honor" },
