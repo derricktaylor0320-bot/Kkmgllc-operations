@@ -256,7 +256,12 @@ export default function CompassNavigation({
                 <img
                   src={compassLogo}
                   alt=""
-                  className="brand-crest-chrome h-[72%] w-[72%] object-contain drop-shadow-[0_0_10px_hsl(var(--primary)/0.6)]"
+                  className="h-[72%] w-[72%] object-contain"
+                  style={{
+                    filter:
+                      "grayscale(1) contrast(1.2) brightness(1.3) drop-shadow(0 0 10px hsl(var(--primary) / 0.6))",
+                    mixBlendMode: "screen",
+                  }}
                 />
               </div>
 
