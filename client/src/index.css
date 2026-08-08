@@ -37,76 +37,75 @@
 .dark {
   color-scheme: dark;
 
-  /* Panthers-inspired silver / electric topaz blue foundation. */
-  --background: 218 72% 7%;
-  --foreground: 210 28% 94%;
+  /* Match the Empire Compass crest: vibrant royal blue + ornate shiny silver. */
+  --background: 224 82% 10%;
+  --foreground: 210 35% 96%;
 
-  --card: 217 58% 11%;
-  --card-foreground: 210 28% 94%;
+  --card: 223 72% 14%;
+  --card-foreground: 210 35% 96%;
 
-  --popover: 217 60% 10%;
-  --popover-foreground: 210 28% 94%;
+  --popover: 223 74% 12%;
+  --popover-foreground: 210 35% 96%;
 
-  /* Polished silver for primary actions and borders. */
-  --primary: 210 24% 84%;
-  --primary-foreground: 218 74% 8%;
+  /* Ornate polished silver — bright specular chrome for CTAs and borders. */
+  --primary: 210 28% 90%;
+  --primary-foreground: 224 82% 10%;
 
-  /* Deep process-blue surfaces behind the silver details. */
-  --secondary: 210 68% 16%;
-  --secondary-foreground: 210 30% 93%;
+  /* Saturated royal-blue surfaces (crest leather / ribbon blue). */
+  --secondary: 223 78% 22%;
+  --secondary-foreground: 210 40% 96%;
 
-  --muted: 214 40% 16%;
-  --muted-foreground: 210 18% 70%;
+  --muted: 222 55% 18%;
+  --muted-foreground: 214 22% 76%;
 
-  /* Vibrant topaz / Carolina process blue accent with glow. */
-  --accent: 199 100% 40%;
-  --accent-foreground: 210 40% 98%;
+  /* Jewel topaz — crown-gem royal blue, not dull navy or flat cyan. */
+  --accent: 220 92% 48%;
+  --accent-foreground: 210 40% 99%;
 
   --destructive: 0 62.8% 36%;
   --destructive-foreground: 210 30% 96%;
 
-  --border: 205 28% 58%;
-  --input: 214 42% 16%;
-  --ring: 199 100% 52%;
-  --button-outline: hsl(205 30% 74% / 0.72);
-  --primary-border: hsl(210 40% 92% / 0.55);
-  --secondary-border: hsl(199 80% 48% / 0.35);
+  --border: 214 36% 68%;
+  --input: 223 50% 18%;
+  --ring: 220 95% 62%;
+  --button-outline: hsl(210 40% 88% / 0.78);
+  --primary-border: hsl(210 45% 96% / 0.62);
+  --secondary-border: hsl(220 90% 55% / 0.42);
 
   --radius: 0.5rem;
 }
 
-/* Pocket Booster shares the silver-blue topaz system so the program
-   no longer introduces cream, chocolate, or gold site chrome. */
+/* Pocket Booster shares the royal-blue + ornate-silver system. */
 .pocket-booster-theme {
   color-scheme: dark;
-  --background: 218 72% 7%;
-  --foreground: 210 28% 94%;
+  --background: 224 82% 10%;
+  --foreground: 210 35% 96%;
 
-  --card: 217 58% 11%;
-  --card-foreground: 210 28% 94%;
+  --card: 223 72% 14%;
+  --card-foreground: 210 35% 96%;
 
-  --popover: 217 60% 10%;
-  --popover-foreground: 210 28% 94%;
+  --popover: 223 74% 12%;
+  --popover-foreground: 210 35% 96%;
 
-  --primary: 210 24% 84%;
-  --primary-foreground: 218 74% 8%;
+  --primary: 210 28% 90%;
+  --primary-foreground: 224 82% 10%;
 
-  --secondary: 210 68% 16%;
-  --secondary-foreground: 210 30% 93%;
+  --secondary: 223 78% 22%;
+  --secondary-foreground: 210 40% 96%;
 
-  --muted: 214 40% 16%;
-  --muted-foreground: 210 18% 70%;
+  --muted: 222 55% 18%;
+  --muted-foreground: 214 22% 76%;
 
-  --accent: 199 100% 40%;
-  --accent-foreground: 210 40% 98%;
+  --accent: 220 92% 48%;
+  --accent-foreground: 210 40% 99%;
 
   --destructive: 0 62.8% 36%;
   --destructive-foreground: 210 30% 96%;
 
-  --border: 205 28% 58%;
-  --input: 214 42% 16%;
-  --ring: 199 100% 52%;
-  --button-outline: hsl(205 30% 74% / 0.72);
+  --border: 214 36% 68%;
+  --input: 223 50% 18%;
+  --ring: 220 95% 62%;
+  --button-outline: hsl(210 40% 88% / 0.78);
 }
 
 @layer base {
@@ -117,10 +116,10 @@
     @apply font-sans antialiased bg-background text-foreground;
     min-height: 100vh;
     background-image:
-      radial-gradient(circle at 18% -10%, hsl(199 100% 40% / 0.28), transparent 34rem),
-      radial-gradient(circle at 92% 18%, hsl(205 100% 58% / 0.14), transparent 30rem),
-      radial-gradient(circle at 50% 110%, hsl(210 80% 45% / 0.12), transparent 28rem),
-      linear-gradient(145deg, hsl(218 72% 7%), hsl(214 70% 10%) 48%, hsl(220 75% 6%));
+      radial-gradient(circle at 18% -10%, hsl(220 95% 48% / 0.34), transparent 34rem),
+      radial-gradient(circle at 92% 18%, hsl(214 90% 68% / 0.18), transparent 30rem),
+      radial-gradient(circle at 50% 110%, hsl(224 85% 42% / 0.2), transparent 28rem),
+      linear-gradient(145deg, hsl(224 82% 10%), hsl(222 78% 16%) 48%, hsl(226 84% 8%));
     background-attachment: fixed;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -133,42 +132,47 @@
 }
 
 @layer utilities {
-  /* Brushed-silver text with a cool topaz highlight sweep. */
+  /* Ornate shiny silver — chrome specular sweep matching the crest metalwork. */
   .silver-shine {
     background-image: linear-gradient(
-      100deg,
-      hsl(205 18% 58%) 0%,
-      hsl(205 30% 86%) 28%,
-      hsl(199 100% 72%) 48%,
-      hsl(210 40% 98%) 54%,
-      hsl(205 30% 86%) 68%,
-      hsl(205 18% 58%) 100%
+      105deg,
+      hsl(215 12% 52%) 0%,
+      hsl(210 20% 78%) 18%,
+      hsl(210 35% 94%) 34%,
+      hsl(0 0% 100%) 46%,
+      hsl(214 55% 82%) 52%,
+      hsl(210 35% 94%) 60%,
+      hsl(210 20% 78%) 78%,
+      hsl(215 12% 52%) 100%
     );
-    background-size: 200% 100%;
+    background-size: 220% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    animation: silver-shimmer 6s linear infinite;
+    filter: drop-shadow(0 0 0.35rem hsl(210 40% 90% / 0.35));
+    animation: silver-shimmer 5s linear infinite;
   }
 
-  /* Soft electric-blue aura for native blue/silver brand crests. */
+  /* Royal-blue + silver aura for the Empire Compass crest. */
   .brand-crest-glow {
-    filter: drop-shadow(0 0 0.55rem hsl(199 100% 48% / 0.55))
-      drop-shadow(0 0 1.4rem hsl(210 40% 90% / 0.28));
+    filter: drop-shadow(0 0 0.45rem hsl(210 40% 96% / 0.55))
+      drop-shadow(0 0 0.9rem hsl(220 95% 55% / 0.55))
+      drop-shadow(0 0 1.8rem hsl(224 85% 40% / 0.35));
   }
 
   /* Legacy alias: keep older class names pointing at the glow treatment. */
   .brand-crest-chrome {
-    filter: drop-shadow(0 0 0.55rem hsl(199 100% 48% / 0.55))
-      drop-shadow(0 0 1.4rem hsl(210 40% 90% / 0.28));
+    filter: drop-shadow(0 0 0.45rem hsl(210 40% 96% / 0.55))
+      drop-shadow(0 0 0.9rem hsl(220 95% 55% / 0.55))
+      drop-shadow(0 0 1.8rem hsl(224 85% 40% / 0.35));
   }
 
   .topaz-glow {
     background:
-      radial-gradient(circle at 20% 15%, hsl(199 100% 48% / 0.28), transparent 28%),
-      radial-gradient(circle at 80% 30%, hsl(205 100% 60% / 0.16), transparent 32%),
-      radial-gradient(circle at 50% 85%, hsl(210 90% 45% / 0.14), transparent 36%);
+      radial-gradient(circle at 20% 15%, hsl(220 95% 52% / 0.34), transparent 28%),
+      radial-gradient(circle at 80% 30%, hsl(214 90% 70% / 0.2), transparent 32%),
+      radial-gradient(circle at 50% 85%, hsl(224 88% 42% / 0.22), transparent 36%);
     animation: topaz-pulse 7s ease-in-out infinite;
   }
 
@@ -213,11 +217,14 @@
     height: clamp(1.8rem, 6cqw, 2.6rem);
     transform: translateX(-50%);
     place-items: center;
-    border: 1px solid hsl(var(--primary) / 0.8);
+    border: 1px solid hsl(210 40% 96% / 0.92);
     border-radius: 9999px;
-    background: hsl(var(--background) / 0.95);
-    color: hsl(var(--primary));
-    filter: drop-shadow(0 0 0.7rem hsl(var(--primary) / 0.7));
+    background:
+      radial-gradient(circle at 35% 30%, hsl(0 0% 100% / 0.55), transparent 45%),
+      linear-gradient(160deg, hsl(210 30% 88%), hsl(220 40% 62%));
+    color: hsl(224 82% 12%);
+    filter: drop-shadow(0 0 0.55rem hsl(210 40% 96% / 0.75))
+      drop-shadow(0 0 1.1rem hsl(220 95% 55% / 0.45));
     pointer-events: none;
     animation: compass-pointer-pulse 1.8s ease-in-out infinite;
   }
@@ -273,15 +280,17 @@
     transform: translate(-50%, -50%);
     align-items: center;
     justify-content: center;
-    border: 1px solid hsl(var(--primary) / 0.65);
+    border: 1px solid hsl(210 40% 96% / 0.85);
     border-radius: 9999px;
     background:
-      radial-gradient(circle at 35% 30%, hsl(210 40% 98% / 0.24), transparent 38%),
-      radial-gradient(circle at 65% 72%, hsl(216 88% 56% / 0.18), transparent 46%),
-      hsl(var(--background) / 0.94);
+      radial-gradient(circle at 35% 30%, hsl(0 0% 100% / 0.32), transparent 38%),
+      radial-gradient(circle at 65% 72%, hsl(220 95% 55% / 0.28), transparent 46%),
+      linear-gradient(160deg, hsl(223 78% 22% / 0.95), hsl(224 82% 10% / 0.96));
     box-shadow:
-      0 0 0 0.3rem hsl(var(--background) / 0.7),
-      0 0 2.5rem hsl(var(--primary) / 0.32);
+      0 0 0 0.22rem hsl(224 82% 10% / 0.75),
+      0 0 0 0.4rem hsl(210 40% 92% / 0.35),
+      0 0 2.8rem hsl(220 95% 55% / 0.42),
+      inset 0 0 1.2rem hsl(210 40% 96% / 0.12);
   }
 
   .compass-nav-link {
@@ -331,15 +340,17 @@
 
   .compass-nav-link-pointed {
     z-index: 30;
-    border-color: hsl(var(--primary));
-    background: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
+    border-color: hsl(210 40% 98%);
+    background:
+      radial-gradient(circle at 30% 25%, hsl(0 0% 100% / 0.55), transparent 42%),
+      linear-gradient(160deg, hsl(210 30% 92%), hsl(214 40% 72%));
+    color: hsl(224 82% 12%);
     opacity: 1;
     filter: none;
     box-shadow:
-      0 0 0 0.12rem hsl(var(--background)),
-      0 0 0 0.24rem hsl(var(--primary)),
-      0 0 1.6rem hsl(var(--primary) / 0.65);
+      0 0 0 0.12rem hsl(224 82% 10%),
+      0 0 0 0.24rem hsl(210 40% 96%),
+      0 0 1.8rem hsl(220 95% 55% / 0.55);
   }
 
   .compass-nav-link-current:not(.compass-nav-link-pointed) {

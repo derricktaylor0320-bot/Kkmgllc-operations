@@ -149,17 +149,18 @@ export default function CompassNavigation({
         data-testid="dialog-compass-navigation"
       >
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/25 blur-3xl" />
+          <div className="absolute inset-0 topaz-glow opacity-55" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,hsl(var(--background))_72%)]" />
         </div>
 
         <div className="relative z-10 flex h-full min-h-0 flex-col">
-          <SheetHeader className="shrink-0 border-b border-primary/30 px-5 py-3 text-center sm:px-8 sm:py-4">
-            <SheetTitle className="font-display text-xl uppercase tracking-[0.2em] text-primary sm:text-2xl">
-              Explore the Empire
+          <SheetHeader className="shrink-0 border-b border-primary/40 px-5 py-3 text-center sm:px-8 sm:py-4">
+            <SheetTitle className="font-display text-xl uppercase tracking-[0.2em] sm:text-2xl">
+              <span className="silver-shine">Explore the Empire</span>
             </SheetTitle>
             <SheetDescription className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:text-xs">
-              {SITE_LINKS.length} destinations — follow the silver pointer or
+              {SITE_LINKS.length} destinations — follow the ornate silver pointer or
               choose any point
             </SheetDescription>
           </SheetHeader>
@@ -189,13 +190,13 @@ export default function CompassNavigation({
               >
                 <defs>
                   <radialGradient id="compassGlow">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.38" />
-                    <stop offset="60%" stopColor="hsl(var(--primary))" stopOpacity="0.09" />
-                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+                    <stop offset="0%" stopColor="hsl(210 40% 96%)" stopOpacity="0.42" />
+                    <stop offset="45%" stopColor="hsl(220 95% 55%)" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="hsl(224 82% 20%)" stopOpacity="0" />
                   </radialGradient>
                   <linearGradient id="compassRay" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.16" />
-                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.7" />
+                    <stop offset="0%" stopColor="hsl(220 95% 55%)" stopOpacity="0.18" />
+                    <stop offset="100%" stopColor="hsl(210 40% 96%)" stopOpacity="0.85" />
                   </linearGradient>
                 </defs>
 
@@ -205,18 +206,18 @@ export default function CompassNavigation({
                   cy="50"
                   r="41.5"
                   fill="none"
-                  stroke="hsl(var(--primary))"
-                  strokeOpacity="0.3"
-                  strokeWidth="0.35"
+                  stroke="hsl(210 40% 96%)"
+                  strokeOpacity="0.45"
+                  strokeWidth="0.4"
                 />
                 <circle
                   cx="50"
                   cy="50"
                   r="30.5"
                   fill="none"
-                  stroke="hsl(var(--primary))"
-                  strokeOpacity="0.22"
-                  strokeWidth="0.25"
+                  stroke="hsl(220 95% 58%)"
+                  strokeOpacity="0.35"
+                  strokeWidth="0.3"
                   strokeDasharray="1.4 1.4"
                 />
 
