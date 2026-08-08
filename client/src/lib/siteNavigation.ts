@@ -24,6 +24,11 @@ export const SITE_LINKS: SiteLink[] = [
   },
   { href: "/apparel", label: "Apparel", compactLabel: "Apparel" },
   {
+    href: "/football-teams",
+    label: "Football Teams Sports Edition",
+    compactLabel: "Football Teams",
+  },
+  {
     href: "/feminine",
     label: "Feminine Collection",
     compactLabel: "Feminine",

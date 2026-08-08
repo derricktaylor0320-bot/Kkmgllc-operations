@@ -24,6 +24,7 @@ import {
   LogIn,
   CheckCircle2,
   CircleDollarSign,
+  Trophy,
 } from "lucide-react";
 import logo from "@assets/generated_images/consolidatus_empire_logo_2020.png";
 
@@ -31,6 +32,7 @@ type AppNode = { href: string; label: string; Icon: typeof Shirt };
 
 const APPS: AppNode[] = [
   { href: "/apparel", label: "Apparel", Icon: Shirt },
+  { href: "/football-teams", label: "Football Sports Edition", Icon: Trophy },
   { href: "/accessories", label: "Accessories", Icon: Watch },
   { href: "/bedding", label: "Bedding & Intimates", Icon: BedDouble },
   { href: "/feminine", label: "Feminine Collection", Icon: Heart },

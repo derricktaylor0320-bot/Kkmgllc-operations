@@ -13,6 +13,7 @@ import { ArrowLeft, ShoppingCart, Check, AlertCircle } from "lucide-react";
 import { allLogos } from "@/lib/logoCatalog";
 import ShipStateTaxSummary, { useShipToState } from "@/components/ShipStateTaxSummary";
 import { placementSurchargeDollars } from "@shared/customization";
+import { FOOTBALL_SPORTS_EDITION_SECTION } from "@shared/footballTeams";
 
 const garmentTypes = [
   { id: "short-sleeve", name: "Short Sleeve T-Shirt", basePrice: 30, category: "tops" },
@@ -87,6 +88,14 @@ export default function LogoCustomizer() {
   const { toast } = useToast();
 
   const logo = logoId ? allLogos[logoId] : null;
+  const backHref =
+    logo?.section === FOOTBALL_SPORTS_EDITION_SECTION
+      ? "/football-teams"
+      : "/canvas";
+  const backLabel =
+    logo?.section === FOOTBALL_SPORTS_EDITION_SECTION
+      ? "Back to Football Sports Edition"
+      : "Back to Logo Collection";
   
   const selectedGarmentData = garmentTypes.find(g => g.id === selectedGarment);
   const placementOptions =
@@ -230,11 +239,11 @@ export default function LogoCustomizer() {
         <div className="container mx-auto px-4">
           <Button 
             variant="ghost" 
-            onClick={() => setLocation("/canvas")}
+            onClick={() => setLocation(backHref)}
             className="mb-8"
             data-testid="button-back-to-collection"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Logo Collection
+            <ArrowLeft className="mr-2 h-4 w-4" /> {backLabel}
           </Button>
 
           <div className="grid lg:grid-cols-2 gap-12">

@@ -83,12 +83,96 @@ import logoPearlGriffinPurple from "@assets/female-polo-shirts/logo_pearl_griffi
 import logoPearlGriffinNavy from "@assets/female-polo-shirts/logo_pearl_griffin_navy.png";
 import logoPearlGriffinRedGold from "@assets/feminine/logo_pearl_griffin_red_gold.png";
 
+// Seasonal Football Teams Sports Edition — canonical artwork folder:
+// attached_assets/seasonal-football-sports-edition/.
+import footballAtlantaFalcons from "@assets/seasonal-football-sports-edition/atl_falcons.jpg";
+import footballBaltimoreRavens from "@assets/seasonal-football-sports-edition/bal_ravens.jpeg";
+import footballBuffaloBills from "@assets/seasonal-football-sports-edition/buf_bills.jpeg";
+import footballCarolinaPanthers from "@assets/seasonal-football-sports-edition/car_panthers.jpg";
+import footballChicagoBears from "@assets/seasonal-football-sports-edition/chi_bears.jpeg";
+import footballCincinnatiBengals from "@assets/seasonal-football-sports-edition/cin_bengals.jpg";
+import footballClevelandBrowns from "@assets/seasonal-football-sports-edition/cle_browns.jpeg";
+import footballDallasCowboys from "@assets/seasonal-football-sports-edition/dal_cowboys.jpeg";
+import footballDetroitLions from "@assets/seasonal-football-sports-edition/det_lions.jpg";
+import footballGreenBayPackers from "@assets/seasonal-football-sports-edition/gb_packers.jpg";
+import footballIndianapolisColts from "@assets/seasonal-football-sports-edition/ind_colts.jpeg";
+import footballJacksonvilleJaguars from "@assets/seasonal-football-sports-edition/jax_jaguars.jpg";
+import footballKansasCityChiefs from "@assets/seasonal-football-sports-edition/kc_chiefs.png";
+import footballLosAngelesChargers from "@assets/seasonal-football-sports-edition/lac_chargers.jpg";
+import footballLosAngelesRams from "@assets/seasonal-football-sports-edition/lar_rams.jpg";
+import footballMiamiDolphins from "@assets/seasonal-football-sports-edition/mia_dolphins.jpeg";
+import footballMinnesotaVikings from "@assets/seasonal-football-sports-edition/min_vikings.jpg";
+import footballNewEnglandPatriots from "@assets/seasonal-football-sports-edition/ne_patriots.png";
+import footballNewOrleansSaints from "@assets/seasonal-football-sports-edition/no_saints.jpg";
+import footballNewYorkGiants from "@assets/seasonal-football-sports-edition/nyg_giants.jpg";
+import footballNewYorkJets from "@assets/seasonal-football-sports-edition/nyj_jets.jpeg";
+import footballPhiladelphiaEagles from "@assets/seasonal-football-sports-edition/phi_eagles.jpg";
+import footballPittsburghSteelers from "@assets/seasonal-football-sports-edition/pit_steelers.png";
+import footballRaidersLegacy from "@assets/seasonal-football-sports-edition/lv_raiders_legacy.jpg";
+import footballSanFrancisco49ers from "@assets/seasonal-football-sports-edition/sf_49ers.png";
+import footballSeattleSeahawks from "@assets/seasonal-football-sports-edition/sea_seahawks.jpg";
+import footballTampaBayBuccaneers from "@assets/seasonal-football-sports-edition/tb_buccaneers.jpg";
+import footballWashingtonCommanders from "@assets/seasonal-football-sports-edition/was_commanders.jpg";
+import {
+  FOOTBALL_SPORTS_EDITION_SECTION,
+  FOOTBALL_TEAM_DESIGNS,
+  footballTeamLogoAlt,
+  type FootballTeamLogoId,
+} from "@shared/footballTeams";
+
 export interface LogoEntry {
   src: string;
   alt: string;
   color: string;
   section: string;
 }
+
+const footballTeamImages: Record<FootballTeamLogoId, string> = {
+  "500": footballAtlantaFalcons,
+  "501": footballBaltimoreRavens,
+  "502": footballBuffaloBills,
+  "503": footballCarolinaPanthers,
+  "504": footballChicagoBears,
+  "505": footballCincinnatiBengals,
+  "506": footballClevelandBrowns,
+  "507": footballDallasCowboys,
+  "508": footballDetroitLions,
+  "509": footballGreenBayPackers,
+  "510": footballIndianapolisColts,
+  "511": footballJacksonvilleJaguars,
+  "512": footballKansasCityChiefs,
+  "513": footballLosAngelesChargers,
+  "514": footballLosAngelesRams,
+  "515": footballMiamiDolphins,
+  "516": footballMinnesotaVikings,
+  "517": footballNewEnglandPatriots,
+  "518": footballNewOrleansSaints,
+  "519": footballNewYorkGiants,
+  "520": footballNewYorkJets,
+  "521": footballPhiladelphiaEagles,
+  "522": footballPittsburghSteelers,
+  "523": footballRaidersLegacy,
+  "524": footballSanFrancisco49ers,
+  "525": footballSeattleSeahawks,
+  "526": footballTampaBayBuccaneers,
+  "527": footballWashingtonCommanders,
+};
+
+export const FOOTBALL_TEAM_LOGO_IDS = FOOTBALL_TEAM_DESIGNS.map(
+  ({ id }) => id,
+);
+
+const footballTeamLogos = Object.fromEntries(
+  FOOTBALL_TEAM_DESIGNS.map((team) => [
+    team.id,
+    {
+      src: footballTeamImages[team.id],
+      alt: footballTeamLogoAlt(team.name),
+      color: team.name,
+      section: FOOTBALL_SPORTS_EDITION_SECTION,
+    },
+  ]),
+) as Record<FootballTeamLogoId, LogoEntry>;
 
 export const allLogos: Record<string, LogoEntry> = {
   "100": { src: logoGold3D, alt: "Gold 3D Emblem", color: "Gold 3D", section: "Canvas Collection" },
@@ -168,6 +252,7 @@ export const allLogos: Record<string, LogoEntry> = {
   "401": { src: compassKMG1, alt: "KKMG LLC Compass", color: "KKMG LLC Compass", section: "Compass Collection" },
   "402": { src: compassKMG2, alt: "KKMG LLC Compass II", color: "KKMG LLC Compass II", section: "Compass Collection" },
   "403": { src: compassSunburst, alt: "Khomplete Khemistri Apparel Sunburst Emblem", color: "Apparel Sunburst", section: "Compass Collection" },
+  ...footballTeamLogos,
 };
 
 // Featured feminine pearl griffin crests for /feminine — Royalty Badge of Honor
@@ -223,6 +308,7 @@ const BRAND_SECTION_ORDER = [
   "Canvas Collection",
   "Shield of Honor",
   "Compass Collection",
+  FOOTBALL_SPORTS_EDITION_SECTION,
 ] as const;
 
 export const LOGO_SECTIONS: { name: string; ids: string[] }[] = (() => {

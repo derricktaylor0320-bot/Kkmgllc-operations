@@ -220,6 +220,25 @@ export default function Canvas() {
                 className="w-full h-auto object-contain rounded-lg shadow-2xl"
               />
             </motion.div>
+            <div className="mx-auto max-w-4xl rounded-2xl border border-primary/45 bg-primary/10 p-6 text-center shadow-xl md:p-8">
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
+                New Seasonal Collection · August–February
+              </p>
+              <h2 className="mt-3 font-display text-2xl font-bold uppercase tracking-wide text-secondary-foreground md:text-3xl">
+                Football Teams Sports Edition
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-secondary-foreground/70">
+                Explore 28 football crests, then choose your garment and print
+                placement.
+              </p>
+              <Link
+                href="/football-teams"
+                className="mt-5 inline-flex rounded-full bg-primary px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-primary-foreground transition hover:bg-primary/90"
+                data-testid="link-football-collection"
+              >
+                Shop Football Sports Edition
+              </Link>
+            </div>
           </div>
         </section>
 
