@@ -356,7 +356,7 @@ export default function ExpenseRelief() {
               </p>
               <h1 className="font-brand text-4xl font-bold tracking-wide sm:text-5xl lg:text-6xl">
                 Out-of-Pocket{" "}
-                <span className="gold-shine">Booster</span>
+                <span className="silver-shine">Booster</span>
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
                 {catalog?.tagline ?? EXPENSE_RELIEF_PLATFORM.tagline} Four

@@ -52,7 +52,7 @@ export default function About() {
                 Established 2020
               </p>
               <h1 className="mb-7 text-4xl font-display font-bold uppercase leading-[1.05] tracking-tight sm:text-5xl md:text-7xl">
-                About <span className="gold-shine">Khomplete Khemistri</span>
+                About <span className="silver-shine">Khomplete Khemistri</span>
               </h1>
               <p className="mx-auto max-w-3xl text-lg font-light leading-relaxed text-secondary-foreground/80 md:text-xl">
                 Apparel & Accessories built on harmony, balance, imagination,
@@ -247,11 +247,11 @@ export default function About() {
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
-              className="relative overflow-hidden border border-[#b68a3a] bg-[#f4efe2] px-6 py-10 text-[#3b2417] shadow-[0_24px_70px_rgba(0,0,0,0.35)] sm:px-10 md:px-16 md:py-14"
+              className="relative overflow-hidden border border-[#8fa5bd] bg-[#e7edf4] px-6 py-10 text-[#10264a] shadow-[0_24px_70px_rgba(0,0,0,0.35)] sm:px-10 md:px-16 md:py-14"
               data-testid="founders-letter"
             >
-              <div className="pointer-events-none absolute inset-2 border border-[#b68a3a]/45" />
-              <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none font-brand text-[8rem] font-bold text-[#a47a34]/[0.07] sm:text-[12rem] md:text-[17rem]">
+              <div className="pointer-events-none absolute inset-2 border border-[#6f8caf]/45" />
+              <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none font-brand text-[8rem] font-bold text-[#2f5685]/[0.07] sm:text-[12rem] md:text-[17rem]">
                 TCE
               </div>
 
@@ -287,7 +287,7 @@ export default function About() {
                         offset="0"
                       />
                     </feComponentTransfer>
-                    <feFlood floodColor="#4a2d18" result="letterhead-ink" />
+                    <feFlood floodColor="#10264a" result="letterhead-ink" />
                     <feComposite
                       in="letterhead-ink"
                       in2="strengthened-alpha"
@@ -301,7 +301,7 @@ export default function About() {
                   className="mx-auto h-auto w-full max-w-sm"
                   style={{
                     filter:
-                      "url(#letterhead-logo-knockout) drop-shadow(0 5px 5px rgb(97 61 19 / 0.18))",
+                      "url(#letterhead-logo-knockout) drop-shadow(0 5px 5px rgb(14 38 75 / 0.18))",
                   }}
                   data-testid="img-founders-letterhead-logo"
                 />
@@ -330,18 +330,18 @@ export default function About() {
 
               <div className="relative mx-auto mt-10 max-w-3xl">
                 <div className="flex items-center gap-4">
-                  <span className="h-px flex-1 bg-[#a47a34]/55" />
-                  <p className="font-brand text-xl italic text-[#8a622b] sm:text-2xl">
+                  <span className="h-px flex-1 bg-[#56779e]/55" />
+                  <p className="font-brand text-xl italic text-[#234976] sm:text-2xl">
                     Sincerely
                   </p>
-                  <span className="h-px flex-1 bg-[#a47a34]/55" />
+                  <span className="h-px flex-1 bg-[#56779e]/55" />
                 </div>
-                <div className="mt-6 grid divide-y divide-[#a47a34]/40 border-y border-[#a47a34]/55 text-center font-brand font-semibold italic sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                <div className="mt-6 grid divide-y divide-[#56779e]/40 border-y border-[#56779e]/55 text-center font-brand font-semibold italic sm:grid-cols-3 sm:divide-x sm:divide-y-0">
                   <p className="px-3 py-4">Derrick Taylor</p>
                   <p className="px-3 py-4">Carlyle R. Oliver</p>
                   <p className="px-3 py-4">Jerome Young Jr.</p>
                 </div>
-                <p className="mt-5 text-center text-xs font-semibold uppercase tracking-[0.22em] text-[#6f4a23]">
+                <p className="mt-5 text-center text-xs font-semibold uppercase tracking-[0.22em] text-[#193b68]">
                   The Consolidatus Empire LLC
                 </p>
               </div>

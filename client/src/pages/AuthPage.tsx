@@ -117,7 +117,7 @@ export default function AuthPage() {
             {/* Hero / value side */}
             <div className="text-center md:text-left">
               <div className="flex justify-center md:justify-start mb-6">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/40 to-primary/5 flex items-center justify-center border border-primary/40 shadow-[0_0_40px_rgba(212,175,55,0.3)]">
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/40 to-primary/5 flex items-center justify-center border border-primary/40 shadow-[0_0_40px_hsl(var(--primary)/0.3)]">
                   <img
                     src={logo}
                     alt="Consolidatus Empire"
@@ -276,7 +276,7 @@ export default function AuthPage() {
                     <Button
                       type="submit"
                       disabled={submitting}
-                      className="w-full bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
                       data-testid="button-submit-auth"
                     >
                       {submitting && (

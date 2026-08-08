@@ -224,7 +224,7 @@ function AddMediaDialog() {
     <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) resetAll(); }}>
       <DialogTrigger asChild>
         <Button
-          className="bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display gap-2"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display gap-2"
           data-testid="button-add-media"
         >
           <Plus className="h-4 w-4" />
@@ -307,7 +307,7 @@ function AddMediaDialog() {
               />
             </div>
             <Button
-              className="w-full bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
               onClick={() => linkMutation.mutate()}
               disabled={linkMutation.isPending}
               data-testid="button-submit-link"
@@ -376,7 +376,7 @@ function AddMediaDialog() {
               </div>
             )}
             <Button
-              className="w-full bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
               onClick={uploadFile}
               disabled={upProgress !== null}
               data-testid="button-submit-upload"
@@ -444,7 +444,7 @@ export default function Media() {
               className="font-display text-4xl md:text-6xl font-bold uppercase tracking-tight"
               data-testid="text-media-title"
             >
-              Media & <span className="gold-shine">Music</span>
+              Media & <span className="silver-shine">Music</span>
             </motion.h1>
             <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
               Singing clips and audio projects — straight from the Empire. Tap

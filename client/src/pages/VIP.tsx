@@ -53,12 +53,12 @@ export default function VIP() {
           animate={{ scale: 1, opacity: 1 }}
           className="text-center max-w-md"
         >
-          <CheckCircle className="w-20 h-20 text-gold mx-auto mb-6" />
-          <h1 className="text-3xl font-display text-gold mb-4">Welcome to the Empire!</h1>
+          <CheckCircle className="w-20 h-20 text-primary mx-auto mb-6" />
+          <h1 className="text-3xl font-display text-primary mb-4">Welcome to the Empire!</h1>
           <p className="text-foreground/80 mb-6">
             You're now a VIP member! Get ready for exclusive deals, early access to new products, and special rewards.
           </p>
-          <Button asChild className="bg-gold text-background hover:bg-gold/90">
+          <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
             <a href="/">Start Shopping</a>
           </Button>
         </motion.div>
@@ -69,7 +69,7 @@ export default function VIP() {
   return (
     <div className="min-h-screen bg-background">
       <div className="relative py-20 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-gold/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent" />
         
         <div className="max-w-4xl mx-auto relative z-10">
           <BrandSectionBanner compact />
@@ -78,8 +78,8 @@ export default function VIP() {
             animate={{ y: 0, opacity: 1 }}
             className="text-center mb-12"
           >
-            <Crown className="w-16 h-16 text-gold mx-auto mb-4" />
-            <h1 className="text-4xl md:text-5xl font-display text-gold mb-4">
+            <Crown className="w-16 h-16 text-primary mx-auto mb-4" />
+            <h1 className="text-4xl md:text-5xl font-display text-primary mb-4">
               Join the Empire VIP Club
             </h1>
             <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
@@ -94,11 +94,11 @@ export default function VIP() {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-card/50 border border-gold/20 rounded-lg p-6 flex items-start gap-4"
+                className="bg-card/50 border border-primary/20 rounded-lg p-6 flex items-start gap-4"
               >
-                <benefit.icon className="w-8 h-8 text-gold flex-shrink-0" />
+                <benefit.icon className="w-8 h-8 text-primary flex-shrink-0" />
                 <div>
-                  <h3 className="font-display text-lg text-gold mb-1">{benefit.title}</h3>
+                  <h3 className="font-display text-lg text-primary mb-1">{benefit.title}</h3>
                   <p className="text-foreground/70 text-sm">{benefit.desc}</p>
                 </div>
               </motion.div>
@@ -118,7 +118,7 @@ export default function VIP() {
                   placeholder="Your Name (optional)"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="bg-card border-gold/30 text-foreground placeholder:text-foreground/50"
+                  className="bg-card border-primary/30 text-foreground placeholder:text-foreground/50"
                   data-testid="input-vip-name"
                 />
               </div>
@@ -129,7 +129,7 @@ export default function VIP() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-card border-gold/30 text-foreground placeholder:text-foreground/50"
+                  className="bg-card border-primary/30 text-foreground placeholder:text-foreground/50"
                   data-testid="input-vip-email"
                 />
               </div>
@@ -141,7 +141,7 @@ export default function VIP() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gold text-background hover:bg-gold/90 font-display text-lg py-6"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-display text-lg py-6"
                 data-testid="button-vip-submit"
               >
                 {isSubmitting ? "Joining..." : "Join the VIP Club"}

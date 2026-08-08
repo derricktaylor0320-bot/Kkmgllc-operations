@@ -133,7 +133,7 @@ export default function Cart() {
             </p>
             <Link href="/accessories">
               <Button
-                className="bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
                 data-testid="button-start-shopping"
               >
                 Start Shopping
@@ -385,7 +385,7 @@ export default function Cart() {
                 <Button
                   onClick={handleCheckout}
                   disabled={isLoading}
-                  className="w-full bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display h-11"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display h-11"
                   data-testid="button-checkout"
                 >
                   {isLoading ? "Processing..." : "Checkout"}

@@ -45,7 +45,7 @@ export default function CheckoutCancel() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/apparel">
               <Button 
-                className="w-full sm:w-auto bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+                className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
                 data-testid="button-return-to-shop"
               >
                 <ShoppingBag className="w-4 h-4 mr-2" />

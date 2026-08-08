@@ -33,7 +33,7 @@ export default function BrandSectionBanner({
       <img
         src={imageSrc}
         alt={imageAlt}
-        className={`w-full ${compact ? "max-w-2xl" : "max-w-4xl"} mx-auto h-auto object-contain drop-shadow-2xl ${compact ? "mb-4" : "mb-6"}`}
+        className={`w-full ${compact ? "max-w-2xl" : "max-w-4xl"} mx-auto h-auto object-contain drop-shadow-2xl ${compact ? "mb-4" : "mb-6"} ${imageSrc === consolidatusBadge ? "brand-crest-chrome" : ""}`}
         data-testid="img-brand-section-banner"
       />
       {caption ? (

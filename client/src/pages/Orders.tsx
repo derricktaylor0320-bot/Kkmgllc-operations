@@ -148,7 +148,7 @@ export default function Orders() {
               Please sign in to view your store's orders.
             </p>
             <Button
-              className="bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display"
               onClick={() => navigate("/auth")}
               data-testid="button-sign-in"
             >

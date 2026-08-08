@@ -161,7 +161,7 @@ export default function Hub() {
                   <Button
                     size="sm"
                     onClick={() => setLocation("/auth")}
-                    className="bg-primary text-black hover:bg-primary/90 uppercase tracking-wider font-display gap-2"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-wider font-display gap-2"
                     data-testid="button-hub-signin"
                   >
                     <LogIn className="w-4 h-4" />
@@ -194,7 +194,7 @@ export default function Hub() {
                 <div className="absolute w-64 h-64 rounded-full bg-primary/20 blur-3xl animate-pulse" />
                 <div className="absolute w-44 h-44 rounded-full border border-primary/20" />
                 <div className="absolute w-60 h-60 rounded-full border border-primary/10" />
-                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/40 to-primary/5 backdrop-blur flex items-center justify-center border border-primary/40 shadow-[0_0_40px_rgba(212,175,55,0.35)]">
+                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/40 to-primary/5 backdrop-blur flex items-center justify-center border border-primary/40 shadow-[0_0_40px_hsl(var(--primary)/0.35)]">
                   <img
                     src={logo}
                     alt="Consolidatus Empire"
@@ -228,9 +228,9 @@ export default function Hub() {
                   <span
                     className={`flex items-center justify-center w-14 h-14 rounded-full border transition-colors ${
                       isHover
-                        ? "bg-primary text-black border-primary"
+                        ? "bg-primary text-primary-foreground border-primary"
                         : "bg-background/80 text-primary border-primary/40"
-                    } shadow-[0_0_20px_rgba(212,175,55,0.25)]`}
+                    } shadow-[0_0_20px_hsl(var(--primary)/0.25)]`}
                   >
                     <Icon className="w-6 h-6" />
                   </span>

@@ -66,7 +66,7 @@ export default function HotDogs() {
                 Coming Soon
               </span>
               <h1 className="font-display text-4xl md:text-6xl font-bold mb-4 tracking-tight uppercase">
-                Premium Choice <span className="gold-shine">Hot Dogs</span>
+                Premium Choice <span className="silver-shine">Hot Dogs</span>
               </h1>
               <p className="text-xl text-secondary-foreground/70 max-w-3xl mx-auto">
                 A premium street-food experience joining the Consolidatus Empire.

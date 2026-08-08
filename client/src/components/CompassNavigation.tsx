@@ -159,7 +159,7 @@ export default function CompassNavigation({
               Explore the Empire
             </SheetTitle>
             <SheetDescription className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:text-xs">
-              {SITE_LINKS.length} destinations — follow the golden pointer or
+              {SITE_LINKS.length} destinations — follow the silver pointer or
               choose any point
             </SheetDescription>
           </SheetHeader>
