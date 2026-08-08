@@ -56,6 +56,7 @@ export const LOGO_ALTS: string[] = [
   "KKA Crossed Swords Logo",
   "Khomplete Khemistri Apparel Gold Crest",
   "KKMG LLC Eagle Shield of Honor",
+  "Khomplete Khemistri Apparel Silver & Blue Values Eagle Shield",
   "Apparel Eagle Crest - Maroon & Gold",
   "Khomplete Khemistri Apparel & Accessories Eagle Crest - Black & White Est. 2020",
   "Khomplete Khemistri Apparel & Accessories Eagle Crest - Navy & Gold Est. 2020",

@@ -62,27 +62,18 @@ import honorWhiteGold from "@assets/shield_white_gold.jpg";
 // Import Legacy Collage
 import legacyCollage from "@assets/Screenshot_20251126_202634_Photos_1764214454254.jpg";
 
-// Import KKMG LLC Eagle Shield (#218)
-import kkmgEagleShield from "@assets/1781665131814_1781665574938.png";
+// Import KKMG LLC Eagle Shield (#218) — silver/blue chrome values crest
+import kkmgEagleShield from "@assets/masculine/logo_kkmg_eagle_shield.png";
 
 // Import Apparel Eagle Crest (#219) + eagle crests (#220-227)
 // + Consolidatus Empire standalone eagle crest (#228)
 import eagleCrestMaroonGold from "@assets/IMG_20260628_234856_1782729067418.png";
-import badgeApparelAccessoriesRoyalty from "@assets/1781697764383_1781711765541.png";
 import badgeConsolidatusEmpireStandalone from "@assets/badge_consolidatus_empire_standalone_218.png";
 import logoKkElementsBadge from "@assets/logo_kk_elements_badge.png";
 import logoKkApparelLeatherCrest from "@assets/logo_kk_apparel_leather_swords_crest.png";
 import badgeConsolidatusNavySilver from "@assets/brand/consolidatus_empire_crest_navy_silver.png";
 import badgeConsolidatusCharcoalPurple from "@assets/brand/consolidatus_empire_crest_charcoal_purple.png";
 import badgeConsolidatusGoldBrown from "@assets/brand/consolidatus_empire_crest_gold_brown.png";
-
-// Import Luxury Banners
-import luxuryBanner from "@assets/1764816894577_1764816974804.jpg";
-import bannerMoodVibe from "@assets/generated_images/color_mood_vibe_banner.png";
-import banner1stGen from "@assets/generated_images/1st_generation_logos_banner.png";
-import bannerShieldOfHonor from "@assets/generated_images/shield_of_honor_banner.png";
-import bannerBadgeOfHonor from "@assets/generated_images/badge_of_honor_banner.png";
-import bannerCanvasCollection from "@assets/generated_images/2nd_gen_logos_banner.png";
 
 
 // Accessory logos — Canvas Collection (118) + Badge of Honor crossed swords (215-216)
@@ -96,7 +87,6 @@ import logoKKAShield from "@assets/kka_shield_apparel_logo.jpg";
 import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 
 // Compass Collection — 400-403
-import bannerCompass from "@assets/1781364317455_1781369690056.png";
 import compassKKApparel from "@assets/copilot_image_1781366430242_1781369724345.jpeg";
 import compassKMG1 from "@assets/image_1781365445486_1781369761822.jpeg";
 import compassKMG2 from "@assets/image_1781365494182_1781369761833.jpeg";
@@ -172,7 +162,7 @@ export default function Canvas() {
     { id: "215", src: logoCrossedSwords, alt: "Crossed Swords with Khomplete Khemistri", color: "Crossed Swords", featured: true },
     { id: "216", src: logoKKACrossedSwords, alt: "KKA Crossed Swords Logo", color: "KKA Swords", featured: true },
     { id: "217", src: crestGoldApparel, alt: "Khomplete Khemistri Apparel Gold Crest", color: "Gold Apparel Crest", featured: true },
-    { id: "218", src: kkmgEagleShield, alt: "KKMG LLC Eagle Shield of Honor", color: "KKMG LLC Shield", featured: true },
+    { id: "218", src: kkmgEagleShield, alt: "Khomplete Khemistri Apparel Silver & Blue Values Eagle Shield", color: "Silver & Blue Values Eagle", featured: true },
     { id: "219", src: eagleCrestMaroonGold, alt: "Apparel Eagle Crest - Maroon & Gold", color: "Maroon & Gold Eagle Crest", featured: true },
     { id: "220", src: badgeEaglesBlackWhite, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Black & White Est. 2020", color: "Black & White Eagles", featured: true },
     { id: "221", src: badgeEaglesNavyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Navy & Gold Est. 2020", color: "Navy & Gold Eagles", featured: true },
@@ -217,17 +207,24 @@ export default function Canvas() {
         {/* Collection intro */}
         <section className="pt-16 pb-8 bg-secondary text-secondary-foreground">
           <div className="container mx-auto px-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="max-w-5xl mx-auto text-center mb-16"
+              className="max-w-5xl mx-auto text-center mb-12"
             >
-              <img 
-                src={luxuryBanner} 
-                alt="Our Branded Logo Collection" 
-                className="w-full h-auto object-contain rounded-lg shadow-2xl"
-              />
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
+                Logo Collections
+              </p>
+              <h1
+                className="mt-3 font-display text-3xl font-bold uppercase tracking-wide text-secondary-foreground md:text-5xl"
+                data-testid="heading-branded-logo-collection"
+              >
+                Our Branded Logo Collection
+              </h1>
+              <p className="mx-auto mt-4 max-w-2xl text-secondary-foreground/70">
+                Silver-blue empire crests across Royalty Badge, Canvas, Shield of Honor, and Compass.
+              </p>
             </motion.div>
             <div className="mx-auto max-w-4xl rounded-2xl border border-primary/45 bg-primary/10 p-6 text-center shadow-xl md:p-8">
               <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
@@ -255,18 +252,13 @@ export default function Canvas() {
         <section className="py-24 bg-muted/20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <img 
-                src={bannerBadgeOfHonor} 
-                alt="Introducing Our Versatile Royalty Badge of Honor Collection" 
-                className="w-full max-w-4xl mx-auto h-auto object-contain drop-shadow-2xl mb-4"
-                data-testid="img-royalty-badge-honor-intro"
-              />
-              <img 
-                src={badgeApparelAccessoriesRoyalty} 
-                alt="Our Royalty Badge of Honor — Khomplete Khemistri Apparel & Accessories" 
-                className="w-full max-w-3xl mx-auto h-auto object-contain drop-shadow-2xl mb-4"
-              />
-              <h2 className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-6 mb-2">
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
+                Royalty Badge of Honor
+              </p>
+              <h2
+                className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-3 mb-2"
+                data-testid="heading-royalty-badge-honor"
+              >
                 Versatile Royalty Badge of Honor Collection
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
@@ -362,18 +354,13 @@ export default function Canvas() {
           <div className="container mx-auto px-4">
 
             <div className="text-center mb-16">
-              <img 
-                src={bannerCanvasCollection} 
-                alt="Introducing Our Versatile Canvas Collection" 
-                className="w-full max-w-4xl mx-auto h-auto object-contain rounded-lg shadow-xl mb-4"
-                data-testid="img-canvas-collection-intro"
-              />
-              <img 
-                src={bannerMoodVibe} 
-                alt="Color to Match Your Mood and Vibe" 
-                className="w-full max-w-4xl mx-auto h-auto object-contain rounded-lg shadow-xl mb-4"
-              />
-              <h2 className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-6 mb-2">
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
+                Color to Match Your Mood and Vibe
+              </p>
+              <h2
+                className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-3 mb-2"
+                data-testid="heading-canvas-collection"
+              >
                 Versatile Canvas Collection
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
@@ -422,11 +409,12 @@ export default function Canvas() {
               className="w-full mt-24"
             >
               <div className="text-center mb-8">
-                <img 
-                  src={banner1stGen} 
-                  alt="Our 1st Generation Logos" 
-                  className="w-full max-w-4xl mx-auto h-auto object-contain rounded-lg shadow-xl mb-4"
-                />
+                <h3
+                  className="text-2xl md:text-3xl font-display uppercase tracking-wide text-primary"
+                  data-testid="heading-1st-generation-logos"
+                >
+                  Our 1st Generation Logos
+                </h3>
                 <p className="text-secondary-foreground/60 mt-4 max-w-2xl mx-auto">
                   The original designs that started it all. A testament to our brand's evolution.
                 </p>
@@ -451,13 +439,13 @@ export default function Canvas() {
         <section className="py-24 bg-gradient-to-b from-background to-secondary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <img
-                src={bannerShieldOfHonor}
-                alt="Introducing Our Versatile Armored Shield Collection"
-                className="w-full max-w-4xl mx-auto h-auto object-contain drop-shadow-2xl mb-4"
-                data-testid="img-armored-shield-intro"
-              />
-              <h2 className="text-4xl md:text-5xl font-display uppercase tracking-wide text-primary mb-4">
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
+                Shield of Honor
+              </p>
+              <h2
+                className="text-4xl md:text-5xl font-display uppercase tracking-wide text-primary mt-3 mb-4"
+                data-testid="heading-armored-shield"
+              >
                 Versatile Armored Shield Collection
               </h2>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
@@ -503,11 +491,15 @@ export default function Canvas() {
         <section className="py-24 bg-gradient-to-b from-secondary/30 to-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <img 
-                src={bannerCompass} 
-                alt="The Compass Collection" 
-                className="w-full max-w-2xl mx-auto h-auto object-contain rounded-lg shadow-xl mb-4"
-              />
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
+                Compass Collection
+              </p>
+              <h2
+                className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-3 mb-4"
+                data-testid="heading-compass-collection"
+              >
+                The Compass Collection
+              </h2>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
                 The Compass Collection. Charting the course of the empire, guided by direction, discipline, and vision.
                 <span className="block text-primary font-bold mt-2">EST. 2020</span>
