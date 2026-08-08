@@ -55,6 +55,9 @@ import badgeEaglesBurgundyGold from "@assets/male-polo-shirts/logo_eagle_swords_
 import badgeEaglesSilverGold from "@assets/male-polo-shirts/logo_eagle_swords_silver_gold.png";
 import badgeEaglesAllGold from "@assets/male-polo-shirts/logo_eagle_swords_all_gold.png";
 import badgeConsolidatusEmpireStandalone from "@assets/masculine/badge_consolidatus_empire_standalone_218.png";
+import badgeConsolidatusNavySilver from "@assets/brand/consolidatus_empire_crest_navy_silver.png";
+import badgeConsolidatusCharcoalPurple from "@assets/brand/consolidatus_empire_crest_charcoal_purple.png";
+import badgeConsolidatusGoldBrown from "@assets/brand/consolidatus_empire_crest_gold_brown.png";
 import logoKkElementsBadge from "@assets/feminine/logo_kk_elements_badge.png";
 import logoKkApparelLeatherCrest from "@assets/masculine/logo_kk_apparel_leather_swords_crest.png";
 import compassKKApparel from "@assets/copilot_image_1781366430242_1781369724345.jpeg";
@@ -237,6 +240,9 @@ export const allLogos: Record<string, LogoEntry> = {
   "233": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Badge of Honor" },
   "234": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Badge of Honor" },
   "235": { src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold", section: "Badge of Honor" },
+  "236": { src: badgeConsolidatusNavySilver, alt: "The Consolidatus Empire LLC Crest - Navy & Silver Est. 2020", color: "Consolidatus Navy & Silver", section: "Badge of Honor" },
+  "237": { src: badgeConsolidatusCharcoalPurple, alt: "The Consolidatus Empire LLC Crest - Charcoal & Purple Est. 2020", color: "Consolidatus Charcoal & Purple", section: "Badge of Honor" },
+  "238": { src: badgeConsolidatusGoldBrown, alt: "The Consolidatus Empire LLC Crest - Gold & Brown Est. 2020", color: "Consolidatus Gold & Brown", section: "Badge of Honor" },
   "300": { src: honorAllGold, alt: "The Golden Eagle Shield", color: "All Gold", section: "Shield of Honor" },
   "301": { src: honorNavyGold, alt: "Navy & Gold Eagle Shield", color: "Navy & Gold", section: "Shield of Honor" },
   "302": { src: honorSilverGold, alt: "Silver & Gold Eagle Shield", color: "Silver & Gold", section: "Shield of Honor" },
@@ -295,6 +301,9 @@ export const MASCULINE_FOLDER_LOGO_IDS = [
   "218",
   ...MALE_POLO_LOGO_IDS,
   "228",
+  "236",
+  "237",
+  "238",
   "301",
   "309",
   "310",

@@ -72,11 +72,17 @@ import badgeApparelAccessoriesRoyalty from "@assets/1781697764383_1781711765541.
 import badgeConsolidatusEmpireStandalone from "@assets/badge_consolidatus_empire_standalone_218.png";
 import logoKkElementsBadge from "@assets/logo_kk_elements_badge.png";
 import logoKkApparelLeatherCrest from "@assets/logo_kk_apparel_leather_swords_crest.png";
+import badgeConsolidatusNavySilver from "@assets/brand/consolidatus_empire_crest_navy_silver.png";
+import badgeConsolidatusCharcoalPurple from "@assets/brand/consolidatus_empire_crest_charcoal_purple.png";
+import badgeConsolidatusGoldBrown from "@assets/brand/consolidatus_empire_crest_gold_brown.png";
 
 // Import Luxury Banners
 import luxuryBanner from "@assets/1764816894577_1764816974804.jpg";
 import bannerMoodVibe from "@assets/generated_images/color_mood_vibe_banner.png";
 import banner1stGen from "@assets/generated_images/1st_generation_logos_banner.png";
+import bannerShieldOfHonor from "@assets/generated_images/shield_of_honor_banner.png";
+import bannerBadgeOfHonor from "@assets/generated_images/badge_of_honor_banner.png";
+import bannerCanvasCollection from "@assets/generated_images/2nd_gen_logos_banner.png";
 
 
 // Accessory logos — Canvas Collection (118) + Badge of Honor crossed swords (215-216)
@@ -177,6 +183,9 @@ export default function Canvas() {
     { id: "226", src: badgeEaglesSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold", color: "Silver & Gold Eagles", featured: true },
     { id: "227", src: badgeEaglesAllGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold", color: "All Gold Eagles", featured: true },
     { id: "228", src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", featured: true },
+    { id: "236", src: badgeConsolidatusNavySilver, alt: "The Consolidatus Empire LLC Crest - Navy & Silver Est. 2020", color: "Consolidatus Navy & Silver", featured: true },
+    { id: "237", src: badgeConsolidatusCharcoalPurple, alt: "The Consolidatus Empire LLC Crest - Charcoal & Purple Est. 2020", color: "Consolidatus Charcoal & Purple", featured: true },
+    { id: "238", src: badgeConsolidatusGoldBrown, alt: "The Consolidatus Empire LLC Crest - Gold & Brown Est. 2020", color: "Consolidatus Gold & Brown", featured: true },
   ];
 
   const honorShields = [
@@ -242,21 +251,26 @@ export default function Canvas() {
           </div>
         </section>
 
-        {/* Section 1: Royalty Badge of Honor — biggest collection (35 logos) */}
+        {/* Section 1: Versatile Royalty Badge of Honor — biggest collection */}
         <section className="py-24 bg-muted/20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <img 
-                src={badgeApparelAccessoriesRoyalty} 
-                alt="Our Royalty Badge of Honor — Khomplete Khemistri Apparel & Accessories" 
+                src={bannerBadgeOfHonor} 
+                alt="Introducing Our Versatile Royalty Badge of Honor Collection" 
                 className="w-full max-w-4xl mx-auto h-auto object-contain drop-shadow-2xl mb-4"
                 data-testid="img-royalty-badge-honor-intro"
               />
+              <img 
+                src={badgeApparelAccessoriesRoyalty} 
+                alt="Our Royalty Badge of Honor — Khomplete Khemistri Apparel & Accessories" 
+                className="w-full max-w-3xl mx-auto h-auto object-contain drop-shadow-2xl mb-4"
+              />
               <h2 className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-6 mb-2">
-                Our Royalty Badge of Honor
+                Versatile Royalty Badge of Honor Collection
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
-                Our Biggest Collection · 35 Logos
+                Our Biggest Collection · 38 Logos
               </p>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
                 Male and female crests to match your mood and your vibe — which one do you want to ride with? Brotherhood, Unity, and Strength.
@@ -338,7 +352,7 @@ export default function Canvas() {
         </section>
 
 
-        {/* Section 2: Canvas Collection — circular logos to match your mood & vibe */}
+        {/* Section 2: Versatile Canvas Collection — circular logos to match your mood & vibe */}
         <section className="py-24 bg-secondary text-secondary-foreground relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
             <div className="absolute right-0 top-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
@@ -349,12 +363,18 @@ export default function Canvas() {
 
             <div className="text-center mb-16">
               <img 
+                src={bannerCanvasCollection} 
+                alt="Introducing Our Versatile Canvas Collection" 
+                className="w-full max-w-4xl mx-auto h-auto object-contain rounded-lg shadow-xl mb-4"
+                data-testid="img-canvas-collection-intro"
+              />
+              <img 
                 src={bannerMoodVibe} 
                 alt="Color to Match Your Mood and Vibe" 
                 className="w-full max-w-4xl mx-auto h-auto object-contain rounded-lg shadow-xl mb-4"
               />
               <h2 className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-6 mb-2">
-                Canvas Collection
+                Versatile Canvas Collection
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
                 25 Logos · Match Your Mood & Vibe
@@ -427,11 +447,19 @@ export default function Canvas() {
           </div>
         </section>
 
-        {/* Section 3: Shield of Honor Collection */}
+        {/* Section 3: Versatile Armored Shield of Honor Collection */}
         <section className="py-24 bg-gradient-to-b from-background to-secondary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-display uppercase tracking-wide text-primary mb-4">Shield of Honor Collection</h2>
+              <img
+                src={bannerShieldOfHonor}
+                alt="Introducing Our Versatile Armored Shield Collection"
+                className="w-full max-w-4xl mx-auto h-auto object-contain drop-shadow-2xl mb-4"
+                data-testid="img-armored-shield-intro"
+              />
+              <h2 className="text-4xl md:text-5xl font-display uppercase tracking-wide text-primary mb-4">
+                Versatile Armored Shield Collection
+              </h2>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
                 The eagle shields that guard the empire — protecting the wealth, the vision, and the future.
                 <span className="block text-primary font-bold mt-2">EST. 2020</span>

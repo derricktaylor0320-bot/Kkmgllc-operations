@@ -4,6 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
 import { useQuery } from "@tanstack/react-query";
 import { groupProductVariants } from "@/lib/productVariants";
+import accessoriesSectionArt from "@assets/generated_images/kk_accessories_standalone_logo.png";
 
 export default function Accessories() {
   const { data: products, isLoading } = useQuery({
@@ -25,7 +26,11 @@ export default function Accessories() {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-12">
-        <BrandSectionBanner caption="Branded essentials for your lifestyle. Duffle bags, tumblers, umbrellas, candles, and more." />
+        <BrandSectionBanner
+          imageSrc={accessoriesSectionArt}
+          imageAlt="Khomplete Khemistri Accessories — Apparel & Accessories"
+          caption="Branded essentials for your lifestyle. Watches, duffle bags, tumblers, umbrellas, candles, and more."
+        />
 
         {isLoading ? (
           <div className="text-center py-12">Loading products...</div>
@@ -58,7 +63,8 @@ export default function Accessories() {
                 scents={product.scents}
                 variants={product.variants}
                 imageFit={
-                  product.imageUrl?.includes("kk_branded_logo_lighter")
+                  product.imageUrl?.includes("kk_branded_logo_lighter") ||
+                  product.imageUrl?.includes("kk_his_hers_watch")
                     ? "contain"
                     : "cover"
                 }
