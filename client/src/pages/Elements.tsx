@@ -4,7 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import elementsHealthSectionArt from "@assets/brand/khomplete_khemistri_elements_health_blue_silver.jpg";
+import elementsHealthSectionArt from "@assets/brand/khomplete_khemistri_elements_health_section.png";
 
 export default function Elements() {
   const { data: products, isLoading: loadingElements } = useQuery({
