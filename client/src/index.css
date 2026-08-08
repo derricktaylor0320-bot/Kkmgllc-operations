@@ -120,7 +120,7 @@
       radial-gradient(circle at 18% -10%, hsl(219 96% 54% / 0.42), transparent 34rem),
       radial-gradient(circle at 92% 18%, hsl(214 90% 72% / 0.26), transparent 30rem),
       radial-gradient(circle at 50% 110%, hsl(222 90% 48% / 0.28), transparent 28rem),
-      linear-gradient(145deg, hsl(223 86% 15%), hsl(221 84% 24%) 48%, hsl(224 88% 12%));
+      linear-gradient(145deg, hsl(222 88% 17%), hsl(221 90% 28%) 48%, hsl(223 88% 14%));
     background-attachment: fixed;
   }
   h1, h2, h3, h4, h5, h6 {
