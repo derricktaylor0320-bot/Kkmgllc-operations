@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import royaltyBadgeSectionArt from "@assets/brand/versatile_royalty_badge_of_honor_section.png";
+import canvasCollectionSectionArt from "@assets/brand/versatile_canvas_collection_section.png";
+import armoredShieldSectionArt from "@assets/brand/versatile_armored_shield_section.png";
 
 // Canvas Collection — color logos 100-117
 import logoGold3D from "@assets/Screenshot_20251126_202749_Photos_1764207404143.jpg";
@@ -252,11 +255,14 @@ export default function Canvas() {
         <section className="py-24 bg-muted/20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
-                Royalty Badge of Honor
-              </p>
+              <img
+                src={royaltyBadgeSectionArt}
+                alt="Introducing our Versatile Royalty Badge of Honor Collection"
+                className="mx-auto mb-8 h-auto w-full max-w-6xl object-contain drop-shadow-2xl"
+                data-testid="img-royalty-badge-section"
+              />
               <h2
-                className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-3 mb-2"
+                className="sr-only"
                 data-testid="heading-royalty-badge-honor"
               >
                 Versatile Royalty Badge of Honor Collection
@@ -354,11 +360,14 @@ export default function Canvas() {
           <div className="container mx-auto px-4">
 
             <div className="text-center mb-16">
-              <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
-                Color to Match Your Mood and Vibe
-              </p>
+              <img
+                src={canvasCollectionSectionArt}
+                alt="Introducing our Versatile Canvas Collection"
+                className="mx-auto mb-8 h-auto w-full max-w-6xl object-contain drop-shadow-2xl"
+                data-testid="img-canvas-collection-section"
+              />
               <h2
-                className="text-3xl md:text-4xl font-display uppercase tracking-wide text-primary mt-3 mb-2"
+                className="sr-only"
                 data-testid="heading-canvas-collection"
               >
                 Versatile Canvas Collection
@@ -439,11 +448,14 @@ export default function Canvas() {
         <section className="py-24 bg-gradient-to-b from-background to-secondary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
-                Shield of Honor
-              </p>
+              <img
+                src={armoredShieldSectionArt}
+                alt="Introducing our Versatile Armored Shield Collection"
+                className="mx-auto mb-8 h-auto w-full max-w-6xl object-contain drop-shadow-2xl"
+                data-testid="img-armored-shield-section"
+              />
               <h2
-                className="text-4xl md:text-5xl font-display uppercase tracking-wide text-primary mt-3 mb-4"
+                className="sr-only"
                 data-testid="heading-armored-shield"
               >
                 Versatile Armored Shield Collection
