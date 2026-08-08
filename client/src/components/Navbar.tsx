@@ -16,7 +16,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useCart } from "@/hooks/useCart";
 import CompassNavigation from "@/components/CompassNavigation";
 
-import logo from "../../../image.png";
+import logo from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
 
 export default function Navbar() {
   const [, setLocation] = useLocation();
@@ -40,7 +40,7 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 font-display font-bold text-2xl tracking-tighter uppercase hover:text-primary transition-colors">
-          <img src={logo} alt="The Consolidatus Empire LLC crest" className="brand-crest-chrome h-12 w-12 rounded-full object-contain drop-shadow-[0_0_10px_hsl(var(--primary)/0.35)]" />
+          <img src={logo} alt="The Consolidatus Empire LLC crest" className="brand-crest-glow h-12 w-12 rounded-full object-contain" />
           <span className="hidden sm:inline">The Consolidatus <span className="silver-shine">Empire LLC</span></span>
           <span className="silver-shine text-lg sm:hidden">TCE</span>
         </Link>

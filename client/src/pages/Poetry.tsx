@@ -225,7 +225,7 @@ export default function Poetry() {
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute top-2 right-2">
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${product.format === 'plaque' ? 'bg-amber-800 text-white' : 'bg-gray-400 text-white'}`}>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${product.format === 'plaque' ? 'bg-sky-700 text-white' : 'bg-slate-500 text-white'}`}>
                             {product.format === 'plaque' ? 'Wooden Plaque' : 'Glass Frame'}
                           </span>
                         </div>

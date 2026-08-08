@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import consolidatusBadge from "@assets/badge_consolidatus_empire_standalone_218.png";
+import consolidatusBadge from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
 
 type BrandSectionBannerProps = {
   /** Optional page-specific caption under the badge */
@@ -21,8 +21,10 @@ export default function BrandSectionBanner({
   className = "",
   compact = false,
   imageSrc = consolidatusBadge,
-  imageAlt = "The Consolidatus Empire LLC — Royalty Badge of Honor",
+  imageAlt = "The Consolidatus Empire LLC — Silver Blue Topaz Crest",
 }: BrandSectionBannerProps) {
+  const isDefaultCrest = imageSrc === consolidatusBadge;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -33,7 +35,7 @@ export default function BrandSectionBanner({
       <img
         src={imageSrc}
         alt={imageAlt}
-        className={`w-full ${compact ? "max-w-2xl" : "max-w-4xl"} mx-auto h-auto object-contain drop-shadow-2xl ${compact ? "mb-4" : "mb-6"} ${imageSrc === consolidatusBadge ? "brand-crest-chrome" : ""}`}
+        className={`w-full ${compact ? "max-w-2xl" : "max-w-4xl"} mx-auto h-auto object-contain ${compact ? "mb-4" : "mb-6"} ${isDefaultCrest ? "brand-crest-glow" : "drop-shadow-2xl"}`}
         data-testid="img-brand-section-banner"
       />
       {caption ? (

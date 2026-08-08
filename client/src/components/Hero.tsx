@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import heroBackground from "../../../image_1784694080293.jpeg";
+import heroBackground from "@assets/brand/empire_headquarters_blue_silver.jpg";
 
 export default function Hero() {
   return (
@@ -11,18 +11,18 @@ export default function Hero() {
           src={heroBackground}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-30 blur-2xl grayscale contrast-125"
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 blur-xl"
         />
         <img
           src={heroBackground}
           alt="The Consolidatus Empire Headquarters"
-          className="relative h-full w-full object-cover object-center grayscale contrast-110 brightness-90 md:object-contain"
+          className="relative h-full w-full object-cover object-center md:object-contain"
           data-testid="img-home-headquarters"
         />
-        <div className="absolute inset-0 bg-[#0755c8]/35 mix-blend-color" />
-        <div className="absolute inset-0 bg-[#020a1e]/20" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_45%_at_50%_40%,rgba(0,0,0,0.35),transparent_75%)]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[#0085ca]/18 mix-blend-soft-light" />
+        <div className="pointer-events-none absolute inset-0 topaz-glow opacity-70" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_50%_at_50%_42%,rgba(0,133,202,0.18),transparent_72%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-[#020a1e]/35" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 text-center">

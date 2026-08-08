@@ -2,8 +2,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
 import { motion } from "framer-motion";
-import letterheadCrest from "@assets/generated_images/consolidatus_empire_logo_2020.png";
-import foundersPhoto from "../../../1784771072078.png";
+import letterheadCrest from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
+import foundersPhoto from "@assets/brand/founders_blue_silver.jpg";
 
 const lifestyleCollections = [
   {

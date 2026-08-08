@@ -488,7 +488,7 @@ export default function LogoCustomizer() {
                     />
                   </div>
                   {!selectedGarment && (
-                    <div className="flex items-center gap-2 text-amber-500 text-sm mb-4" data-testid="warning-select-garment">
+                    <div className="flex items-center gap-2 text-sky-400 text-sm mb-4" data-testid="warning-select-garment">
                       <AlertCircle className="h-4 w-4" />
                       <span>Please select a garment type above</span>
                     </div>

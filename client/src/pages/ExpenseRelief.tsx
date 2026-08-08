@@ -832,7 +832,7 @@ export default function ExpenseRelief() {
                 </h3>
                 {!vaultCanPay && (
                   <div
-                    className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-amber-100"
+                    className="rounded-lg border border-sky-500/40 bg-sky-500/10 p-3 text-xs text-sky-100"
                     data-testid="banner-vault-empty"
                   >
                     Vault available: {formatMoney(vaultAvailable)}. You can
