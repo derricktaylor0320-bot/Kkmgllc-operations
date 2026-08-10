@@ -2,8 +2,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
+import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
+import { Car, Trophy, UtensilsCrossed } from "lucide-react";
 import { groupProductVariants } from "@/lib/productVariants";
+import { gameDayBundlePriceDollars } from "@shared/footballGameDayBundle";
 import accessoriesSectionArt from "@assets/generated_images/kk_accessories_standalone_logo.png";
 
 export default function Accessories() {
@@ -29,8 +33,53 @@ export default function Accessories() {
         <BrandSectionBanner
           imageSrc={accessoriesSectionArt}
           imageAlt="Khomplete Khemistri Accessories — Apparel & Accessories"
-          caption="Branded essentials for your lifestyle. Watches, duffle bags, tumblers, umbrellas, candles, and more."
+          caption="Branded essentials for your lifestyle. Watches, duffle bags, tumblers, car floor mats, umbrellas, candles, and more."
         />
+
+        <div className="mb-12 grid gap-6 md:grid-cols-2">
+          <div className="rounded-2xl border border-primary/30 bg-secondary/40 p-6">
+            <div className="mb-3 flex items-center gap-2 text-primary">
+              <UtensilsCrossed className="h-5 w-5" />
+              <span className="text-xs font-bold uppercase tracking-wider">
+                Football Sports Edition
+              </span>
+            </div>
+            <h2 className="font-display text-xl font-bold uppercase text-foreground">
+              Team Cooking Boards
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Handmade NFL cutting boards with your team crest in colored resin.
+              $50 each · 2 for $90 — buy now with one click.
+            </p>
+            <Link href="/football-teams#cutting-boards">
+              <Button className="mt-4 font-display uppercase tracking-wider" data-testid="link-football-cutting-boards">
+                Shop Cutting Boards
+              </Button>
+            </Link>
+          </div>
+          <div className="rounded-2xl border border-primary/30 bg-secondary/40 p-6">
+            <div className="mb-3 flex items-center gap-2 text-primary">
+              <Car className="h-5 w-5" />
+              <span className="text-xs font-bold uppercase tracking-wider">
+                Game Day Bundle
+              </span>
+            </div>
+            <h2 className="font-display text-xl font-bold uppercase text-foreground">
+              Floor Mats + Cooking Board
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Team-logo car floor mats paired with a handmade cutting board.
+              One flat ${gameDayBundlePriceDollars()} price with your team crest
+              on both.
+            </p>
+            <Link href="/football-teams#game-day-bundle">
+              <Button className="mt-4 font-display uppercase tracking-wider" data-testid="link-football-game-day-bundle">
+                <Trophy className="mr-2 h-4 w-4" />
+                Shop Game Day Bundle
+              </Button>
+            </Link>
+          </div>
+        </div>
 
         {isLoading ? (
           <div className="text-center py-12">Loading products...</div>
@@ -64,7 +113,8 @@ export default function Accessories() {
                 variants={product.variants}
                 imageFit={
                   product.imageUrl?.includes("kk_branded_logo_lighter") ||
-                  product.imageUrl?.includes("kk_his_hers_watch")
+                  product.imageUrl?.includes("kk_his_hers_watch") ||
+                  product.imageUrl?.includes("kk_custom_car_floor_mats")
                     ? "contain"
                     : "cover"
                 }
