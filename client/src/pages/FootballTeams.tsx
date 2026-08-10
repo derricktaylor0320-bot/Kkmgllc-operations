@@ -311,10 +311,20 @@ export default function FootballTeams() {
         >
           <div className="container mx-auto px-4 py-12 md:py-16">
             <div className="mx-auto max-w-5xl rounded-2xl border border-primary/35 bg-secondary/40 p-6 shadow-2xl md:p-10">
-              <div className="grid gap-8 md:grid-cols-[auto_1fr]">
-                <span className="flex h-14 w-14 items-center justify-center rounded-xl border border-primary/40 bg-primary/10 text-primary">
-                  <Car className="h-7 w-7" />
-                </span>
+              <div className="grid gap-8 md:grid-cols-[minmax(0,14rem)_1fr] md:items-start">
+                <figure className="overflow-hidden rounded-xl border border-primary/35 bg-black/20">
+                  <img
+                    src="/assets/kk_custom_car_floor_mats.png"
+                    alt="Custom team-logo car floor mats included in the Game Day Bundle"
+                    className="aspect-square w-full object-contain p-3"
+                    loading="lazy"
+                    data-testid="img-game-day-bundle-floor-mats"
+                  />
+                  <figcaption className="flex items-center justify-center gap-2 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-primary">
+                    <Car className="h-3.5 w-3.5" />
+                    Floor mats included
+                  </figcaption>
+                </figure>
                 <div>
                   <h2
                     className="font-display text-2xl font-bold uppercase tracking-wide text-primary md:text-3xl"
@@ -368,6 +378,17 @@ export default function FootballTeams() {
                       </Button>
                     </Link>
                   </div>
+                  <p className="mt-4 text-sm text-muted-foreground">
+                    Want mats only?{" "}
+                    <Link
+                      href="/accessories#custom-car-floor-mats"
+                      className="font-semibold text-primary underline-offset-4 hover:underline"
+                      data-testid="link-standalone-floor-mats"
+                    >
+                      Shop standalone Custom Car Floor Mats on Accessories
+                    </Link>
+                    .
+                  </p>
                 </div>
               </div>
             </div>
