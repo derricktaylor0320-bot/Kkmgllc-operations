@@ -8,6 +8,7 @@ import { syncStorefrontToSquare, squareConfigured } from "./squareCatalogSync";
 import { sendEmail, buildOrderReceiptEmail, buildShippingNotificationEmail } from "./email";
 import { trackingUrlFor } from "@shared/shipping";
 import { resolvePublicSiteUrl } from "@shared/site";
+import { resolveStorefrontImageUrl } from "@shared/productImages";
 import { ensureCatalogData } from "./ensureCatalogData";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireOwner, toPublicUser } from "./auth";
@@ -673,12 +674,14 @@ export async function registerRoutes(
           const metadata = (row.product_metadata || {}) as any;
           const images = (row.product_images || []) as any[];
           
+          const rawImage =
+            metadata.imageUrl || (images.length > 0 ? String(images[0]) : "");
           productsMap.set(row.product_id, {
             id: row.product_id,
             title: row.product_name,
             description: row.product_description,
             category: metadata.category || 'General',
-            imageUrl: metadata.imageUrl || (images.length > 0 ? images[0] : ''),
+            imageUrl: resolveStorefrontImageUrl(rawImage, row.product_name),
             productType: metadata.productType || 'general',
             sortOrder: parseInt(metadata.sortOrder || '99'),
             soldOut: metadata.soldOut === 'true',

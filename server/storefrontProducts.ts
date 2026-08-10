@@ -4,6 +4,7 @@ import {
   scentsFor,
   FULL_LOGO_CATALOG_OPTION,
 } from "@shared/customization";
+import { resolveStorefrontImageUrl } from "@shared/productImages";
 import { catalogStorage } from "./catalogStorage";
 
 // A single storefront product as the React app consumes it. Prices are dollar
@@ -100,12 +101,14 @@ export async function getStorefrontProductsDetailed(): Promise<StorefrontProduct
       const metadata = (row.product_metadata || {}) as any;
       const images = (row.product_images || []) as any[];
 
+      const rawImage =
+        metadata.imageUrl || (images.length > 0 ? String(images[0]) : "");
       productsMap.set(row.product_id, {
         id: row.product_id,
         title: row.product_name,
         description: row.product_description,
         category: metadata.category || 'General',
-        imageUrl: metadata.imageUrl || (images.length > 0 ? images[0] : ''),
+        imageUrl: resolveStorefrontImageUrl(rawImage, row.product_name),
         productType: metadata.productType || 'general',
         soldOut: metadata.soldOut === 'true',
         comingSoon: metadata.comingSoon === 'true',
