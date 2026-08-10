@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useLocation } from "wouter";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
@@ -14,7 +14,14 @@ import { allLogos } from "@/lib/logoCatalog";
 import ShipStateTaxSummary, { useShipToState } from "@/components/ShipStateTaxSummary";
 import { placementSurchargeDollars } from "@shared/customization";
 import {
+  GAME_DAY_BUNDLE_FEATURES,
+  gameDayBundlePriceDollars,
+  gameDayBundleSavingsDollars,
+  NFL_GAME_DAY_BUNDLE_GARMENT_ID,
+} from "@shared/footballGameDayBundle";
+import {
   CUTTING_BOARD_FEATURES,
+  CUTTING_BOARD_GARMENT_QUERY_PARAM,
   cuttingBoardTotalDollars,
   NFL_CUTTING_BOARD_GARMENT_ID,
 } from "@shared/footballCuttingBoard";
@@ -40,6 +47,13 @@ const garmentTypes = [
     name: "NFL Handmade Cutting Board",
     basePrice: 50,
     category: "cutting-board",
+    footballOnly: true,
+  },
+  {
+    id: NFL_GAME_DAY_BUNDLE_GARMENT_ID,
+    name: "Game Day Bundle (Floor Mats + Cutting Board)",
+    basePrice: gameDayBundlePriceDollars(),
+    category: "game-day-bundle",
     footballOnly: true,
   },
 ];
@@ -118,6 +132,31 @@ export default function LogoCustomizer() {
   
   const selectedGarmentData = availableGarments.find(g => g.id === selectedGarment);
   const isCuttingBoard = selectedGarmentData?.category === "cutting-board";
+  const isGameDayBundle = selectedGarmentData?.category === "game-day-bundle";
+  const isSpecialFootballOrder = isCuttingBoard || isGameDayBundle;
+  const orderSummaryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const garmentParam = params.get(CUTTING_BOARD_GARMENT_QUERY_PARAM);
+    if (logo?.section !== FOOTBALL_SPORTS_EDITION_SECTION) return;
+
+    if (
+      garmentParam === NFL_CUTTING_BOARD_GARMENT_ID ||
+      garmentParam === NFL_GAME_DAY_BUNDLE_GARMENT_ID
+    ) {
+      setSelectedGarment(garmentParam);
+      if (garmentParam === NFL_CUTTING_BOARD_GARMENT_ID) {
+        setCuttingBoardQty(1);
+      }
+      window.requestAnimationFrame(() => {
+        orderSummaryRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    }
+  }, [logoId, logo?.section]);
   const placementOptions =
     selectedGarmentData?.category === "bottoms"
       ? bottomPlacementOptions
@@ -162,6 +201,10 @@ export default function LogoCustomizer() {
       return cuttingBoardTotalDollars(cuttingBoardQty);
     }
 
+    if (garment.category === "game-day-bundle") {
+      return gameDayBundlePriceDollars();
+    }
+
     let price = garment.basePrice;
     price += placementSurchargeDollars(selectedPlacements.length);
     return price;
@@ -182,10 +225,13 @@ export default function LogoCustomizer() {
     if (nextCategory === "cutting-board") {
       setCuttingBoardQty(1);
     }
-    if (prevCategory !== nextCategory && nextCategory !== "cutting-board") {
+    if (prevCategory !== nextCategory && !isSpecialFootballCategory(nextCategory)) {
       setSelectedPlacements([defaultPlacementFor(nextCategory)]);
     }
   };
+
+  const isSpecialFootballCategory = (category?: string) =>
+    category === "cutting-board" || category === "game-day-bundle";
 
   const handleCheckout = async () => {
     setError(null);
@@ -214,8 +260,10 @@ export default function LogoCustomizer() {
     
     try {
       const garment = availableGarments.find(g => g.id === selectedGarment);
-      const placements = isCuttingBoard
-        ? "Team crest embedded in board design"
+      const placements = isSpecialFootballOrder
+        ? isGameDayBundle
+          ? "Team crest on floor mats and cutting board"
+          : "Team crest embedded in board design"
         : selectedPlacements.map(p => {
             const opt = placementOptions.find(opt => opt.id === p);
             return opt ? `${opt.name} (${opt.dimensions})` : "";
@@ -229,7 +277,7 @@ export default function LogoCustomizer() {
           logoName: logo.color,
           garmentType: garment?.name,
           garmentId: selectedGarment,
-          placements: isCuttingBoard ? ["board-design"] : selectedPlacements,
+          placements: isSpecialFootballOrder ? ["team-design"] : selectedPlacements,
           placementDescription: placements,
           quantity: isCuttingBoard ? cuttingBoardQty : 1,
           totalPrice: calculatePrice() * 100,
@@ -465,7 +513,61 @@ export default function LogoCustomizer() {
                     </RadioGroup>
                   </div>
                 )}
+                {isFootballLogo && (
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-3 font-semibold uppercase tracking-wide">
+                      Game Day Bundle
+                    </p>
+                    <RadioGroup
+                      value={selectedGarment}
+                      onValueChange={handleGarmentChange}
+                      className="grid gap-3"
+                    >
+                      {availableGarments
+                        .filter((g) => g.category === "game-day-bundle")
+                        .map((garment) => (
+                          <div key={garment.id} className="flex items-center">
+                            <RadioGroupItem
+                              value={garment.id}
+                              id={garment.id}
+                              className="peer sr-only"
+                              data-testid={`radio-garment-${garment.id}`}
+                            />
+                            <Label
+                              htmlFor={garment.id}
+                              className="flex items-center justify-between w-full p-4 bg-secondary rounded-lg border-2 border-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 cursor-pointer transition-all hover:bg-secondary/80"
+                            >
+                              <span className="font-medium">{garment.name}</span>
+                              <span className="text-right">
+                                <span className="block text-primary font-bold">
+                                  ${garment.basePrice}
+                                </span>
+                                <span className="block text-[10px] uppercase tracking-wider text-muted-foreground">
+                                  Save ${gameDayBundleSavingsDollars()}
+                                </span>
+                              </span>
+                            </Label>
+                          </div>
+                        ))}
+                    </RadioGroup>
+                  </div>
+                )}
               </div>
+
+              {isGameDayBundle && (
+                <div className="space-y-4" data-testid="game-day-bundle-options">
+                  <h3 className="text-xl font-display font-bold uppercase">
+                    2. Bundle Includes
+                  </h3>
+                  <div className="space-y-2 rounded-lg bg-secondary p-4">
+                    <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
+                      {GAME_DAY_BUNDLE_FEATURES.map((feature, i) => (
+                        <li key={i}>{feature}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
 
               {isCuttingBoard && (
                 <div className="space-y-4" data-testid="cutting-board-options">
@@ -541,7 +643,7 @@ export default function LogoCustomizer() {
                 </div>
               )}
 
-              {!isCuttingBoard && (
+              {!isSpecialFootballOrder && (
               <div className="space-y-4">
                 <h3 className="text-xl font-display font-bold uppercase">
                   2. Select Logo Placement
@@ -589,7 +691,11 @@ export default function LogoCustomizer() {
               </div>
               )}
 
-              <Card className="bg-primary/10 border-primary/30">
+              <Card
+                ref={orderSummaryRef}
+                id="custom-order-summary"
+                className="bg-primary/10 border-primary/30 scroll-mt-24"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-lg font-medium">Your Custom Order</span>
@@ -605,7 +711,7 @@ export default function LogoCustomizer() {
                         {isCuttingBoard ? ` × ${cuttingBoardQty}` : ""}
                       </p>
                     )}
-                    {!isCuttingBoard && (
+                    {!isSpecialFootballOrder && (
                     <p>Placement: {selectedPlacements.map(p => 
                       placementOptions.find(opt => opt.id === p)?.name
                     ).join(" + ")}</p>
@@ -613,7 +719,10 @@ export default function LogoCustomizer() {
                     {isCuttingBoard && (
                       <p>Design: Team crest embedded in board</p>
                     )}
-                    {!isCuttingBoard && selectedPlacements.map(p => {
+                    {isGameDayBundle && (
+                      <p>Design: Team crest on floor mats and cutting board</p>
+                    )}
+                    {!isSpecialFootballOrder && selectedPlacements.map(p => {
                       const opt = placementOptions.find(opt => opt.id === p);
                       return opt ? (
                         <p key={p} className="text-xs pl-2" data-testid={`summary-dimensions-${opt.id}`}>
@@ -657,7 +766,13 @@ export default function LogoCustomizer() {
                     data-testid="button-proceed-to-checkout"
                   >
                     <ShoppingCart className="mr-2 h-5 w-5" />
-                    {isSubmitting ? "Processing..." : "Proceed to Checkout"}
+                    {isSubmitting
+                      ? "Processing..."
+                      : isCuttingBoard
+                        ? "Buy Now — Cutting Board"
+                        : isGameDayBundle
+                          ? "Buy Now — Game Day Bundle"
+                          : "Proceed to Checkout"}
                   </Button>
                 </CardContent>
               </Card>

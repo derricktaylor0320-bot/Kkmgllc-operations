@@ -165,6 +165,8 @@ const RETIRED_PRODUCT_NAMES = [
   // Custom logo/picture mugs + delivery cost too much to make a profit on.
   "Coffee Mug",
   "Matte Black Mug",
+  // Not selling — pulled from storefront; can be re-added later.
+  "Personalized Coffee Cup Sleeve",
 ];
 
 // Vintage Baltimore collection ($30 graphic tees). The 10 real designs that
@@ -1006,6 +1008,21 @@ const EXTRA_ACCESSORY_PRODUCTS: {
     },
   },
   {
+    productId: "prod_kkcarfloormats",
+    priceId: "price_kkcarfloormats",
+    name: "Custom Car Floor Mats",
+    description:
+      "Personalized custom car floor mats (rug-style) featuring your choice of any Khomplete Khemistri logo from our full catalog. All-weather mats custom-branded for your vehicle. One flat $60 price includes your custom logo and shipping — no extra charges at checkout. SELECT YOUR LOGO at checkout.",
+    priceCents: 6000,
+    meta: {
+      category: "Accessories",
+      productType: "accessory",
+      sortOrder: "31",
+      gender: "Unisex",
+      imageUrl: "/assets/kk_custom_car_floor_mats.png",
+    },
+  },
+  {
     productId: "prod_kkdrawstringbackpack",
     priceId: "price_kkdrawstringbackpack",
     name: "Personalized Drawstring Backpack",
@@ -1013,15 +1030,6 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       "Personalized drawstring backpack with your choice of any Khomplete Khemistri logo from our full catalog. Lightweight cinch-top bag, perfect for the gym, school, or everyday carry. SELECT YOUR COLOR AND LOGO at checkout! Available in 5 colors: Black, Orange, Royal Blue, Pink, and White.",
     priceCents: 1200,
     meta: { category: "Bags", productType: "accessory", imageUrl: "/assets/kk_drawstring_backpack.png", gender: "Unisex", colors: "Black, Orange, Royal Blue, Pink, White" },
-  },
-  {
-    productId: "prod_kkcoffeesleeve",
-    priceId: "price_kkcoffeesleeve",
-    name: "Personalized Coffee Cup Sleeve",
-    description:
-      "Personalized reusable neoprene coffee cup sleeve with your choice of any Khomplete Khemistri logo from our full catalog. Insulated to keep hot drinks hot and cold drinks cold while keeping your hands comfortable. Universal fit for 22-24 oz cups. SELECT YOUR COLOR AND LOGO at checkout! Available in 34 colors: White, Black, Navy Blue, Royal Blue, Pink, Deep Sky Blue, Red, Blush Pink, Maroon, Sage, Candy, Pastel, Lavender, Baby Blue, Light Grey, Charcoal, Teal, Blackish Green, Peach Yellow, Coral, Violet, Rose Red, Orange, Magenta, Bright Gold, Kelly Green, Grass Green, Turquoise, Robin Egg Blue, Aquamarine, Light Teal, Mint Green, Mint, and Hot Pink.",
-    priceCents: 1500,
-    meta: { category: "Drinkware", productType: "accessory", imageUrl: "/assets/kk_coffee_sleeve.png", gender: "Unisex", colors: "White, Black, Navy Blue, Royal Blue, Pink, Deep Sky Blue, Red, Blush Pink, Maroon, Sage, Candy, Pastel, Lavender, Baby Blue, Light Grey, Charcoal, Teal, Blackish Green, Peach Yellow, Coral, Violet, Rose Red, Orange, Magenta, Bright Gold, Kelly Green, Grass Green, Turquoise, Robin Egg Blue, Aquamarine, Light Teal, Mint Green, Mint, Hot Pink" },
   },
   {
     productId: "prod_kkhisherswatches",

@@ -21,6 +21,10 @@ import {
   cuttingBoardTotalCents,
   NFL_CUTTING_BOARD_GARMENT_ID,
 } from "@shared/footballCuttingBoard";
+import {
+  GAME_DAY_BUNDLE_PRICE_CENTS,
+  NFL_GAME_DAY_BUNDLE_GARMENT_ID,
+} from "@shared/footballGameDayBundle";
 import { FOOTBALL_TEAM_DESIGNS } from "@shared/footballTeams";
 import { updateOrderFulfillmentSchema, insertMediaLinkSchema, mediaUploadFieldsSchema, insertReviewSchema, updateProfileSchema, type Review, type User } from "@shared/schema";
 import {
@@ -877,6 +881,20 @@ export async function registerRoutes(
         lineNote = `Team: ${logoName} | Qty: ${boardQty} ($50 each, 2 for $90)`.slice(0, 500);
         // Bundle pricing is not a flat per-unit rate — charge the computed total
         // as one line (Square multiplies unit price × quantity).
+        lineQuantity = 1;
+      } else if (garmentId === NFL_GAME_DAY_BUNDLE_GARMENT_ID) {
+        if (!footballLogoIds.has(String(logoId))) {
+          return res.status(400).json({
+            error: "The Game Day Bundle is only available with Football Sports Edition team designs.",
+          });
+        }
+        amountCents = GAME_DAY_BUNDLE_PRICE_CENTS;
+        lineName = `Game Day Bundle (Floor Mats + Cutting Board) - Logo #${logoId}`;
+        lineNote =
+          `Team: ${logoName} | Custom team-logo car floor mats + handmade NFL cutting board ($99 bundle)`.slice(
+            0,
+            500,
+          );
         lineQuantity = 1;
       } else {
         const basePrice = GARMENT_BASE_PRICES[garmentId];
