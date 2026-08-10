@@ -8,7 +8,8 @@ import { Link } from "wouter";
 import { Car, Trophy, UtensilsCrossed } from "lucide-react";
 import { groupProductVariants } from "@/lib/productVariants";
 import { gameDayBundlePriceDollars } from "@shared/footballGameDayBundle";
-import accessoriesSectionArt from "@assets/generated_images/kk_accessories_standalone_logo.png";
+import { CUTTING_BOARD_SAMPLE_PHOTOS } from "@shared/footballCuttingBoard";
+import accessoriesSectionArt from "@assets/generated_images/kk_accessories_apparel_banner.jpeg";
 
 export default function Accessories() {
   const { data: products, isLoading } = useQuery({
@@ -51,6 +52,28 @@ export default function Accessories() {
               Handmade NFL cutting boards with your team crest in colored resin.
               $50 each · 2 for $90 — buy now with one click.
             </p>
+            <div
+              className="mt-4 grid grid-cols-2 gap-3"
+              data-testid="accessories-cutting-board-samples"
+            >
+              {CUTTING_BOARD_SAMPLE_PHOTOS.map((sample) => (
+                <figure
+                  key={sample.teamLogoId}
+                  className="overflow-hidden rounded-xl border border-primary/25 bg-black/20"
+                >
+                  <img
+                    src={sample.src}
+                    alt={sample.alt}
+                    className="aspect-[4/3] w-full object-cover"
+                    loading="lazy"
+                    data-testid={`img-accessories-board-${sample.teamLogoId}`}
+                  />
+                  <figcaption className="px-2 py-1.5 text-center text-[10px] font-bold uppercase tracking-wider text-primary">
+                    {sample.teamName}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
             <Link href="/football-teams#cutting-boards">
               <Button className="mt-4 font-display uppercase tracking-wider" data-testid="link-football-cutting-boards">
                 Shop Cutting Boards
@@ -114,7 +137,8 @@ export default function Accessories() {
                 imageFit={
                   product.imageUrl?.includes("kk_branded_logo_lighter") ||
                   product.imageUrl?.includes("kk_his_hers_watch") ||
-                  product.imageUrl?.includes("kk_custom_car_floor_mats")
+                  product.imageUrl?.includes("kk_custom_car_floor_mats") ||
+                  product.imageUrl?.includes("scented_candles_branded")
                     ? "contain"
                     : "cover"
                 }
