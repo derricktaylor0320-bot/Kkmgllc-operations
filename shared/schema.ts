@@ -489,6 +489,20 @@ export const yieldPayouts = pgTable("yield_payouts", {
 
 export type YieldPayout = typeof yieldPayouts.$inferSelect;
 
+/** Per-project annual yield rates and backing-asset metadata (5-pillar structure). */
+export const projectYieldConfigs = pgTable("project_yield_configs", {
+  projectTag: varchar("project_tag", { length: 50 }).primaryKey(),
+  projectName: varchar("project_name", { length: 100 }).notNull(),
+  annualYieldRate: decimal("annual_yield_rate", {
+    precision: 5,
+    scale: 4,
+  }).notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  backingAssetDescription: text("backing_asset_description"),
+});
+
+export type ProjectYieldConfig = typeof projectYieldConfigs.$inferSelect;
+
 /** In-app investor notifications — where money went & how it was used */
 export const investmentNotifications = pgTable("investment_notifications", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

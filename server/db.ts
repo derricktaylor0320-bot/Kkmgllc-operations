@@ -420,6 +420,62 @@ export async function ensureTablesExist() {
       ON yield_payouts (user_id, created_at)
     `);
 
+    // Per-project yield configuration — 5-pillar investment structure.
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS project_yield_configs (
+        project_tag VARCHAR(50) PRIMARY KEY,
+        project_name VARCHAR(100) NOT NULL,
+        annual_yield_rate DECIMAL(5, 4) NOT NULL,
+        is_active BOOLEAN DEFAULT TRUE,
+        backing_asset_description TEXT
+      )
+    `);
+    await db.execute(sql`
+      INSERT INTO project_yield_configs (
+        project_tag,
+        project_name,
+        annual_yield_rate,
+        is_active,
+        backing_asset_description
+      ) VALUES
+        (
+          'KHOMPLETE_KHEMISTRI',
+          'Khomplete Khemistri Apparel Line',
+          0.0700,
+          TRUE,
+          'High-margin physical apparel sales and fabric inventory.'
+        ),
+        (
+          'FR2P_PROGRAM',
+          'The FR2P Program (Financial Roadway to Prosperity)',
+          0.0800,
+          TRUE,
+          'Membership subscriptions and outside ad platform revenue.'
+        ),
+        (
+          'POCKET_BOOSTER',
+          'Pocket Booster Liquidity Vault',
+          0.0850,
+          TRUE,
+          'Recurring monthly flat subscriber fees.'
+        ),
+        (
+          'PREMIUM_CHOICE_DOGS',
+          'Premium Choice Dogs Infrastructure',
+          0.1100,
+          TRUE,
+          'Daily cash-and-card transactions from physical mobile units.'
+        ),
+        (
+          'COMMERCIAL_REAL_ESTATE',
+          'Commercial Real Estate Portfolio',
+          0.0000,
+          FALSE,
+          'Future brick-and-mortar equity (Independent motels & laundromats).'
+        )
+      ON CONFLICT (project_tag) DO NOTHING
+    `);
+
     await db.execute(sql`
       CREATE TABLE IF NOT EXISTS investment_notifications (
         id VARCHAR(255) PRIMARY KEY DEFAULT gen_random_uuid(),

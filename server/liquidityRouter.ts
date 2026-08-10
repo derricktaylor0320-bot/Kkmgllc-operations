@@ -9,6 +9,7 @@ import {
   investmentNotifications,
   pocketBoosterVault,
   projectLedger,
+  projectYieldConfigs,
   userInvestments,
   userSubscriptions,
   yieldPayouts,
@@ -36,6 +37,20 @@ import {
 
 function currentUser(req: Request): User {
   return req.user as User;
+}
+
+function canAccessInvestor(req: Request, targetUserId: string): boolean {
+  const user = currentUser(req);
+  if (user.id === targetUserId) return true;
+
+  const allowlist = (process.env.OWNER_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  if (allowlist.length === 0) return true;
+
+  const email = user.email?.toLowerCase();
+  return Boolean(email && allowlist.includes(email));
 }
 
 function money(n: number, decimals = 2): string {
@@ -795,6 +810,100 @@ export function registerLiquidityRoutes(app: Express): void {
         console.error("Yield distribution error:", error);
         return res.status(500).json({
           error: "Failed to distribute subscription-funded yield.",
+        });
+      }
+    },
+  );
+
+  /**
+   * Calculate investor daily compounding yield per pillar allocation.
+   * Joins active RPUs with project_yield_configs for live dashboard widgets.
+   */
+  app.get(
+    "/api/liquidity/calculate-investor-yield/:userId",
+    requireAuth,
+    async (req: Request, res: Response) => {
+      try {
+        const { userId } = req.params;
+        if (!userId) {
+          return res.status(400).json({ error: "User id is required." });
+        }
+        if (!canAccessInvestor(req, userId)) {
+          return res.status(403).json({ error: "Not authorized." });
+        }
+
+        const investorAssets = await db
+          .select({
+            id: userInvestments.id,
+            projectTag: userInvestments.projectTag,
+            dollarValue: userInvestments.amountAllocated,
+            projectName: projectYieldConfigs.projectName,
+            annualYieldRate: projectYieldConfigs.annualYieldRate,
+            createdAt: userInvestments.createdAt,
+          })
+          .from(userInvestments)
+          .innerJoin(
+            projectYieldConfigs,
+            eq(userInvestments.projectTag, projectYieldConfigs.projectTag),
+          )
+          .where(
+            and(
+              eq(userInvestments.userId, userId),
+              eq(userInvestments.status, "ACTIVE"),
+            ),
+          );
+
+        if (investorAssets.length === 0) {
+          return res.status(200).json({
+            success: true,
+            message: "No active investments found.",
+            assets: [],
+          });
+        }
+
+        const msPerDay = 24 * 60 * 60 * 1000;
+        const today = Date.now();
+
+        const updatedAssets = investorAssets.map((asset) => {
+          const principal = parseFloat(asset.dollarValue);
+          const annualRate = parseFloat(asset.annualYieldRate);
+          const dateInvested = asset.createdAt
+            ? new Date(asset.createdAt)
+            : new Date();
+          const daysActive = Math.max(
+            1,
+            Math.floor((today - dateInvested.getTime()) / msPerDay),
+          );
+
+          const totalEarnings = compoundDailyInterest(
+            principal,
+            daysActive,
+            annualRate,
+          );
+          const currentValue = principal + totalEarnings;
+
+          return {
+            investmentId: asset.id,
+            pillarTag: asset.projectTag,
+            pillarName: asset.projectName,
+            annualPercentage: `${(annualRate * 100).toFixed(1)}%`,
+            daysCompounding: daysActive,
+            initialPrincipal: principal.toFixed(2),
+            currentValue: currentValue.toFixed(2),
+            totalEarnings: totalEarnings.toFixed(2),
+          };
+        });
+
+        return res.status(200).json({
+          success: true,
+          complianceProtocol: "REVENUE_PARTICIPATION_UNITS_ONLY",
+          investorId: userId,
+          assets: updatedAssets,
+        });
+      } catch (error) {
+        console.error("Yield Calculation Failure:", error);
+        return res.status(500).json({
+          error: "Failed to securely calculate live asset-backed returns.",
         });
       }
     },
