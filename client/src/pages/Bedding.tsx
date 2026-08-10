@@ -4,6 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import beddingSectionArt from "@assets/kk_bedding_set_blue_silver.jpeg";
 
 function renderProduct(product: any) {
   return (
@@ -55,7 +56,11 @@ export default function Bedding() {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-12">
-        <BrandSectionBanner caption="Sleep and dream in luxury. Premium bedding sets, pajamas, and intimates — all carrying the Khomplete Khemistri mark." />
+        <BrandSectionBanner
+          imageSrc={beddingSectionArt}
+          imageAlt="Khomplete Khemistri Accessories Bedding — royal blue and silver"
+          caption="Sleep and dream in luxury. Premium bedding sets, pajamas, and intimates — all carrying the Khomplete Khemistri mark."
+        />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

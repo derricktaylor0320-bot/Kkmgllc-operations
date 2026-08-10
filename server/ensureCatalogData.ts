@@ -1,5 +1,13 @@
 import { sql } from "drizzle-orm";
 import { db } from "./db";
+import {
+  BODY_BUTTER_IMAGE,
+  BEDDING_BODY_PILLOW_IMAGE,
+  BEDDING_COMFORTER_IMAGE,
+  BEDDING_PILLOWCASE_IMAGE,
+  BEDDING_SHEET_IMAGE,
+  LEGACY_BROWN_BEDDING_IMAGE_PATHS,
+} from "@shared/productImages";
 
 // Catalog facts that must be true in whatever database this server is connected
 // to. The synced `stripe.products` / `stripe.prices` tables are the durable
@@ -88,7 +96,7 @@ const BODY_BUTTER_PRODUCT_ID = "prod_kkbodybutter";
 const BODY_BUTTER_PRICE_ID = "price_kkbodybutter";
 const BODY_BUTTER_NAME = "Whipped Body Butters";
 const BODY_BUTTER_PRICE_CENTS = 1200;
-const BODY_BUTTER_IMAGE = "/assets/whipped_body_butters_branded.png";
+const BODY_BUTTER_IMAGE_PATH = BODY_BUTTER_IMAGE;
 const BODY_BUTTER_DESCRIPTION =
   "Luxurious Khomplete Khemistri whipped body butter in a 4 oz jar. Rich, fast-absorbing moisture that leaves skin soft and smooth. $12 per jar.";
 const BODY_BUTTER_META = {
@@ -96,7 +104,7 @@ const BODY_BUTTER_META = {
   productType: "accessory",
   customize: "none",
   scented: "true",
-  imageUrl: BODY_BUTTER_IMAGE,
+  imageUrl: BODY_BUTTER_IMAGE_PATH,
 };
 
 // Custom phone cases. These must exist in whatever DB this server is connected
@@ -715,7 +723,7 @@ const BEDDING_PRODUCTS: {
     description:
       'Luxury velvet comforter set featuring the Khomplete Khemistri Accessories eagle badge and "Sleep and Dream in Luxury" in silver. Rich royal blue. Includes comforter and matching pillow shams. Select your size at checkout: Twin, Full, Queen, or King.',
     priceCents: BEDDING_PRICE_COMFORTER_CENTS,
-    meta: { category: "Bedding", productType: "accessory", sortOrder: "50", imageUrl: "/assets/kk_bedding_set_blue_silver.jpeg", fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
+    meta: { category: "Bedding", productType: "accessory", sortOrder: "50", imageUrl: BEDDING_COMFORTER_IMAGE, fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
   },
   {
     productId: "prod_kksheetset",
@@ -724,7 +732,7 @@ const BEDDING_PRODUCTS: {
     description:
       'Premium satin sheet set featuring the Khomplete Khemistri Accessories eagle badge and "Sleep and Dream in Luxury" in silver. Elegant royal blue. Includes fitted sheet, flat sheet, and matching pillowcases. Select your size at checkout: Twin, Full, Queen, or King.',
     priceCents: BEDDING_PRICE_SHEET_CENTS,
-    meta: { category: "Bedding", productType: "accessory", sortOrder: "51", imageUrl: "/assets/kk_bedding_set_blue_silver.jpeg", fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
+    meta: { category: "Bedding", productType: "accessory", sortOrder: "51", imageUrl: BEDDING_SHEET_IMAGE, fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
   },
   {
     productId: "prod_kkpillowcaseset",
@@ -733,7 +741,7 @@ const BEDDING_PRODUCTS: {
     description:
       'Luxury branded pillowcase set — pack of 2. Featuring the Khomplete Khemistri Accessories eagle badge and "Sleep and Dream in Luxury" in silver on rich royal blue. Select your size at checkout: Twin, Full, Queen, or King.',
     priceCents: BEDDING_PRICE_PILLOWCASE_CENTS,
-    meta: { category: "Bedding", productType: "accessory", sortOrder: "52", imageUrl: "/assets/kk_pillowcase_set_blue_silver.jpeg", fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
+    meta: { category: "Bedding", productType: "accessory", sortOrder: "52", imageUrl: BEDDING_PILLOWCASE_IMAGE, fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
   },
   {
     productId: "prod_kkbodypillow",
@@ -742,7 +750,7 @@ const BEDDING_PRODUCTS: {
     description:
       'Luxury branded body pillow featuring the Khomplete Khemistri Accessories eagle badge and "Sleep and Dream in Luxury" in silver on rich royal blue. Generous 60" x 20" size for full-body comfort.',
     priceCents: BEDDING_PRICE_BODYPILLOW_CENTS,
-    meta: { category: "Bedding", productType: "accessory", sortOrder: "53", imageUrl: "/assets/kk_body_pillow_blue_silver.jpeg", fulfillment: "Amazon", customize: "none" },
+    meta: { category: "Bedding", productType: "accessory", sortOrder: "53", imageUrl: BEDDING_BODY_PILLOW_IMAGE, fulfillment: "Amazon", customize: "none" },
   },
 ];
 
@@ -1548,12 +1556,18 @@ export async function ensureCatalogData() {
     //     accountId gate so production always self-heals imageUrl/description on
     //     every boot, even when synthetic inserts below are skipped.
     for (const b of BEDDING_PRODUCTS) {
+      const imageList = JSON.stringify([b.meta.imageUrl]);
       await db.execute(sql`
         UPDATE stripe.products
         SET _raw_data = jsonb_set(
-              jsonb_set(_raw_data, '{description}', ${JSON.stringify(b.description)}::jsonb, true),
-              '{metadata}',
-              COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(b.meta)}::jsonb,
+              jsonb_set(
+                jsonb_set(_raw_data, '{description}', ${JSON.stringify(b.description)}::jsonb, true),
+                '{metadata}',
+                COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(b.meta)}::jsonb,
+                true
+              ),
+              '{images}',
+              ${imageList}::jsonb,
               true
             ),
             _updated_at = now()
@@ -1565,15 +1579,48 @@ export async function ensureCatalogData() {
     await db.execute(sql`
       UPDATE stripe.products
       SET _raw_data = jsonb_set(
-            jsonb_set(_raw_data, '{description}', ${JSON.stringify(BODY_BUTTER_DESCRIPTION)}::jsonb, true),
-            '{metadata}',
-            COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(BODY_BUTTER_META)}::jsonb,
+            jsonb_set(
+              jsonb_set(_raw_data, '{description}', ${JSON.stringify(BODY_BUTTER_DESCRIPTION)}::jsonb, true),
+              '{metadata}',
+              COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(BODY_BUTTER_META)}::jsonb,
+              true
+            ),
+            '{images}',
+            ${JSON.stringify([BODY_BUTTER_IMAGE_PATH])}::jsonb,
             true
           ),
           _updated_at = now()
       WHERE active = true
         AND (id = ${BODY_BUTTER_PRODUCT_ID} OR name = ${BODY_BUTTER_NAME})
     `);
+
+    // 3d) Self-heal any snapshot that still points at retired brown bedding
+    //     filenames (metadata.imageUrl or images[0]).
+    for (const [legacyPath, bluePath] of Object.entries(
+      LEGACY_BROWN_BEDDING_IMAGE_PATHS,
+    )) {
+      const imageList = JSON.stringify([bluePath]);
+      await db.execute(sql`
+        UPDATE stripe.products
+        SET _raw_data = jsonb_set(
+              jsonb_set(
+                _raw_data,
+                '{metadata}',
+                COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify({ imageUrl: bluePath })}::jsonb,
+                true
+              ),
+              '{images}',
+              ${imageList}::jsonb,
+              true
+            ),
+            _updated_at = now()
+        WHERE active = true
+          AND (
+            _raw_data->'metadata'->>'imageUrl' = ${legacyPath}
+            OR _raw_data->'images'->>0 = ${legacyPath}
+          )
+      `);
+    }
 
     // 4) Synthetic catalog inserts need an account id from an existing product
     //    row. Without one we can't create tumblers / cases / etc. on this DB.
@@ -1721,9 +1768,14 @@ export async function ensureCatalogData() {
     await db.execute(sql`
       UPDATE stripe.products
       SET _raw_data = jsonb_set(
-            jsonb_set(_raw_data, '{description}', ${JSON.stringify(BODY_BUTTER_DESCRIPTION)}::jsonb, true),
-            '{metadata}',
-            COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(BODY_BUTTER_META)}::jsonb,
+            jsonb_set(
+              jsonb_set(_raw_data, '{description}', ${JSON.stringify(BODY_BUTTER_DESCRIPTION)}::jsonb, true),
+              '{metadata}',
+              COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(BODY_BUTTER_META)}::jsonb,
+              true
+            ),
+            '{images}',
+            ${JSON.stringify([BODY_BUTTER_IMAGE_PATH])}::jsonb,
             true
           ),
           _updated_at = now()
@@ -2702,9 +2754,14 @@ export async function ensureCatalogData() {
       await db.execute(sql`
         UPDATE stripe.products
         SET _raw_data = jsonb_set(
-              jsonb_set(_raw_data, '{description}', ${JSON.stringify(b.description)}::jsonb, true),
-              '{metadata}',
-              COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(b.meta)}::jsonb,
+              jsonb_set(
+                jsonb_set(_raw_data, '{description}', ${JSON.stringify(b.description)}::jsonb, true),
+                '{metadata}',
+                COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(b.meta)}::jsonb,
+                true
+              ),
+              '{images}',
+              ${JSON.stringify([b.meta.imageUrl])}::jsonb,
               true
             ),
             _updated_at = now()
