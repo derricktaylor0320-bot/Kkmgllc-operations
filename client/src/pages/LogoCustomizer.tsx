@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useLocation } from "wouter";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
@@ -15,6 +15,7 @@ import ShipStateTaxSummary, { useShipToState } from "@/components/ShipStateTaxSu
 import { placementSurchargeDollars } from "@shared/customization";
 import {
   CUTTING_BOARD_FEATURES,
+  CUTTING_BOARD_GARMENT_QUERY_PARAM,
   cuttingBoardTotalDollars,
   NFL_CUTTING_BOARD_GARMENT_ID,
 } from "@shared/footballCuttingBoard";
@@ -118,6 +119,26 @@ export default function LogoCustomizer() {
   
   const selectedGarmentData = availableGarments.find(g => g.id === selectedGarment);
   const isCuttingBoard = selectedGarmentData?.category === "cutting-board";
+  const orderSummaryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const garmentParam = params.get(CUTTING_BOARD_GARMENT_QUERY_PARAM);
+    if (
+      garmentParam === NFL_CUTTING_BOARD_GARMENT_ID &&
+      logo?.section === FOOTBALL_SPORTS_EDITION_SECTION
+    ) {
+      setSelectedGarment(NFL_CUTTING_BOARD_GARMENT_ID);
+      setCuttingBoardQty(1);
+      window.requestAnimationFrame(() => {
+        orderSummaryRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    }
+  }, [logoId, logo?.section]);
+
   const placementOptions =
     selectedGarmentData?.category === "bottoms"
       ? bottomPlacementOptions
@@ -589,7 +610,11 @@ export default function LogoCustomizer() {
               </div>
               )}
 
-              <Card className="bg-primary/10 border-primary/30">
+              <Card
+                ref={orderSummaryRef}
+                id="custom-order-summary"
+                className="bg-primary/10 border-primary/30 scroll-mt-24"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-lg font-medium">Your Custom Order</span>
@@ -657,7 +682,7 @@ export default function LogoCustomizer() {
                     data-testid="button-proceed-to-checkout"
                   >
                     <ShoppingCart className="mr-2 h-5 w-5" />
-                    {isSubmitting ? "Processing..." : "Proceed to Checkout"}
+                    {isSubmitting ? "Processing..." : isCuttingBoard ? "Proceed to Checkout — Board" : "Proceed to Checkout"}
                   </Button>
                 </CardContent>
               </Card>
