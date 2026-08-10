@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, CalendarDays, Shirt, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarDays, Shirt, Sparkles, UtensilsCrossed } from "lucide-react";
 import { Link } from "wouter";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -46,10 +46,10 @@ export default function FootballTeams() {
                 <span className="mt-2 block text-primary">Sports Edition</span>
               </h1>
               <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Pick your football crest, choose the item you want, and decide
-                exactly where the design goes. These limited-season designs can
-                be placed on shirts, sweatshirts, jackets, jeans, shorts, and
-                more.
+                Pick your football crest, then choose apparel, accessories, or a
+                handmade NFL cutting board ($50 · 2 for $90). Limited-season
+                designs can be placed on shirts, sweatshirts, jackets, jeans,
+                shorts, and more.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm">
                 <span className="rounded-full border border-primary/35 bg-primary/10 px-4 py-2 text-foreground">
@@ -59,10 +59,45 @@ export default function FootballTeams() {
                   T-shirts start at $30
                 </span>
                 <span className="rounded-full border border-primary/35 bg-primary/10 px-4 py-2 text-foreground">
+                  NFL cutting boards $50 · 2 for $90
+                </span>
+                <span className="rounded-full border border-primary/35 bg-primary/10 px-4 py-2 text-foreground">
                   Multiple placements add $3
                 </span>
               </div>
             </motion.div>
+          </div>
+        </section>
+
+        <section className="border-y border-primary/20 bg-secondary/40">
+          <div className="container mx-auto px-4 py-12 md:py-16">
+            <div className="mx-auto grid max-w-5xl gap-8 rounded-2xl border border-primary/35 bg-background/70 p-6 shadow-2xl md:grid-cols-[auto_1fr] md:p-10">
+              <span className="flex h-14 w-14 items-center justify-center rounded-xl border border-primary/40 bg-primary/10 text-primary">
+                <UtensilsCrossed className="h-7 w-7" />
+              </span>
+              <div>
+                <h2 className="font-display text-2xl font-bold uppercase tracking-wide text-primary md:text-3xl">
+                  NFL Handmade Cutting Boards
+                </h2>
+                <p className="mt-3 leading-relaxed text-muted-foreground">
+                  Bring game day into your kitchen with handcrafted hardwood
+                  cutting boards featuring your team crest. Each board is made by
+                  hand with premium wood, detailed NFL team artwork, and a
+                  food-safe epoxy finish — functional for everyday use or bold
+                  enough to display.
+                </p>
+                <p className="mt-4 text-sm font-semibold uppercase tracking-wider text-foreground">
+                  $50 per board · 2 for $90
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Pick any team below, then choose{" "}
+                  <span className="font-medium text-foreground">
+                    NFL Handmade Cutting Board
+                  </span>{" "}
+                  under Game Day Kitchen.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -78,8 +113,8 @@ export default function FootballTeams() {
               {FOOTBALL_SPORTS_EDITION_SECTION}
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-              Select any crest below to open the customizer and choose your
-              garment and print location.
+              Select any crest below to open the customizer — apparel, tumblers,
+              or NFL cutting boards.
             </p>
           </div>
 
