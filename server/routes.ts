@@ -16,6 +16,11 @@ import { registerLiquidityRoutes } from "./liquidityRouter";
 import { registerExpenseReliefRoutes } from "./expenseRelief";
 import { PROGRAM_PATHWAY, PROGRAM_STAGES } from "@shared/programStages";
 import { checkCustomization, customizationErrorMessage, isDefaultLogoCustomizable, apparelSizesFor, scentsFor, FULL_LOGO_CATALOG_OPTION, placementSurchargeDollars } from "@shared/customization";
+import {
+  cuttingBoardTotalCents,
+  NFL_CUTTING_BOARD_GARMENT_ID,
+} from "@shared/footballCuttingBoard";
+import { FOOTBALL_TEAM_DESIGNS } from "@shared/footballTeams";
 import { updateOrderFulfillmentSchema, insertMediaLinkSchema, mediaUploadFieldsSchema, insertReviewSchema, updateProfileSchema, type Review, type User } from "@shared/schema";
 import {
   DISCOUNT_CODES,
@@ -815,7 +820,7 @@ export async function registerRoutes(
   // Create custom checkout session for logo customization (Square-hosted checkout)
   app.post("/api/create-custom-checkout", async (req, res) => {
     try {
-      const { logoId, logoName, garmentType, garmentId, placements, placementDescription } = req.body;
+      const { logoId, logoName, garmentType, garmentId, placements, placementDescription, quantity } = req.body;
 
       if (!logoId || !garmentId) {
         return res.status(400).json({ error: "Missing required fields" });
@@ -825,6 +830,10 @@ export async function registerRoutes(
       if (taxResult.error) {
         return res.status(400).json({ error: taxResult.error });
       }
+
+      const footballLogoIds = new Set<string>(
+        FOOTBALL_TEAM_DESIGNS.map((team) => team.id),
+      );
 
       // Server-authoritative pricing: compute the total here, never trust the client.
       // Base garment prices (USD) must mirror the LogoCustomizer options.
@@ -845,20 +854,49 @@ export async function registerRoutes(
         "tumbler-40oz": 45,
       };
 
-      const basePrice = GARMENT_BASE_PRICES[garmentId];
-      if (!basePrice) {
-        return res.status(400).json({ error: "Invalid garment selection" });
-      }
+      let amountCents: number;
+      let lineQuantity = 1;
+      let lineName: string;
+      let lineNote: string;
 
-      // Some items (e.g. the tumblers) carry a single laser-etched logo only —
-      // the dual-placement surcharge must never apply to them.
-      const SINGLE_PLACEMENT_GARMENTS = new Set(["tumbler-20oz", "tumbler-30oz", "tumbler-40oz"]);
-      const placementCount = SINGLE_PLACEMENT_GARMENTS.has(garmentId)
-        ? 1
-        : (Array.isArray(placements) ? placements.length : 1);
-      const totalDollars =
-        basePrice + placementSurchargeDollars(placementCount);
-      const amountCents = Math.round(totalDollars * 100);
+      if (garmentId === NFL_CUTTING_BOARD_GARMENT_ID) {
+        if (!footballLogoIds.has(String(logoId))) {
+          return res.status(400).json({
+            error: "NFL cutting boards are only available with Football Sports Edition team designs.",
+          });
+        }
+        const boardQty = Math.max(1, Math.min(99, Math.round(Number(quantity) || 1)));
+        amountCents = cuttingBoardTotalCents(boardQty);
+        lineName =
+          boardQty === 1
+            ? `NFL Handmade Cutting Board - Logo #${logoId}`
+            : `NFL Handmade Cutting Boards (${boardQty}) - Logo #${logoId}`;
+        lineNote = `Team: ${logoName} | Qty: ${boardQty} ($50 each, 2 for $90)`.slice(0, 500);
+        // Bundle pricing is not a flat per-unit rate — charge the computed total
+        // as one line (Square multiplies unit price × quantity).
+        lineQuantity = 1;
+      } else {
+        const basePrice = GARMENT_BASE_PRICES[garmentId];
+        if (!basePrice) {
+          return res.status(400).json({ error: "Invalid garment selection" });
+        }
+
+        // Some items (e.g. the tumblers) carry a single laser-etched logo only —
+        // the dual-placement surcharge must never apply to them.
+        const SINGLE_PLACEMENT_GARMENTS = new Set([
+          "tumbler-20oz",
+          "tumbler-30oz",
+          "tumbler-40oz",
+        ]);
+        const placementCount = SINGLE_PLACEMENT_GARMENTS.has(garmentId)
+          ? 1
+          : (Array.isArray(placements) ? placements.length : 1);
+        const totalDollars =
+          basePrice + placementSurchargeDollars(placementCount);
+        amountCents = Math.round(totalDollars * 100);
+        lineName = `Custom ${garmentType || "Garment"} - Logo #${logoId}`;
+        lineNote = `Logo: ${logoName} | Placement: ${placementDescription}`.slice(0, 500);
+      }
 
       const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
 
@@ -867,10 +905,10 @@ export async function registerRoutes(
       const { url } = await createSquareOrderPaymentLink({
         lineItems: [
           {
-            name: `Custom ${garmentType || "Garment"} - Logo #${logoId}`,
-            quantity: 1,
+            name: lineName,
+            quantity: lineQuantity,
             amountCents,
-            note: `Logo: ${logoName} | Placement: ${placementDescription}`.slice(0, 500),
+            note: lineNote,
           },
         ],
         tax: taxResult.tax,

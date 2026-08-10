@@ -9,11 +9,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, ShoppingCart, Check, AlertCircle } from "lucide-react";
+import { ArrowLeft, Minus, Plus, ShoppingCart, Check, AlertCircle } from "lucide-react";
 import { allLogos } from "@/lib/logoCatalog";
 import ShipStateTaxSummary, { useShipToState } from "@/components/ShipStateTaxSummary";
 import { placementSurchargeDollars } from "@shared/customization";
+import {
+  CUTTING_BOARD_FEATURES,
+  cuttingBoardTotalDollars,
+  NFL_CUTTING_BOARD_GARMENT_ID,
+} from "@shared/footballCuttingBoard";
 import { FOOTBALL_SPORTS_EDITION_SECTION } from "@shared/footballTeams";
+
+const MAX_CUTTING_BOARD_QTY = 10;
 
 const garmentTypes = [
   { id: "short-sleeve", name: "Short Sleeve T-Shirt", basePrice: 30, category: "tops" },
@@ -28,6 +35,13 @@ const garmentTypes = [
   { id: "tumbler-20oz", name: "20oz Insulated Travel Tumbler", basePrice: 34.99, category: "accessories" },
   { id: "tumbler-30oz", name: "30oz Insulated Travel Tumbler", basePrice: 39.99, category: "accessories" },
   { id: "tumbler-40oz", name: "40oz Insulated Travel Tumbler", basePrice: 45, category: "accessories" },
+  {
+    id: NFL_CUTTING_BOARD_GARMENT_ID,
+    name: "NFL Handmade Cutting Board",
+    basePrice: 50,
+    category: "cutting-board",
+    footballOnly: true,
+  },
 ];
 
 const topPlacementOptions = [
@@ -81,6 +95,7 @@ export default function LogoCustomizer() {
   const { logoId } = useParams<{ logoId: string }>();
   const [, setLocation] = useLocation();
   const [selectedGarment, setSelectedGarment] = useState<string>("");
+  const [cuttingBoardQty, setCuttingBoardQty] = useState(1);
   const [selectedPlacements, setSelectedPlacements] = useState<string[]>(["front-left-chest"]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -88,6 +103,10 @@ export default function LogoCustomizer() {
   const { toast } = useToast();
 
   const logo = logoId ? allLogos[logoId] : null;
+  const isFootballLogo = logo?.section === FOOTBALL_SPORTS_EDITION_SECTION;
+  const availableGarments = garmentTypes.filter(
+    (g) => !g.footballOnly || isFootballLogo,
+  );
   const backHref =
     logo?.section === FOOTBALL_SPORTS_EDITION_SECTION
       ? "/football-teams"
@@ -97,7 +116,8 @@ export default function LogoCustomizer() {
       ? "Back to Football Sports Edition"
       : "Back to Logo Collection";
   
-  const selectedGarmentData = garmentTypes.find(g => g.id === selectedGarment);
+  const selectedGarmentData = availableGarments.find(g => g.id === selectedGarment);
+  const isCuttingBoard = selectedGarmentData?.category === "cutting-board";
   const placementOptions =
     selectedGarmentData?.category === "bottoms"
       ? bottomPlacementOptions
@@ -135,9 +155,13 @@ export default function LogoCustomizer() {
   };
 
   const calculatePrice = () => {
-    const garment = garmentTypes.find(g => g.id === selectedGarment);
+    const garment = availableGarments.find(g => g.id === selectedGarment);
     if (!garment) return 0;
-    
+
+    if (garment.category === "cutting-board") {
+      return cuttingBoardTotalDollars(cuttingBoardQty);
+    }
+
     let price = garment.basePrice;
     price += placementSurchargeDollars(selectedPlacements.length);
     return price;
@@ -151,11 +175,14 @@ export default function LogoCustomizer() {
   };
 
   const handleGarmentChange = (value: string) => {
-    const newGarment = garmentTypes.find((g) => g.id === value);
+    const newGarment = availableGarments.find((g) => g.id === value);
     const prevCategory = selectedGarmentData?.category;
     const nextCategory = newGarment?.category;
     setSelectedGarment(value);
-    if (prevCategory !== nextCategory) {
+    if (nextCategory === "cutting-board") {
+      setCuttingBoardQty(1);
+    }
+    if (prevCategory !== nextCategory && nextCategory !== "cutting-board") {
       setSelectedPlacements([defaultPlacementFor(nextCategory)]);
     }
   };
@@ -186,11 +213,13 @@ export default function LogoCustomizer() {
     setIsSubmitting(true);
     
     try {
-      const garment = garmentTypes.find(g => g.id === selectedGarment);
-      const placements = selectedPlacements.map(p => {
-        const opt = placementOptions.find(opt => opt.id === p);
-        return opt ? `${opt.name} (${opt.dimensions})` : "";
-      }).filter(Boolean).join(" + ");
+      const garment = availableGarments.find(g => g.id === selectedGarment);
+      const placements = isCuttingBoard
+        ? "Team crest embedded in board design"
+        : selectedPlacements.map(p => {
+            const opt = placementOptions.find(opt => opt.id === p);
+            return opt ? `${opt.name} (${opt.dimensions})` : "";
+          }).filter(Boolean).join(" + ");
       
       const response = await fetch("/api/create-custom-checkout", {
         method: "POST",
@@ -200,8 +229,9 @@ export default function LogoCustomizer() {
           logoName: logo.color,
           garmentType: garment?.name,
           garmentId: selectedGarment,
-          placements: selectedPlacements,
+          placements: isCuttingBoard ? ["board-design"] : selectedPlacements,
           placementDescription: placements,
+          quantity: isCuttingBoard ? cuttingBoardQty : 1,
           totalPrice: calculatePrice() * 100,
           shipToState,
         }),
@@ -278,10 +308,15 @@ export default function LogoCustomizer() {
             >
               <div>
                 <h1 className="text-4xl font-display font-bold uppercase mb-2">
-                  Customize Your <span className="text-primary">Apparel</span>
+                  Customize Your{" "}
+                  <span className="text-primary">
+                    {isFootballLogo ? "Team Gear" : "Apparel"}
+                  </span>
                 </h1>
                 <p className="text-muted-foreground">
-                  Select your garment type and placement options below.
+                  {isFootballLogo
+                    ? "Select apparel, accessories, or a handmade NFL cutting board below."
+                    : "Select your garment type and placement options below."}
                 </p>
               </div>
 
@@ -296,7 +331,7 @@ export default function LogoCustomizer() {
                     onValueChange={handleGarmentChange}
                     className="grid gap-3"
                   >
-                    {garmentTypes.filter(g => g.category === "tops").map((garment) => (
+                    {availableGarments.filter(g => g.category === "tops").map((garment) => (
                       <div key={garment.id} className="flex items-center">
                         <RadioGroupItem 
                           value={garment.id} 
@@ -322,7 +357,7 @@ export default function LogoCustomizer() {
                     onValueChange={handleGarmentChange}
                     className="grid gap-3"
                   >
-                    {garmentTypes.filter(g => g.category === "bottoms").map((garment) => (
+                    {availableGarments.filter(g => g.category === "bottoms").map((garment) => (
                       <div key={garment.id} className="flex items-center">
                         <RadioGroupItem 
                           value={garment.id} 
@@ -348,7 +383,7 @@ export default function LogoCustomizer() {
                     onValueChange={handleGarmentChange}
                     className="grid gap-3"
                   >
-                    {garmentTypes.filter(g => g.category === "swimwear").map((garment) => (
+                    {availableGarments.filter(g => g.category === "swimwear").map((garment) => (
                       <div key={garment.id} className="flex items-center">
                         <RadioGroupItem
                           value={garment.id}
@@ -374,7 +409,7 @@ export default function LogoCustomizer() {
                     onValueChange={handleGarmentChange}
                     className="grid gap-3"
                   >
-                    {garmentTypes.filter(g => g.category === "accessories").map((garment) => (
+                    {availableGarments.filter(g => g.category === "accessories").map((garment) => (
                       <div key={garment.id} className="flex items-center">
                         <RadioGroupItem
                           value={garment.id}
@@ -393,7 +428,107 @@ export default function LogoCustomizer() {
                     ))}
                   </RadioGroup>
                 </div>
+                {isFootballLogo && (
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-3 font-semibold uppercase tracking-wide">
+                      Game Day Kitchen
+                    </p>
+                    <RadioGroup
+                      value={selectedGarment}
+                      onValueChange={handleGarmentChange}
+                      className="grid gap-3"
+                    >
+                      {availableGarments
+                        .filter((g) => g.category === "cutting-board")
+                        .map((garment) => (
+                          <div key={garment.id} className="flex items-center">
+                            <RadioGroupItem
+                              value={garment.id}
+                              id={garment.id}
+                              className="peer sr-only"
+                              data-testid={`radio-garment-${garment.id}`}
+                            />
+                            <Label
+                              htmlFor={garment.id}
+                              className="flex items-center justify-between w-full p-4 bg-secondary rounded-lg border-2 border-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 cursor-pointer transition-all hover:bg-secondary/80"
+                            >
+                              <span className="font-medium">{garment.name}</span>
+                              <span className="text-right">
+                                <span className="block text-primary font-bold">$50</span>
+                                <span className="block text-[10px] uppercase tracking-wider text-muted-foreground">
+                                  2 for $90
+                                </span>
+                              </span>
+                            </Label>
+                          </div>
+                        ))}
+                    </RadioGroup>
+                  </div>
+                )}
               </div>
+
+              {isCuttingBoard && (
+                <div className="space-y-4" data-testid="cutting-board-options">
+                  <h3 className="text-xl font-display font-bold uppercase">
+                    2. Choose Quantity
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    $50 per board — grab two for $90. Each board features your
+                    team crest in a handcrafted hardwood design.
+                  </p>
+                  <div className="flex items-center gap-4 rounded-lg bg-secondary p-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      disabled={cuttingBoardQty <= 1}
+                      onClick={() => setCuttingBoardQty((q) => Math.max(1, q - 1))}
+                      aria-label="Decrease quantity"
+                      data-testid="button-cutting-board-qty-decrease"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <span
+                      className="min-w-[3ch] text-center text-2xl font-display font-bold"
+                      data-testid="text-cutting-board-qty"
+                    >
+                      {cuttingBoardQty}
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      disabled={cuttingBoardQty >= MAX_CUTTING_BOARD_QTY}
+                      onClick={() =>
+                        setCuttingBoardQty((q) =>
+                          Math.min(MAX_CUTTING_BOARD_QTY, q + 1),
+                        )
+                      }
+                      aria-label="Increase quantity"
+                      data-testid="button-cutting-board-qty-increase"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                    <span className="text-sm text-muted-foreground">
+                      {cuttingBoardQty === 2
+                        ? "Pair price applied — $90"
+                        : cuttingBoardQty > 2
+                          ? "Bundle pricing applied"
+                          : "$50 each"}
+                    </span>
+                  </div>
+                  <div className="space-y-2 rounded-lg bg-secondary p-4">
+                    <p className="text-sm font-semibold uppercase tracking-wide text-primary">
+                      Handmade Details
+                    </p>
+                    <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
+                      {CUTTING_BOARD_FEATURES.map((feature, i) => (
+                        <li key={i}>{feature}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
 
               {selectedGarment && accessoryFeatures[selectedGarment] && (
                 <div className="space-y-2 rounded-lg bg-secondary p-4" data-testid="accessory-features">
@@ -406,6 +541,7 @@ export default function LogoCustomizer() {
                 </div>
               )}
 
+              {!isCuttingBoard && (
               <div className="space-y-4">
                 <h3 className="text-xl font-display font-bold uppercase">
                   2. Select Logo Placement
@@ -451,6 +587,7 @@ export default function LogoCustomizer() {
                   </p>
                 )}
               </div>
+              )}
 
               <Card className="bg-primary/10 border-primary/30">
                 <CardContent className="p-6">
@@ -463,12 +600,20 @@ export default function LogoCustomizer() {
                   <div className="text-sm text-muted-foreground space-y-1 mb-6">
                     <p>Logo: #{logoId} - {logo.color}</p>
                     {selectedGarment && (
-                      <p>Garment: {garmentTypes.find(g => g.id === selectedGarment)?.name}</p>
+                      <p>
+                        Item: {availableGarments.find(g => g.id === selectedGarment)?.name}
+                        {isCuttingBoard ? ` × ${cuttingBoardQty}` : ""}
+                      </p>
                     )}
+                    {!isCuttingBoard && (
                     <p>Placement: {selectedPlacements.map(p => 
                       placementOptions.find(opt => opt.id === p)?.name
                     ).join(" + ")}</p>
-                    {selectedPlacements.map(p => {
+                    )}
+                    {isCuttingBoard && (
+                      <p>Design: Team crest embedded in board</p>
+                    )}
+                    {!isCuttingBoard && selectedPlacements.map(p => {
                       const opt = placementOptions.find(opt => opt.id === p);
                       return opt ? (
                         <p key={p} className="text-xs pl-2" data-testid={`summary-dimensions-${opt.id}`}>
