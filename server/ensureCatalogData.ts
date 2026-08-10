@@ -1544,6 +1544,37 @@ export async function ensureCatalogData() {
       WHERE name = ${CANDLE_NAME} AND active = true
     `);
 
+    // 3c) Bedding + body butter -> royal blue / silver artwork. Runs before the
+    //     accountId gate so production always self-heals imageUrl/description on
+    //     every boot, even when synthetic inserts below are skipped.
+    for (const b of BEDDING_PRODUCTS) {
+      await db.execute(sql`
+        UPDATE stripe.products
+        SET _raw_data = jsonb_set(
+              jsonb_set(_raw_data, '{description}', ${JSON.stringify(b.description)}::jsonb, true),
+              '{metadata}',
+              COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(b.meta)}::jsonb,
+              true
+            ),
+            _updated_at = now()
+        WHERE active = true
+          AND (id = ${b.productId} OR name = ${b.name})
+      `);
+    }
+
+    await db.execute(sql`
+      UPDATE stripe.products
+      SET _raw_data = jsonb_set(
+            jsonb_set(_raw_data, '{description}', ${JSON.stringify(BODY_BUTTER_DESCRIPTION)}::jsonb, true),
+            '{metadata}',
+            COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(BODY_BUTTER_META)}::jsonb,
+            true
+          ),
+          _updated_at = now()
+      WHERE active = true
+        AND (id = ${BODY_BUTTER_PRODUCT_ID} OR name = ${BODY_BUTTER_NAME})
+    `);
+
     // 4) Synthetic catalog inserts need an account id from an existing product
     //    row. Without one we can't create tumblers / cases / etc. on this DB.
     const acct: any = await db.execute(
@@ -1551,7 +1582,9 @@ export async function ensureCatalogData() {
     );
     const accountId = acct?.rows?.[0]?._account_id as string | undefined;
     if (!accountId) {
-      console.warn("ensureCatalogData: no _account_id found; skipped catalog product inserts.");
+      console.warn(
+        "ensureCatalogData: no _account_id found; skipped synthetic catalog inserts (bedding/body-butter imagery already synced above).",
+      );
       return;
     }
 
@@ -1694,7 +1727,8 @@ export async function ensureCatalogData() {
             true
           ),
           _updated_at = now()
-      WHERE name = ${BODY_BUTTER_NAME} AND active = true
+      WHERE active = true
+        AND (id = ${BODY_BUTTER_PRODUCT_ID} OR name = ${BODY_BUTTER_NAME})
     `);
 
     // Force the body butter's active price to $12 (self-heals any drift), the
@@ -2674,7 +2708,8 @@ export async function ensureCatalogData() {
               true
             ),
             _updated_at = now()
-        WHERE name = ${b.name} AND active = true
+        WHERE active = true
+          AND (id = ${b.productId} OR name = ${b.name})
       `);
 
       await db.execute(sql`
