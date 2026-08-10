@@ -10,7 +10,14 @@ export function serveStatic(app: Express) {
     );
   }
 
-  // Serve attached_assets at both /assets and /attached_assets paths for product images
+  // Catalog product images live in client/public/assets (built to dist/public/assets).
+  // Serve those first so /assets always resolves to the latest storefront artwork.
+  const distAssetsPath = path.resolve(distPath, "assets");
+  if (fs.existsSync(distAssetsPath)) {
+    app.use("/assets", express.static(distAssetsPath));
+  }
+
+  // attached_assets holds uploads and legacy paths; fall back after dist assets.
   const attachedAssetsPath = path.resolve(__dirname, "..", "attached_assets");
   if (fs.existsSync(attachedAssetsPath)) {
     app.use("/assets", express.static(attachedAssetsPath));
