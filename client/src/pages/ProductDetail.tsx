@@ -39,8 +39,11 @@ interface ApiProduct {
   scents?: string | null;
 }
 
-function listingForType(productType?: string) {
-  switch (productType) {
+function listingForProduct(product: { productType?: string; category?: string }) {
+  if (product.category === "Body Care") {
+    return { href: "/elements", label: "Health & Skin Care" };
+  }
+  switch (product.productType) {
     case "accessory":
       return { href: "/accessories", label: "Accessories" };
     case "vintage":
@@ -110,7 +113,7 @@ function ProductDetailContent({
   const { addItem, items: cartItems } = useCart();
   const { recordView } = useRecentlyViewed();
   const price = parseFloat(product.price);
-  const listing = listingForType(product.productType);
+  const listing = listingForProduct(product);
   const soldOut = !!product.soldOut;
   const comingSoon = !!product.comingSoon;
   const supplementInfo = getSupplementInfo(product.title);

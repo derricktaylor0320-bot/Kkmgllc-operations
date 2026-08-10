@@ -1005,7 +1005,7 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       "Personalized custom car floor mats (rug-style) featuring your choice of any Khomplete Khemistri logo from our full catalog. All-weather mats custom-branded for your vehicle. One flat $60 price includes your custom logo and shipping — no extra charges at checkout. SELECT YOUR LOGO at checkout.",
     priceCents: 6000,
     meta: {
-      category: "Automotive",
+      category: "Accessories",
       productType: "accessory",
       sortOrder: "31",
       gender: "Unisex",
