@@ -27,6 +27,153 @@ import {
 
 const STANDARD_LOGO_OPTIONS = "Apparel Logo, Accessories Eagle Badge, 5 Swords Crest";
 
+/**
+ * Create-or-repair a synthetic catalog product + one-time price.
+ *
+ * The previous insert pattern skipped rows when an inactive product already
+ * shared the name, and only updated `active = true` rows — so a failed partial
+ * insert could permanently hide a SKU (e.g. Custom Car Floor Mats on prod).
+ * This helper inserts by id when missing, reactivates inactive matches, and
+ * keeps the linked price active at the intended amount.
+ */
+async function ensureSyntheticProduct(opts: {
+  accountId: string;
+  productId: string;
+  priceId: string;
+  name: string;
+  description: string;
+  priceCents: number;
+  meta: Record<string, string>;
+  created: number;
+  stripSizes?: boolean;
+}): Promise<void> {
+  const {
+    accountId,
+    productId,
+    priceId,
+    name,
+    description,
+    priceCents,
+    meta,
+    created,
+    stripSizes = false,
+  } = opts;
+
+  const productRaw = JSON.stringify({
+    id: productId,
+    object: "product",
+    active: true,
+    name,
+    description,
+    metadata: meta,
+    images: [],
+    created,
+    livemode: false,
+  });
+
+  // Insert when neither the synthetic id nor the display name exists yet.
+  await db.execute(sql`
+    INSERT INTO stripe.products (_raw_data, _account_id, _updated_at, _last_synced_at)
+    SELECT ${productRaw}::jsonb, ${accountId}, now(), now()
+    WHERE NOT EXISTS (
+      SELECT 1 FROM stripe.products
+      WHERE id = ${productId} OR name = ${name}
+    )
+  `);
+
+  // Reactivate + converge name/description/metadata for id OR name matches
+  // (covers inactive leftovers that blocked the insert above).
+  await db.execute(sql`
+    UPDATE stripe.products
+    SET _raw_data = jsonb_set(
+          jsonb_set(
+            jsonb_set(
+              jsonb_set(_raw_data, '{active}', 'true'::jsonb, true),
+              '{name}',
+              ${JSON.stringify(name)}::jsonb,
+              true
+            ),
+            '{description}',
+            ${JSON.stringify(description)}::jsonb,
+            true
+          ),
+          '{metadata}',
+          (
+            CASE
+              WHEN ${stripSizes} THEN
+                (COALESCE(_raw_data->'metadata', '{}'::jsonb) - 'etsyLink' - 'cost' - 'profitMargin' - 'sizes')
+              ELSE
+                (COALESCE(_raw_data->'metadata', '{}'::jsonb) - 'etsyLink' - 'cost' - 'profitMargin')
+            END
+          ) || ${JSON.stringify(meta)}::jsonb,
+          true
+        ),
+        _updated_at = now()
+    WHERE id = ${productId} OR name = ${name}
+  `);
+
+  // Prefer attaching the canonical synthetic price id to the live product id.
+  const liveProductIdResult: any = await db.execute(sql`
+    SELECT id FROM stripe.products
+    WHERE (id = ${productId} OR name = ${name}) AND active = true
+    ORDER BY (id = ${productId}) DESC
+    LIMIT 1
+  `);
+  const liveProductId =
+    (liveProductIdResult?.rows?.[0]?.id as string | undefined) || productId;
+
+  const livePriceRaw = JSON.stringify({
+    id: priceId,
+    object: "price",
+    active: true,
+    currency: "usd",
+    unit_amount: priceCents,
+    product: liveProductId,
+    type: "one_time",
+    billing_scheme: "per_unit",
+    created,
+    livemode: false,
+  });
+
+  await db.execute(sql`
+    INSERT INTO stripe.prices (_raw_data, _account_id, _updated_at, _last_synced_at)
+    SELECT ${livePriceRaw}::jsonb, ${accountId}, now(), now()
+    WHERE NOT EXISTS (SELECT 1 FROM stripe.prices WHERE id = ${priceId})
+      AND EXISTS (SELECT 1 FROM stripe.products WHERE id = ${liveProductId})
+  `);
+
+  // If the canonical price row exists but points at a stale product / amount /
+  // inactive flag, repair it in place.
+  await db.execute(sql`
+    UPDATE stripe.prices
+    SET _raw_data = jsonb_set(
+          jsonb_set(
+            jsonb_set(_raw_data, '{active}', 'true'::jsonb, true),
+            '{product}',
+            ${JSON.stringify(liveProductId)}::jsonb,
+            true
+          ),
+          '{unit_amount}',
+          ${String(priceCents)}::jsonb,
+          true
+        ),
+        _updated_at = now()
+    WHERE id = ${priceId}
+  `);
+
+  // Force any *already-active* price on this product to the intended amount
+  // (self-heals drift when a non-canonical price id is what the storefront
+  // sees). Do not reactivate archived prices — that would create duplicates.
+  await db.execute(sql`
+    UPDATE stripe.prices
+    SET _raw_data = jsonb_set(_raw_data, '{unit_amount}', ${String(priceCents)}::jsonb, true),
+        _updated_at = now()
+    WHERE active = true
+      AND product = ${liveProductId}
+      AND (_raw_data->>'unit_amount') IS DISTINCT FROM ${String(priceCents)}
+  `);
+}
+
 // Branded Tumblers — Amazon-fulfilled, three sizes. Retail includes the Amazon
 // delivery fee, so the customer sees FREE SHIPPING; sales tax is added at
 // checkout from the buyer's ship-to state. All three share the colors note
@@ -1017,7 +1164,8 @@ const EXTRA_ACCESSORY_PRODUCTS: {
     meta: {
       category: "Accessories",
       productType: "accessory",
-      sortOrder: "31",
+      // Near the top of Accessories (after His & Hers watches / duffle).
+      sortOrder: "26",
       gender: "Unisex",
       imageUrl: "/assets/kk_custom_car_floor_mats.png",
     },
@@ -1644,6 +1792,53 @@ export async function ensureCatalogData() {
     }
 
     const created = Math.floor(Date.now() / 1000);
+
+    // 4b) Critical Accessories SKUs — run immediately so a failure later in this
+    //     routine cannot leave Custom Car Floor Mats missing from production.
+    //     Also retire the cup sleeve here (in addition to step 7) for the same
+    //     reason: customers were still seeing it while mats never appeared.
+    try {
+      const floorMats = EXTRA_ACCESSORY_PRODUCTS.find(
+        (p) => p.productId === "prod_kkcarfloormats",
+      );
+      if (floorMats) {
+        await ensureSyntheticProduct({
+          accountId,
+          productId: floorMats.productId,
+          priceId: floorMats.priceId,
+          name: floorMats.name,
+          description: floorMats.description,
+          priceCents: floorMats.priceCents,
+          meta: floorMats.meta,
+          created,
+        });
+        console.log(
+          "ensureCatalogData: ensured Custom Car Floor Mats ($60 flat, logo + shipping).",
+        );
+      }
+
+      await db.execute(sql`
+        UPDATE stripe.products
+        SET _raw_data = jsonb_set(_raw_data, '{active}', 'false'::jsonb, true),
+            _updated_at = now()
+        WHERE name = ${"Personalized Coffee Cup Sleeve"} AND active = true
+      `);
+      await db.execute(sql`
+        UPDATE stripe.prices
+        SET _raw_data = jsonb_set(_raw_data, '{active}', 'false'::jsonb, true),
+            _updated_at = now()
+        WHERE active = true
+          AND product IN (
+            SELECT id FROM stripe.products
+            WHERE name = ${"Personalized Coffee Cup Sleeve"}
+          )
+      `);
+    } catch (err) {
+      console.error(
+        "ensureCatalogData: critical Accessories SKU ensure failed:",
+        err,
+      );
+    }
 
     // 5a) 20 oz + 30 oz Branded Tumblers ($34.99 / $39.99, Amazon-fulfilled,
     //     free shipping baked into retail). Guarded insert creates them where
@@ -2850,79 +3045,31 @@ export async function ensureCatalogData() {
       `);
     }
 
-    // 6b) Extra accessories (e.g. Personalized Drawstring Backpack) — same
-    //     self-applying create/keep-current pattern as bedding above. Multi-color
-    //     picker via `colors`; full logo catalog by default (no logoOptions).
+    // 6b) Extra accessories (e.g. Personalized Drawstring Backpack / Car Floor
+    //     Mats) — self-applying create/reactivate/repair via ensureSyntheticProduct.
+    //     Per-item try/catch so one bad SKU cannot block the rest of the catalog.
     for (const e of EXTRA_ACCESSORY_PRODUCTS) {
-      const eProductRaw = JSON.stringify({
-        id: e.productId,
-        object: "product",
-        active: true,
-        name: e.name,
-        description: e.description,
-        metadata: e.meta,
-        images: [],
-        created,
-        livemode: false,
-      });
-
-      const ePriceRaw = JSON.stringify({
-        id: e.priceId,
-        object: "price",
-        active: true,
-        currency: "usd",
-        unit_amount: e.priceCents,
-        product: e.productId,
-        type: "one_time",
-        billing_scheme: "per_unit",
-        created,
-        livemode: false,
-      });
-
-      await db.execute(sql`
-        INSERT INTO stripe.products (_raw_data, _account_id, _updated_at, _last_synced_at)
-        SELECT ${eProductRaw}::jsonb, ${accountId}, now(), now()
-        WHERE NOT EXISTS (SELECT 1 FROM stripe.products WHERE name = ${e.name})
-      `);
-
-      await db.execute(sql`
-        INSERT INTO stripe.prices (_raw_data, _account_id, _updated_at, _last_synced_at)
-        SELECT ${ePriceRaw}::jsonb, ${accountId}, now(), now()
-        WHERE NOT EXISTS (SELECT 1 FROM stripe.prices WHERE id = ${e.priceId})
-          AND EXISTS (SELECT 1 FROM stripe.products WHERE id = ${e.productId})
-      `);
-
-      // When a product moves from bedding-style `sizes` to wearable `apparelSizes`
-      // (so logo + size can both be chosen), drop the stale `sizes` key so the
-      // size-only checkout path doesn't keep winning.
-      const stripSizes = Boolean(e.meta.apparelSizes);
-      await db.execute(sql`
-        UPDATE stripe.products
-        SET _raw_data = jsonb_set(
-              jsonb_set(_raw_data, '{description}', ${JSON.stringify(e.description)}::jsonb, true),
-              '{metadata}',
-              (
-                CASE
-                  WHEN ${stripSizes} THEN
-                    (COALESCE(_raw_data->'metadata', '{}'::jsonb) - 'etsyLink' - 'cost' - 'profitMargin' - 'sizes')
-                  ELSE
-                    (COALESCE(_raw_data->'metadata', '{}'::jsonb) - 'etsyLink' - 'cost' - 'profitMargin')
-                END
-              ) || ${JSON.stringify(e.meta)}::jsonb,
-              true
-            ),
-            _updated_at = now()
-        WHERE name = ${e.name} AND active = true
-      `);
-
-      await db.execute(sql`
-        UPDATE stripe.prices
-        SET _raw_data = jsonb_set(_raw_data, '{unit_amount}', ${String(e.priceCents)}::jsonb, true),
-            _updated_at = now()
-        WHERE active = true
-          AND product IN (SELECT id FROM stripe.products WHERE name = ${e.name} AND active = true)
-          AND (_raw_data->>'unit_amount') IS DISTINCT FROM ${String(e.priceCents)}
-      `);
+      try {
+        await ensureSyntheticProduct({
+          accountId,
+          productId: e.productId,
+          priceId: e.priceId,
+          name: e.name,
+          description: e.description,
+          priceCents: e.priceCents,
+          meta: e.meta,
+          created,
+          // When a product moves from bedding-style `sizes` to wearable
+          // `apparelSizes` (so logo + size can both be chosen), drop the stale
+          // `sizes` key so the size-only checkout path doesn't keep winning.
+          stripSizes: Boolean(e.meta.apparelSizes),
+        });
+      } catch (err) {
+        console.error(
+          `ensureCatalogData: failed ensuring extra accessory "${e.name}":`,
+          err,
+        );
+      }
     }
 
     // 7) Remove retired products (Kids Sippy Cup + the baby line) from the
