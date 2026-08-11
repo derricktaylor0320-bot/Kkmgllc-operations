@@ -74,6 +74,12 @@ const FEMININE_LOGO_COPY: Record<
     description:
       "Crisp red-and-gold griffin crest with pearl crown — the bold successor to the earlier dark fuchsia colorway.",
   },
+  "240": {
+    name: "Feminine Ornate Eagle — Ed Hardy Style",
+    label: "Royalty Badge · Female",
+    description:
+      "Bold tattoo-luxe feminine crest — crowned eagle, heart-ruby shield, roses, and ornate scrollwork in vibrant Ed Hardy energy.",
+  },
 };
 
 function productImageFit(product: StorefrontProduct) {

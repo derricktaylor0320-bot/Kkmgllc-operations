@@ -85,6 +85,8 @@ import logoPearlGriffinCottonCandy from "@assets/female-polo-shirts/logo_pearl_g
 import logoPearlGriffinPurple from "@assets/female-polo-shirts/logo_pearl_griffin_purple.png";
 import logoPearlGriffinNavy from "@assets/female-polo-shirts/logo_pearl_griffin_navy.png";
 import logoPearlGriffinRedGold from "@assets/feminine/logo_pearl_griffin_red_gold.png";
+import logoFoundersCrestII from "@assets/masculine/logo_founders_crest_ii_blue_gold.png";
+import logoFeminineEdHardyCrest from "@assets/feminine/logo_feminine_ed_hardy_crest.png";
 
 // Seasonal Football Teams Sports Edition — canonical artwork folder:
 // attached_assets/seasonal-football-sports-edition/.
@@ -243,6 +245,8 @@ export const allLogos: Record<string, LogoEntry> = {
   "236": { src: badgeConsolidatusNavySilver, alt: "The Consolidatus Empire LLC Crest - Navy & Silver Est. 2020", color: "Consolidatus Navy & Silver", section: "Badge of Honor" },
   "237": { src: badgeConsolidatusCharcoalPurple, alt: "The Consolidatus Empire LLC Crest - Charcoal & Purple Est. 2020", color: "Consolidatus Charcoal & Purple", section: "Badge of Honor" },
   "238": { src: badgeConsolidatusGoldBrown, alt: "The Consolidatus Empire LLC Crest - Gold & Brown Est. 2020", color: "Consolidatus Gold & Brown", section: "Badge of Honor" },
+  "239": { src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", section: "Badge of Honor" },
+  "240": { src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest", section: "Badge of Honor" },
   "300": { src: honorAllGold, alt: "The Golden Eagle Shield", color: "All Gold", section: "Shield of Honor" },
   "301": { src: honorNavyGold, alt: "Navy & Gold Eagle Shield", color: "Navy & Gold", section: "Shield of Honor" },
   "302": { src: honorSilverGold, alt: "Silver & Gold Eagle Shield", color: "Silver & Gold", section: "Shield of Honor" },
@@ -264,7 +268,7 @@ export const allLogos: Record<string, LogoEntry> = {
 // Featured feminine pearl griffin crests for /feminine — Royalty Badge of Honor
 // Female Logos subgroup (IDs 229–235). Polo emblems use 229–234
 // (see attached_assets/female-polo-shirts/); #235 Red & Gold is gallery-only.
-export const FEMININE_LOGO_IDS = ["229", "230", "231", "232", "233", "234", "235"] as const;
+export const FEMININE_LOGO_IDS = ["229", "230", "231", "232", "233", "234", "235", "240"] as const;
 
 // Eight men’s eagle-and-swords crests used for premium polos (fixed placement).
 // Files: attached_assets/male-polo-shirts/.
@@ -304,6 +308,7 @@ export const MASCULINE_FOLDER_LOGO_IDS = [
   "236",
   "237",
   "238",
+  "239",
   "301",
   "309",
   "310",

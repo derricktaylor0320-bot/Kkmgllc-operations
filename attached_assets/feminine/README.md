@@ -21,6 +21,7 @@ Royalty Badge of Honor collection (not the circular Canvas Collection):
 | `logo_pearl_griffin_purple.png` | Purple | #233 |
 | `logo_pearl_griffin_navy.png` | Navy | #234 |
 | `logo_pearl_griffin_red_gold.png` | Red & Gold | #235 |
+| `logo_feminine_ed_hardy_crest.png` | Ed Hardy Style | #240 |
 
 **Female premium polos:** #229–#234 are the emblems for women’s premium polo
 shirts (copies + notes in `attached_assets/female-polo-shirts/`).

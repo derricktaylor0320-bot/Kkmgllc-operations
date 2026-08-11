@@ -26,7 +26,7 @@ import logoLimeGreen from "@assets/logo_lime_green.jpg";
 import logoMasterpieceTrident from "@assets/logo_masterpiece_trident_three.png";
 import medallionCorePrinciples from "@assets/copilot_image_1781210586301_1781211927468.jpeg";
 
-// Badge of Honor Collection — crests 200-228 + Female Logos 229-235
+// Badge of Honor Collection — crests 200-228 + Female Logos 229-235, 240 + Founders Crest II 239
 import shieldBlackWhite from "@assets/Screenshot_20251126_205145_Photos_1764208360832.jpg";
 import shieldBlueGold from "@assets/Screenshot_20251126_205125_Photos_1764208373884.jpg";
 import crestBlueValuesSwords from "@assets/image000009_1781214860404.jpg";
@@ -104,6 +104,8 @@ import logoPearlGriffinCottonCandy from "@assets/feminine/logo_pearl_griffin_cot
 import logoPearlGriffinPurple from "@assets/feminine/logo_pearl_griffin_purple.png";
 import logoPearlGriffinNavy from "@assets/feminine/logo_pearl_griffin_navy.png";
 import logoPearlGriffinRedGold from "@assets/feminine/logo_pearl_griffin_red_gold.png";
+import logoFoundersCrestII from "@assets/masculine/logo_founders_crest_ii_blue_gold.png";
+import logoFeminineEdHardyCrest from "@assets/feminine/logo_feminine_ed_hardy_crest.png";
 
 export default function Canvas() {
   const logos = [
@@ -144,6 +146,7 @@ export default function Canvas() {
     { id: "233", src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple" },
     { id: "234", src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy" },
     { id: "235", src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold" },
+    { id: "240", src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest" },
   ];
 
   const badges = [
@@ -179,6 +182,7 @@ export default function Canvas() {
     { id: "236", src: badgeConsolidatusNavySilver, alt: "The Consolidatus Empire LLC Crest - Navy & Silver Est. 2020", color: "Consolidatus Navy & Silver", featured: true },
     { id: "237", src: badgeConsolidatusCharcoalPurple, alt: "The Consolidatus Empire LLC Crest - Charcoal & Purple Est. 2020", color: "Consolidatus Charcoal & Purple", featured: true },
     { id: "238", src: badgeConsolidatusGoldBrown, alt: "The Consolidatus Empire LLC Crest - Gold & Brown Est. 2020", color: "Consolidatus Gold & Brown", featured: true },
+    { id: "239", src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", featured: true },
   ];
 
   const honorShields = [
@@ -268,7 +272,7 @@ export default function Canvas() {
                 Versatile Royalty Badge of Honor Collection
               </h2>
               <p className="text-primary font-display text-sm uppercase tracking-[0.28em] mt-3">
-                Our Biggest Collection · 38 Logos
+                Our Biggest Collection · 40 Logos
               </p>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
                 Male and female crests to match your mood and your vibe — which one do you want to ride with? Brotherhood, Unity, and Strength.
