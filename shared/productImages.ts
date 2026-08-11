@@ -16,12 +16,21 @@ export const LEGACY_BROWN_BEDDING_IMAGE_PATHS: Record<string, string> = {
   "/assets/kk_body_pillow.png": BEDDING_BODY_PILLOW_IMAGE,
 };
 
+export const HIS_HERS_WATCH_IMAGE = "/assets/kka_gold_watch.jpg";
+
+/** Retired His & Hers watch image path (replaced by kka_gold_watch.jpg). */
+export const LEGACY_WATCH_IMAGE_PATHS: Record<string, string> = {
+  "/assets/kk_his_hers_watch_set.jpg": HIS_HERS_WATCH_IMAGE,
+  "/attached_assets/kka_gold_watch.jpg": HIS_HERS_WATCH_IMAGE,
+};
+
 const TITLE_IMAGE_OVERRIDES: Array<{ pattern: RegExp; imageUrl: string }> = [
   { pattern: /comforter set/i, imageUrl: BEDDING_COMFORTER_IMAGE },
   { pattern: /sheet set/i, imageUrl: BEDDING_SHEET_IMAGE },
   { pattern: /pillowcase set/i, imageUrl: BEDDING_PILLOWCASE_IMAGE },
   { pattern: /body pillow/i, imageUrl: BEDDING_BODY_PILLOW_IMAGE },
   { pattern: /whipped body butter/i, imageUrl: BODY_BUTTER_IMAGE },
+  { pattern: /his & hers watch/i, imageUrl: HIS_HERS_WATCH_IMAGE },
 ];
 
 function isBlueSilverArtwork(path: string): boolean {
@@ -42,8 +51,10 @@ export function resolveStorefrontImageUrl(
 ): string {
   const trimmed = (imageUrl || "").trim();
   if (trimmed) {
-    const legacy = LEGACY_BROWN_BEDDING_IMAGE_PATHS[trimmed];
-    if (legacy) return legacy;
+    const legacyBedding = LEGACY_BROWN_BEDDING_IMAGE_PATHS[trimmed];
+    if (legacyBedding) return legacyBedding;
+    const legacyWatch = LEGACY_WATCH_IMAGE_PATHS[trimmed];
+    if (legacyWatch) return legacyWatch;
     if (isBlueSilverArtwork(trimmed)) return trimmed;
   }
 

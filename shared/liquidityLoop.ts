@@ -70,14 +70,14 @@ export const HUB_INVESTMENT_PROGRAMS: HubInvestmentProgram[] = [
   },
   {
     tag: "EXPENSE_RELIEF_VAULT",
-    name: "Out-of-Pocket Booster Vault",
-    shortName: "OOP Booster",
+    name: "TCE Expense Advantage Vault",
+    shortName: "TCE Expense Advantage",
     description:
       "Compensation Vault for verified out-of-pocket expense claims — membership fees and investor capital put money back in members' pockets (medical, dental, vet, tolls, and more).",
     allocationSummary:
-      "100% into the Out-of-Pocket Booster Compensation Vault",
+      "100% into the TCE Expense Advantage Compensation Vault",
     ledgerDescription:
-      "100% allocated to the Out-of-Pocket Booster Compensation Vault to back verified member reimbursements on out-of-pocket expenses.",
+      "100% allocated to the TCE Expense Advantage Compensation Vault to back verified member reimbursements on out-of-pocket expenses.",
     annualYieldRate: 0.08,
     status: "open",
     fundsPocketBoosterVault: false,

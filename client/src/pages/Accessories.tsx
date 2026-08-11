@@ -222,6 +222,7 @@ export default function Accessories() {
                 variants={product.variants}
                 imageFit={
                   product.imageUrl?.includes("kk_branded_logo_lighter") ||
+                  product.imageUrl?.includes("kka_gold_watch") ||
                   product.imageUrl?.includes("kk_his_hers_watch") ||
                   product.imageUrl?.includes("kk_custom_car_floor_mats") ||
                   product.imageUrl?.includes("scented_candles_branded")

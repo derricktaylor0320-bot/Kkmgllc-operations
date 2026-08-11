@@ -1187,11 +1187,11 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       "Matching his & hers wristwatch set featuring the Khomplete Khemistri Accessories eagle crest on the dial. Classic link bracelets, quartz movement, and a paired presentation ready for gifting. One flat price for the complete two-watch set.",
     priceCents: 12000,
     meta: {
-      category: "Jewelry",
+      category: "Accessories",
       productType: "accessory",
       sortOrder: "27",
       gender: "Unisex",
-      imageUrl: "/assets/kk_his_hers_watch_set.jpg",
+      imageUrl: "/assets/kka_gold_watch.jpg",
       customize: "none",
     },
   },
@@ -1814,6 +1814,25 @@ export async function ensureCatalogData() {
         });
         console.log(
           "ensureCatalogData: ensured Custom Car Floor Mats ($60 flat, logo + shipping).",
+        );
+      }
+
+      const hisHersWatches = EXTRA_ACCESSORY_PRODUCTS.find(
+        (p) => p.productId === "prod_kkhisherswatches",
+      );
+      if (hisHersWatches) {
+        await ensureSyntheticProduct({
+          accountId,
+          productId: hisHersWatches.productId,
+          priceId: hisHersWatches.priceId,
+          name: hisHersWatches.name,
+          description: hisHersWatches.description,
+          priceCents: hisHersWatches.priceCents,
+          meta: hisHersWatches.meta,
+          created,
+        });
+        console.log(
+          "ensureCatalogData: ensured Khomplete Khemistri His & Hers Watch Set.",
         );
       }
 

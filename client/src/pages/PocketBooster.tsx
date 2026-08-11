@@ -443,7 +443,7 @@ export default function PocketBooster() {
                 <a href="#pay-to-learn">Take a Program</a>
               </Button>
               <Button asChild data-testid="button-open-expense-relief">
-                <Link href="/expense-relief">Out-of-Pocket Booster</Link>
+                <Link href="/expense-relief">TCE Expense Advantage</Link>
               </Button>
               <Button
                 asChild
@@ -475,7 +475,7 @@ export default function PocketBooster() {
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 Pocket Booster gives interest-free cushions when you need cash
-                now. Out-of-Pocket Booster is separate — four membership tiers
+                now. TCE Expense Advantage is separate — four membership tiers
                 reimburse a portion of verified medical, dental, vet, toll, and
                 similar expenses. Optional $125 Early Activation skips the
                 30-day wait. If that program&apos;s Compensation Vault is empty,
@@ -484,7 +484,7 @@ export default function PocketBooster() {
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:items-end">
               <Button asChild data-testid="button-pb-to-expense-relief">
-                <Link href="/expense-relief">Open Out-of-Pocket Booster</Link>
+                <Link href="/expense-relief">Open TCE Expense Advantage</Link>
               </Button>
               <Button asChild variant="ghost" size="sm">
                 <Link href="/expense-relief#claim-application">
@@ -870,7 +870,7 @@ export default function PocketBooster() {
                 className="text-primary underline underline-offset-2"
                 data-testid="link-expense-relief-from-pb-reserve"
               >
-                Out-of-Pocket Booster
+                TCE Expense Advantage
               </Link>
               .
             </p>

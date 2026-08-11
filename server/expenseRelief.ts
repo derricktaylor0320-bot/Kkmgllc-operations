@@ -13,6 +13,7 @@ import {
 import {
   EXPENSE_CATEGORIES,
   EXPENSE_RELIEF_DEFAULTS,
+  EXPENSE_RELIEF_DISCLAIMER,
   EXPENSE_RELIEF_PLAN,
   EXPENSE_RELIEF_PLATFORM,
   EXPENSE_RELIEF_RULES,
@@ -180,6 +181,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
       notAcceptable: NOT_ACCEPTABLE_CLAIMS,
       activationPolicy: ACTIVATION_POLICY,
       claimSubmissionPolicy: CLAIM_SUBMISSION_POLICY,
+      disclaimer: EXPENSE_RELIEF_DISCLAIMER,
       note:
         "Four tiers ($10 / $20 / $40 / $60). Optional $125 Early Activation ($100 + $25 processing) unlocks filing before 30 days. Empty vault means no payout.",
     });

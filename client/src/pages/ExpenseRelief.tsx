@@ -30,6 +30,7 @@ import {
   CLAIM_SUBMISSION_POLICY,
   EXPENSE_CATEGORIES,
   EXPENSE_RELIEF_DEFAULTS,
+  EXPENSE_RELIEF_DISCLAIMER,
   EXPENSE_RELIEF_PLATFORM,
   EXPENSE_RELIEF_RULES,
   EXPENSE_RELIEF_TIERS,
@@ -293,7 +294,7 @@ export default function ExpenseRelief() {
         title: "Vault capital added",
         description:
           data.message ||
-          "Your RPUs went into the Out-of-Pocket Booster Compensation Vault.",
+          "Your RPUs went into the TCE Expense Advantage Compensation Vault.",
       });
     },
     onError: (err: unknown) => {
@@ -355,13 +356,19 @@ export default function ExpenseRelief() {
                 The Consolidatus Empire · companion to Pocket Booster
               </p>
               <h1 className="font-brand text-4xl font-bold tracking-wide sm:text-5xl lg:text-6xl">
-                Out-of-Pocket{" "}
-                <span className="silver-shine">Booster</span>
+                TCE Expense{" "}
+                <span className="silver-shine">Advantage</span>
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
                 {catalog?.tagline ?? EXPENSE_RELIEF_PLATFORM.tagline} Four
                 membership tiers. Optional $125 Early Activation. Claims pay
                 only when the Compensation Vault has capital.
+              </p>
+              <p
+                className="mt-4 max-w-2xl rounded-xl border border-primary/25 bg-background/40 p-4 text-sm leading-relaxed text-muted-foreground"
+                data-testid="text-expense-advantage-disclaimer"
+              >
+                {EXPENSE_RELIEF_DISCLAIMER}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild className="bg-primary text-primary-foreground">
@@ -745,8 +752,8 @@ export default function ExpenseRelief() {
             <div className="mt-6 rounded-xl border border-primary/25 bg-card/40 p-8 text-center">
               <ShieldCheck className="mx-auto h-10 w-10 text-primary" />
               <p className="mt-3 text-sm text-muted-foreground">
-                Sign in with your Empire hub account to activate Out-of-Pocket
-                Booster.
+                Sign in with your Empire hub account to activate TCE Expense
+                Advantage.
               </p>
               <Button asChild className="mt-4">
                 <Link href="/auth">Sign in</Link>
@@ -1043,7 +1050,7 @@ export default function ExpenseRelief() {
                       {investMutation.isPending ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       ) : null}
-                      Issue RPUs to OOP Booster Vault
+                      Issue RPUs to TCE Expense Advantage Vault
                     </Button>
                   </div>
                 )}
