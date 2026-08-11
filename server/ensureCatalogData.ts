@@ -1184,14 +1184,14 @@ const EXTRA_ACCESSORY_PRODUCTS: {
     priceId: "price_kkhisherswatches",
     name: "Khomplete Khemistri His & Hers Watch Set",
     description:
-      "Matching his & hers wristwatch set featuring the Khomplete Khemistri Accessories eagle crest on the dial. Classic link bracelets, quartz movement, and a paired presentation ready for gifting. One flat price for the complete two-watch set.",
+      "Matching his & hers wristwatch set in polished silver with navy dials featuring the Khomplete Khemistri Accessories eagle crest. Classic link bracelets, quartz movement, and a paired presentation ready for gifting. One flat price for the complete two-watch set.",
     priceCents: 12000,
     meta: {
       category: "Accessories",
       productType: "accessory",
       sortOrder: "27",
       gender: "Unisex",
-      imageUrl: "/assets/kka_gold_watch.jpg",
+      imageUrl: "/assets/kk_his_hers_watch_set.jpg",
       customize: "none",
     },
   },

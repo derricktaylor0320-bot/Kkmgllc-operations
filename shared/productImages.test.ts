@@ -50,9 +50,9 @@ describe("resolveStorefrontImageUrl", () => {
     );
   });
 
-  it("rewrites retired His & Hers watch image to kka_gold_watch artwork", () => {
+  it("rewrites retired gold watch image to silver His & Hers artwork", () => {
     assert.equal(
-      resolveStorefrontImageUrl("/assets/kk_his_hers_watch_set.jpg"),
+      resolveStorefrontImageUrl("/assets/kka_gold_watch.jpg"),
       HIS_HERS_WATCH_IMAGE,
     );
   });

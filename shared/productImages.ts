@@ -16,11 +16,11 @@ export const LEGACY_BROWN_BEDDING_IMAGE_PATHS: Record<string, string> = {
   "/assets/kk_body_pillow.png": BEDDING_BODY_PILLOW_IMAGE,
 };
 
-export const HIS_HERS_WATCH_IMAGE = "/assets/kka_gold_watch.jpg";
+export const HIS_HERS_WATCH_IMAGE = "/assets/kk_his_hers_watch_set.jpg";
 
-/** Retired His & Hers watch image path (replaced by kka_gold_watch.jpg). */
+/** Retired gold watch image paths (replaced by silver His & Hers artwork). */
 export const LEGACY_WATCH_IMAGE_PATHS: Record<string, string> = {
-  "/assets/kk_his_hers_watch_set.jpg": HIS_HERS_WATCH_IMAGE,
+  "/assets/kka_gold_watch.jpg": HIS_HERS_WATCH_IMAGE,
   "/attached_assets/kka_gold_watch.jpg": HIS_HERS_WATCH_IMAGE,
 };
 
