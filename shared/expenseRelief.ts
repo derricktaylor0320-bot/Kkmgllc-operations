@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 /**
- * Out-of-Pocket Booster (Consolidated Expense Relief)
- * ----------------------------------------------------
+ * TCE Expense Advantage Program (Consolidated Expense Relief)
+ * ------------------------------------------------------------
  * Empire benefit program: membership tiers reimburse a portion of verified
  * out-of-pocket expenses. Companion to Pocket Booster (cushions) — this program
  * pays back after you already spent, subject to vault capital.
@@ -15,13 +15,16 @@ import { z } from "zod";
  */
 
 export const EXPENSE_RELIEF_PLATFORM = {
-  platformName: "Out-of-Pocket Booster",
-  shortName: "OOP Booster",
+  platformName: "TCE Expense Advantage Program",
+  shortName: "TCE Expense Advantage",
   programTag: "EXPENSE_RELIEF_VAULT",
   fundingStrategy: "Zero-Capital (Subscription + Vault Powered)",
   tagline: "Money back in your pocket for real out-of-pocket costs.",
   companionProgram: "Pocket Booster",
 } as const;
+
+export const EXPENSE_RELIEF_DISCLAIMER =
+  "T. C. E. (The Consolidatus Empire LLC) Expense Advantage Program was created to assist with out-of-pocket expenses that we are often faced with. It is designed with the everyday consumer in mind and we focus on everyday unforeseen incidents that many say \"it won't happen to me\" and most likely don't plan for — things like car accidents, dropped cell phones, traffic violations, and medical visits, etc. Now let's clear up one major misconception: we are not insurance. With us, it is better to have our services and not need it than to need it and not have it.";
 
 /** Shared timing / fee constants across all tiers */
 export const EXPENSE_RELIEF_DEFAULTS = {
@@ -275,13 +278,13 @@ export const EXPENSE_RELIEF_RULES = [
   {
     id: "not_fr2p",
     title: "Not a rewards / affiliate program",
-    body: "Out-of-Pocket Booster reimburses verified expenses. Pocket Booster handles cash cushions. FR2P / FARSUP stay separate for rewards.",
+    body: "TCE Expense Advantage reimburses verified expenses. Pocket Booster handles cash cushions. FR2P / FARSUP stay separate for rewards.",
   },
 ] as const;
 
 /** Official Activation Policy copy for the website */
 export const ACTIVATION_POLICY = {
-  title: "Out-of-Pocket Booster Activation Policy",
+  title: "TCE Expense Advantage Activation Policy",
   intro:
     "Members must complete a 30-day activation period before filing their first reimbursement claim. This activation period ensures program integrity, prevents fraud, and allows time for verification of member information.",
   requirements: [
@@ -311,7 +314,7 @@ export const ACTIVATION_POLICY = {
 
 /** Official Claim Submission Policy copy */
 export const CLAIM_SUBMISSION_POLICY = {
-  title: "Out-of-Pocket Booster Claim Submission Policy",
+  title: "TCE Expense Advantage Claim Submission Policy",
   intro:
     "To maintain fairness and prevent fraudulent activity, all claims must follow the rules below.",
   filingRequirements: [
@@ -433,7 +436,7 @@ export const NOT_ACCEPTABLE_CLAIMS = [
     group: "Program fees & premiums",
     items: [
       "Monthly insurance premiums as the claim itself",
-      "Out-of-Pocket Booster membership or $125 Early Activation fees",
+      "TCE Expense Advantage membership or $125 Early Activation fees",
       "Pocket Booster, FR2P, or FARSUP program fees",
     ],
   },

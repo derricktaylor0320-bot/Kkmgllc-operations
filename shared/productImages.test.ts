@@ -4,6 +4,7 @@ import {
   BODY_BUTTER_IMAGE,
   BEDDING_COMFORTER_IMAGE,
   BEDDING_PILLOWCASE_IMAGE,
+  HIS_HERS_WATCH_IMAGE,
   resolveStorefrontImageUrl,
 } from "./productImages";
 
@@ -46,6 +47,20 @@ describe("resolveStorefrontImageUrl", () => {
         "Khomplete Khemistri Accessories Pillowcase Set",
       ),
       BEDDING_PILLOWCASE_IMAGE,
+    );
+  });
+
+  it("rewrites retired gold watch image to silver His & Hers artwork", () => {
+    assert.equal(
+      resolveStorefrontImageUrl("/assets/kka_gold_watch.jpg"),
+      HIS_HERS_WATCH_IMAGE,
+    );
+  });
+
+  it("infers watch artwork from title when metadata image is empty", () => {
+    assert.equal(
+      resolveStorefrontImageUrl("", "Khomplete Khemistri His & Hers Watch Set"),
+      HIS_HERS_WATCH_IMAGE,
     );
   });
 });

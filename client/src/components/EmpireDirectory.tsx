@@ -111,7 +111,7 @@ const DIRECTORY_ITEMS: DirectoryItem[] = [
   },
   {
     href: "/expense-relief",
-    title: "Out-of-Pocket Booster",
+    title: "TCE Expense Advantage",
     description:
       "Four tiers — get a portion of verified out-of-pocket expenses back.",
     Icon: WalletCards,

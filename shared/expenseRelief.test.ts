@@ -4,6 +4,7 @@ import {
   ACCEPTABLE_CLAIMS,
   ACTIVATION_POLICY,
   EXPENSE_RELIEF_DEFAULTS,
+  EXPENSE_RELIEF_DISCLAIMER,
   EXPENSE_RELIEF_PLAN,
   EXPENSE_RELIEF_RULES,
   EXPENSE_RELIEF_TIERS,
@@ -14,7 +15,7 @@ import {
   reimbursementForAmount,
 } from "./expenseRelief";
 
-describe("Out-of-Pocket Booster", () => {
+describe("TCE Expense Advantage Program", () => {
   it("offers four tiers with rising reimbursement rates", () => {
     assert.equal(EXPENSE_RELIEF_TIERS.length, 4);
     assert.equal(EXPENSE_RELIEF_TIERS[0].monthlyFee, 10);
@@ -110,6 +111,7 @@ describe("Out-of-Pocket Booster", () => {
     assert.equal(ACTIVATION_POLICY.earlyActivation.total, 125);
     assert.ok(ACCEPTABLE_CLAIMS.length > 0);
     assert.ok(NOT_ACCEPTABLE_CLAIMS.length > 0);
+    assert.match(EXPENSE_RELIEF_DISCLAIMER, /we are not insurance/i);
   });
 
   it("allows verifiable work commute and member school supplies, blocks personal lifestyle", () => {
