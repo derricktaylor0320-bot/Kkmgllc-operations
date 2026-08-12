@@ -6,24 +6,14 @@ import heroBackground from "@assets/brand/empire_headquarters_blue_silver.jpg";
 export default function Hero() {
   return (
     <section className="relative flex h-[85vh] w-full items-center justify-center overflow-hidden text-white">
-      <div className="absolute inset-0 bg-[hsl(222_86%_22%)]">
-        <img
-          src={heroBackground}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-45 blur-xl"
-        />
+      <div className="absolute inset-0 bg-[hsl(222_86%_18%)]">
         <img
           src={heroBackground}
           alt="The Consolidatus Empire Headquarters"
-          className="relative h-full w-full object-cover object-center md:object-contain"
+          className="h-full w-full object-cover object-[center_35%]"
           data-testid="img-home-headquarters"
         />
-        <div className="absolute inset-0 bg-[hsl(219_96%_54%)]/28 mix-blend-soft-light" />
-        <div className="absolute inset-0 bg-[hsl(222_86%_28%)]/25 mix-blend-color" />
-        <div className="pointer-events-none absolute inset-0 topaz-glow opacity-90" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_50%_at_50%_42%,hsla(219,96%,54%,0.28),transparent_72%)]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/92 via-transparent to-[hsl(222_86%_22%)]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/88 via-background/20 to-black/25" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 text-center">
