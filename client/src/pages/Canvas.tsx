@@ -108,6 +108,8 @@ import logoPearlGriffinNavy from "@assets/feminine/logo_pearl_griffin_navy.png";
 import logoPearlGriffinRedGold from "@assets/feminine/logo_pearl_griffin_red_gold.png";
 import logoFoundersCrestII from "@assets/masculine/logo_founders_crest_ii_blue_gold.png";
 import logoFeminineEdHardyCrest from "@assets/feminine/logo_feminine_ed_hardy_crest.png";
+import logoFeminineEagleCrownHotPink from "@assets/feminine/logo_feminine_eagle_crown_hot_pink.png";
+import logoFeminineEagleCrownPurple from "@assets/feminine/logo_feminine_eagle_crown_purple.png";
 
 export default function Canvas() {
   const logos = [
@@ -149,6 +151,8 @@ export default function Canvas() {
     { id: "237", src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy" },
     { id: "238", src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold" },
     { id: "239", src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest" },
+    { id: "246", src: logoFeminineEagleCrownHotPink, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Hot Pink Est. 2020", color: "Feminine Crowned Eagle Hot Pink" },
+    { id: "247", src: logoFeminineEagleCrownPurple, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Purple Est. 2020", color: "Feminine Crowned Eagle Purple" },
   ];
 
   const badges = [
