@@ -26,7 +26,7 @@ import logoLimeGreen from "@assets/logo_lime_green.jpg";
 import logoMasterpieceTrident from "@assets/logo_masterpiece_trident_three.png";
 import medallionCorePrinciples from "@assets/copilot_image_1781210586301_1781211927468.jpeg";
 
-// Badge of Honor Collection — crests 200-228 + Female Logos 229-235, 240 + Founders Crest II 239
+// Badge of Honor Collection — crests 200-228 + Female Logos 229-236 + Founders 237-240
 import shieldBlackWhite from "@assets/Screenshot_20251126_205145_Photos_1764208360832.jpg";
 import shieldBlueGold from "@assets/Screenshot_20251126_205125_Photos_1764208373884.jpg";
 import crestBlueValuesSwords from "@assets/image000009_1781214860404.jpg";
@@ -86,7 +86,7 @@ import logoCrossedSwords from "@assets/generated_images/crossed_swords_kk_logo.p
 import logoKKShieldSwords from "@assets/generated_images/kk_shield_with_swords.png";
 import logoKKACrossedSwords from "@assets/generated_images/kka_crossed_swords_logo.png";
 import logoPrideRainbow from "@assets/1781582068026_1781668463902.png";
-import logoKKAShield from "@assets/kka_shield_apparel_logo.jpg";
+import logoKKAShield from "@assets/masculine/logo_kka_shield_royal_blue_silver.png";
 import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 
 // Compass Collection — 400-403
@@ -146,7 +146,7 @@ export default function Canvas() {
     { id: "233", src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple" },
     { id: "234", src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy" },
     { id: "235", src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold" },
-    { id: "240", src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest" },
+    { id: "236", src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest" },
   ];
 
   const badges = [
@@ -179,10 +179,10 @@ export default function Canvas() {
     { id: "226", src: badgeEaglesSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold", color: "Silver & Gold Eagles", featured: true },
     { id: "227", src: badgeEaglesAllGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold", color: "All Gold Eagles", featured: true },
     { id: "228", src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", featured: true },
-    { id: "236", src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", featured: true },
-    { id: "237", src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", featured: true },
-    { id: "238", src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", featured: true },
-    { id: "239", src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", featured: true },
+    { id: "237", src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", featured: true },
+    { id: "238", src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", featured: true },
+    { id: "239", src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", featured: true },
+    { id: "240", src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", featured: true },
   ];
 
   const honorShields = [
@@ -196,7 +196,7 @@ export default function Canvas() {
     { id: "307", src: honorPurpleGold, alt: "Purple & Gold Eagle Shield", color: "Purple & Gold" },
     { id: "308", src: honorWhiteGold, alt: "White & Gold Eagle Shield", color: "White & Gold" },
     { id: "309", src: logoKKShieldSwords, alt: "KK Shield with Swords", color: "KK Shield & Swords", featured: true },
-    { id: "310", src: logoKKAShield, alt: "KKA Shield with Eagle - Khomplete Khemistri Apparel", color: "KKA Shield", featured: true },
+    { id: "310", src: logoKKAShield, alt: "KKA Shield with Eagle - Khomplete Khemistri Apparel Royal Blue & Silver", color: "KKA Shield Royal Blue & Silver", featured: true },
   ];
 
   const compassCollection = [

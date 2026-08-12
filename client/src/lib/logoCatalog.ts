@@ -70,7 +70,7 @@ import logoCrossedSwords from "@assets/masculine/crossed_swords_kk_logo.png";
 import logoKKShieldSwords from "@assets/masculine/kk_shield_with_swords.png";
 import logoKKACrossedSwords from "@assets/masculine/kka_crossed_swords_logo.png";
 import logoPrideRainbow from "@assets/feminine/logo_pride_tie_dye_crest.png";
-import logoKKAShield from "@assets/masculine/kka_shield_apparel_logo.jpg";
+import logoKKAShield from "@assets/masculine/logo_kka_shield_royal_blue_silver.png";
 import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
 import logoSilverPinkFeminine from "@assets/feminine/logo_silver_pink_feminine_medallion.png";
@@ -242,12 +242,13 @@ export const allLogos: Record<string, LogoEntry> = {
   "233": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Badge of Honor" },
   "234": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Badge of Honor" },
   "235": { src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold", section: "Badge of Honor" },
-  "236": { src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", section: "Badge of Honor" },
-  "237": { src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", section: "Badge of Honor" },
-  "238": { src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", section: "Badge of Honor" },
+  "236": { src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest", section: "Badge of Honor" },
+  // Founders Crest I — three colorways (Navy & Silver, Charcoal & Purple, Gold & Brown)
+  "237": { src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", section: "Badge of Honor" },
+  "238": { src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", section: "Badge of Honor" },
+  "239": { src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", section: "Badge of Honor" },
   // Founders Crest II — royal blue & gold trident crest
-  "239": { src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", section: "Badge of Honor" },
-  "240": { src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest", section: "Badge of Honor" },
+  "240": { src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", section: "Badge of Honor" },
   "300": { src: honorAllGold, alt: "The Golden Eagle Shield", color: "All Gold", section: "Shield of Honor" },
   "301": { src: honorNavyGold, alt: "Navy & Gold Eagle Shield", color: "Navy & Gold", section: "Shield of Honor" },
   "302": { src: honorSilverGold, alt: "Silver & Gold Eagle Shield", color: "Silver & Gold", section: "Shield of Honor" },
@@ -258,7 +259,7 @@ export const allLogos: Record<string, LogoEntry> = {
   "307": { src: honorPurpleGold, alt: "Purple & Gold Eagle Shield", color: "Purple & Gold", section: "Shield of Honor" },
   "308": { src: honorWhiteGold, alt: "White & Gold Eagle Shield", color: "White & Gold", section: "Shield of Honor" },
   "309": { src: logoKKShieldSwords, alt: "KK Shield with Swords", color: "KK Shield & Swords", section: "Shield of Honor" },
-  "310": { src: logoKKAShield, alt: "KKA Shield with Eagle - Khomplete Khemistri Apparel", color: "KKA Shield", section: "Shield of Honor" },
+  "310": { src: logoKKAShield, alt: "KKA Shield with Eagle - Khomplete Khemistri Apparel Royal Blue & Silver", color: "KKA Shield Royal Blue & Silver", section: "Shield of Honor" },
   "400": { src: compassKKApparel, alt: "Khomplete Khemistri Apparel Compass", color: "KK Apparel Compass", section: "Compass Collection" },
   "401": { src: compassKMG1, alt: "KKMG LLC Compass", color: "KKMG LLC Compass", section: "Compass Collection" },
   "402": { src: compassKMG2, alt: "KKMG LLC Compass II", color: "KKMG LLC Compass II", section: "Compass Collection" },
@@ -266,10 +267,9 @@ export const allLogos: Record<string, LogoEntry> = {
   ...footballTeamLogos,
 };
 
-// Featured feminine pearl griffin crests for /feminine — Royalty Badge of Honor
-// Female Logos subgroup (IDs 229–235). Polo emblems use 229–234
-// (see attached_assets/female-polo-shirts/); #235 Red & Gold is gallery-only.
-export const FEMININE_LOGO_IDS = ["229", "230", "231", "232", "233", "234", "235", "240"] as const;
+// Featured feminine crests for /feminine — Royalty Badge of Honor Female Logos
+// (IDs 229–236). Polo emblems use 229–234; #235 Red & Gold is gallery-only.
+export const FEMININE_LOGO_IDS = ["229", "230", "231", "232", "233", "234", "235", "236"] as const;
 
 // Eight men’s eagle-and-swords crests used for premium polos (fixed placement).
 // Files: attached_assets/male-polo-shirts/.
@@ -306,10 +306,10 @@ export const MASCULINE_FOLDER_LOGO_IDS = [
   "218",
   ...MALE_POLO_LOGO_IDS,
   "228",
-  "236",
   "237",
   "238",
   "239",
+  "240",
   "301",
   "309",
   "310",

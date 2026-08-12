@@ -91,7 +91,7 @@ export const LOGO_ALTS: string[] = [
   "Purple & Gold Eagle Shield",
   "White & Gold Eagle Shield",
   "KK Shield with Swords",
-  "KKA Shield with Eagle - Khomplete Khemistri Apparel",
+  "KKA Shield with Eagle - Khomplete Khemistri Apparel Royal Blue & Silver",
   // Compass Collection
   "Khomplete Khemistri Apparel Compass",
   "KKMG LLC Compass",
