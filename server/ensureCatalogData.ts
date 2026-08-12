@@ -699,7 +699,7 @@ const BRANDED_APPAREL_PRODUCTS: {
     description:
       "Women\u2019s premium pique polo with the Female Logos feminine eagle crest in Electric Blue & Silver. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Lake Blue.",
     priceCents: 4500,
-    meta: { category: "Polos", productType: "apparel", sortOrder: "79", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_feminine_eagle_electric_blue_silver.png", poloEmblem: "229" },
+    meta: { category: "Polos", productType: "apparel", sortOrder: "79", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_feminine_eagle_electric_blue_silver.png", poloEmblem: "231" },
   },
   {
     productId: "prod_kkpolofemalegrey",
@@ -708,7 +708,7 @@ const BRANDED_APPAREL_PRODUCTS: {
     description:
       "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Grey. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Grey.",
     priceCents: 4500,
-    meta: { category: "Polos", productType: "apparel", sortOrder: "80", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_grey.png", poloEmblem: "234" },
+    meta: { category: "Polos", productType: "apparel", sortOrder: "80", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_grey.png", poloEmblem: "232" },
   },
   {
     productId: "prod_kkpolofemaletiedye",
@@ -717,7 +717,7 @@ const BRANDED_APPAREL_PRODUCTS: {
     description:
       "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Tie-Dye. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Light Blue.",
     priceCents: 4500,
-    meta: { category: "Polos", productType: "apparel", sortOrder: "81", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_tie_dye.png", poloEmblem: "235" },
+    meta: { category: "Polos", productType: "apparel", sortOrder: "81", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_tie_dye.png", poloEmblem: "233" },
   },
   {
     productId: "prod_kkpolofemalemagenta",
@@ -726,7 +726,7 @@ const BRANDED_APPAREL_PRODUCTS: {
     description:
       "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Cotton Candy pink. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Pink.",
     priceCents: 4500,
-    meta: { category: "Polos", productType: "apparel", sortOrder: "82", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_cotton_candy.png", poloEmblem: "236" },
+    meta: { category: "Polos", productType: "apparel", sortOrder: "82", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_cotton_candy.png", poloEmblem: "234" },
   },
   {
     productId: "prod_kkpolofemalepurple",
@@ -735,7 +735,7 @@ const BRANDED_APPAREL_PRODUCTS: {
     description:
       "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Purple. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Purple.",
     priceCents: 4500,
-    meta: { category: "Polos", productType: "apparel", sortOrder: "83", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_purple.png", poloEmblem: "237" },
+    meta: { category: "Polos", productType: "apparel", sortOrder: "83", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_purple.png", poloEmblem: "235" },
   },
   {
     productId: "prod_kkpolofemalenavy",
@@ -744,7 +744,7 @@ const BRANDED_APPAREL_PRODUCTS: {
     description:
       "Women\u2019s premium pique polo with the Female Logos pearl-crown griffin crest in Navy. Standard placements on every shirt: left chest logo, right sleeve logo, and inside neck tag. No placement customization \u2014 select your size at checkout. Shirt color: Navy Blue.",
     priceCents: 4500,
-    meta: { category: "Polos", productType: "apparel", sortOrder: "84", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_navy.png", poloEmblem: "238" },
+    meta: { category: "Polos", productType: "apparel", sortOrder: "84", gender: "Women", customize: "none", imageUrl: "/attached_assets/female-polo-shirts/logo_pearl_griffin_navy.png", poloEmblem: "236" },
   },
 ];
 

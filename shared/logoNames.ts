@@ -66,6 +66,8 @@ export const LOGO_ALTS: string[] = [
   "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold",
   "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold",
   "The Consolidatus Empire LLC Standalone Crest - Est. 2020",
+  "Khomplete Khemistri Elements Shield - Royal Blue & Silver",
+  "Khomplete Khemistri Elements Shield - Black & Silver",
   "The Founders Crest I - Navy & Silver Est. 2020",
   "The Founders Crest I - Charcoal & Purple Est. 2020",
   "The Founders Crest I - Gold & Brown Est. 2020",
