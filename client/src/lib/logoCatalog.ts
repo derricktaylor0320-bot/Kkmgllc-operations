@@ -78,7 +78,7 @@ import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroid
 // Female premium polo emblems (Female Logos · pearl griffin). Canonical polo
 // folder: attached_assets/female-polo-shirts/ — polos use fixed placement.
 // Copies also remain under attached_assets/feminine/ for the Feminine Collection.
-import logoPearlGriffinBlueDenim from "@assets/female-polo-shirts/logo_pearl_griffin_blue_denim.png";
+import logoFeminineEagleElectricBlue from "@assets/female-polo-shirts/logo_feminine_eagle_electric_blue_silver.png";
 import logoPearlGriffinGrey from "@assets/female-polo-shirts/logo_pearl_griffin_grey.png";
 import logoPearlGriffinTieDye from "@assets/female-polo-shirts/logo_pearl_griffin_tie_dye.png";
 import logoPearlGriffinCottonCandy from "@assets/female-polo-shirts/logo_pearl_griffin_cotton_candy.png";
@@ -235,7 +235,7 @@ export const allLogos: Record<string, LogoEntry> = {
   "227": { src: badgeEaglesAllGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold", color: "All Gold Eagles", section: "Badge of Honor" },
   "228": { src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", section: "Badge of Honor" },
   // Female Logos — pearl-crown griffin crests (Royalty Badge of Honor; not Canvas circles)
-  "229": { src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim", section: "Badge of Honor" },
+  "229": { src: logoFeminineEagleElectricBlue, alt: "Khomplete Khemistri Apparel Feminine Eagle Crest - Electric Blue & Silver Est. 2020", color: "Feminine Eagle Electric Blue & Silver", section: "Badge of Honor" },
   "230": { src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey", section: "Badge of Honor" },
   "231": { src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye", section: "Badge of Honor" },
   "232": { src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy", section: "Badge of Honor" },

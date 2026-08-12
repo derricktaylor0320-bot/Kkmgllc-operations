@@ -33,10 +33,10 @@ const FEMININE_LOGO_COPY: Record<
   { name: string; label: string; description: string }
 > = {
   "229": {
-    name: "Pearl Griffin — Blue Denim",
+    name: "Feminine Eagle — Electric Blue & Silver",
     label: "Royalty Badge · Female",
     description:
-      "Apparel & Accessories griffin crest with a pearl-adorned crown on blue denim — feminine edition with crossed swords.",
+      "Crowned eagle crest in electric blue and silver with values banners — feminine Royalty Badge edition for apparel and accessories.",
   },
   "230": {
     name: "Pearl Griffin — Grey",

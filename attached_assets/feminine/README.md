@@ -14,7 +14,7 @@ Royalty Badge of Honor collection (not the circular Canvas Collection):
 
 | File | Colorway | Logo ID |
 |------|----------|---------|
-| `logo_pearl_griffin_blue_denim.png` | Blue Denim | #229 |
+| `logo_feminine_eagle_electric_blue_silver.png` | Electric Blue & Silver | #229 |
 | `logo_pearl_griffin_grey.png` | Grey | #230 |
 | `logo_pearl_griffin_tie_dye.png` | Tie-Dye | #231 |
 | `logo_pearl_griffin_cotton_candy.png` | Cotton Candy | #232 |

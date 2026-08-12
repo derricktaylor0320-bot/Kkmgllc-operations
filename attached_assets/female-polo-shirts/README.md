@@ -13,7 +13,7 @@ No placement customization at checkout — size only. Shirt color matches the em
 
 | File | Colorway | Logo catalog ID | Shirt color |
 |------|----------|-----------------|-------------|
-| `logo_pearl_griffin_blue_denim.png` | Blue Denim | #229 | Lake Blue |
+| `logo_feminine_eagle_electric_blue_silver.png` | Electric Blue & Silver | #229 | Lake Blue |
 | `logo_pearl_griffin_grey.png` | Grey | #230 | Grey |
 | `logo_pearl_griffin_tie_dye.png` | Tie-Dye | #231 | Light Blue |
 | `logo_pearl_griffin_cotton_candy.png` | Cotton Candy | #232 | Pink |

@@ -97,7 +97,7 @@ import compassSunburst from "@assets/1781351981898_1781369761839.png";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
 import logoSilverPinkFeminine from "@assets/logo_silver_pink_feminine_medallion.png";
 import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroidered_crest.png";
-import logoPearlGriffinBlueDenim from "@assets/feminine/logo_pearl_griffin_blue_denim.png";
+import logoFeminineEagleElectricBlue from "@assets/feminine/logo_feminine_eagle_electric_blue_silver.png";
 import logoPearlGriffinGrey from "@assets/feminine/logo_pearl_griffin_grey.png";
 import logoPearlGriffinTieDye from "@assets/feminine/logo_pearl_griffin_tie_dye.png";
 import logoPearlGriffinCottonCandy from "@assets/feminine/logo_pearl_griffin_cotton_candy.png";
@@ -139,7 +139,7 @@ export default function Canvas() {
   // Female Logos — pearl-crown griffin crests belong to Royalty Badge of Honor
   // (not the circular Canvas Collection).
   const femaleBadges = [
-    { id: "229", src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim" },
+    { id: "229", src: logoFeminineEagleElectricBlue, alt: "Khomplete Khemistri Apparel Feminine Eagle Crest - Electric Blue & Silver Est. 2020", color: "Feminine Eagle Electric Blue & Silver" },
     { id: "230", src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey" },
     { id: "231", src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye" },
     { id: "232", src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy" },
