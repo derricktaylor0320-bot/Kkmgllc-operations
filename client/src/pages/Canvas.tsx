@@ -96,7 +96,6 @@ import compassKMG2 from "@assets/image_1781365494182_1781369761833.jpeg";
 import compassSunburst from "@assets/1781351981898_1781369761839.png";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
 import logoSilverPinkFeminine from "@assets/logo_silver_pink_feminine_medallion.png";
-import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroidered_crest.png";
 import logoFeminineEagleElectricBlue from "@assets/feminine/logo_feminine_eagle_electric_blue_silver.png";
 import logoPearlGriffinGrey from "@assets/feminine/logo_pearl_griffin_grey.png";
 import logoPearlGriffinTieDye from "@assets/feminine/logo_pearl_griffin_tie_dye.png";
@@ -133,7 +132,6 @@ export default function Canvas() {
     { id: "123", src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular" },
     { id: "124", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield" },
     { id: "125", src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink" },
-    { id: "126", src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest" },
   ];
 
   // Female Logos — pearl-crown griffin crests belong to Royalty Badge of Honor

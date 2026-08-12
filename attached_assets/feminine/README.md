@@ -31,7 +31,7 @@ Polos ship fixed — left chest, right sleeve, and inside tag — with no placem
 customization.
 
 ## Also kept here for easy picking
-- `logo_kk_elements_embroidered_crest.png` — Elements embroidered crest for robes / pajamas
+- `logo_kk_elements_embroidered_crest.png` — product reference art for the satin robe (not in the logo catalog)
 - `logo_kk_elements_badge.png` — Elements Golden Shield (Canvas Collection · apparel / bedding / health & wellness)
 - `logo_silver_pink_feminine_medallion.png` (Canvas Collection)
 - `badge_brown_gold_ornate.jpg`, `badge_purple_ornate.jpg`, `badge_purple_swords.jpg`, `badge_green_swords.jpg`, `badge_navy_silver.jpg`

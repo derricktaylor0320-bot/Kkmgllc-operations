@@ -74,7 +74,6 @@ import logoKKAShield from "@assets/masculine/logo_kka_shield_royal_blue_silver.p
 import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 import logoGoldenEagle from "@assets/generated_images/logo_golden_eagle_circular.png";
 import logoSilverPinkFeminine from "@assets/feminine/logo_silver_pink_feminine_medallion.png";
-import logoKkElementsEmbroidered from "@assets/feminine/logo_kk_elements_embroidered_crest.png";
 // Female premium polo emblems (Female Logos · pearl griffin). Canonical polo
 // folder: attached_assets/female-polo-shirts/ — polos use fixed placement.
 // Copies also remain under attached_assets/feminine/ for the Feminine Collection.
@@ -204,7 +203,6 @@ export const allLogos: Record<string, LogoEntry> = {
   "123": { src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular", section: "Canvas Collection" },
   "124": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", section: "Canvas Collection" },
   "125": { src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink", section: "Canvas Collection" },
-  "126": { src: logoKkElementsEmbroidered, alt: "Khomplete Khemistri Elements Embroidered Crest", color: "Elements Embroidered Crest", section: "Canvas Collection" },
   "200": { src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", section: "Badge of Honor" },
   "201": { src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", section: "Badge of Honor" },
   "202": { src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold", section: "Badge of Honor" },
@@ -283,7 +281,6 @@ export const FEMALE_POLO_LOGO_IDS = ["229", "234", "235", "236", "237", "238"] a
 // filter in logo pickers (featured six plus additional feminine colorways).
 export const FEMININE_FOLDER_LOGO_IDS = [
   ...FEMININE_LOGO_IDS,
-  "126",
   "124",
   "125",
   "208",

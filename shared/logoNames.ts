@@ -35,7 +35,6 @@ export const LOGO_ALTS: string[] = [
   "Golden Eagle Circular Emblem",
   "Khomplete Khemistri Elements Golden Shield",
   "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion",
-  "Khomplete Khemistri Elements Embroidered Crest",
   // Badge of Honor
   "Blue & Gold Values Crest - Friendship, Trust, Harmony",
   "Khomplete Khemistri Apparel Leather Swords Crest",
