@@ -39,42 +39,48 @@ const FEMININE_LOGO_COPY: Record<
       "Crowned eagle crest in electric blue and silver with values banners — feminine Royalty Badge edition for apparel and accessories.",
   },
   "232": {
+    name: "Pearl Griffin — Blue Denim",
+    label: "Royalty Badge · Female",
+    description:
+      "Pearl-crowned griffin crest on classic blue denim — polished silver and gold feminine presentation for apparel and accessories.",
+  },
+  "233": {
     name: "Pearl Griffin — Grey",
     label: "Royalty Badge · Female",
     description:
       "Silver and gold griffin crest with pearl crown detailing on grey — soft, polished feminine presentation.",
   },
-  "233": {
+  "234": {
     name: "Pearl Griffin — Tie-Dye",
     label: "Royalty Badge · Female",
     description:
       "Pearl-crowned griffin crest on vibrant tie-dye — colorful feminine energy with crossed swords.",
   },
-  "234": {
+  "235": {
     name: "Pearl Griffin — Cotton Candy",
     label: "Royalty Badge · Female",
     description:
       "Shiny gold griffin crest with pearl crown on soft cotton-candy pink — feminine colorway for apparel and loungewear.",
   },
-  "235": {
+  "236": {
     name: "Pearl Griffin — Purple",
     label: "Royalty Badge · Female",
     description:
       "Gold and navy griffin crest with pearl crown on purple — regal feminine edition.",
   },
-  "236": {
+  "237": {
     name: "Pearl Griffin — Navy",
     label: "Royalty Badge · Female",
     description:
       "All-gold griffin crest with pearl crown on navy — classic feminine Apparel & Accessories mark.",
   },
-  "237": {
+  "238": {
     name: "Pearl Griffin — Red & Gold",
     label: "Royalty Badge · Female",
     description:
       "Crisp red-and-gold griffin crest with pearl crown — the bold successor to the earlier dark fuchsia colorway.",
   },
-  "238": {
+  "239": {
     name: "Feminine Ornate Eagle — Ed Hardy Style",
     label: "Royalty Badge · Female",
     description:
