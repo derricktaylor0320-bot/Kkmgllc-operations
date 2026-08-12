@@ -80,6 +80,7 @@ import logoSilverPinkFeminine from "@assets/feminine/logo_silver_pink_feminine_m
 // folder: attached_assets/female-polo-shirts/ — polos use fixed placement.
 // Copies also remain under attached_assets/feminine/ for the Feminine Collection.
 import logoFeminineEagleElectricBlue from "@assets/female-polo-shirts/logo_feminine_eagle_electric_blue_silver.png";
+import logoPearlGriffinBlueDenim from "@assets/female-polo-shirts/logo_pearl_griffin_blue_denim.png";
 import logoPearlGriffinGrey from "@assets/female-polo-shirts/logo_pearl_griffin_grey.png";
 import logoPearlGriffinTieDye from "@assets/female-polo-shirts/logo_pearl_griffin_tie_dye.png";
 import logoPearlGriffinCottonCandy from "@assets/female-polo-shirts/logo_pearl_griffin_cotton_candy.png";
@@ -238,21 +239,22 @@ export const allLogos: Record<string, LogoEntry> = {
   "230": { src: logoKkElementsShieldBlueSilver, alt: "Khomplete Khemistri Elements Shield - Royal Blue & Silver", color: "Elements Shield Blue & Silver", section: "Badge of Honor" },
   // Female Logos — pearl-crown griffin crests + Ed Hardy (Royalty Badge of Honor)
   "231": { src: logoFeminineEagleElectricBlue, alt: "Khomplete Khemistri Apparel Feminine Eagle Crest - Electric Blue & Silver Est. 2020", color: "Feminine Eagle Electric Blue & Silver", section: "Badge of Honor" },
-  "232": { src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey", section: "Badge of Honor" },
-  "233": { src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye", section: "Badge of Honor" },
-  "234": { src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy", section: "Badge of Honor" },
-  "235": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Badge of Honor" },
-  "236": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Badge of Honor" },
-  "237": { src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold", section: "Badge of Honor" },
-  "238": { src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest", section: "Badge of Honor" },
-  "239": { src: logoKkElementsShieldBlackSilver, alt: "Khomplete Khemistri Elements Shield - Black & Silver", color: "Elements Shield Black & Silver", section: "Badge of Honor" },
-  "240": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", section: "Badge of Honor" },
+  "232": { src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim", section: "Badge of Honor" },
+  "233": { src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey", section: "Badge of Honor" },
+  "234": { src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye", section: "Badge of Honor" },
+  "235": { src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy", section: "Badge of Honor" },
+  "236": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Badge of Honor" },
+  "237": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Badge of Honor" },
+  "238": { src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold", section: "Badge of Honor" },
+  "239": { src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest", section: "Badge of Honor" },
+  "240": { src: logoKkElementsShieldBlackSilver, alt: "Khomplete Khemistri Elements Shield - Black & Silver", color: "Elements Shield Black & Silver", section: "Badge of Honor" },
+  "241": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", section: "Badge of Honor" },
   // Founders Crest I — three colorways (Navy & Silver, Charcoal & Purple, Gold & Brown)
-  "241": { src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", section: "Badge of Honor" },
-  "242": { src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", section: "Badge of Honor" },
-  "243": { src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", section: "Badge of Honor" },
+  "242": { src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", section: "Badge of Honor" },
+  "243": { src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", section: "Badge of Honor" },
+  "244": { src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", section: "Badge of Honor" },
   // Founders Crest II — royal blue & gold trident crest
-  "244": { src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", section: "Badge of Honor" },
+  "245": { src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", section: "Badge of Honor" },
   "300": { src: honorAllGold, alt: "The Golden Eagle Shield", color: "All Gold", section: "Shield of Honor" },
   "301": { src: honorNavyGold, alt: "Navy & Gold Eagle Shield", color: "Navy & Gold", section: "Shield of Honor" },
   "302": { src: honorSilverGold, alt: "Silver & Gold Eagle Shield", color: "Silver & Gold", section: "Shield of Honor" },
@@ -272,19 +274,19 @@ export const allLogos: Record<string, LogoEntry> = {
 };
 
 // Khomplete Khemistri Elements shields in the logo picker (Badge of Honor + #124 Canvas).
-export const KK_ELEMENTS_LOGO_IDS = ["124", "230", "239", "240"] as const;
+export const KK_ELEMENTS_LOGO_IDS = ["124", "230", "240", "241"] as const;
 
-// Featured feminine crests for /feminine — Royalty Badge of Honor Female Logos (#231–#238).
-// Elements shields: #230, #239, #240 (+ #124 Canvas). Founders: #241–#244. Polo emblems
-// use #231 and #232–#236; #237 Red & Gold is gallery-only.
-export const FEMININE_LOGO_IDS = ["231", "232", "233", "234", "235", "236", "237", "238"] as const;
+// Featured feminine crests for /feminine — Royalty Badge of Honor Female Logos (#231–#239).
+// Elements shields: #230, #240, #241 (+ #124 Canvas). Founders: #242–#245. Polo emblems
+// use #231 and #232–#238 (pearl griffins through Red & Gold).
+export const FEMININE_LOGO_IDS = ["231", "232", "233", "234", "235", "236", "237", "238", "239"] as const;
 
 // Eight men’s eagle-and-swords crests used for premium polos (fixed placement).
 // Files: attached_assets/male-polo-shirts/.
 export const MALE_POLO_LOGO_IDS = ["220", "221", "222", "223", "224", "225", "226", "227"] as const;
 
-// Six women’s pearl-griffin Female Logos used for premium polos (fixed placement).
-export const FEMALE_POLO_LOGO_IDS = ["231", "232", "233", "234", "235", "236"] as const;
+// Eight women’s Female Logos used for premium polos (fixed placement).
+export const FEMALE_POLO_LOGO_IDS = ["231", "232", "233", "234", "235", "236", "237", "238"] as const;
 
 // Full feminine folder — every crest available under the Feminine Collection
 // filter in logo pickers (featured six plus additional feminine colorways).
@@ -313,10 +315,10 @@ export const MASCULINE_FOLDER_LOGO_IDS = [
   "218",
   ...MALE_POLO_LOGO_IDS,
   "228",
-  "241",
   "242",
   "243",
   "244",
+  "245",
   "301",
   "309",
   "310",

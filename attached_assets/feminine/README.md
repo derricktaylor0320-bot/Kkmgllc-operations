@@ -15,31 +15,32 @@ Elements shields pair with the golden shield in Canvas Collection (#124):
 | File | Colorway | Logo ID |
 |------|----------|---------|
 | `logo_kk_elements_shield_blue_silver.png` | Royal Blue & Silver | #230 |
-| `logo_kk_elements_shield_black_silver.png` | Black & Silver | #239 |
-| `logo_kk_elements_badge.png` | Golden Shield (also #124 Canvas) | #240 |
+| `logo_kk_elements_shield_black_silver.png` | Black & Silver | #240 |
+| `logo_kk_elements_badge.png` | Golden Shield (also #124 Canvas) | #241 |
 
 ## Female Logos · Royalty Badge of Honor
 
-Female Logos run **#231–#238** (after Elements #230):
+Female Logos run **#231–#239** (after Elements #230):
 
 | File | Colorway | Logo ID |
 |------|----------|---------|
 | `logo_feminine_eagle_electric_blue_silver.png` | Electric Blue & Silver | #231 |
-| `logo_pearl_griffin_grey.png` | Grey | #232 |
-| `logo_pearl_griffin_tie_dye.png` | Tie-Dye | #233 |
-| `logo_pearl_griffin_cotton_candy.png` | Cotton Candy | #234 |
-| `logo_pearl_griffin_purple.png` | Purple | #235 |
-| `logo_pearl_griffin_navy.png` | Navy | #236 |
-| `logo_pearl_griffin_red_gold.png` | Red & Gold | #237 |
-| `logo_feminine_ed_hardy_crest.png` | Ed Hardy Style | #238 |
+| `logo_pearl_griffin_blue_denim.png` | Blue Denim | #232 |
+| `logo_pearl_griffin_grey.png` | Grey | #233 |
+| `logo_pearl_griffin_tie_dye.png` | Tie-Dye | #234 |
+| `logo_pearl_griffin_cotton_candy.png` | Cotton Candy | #235 |
+| `logo_pearl_griffin_purple.png` | Purple | #236 |
+| `logo_pearl_griffin_navy.png` | Navy | #237 |
+| `logo_pearl_griffin_red_gold.png` | Red & Gold | #238 |
+| `logo_feminine_ed_hardy_crest.png` | Ed Hardy Style | #239 |
 
-**Female premium polos:** #231 and #232–#236 are the emblems for women’s premium polo
+**Female premium polos:** #231 and #232–#238 are the emblems for women's premium polo
 shirts (copies + notes in `attached_assets/female-polo-shirts/`).
-#237 Red & Gold is gallery / logo-picker only (no dedicated polo SKU).
+#239 Ed Hardy is gallery / logo-picker only (no dedicated polo SKU).
 Polos ship fixed — left chest, right sleeve, and inside tag — with no placement
 customization.
 
-Founders Crests occupy **#241–#244** in the main catalog (not listed here).
+Founders Crests occupy **#242–#245** in the main catalog (not listed here).
 
 ## Also kept here for easy picking
 - `logo_kk_elements_embroidered_crest.png` — product reference art for the satin robe (not in the logo catalog)

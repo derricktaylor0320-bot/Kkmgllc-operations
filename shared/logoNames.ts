@@ -74,6 +74,7 @@ export const LOGO_ALTS: string[] = [
   "The Founders Crest II - Royal Blue & Gold Est. 2020",
   // Badge of Honor — Female Logos (pearl-crown griffin crests)
   "Khomplete Khemistri Apparel Feminine Eagle Crest - Electric Blue & Silver Est. 2020",
+  "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim",
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey",
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye",
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy",
