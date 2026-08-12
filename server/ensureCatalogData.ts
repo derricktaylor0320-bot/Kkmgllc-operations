@@ -1200,7 +1200,7 @@ const EXTRA_ACCESSORY_PRODUCTS: {
     priceId: "price_kksatinrobe",
     name: "Khomplete Khemistri Elements Satin Robe",
     description:
-      "Luxurious satin robe for women's bedroom and loungewear, finished with elegant gold piping, a self-tie belt, and side pockets. Brand it with the Khomplete Khemistri Elements Embroidered Crest (or any logo from our Feminine Collection). Smooth, lightweight satin. One flat price for every size, XS to 6XL. SELECT YOUR COLOR, SIZE, AND LOGO at checkout! Available in 41 colors.",
+      "Luxurious satin robe for women's bedroom and loungewear, finished with elegant gold piping, a self-tie belt, and side pockets. Features the golden shiny Khomplete Khemistri Elements embroidered crest on the chest (or choose any logo from our Feminine Collection at checkout). Smooth, lightweight satin. One flat price for every size, XS to 6XL. SELECT YOUR COLOR, SIZE, AND LOGO at checkout! Available in 41 colors.",
     priceCents: 4000,
     meta: {
       category: "Sleepwear",
