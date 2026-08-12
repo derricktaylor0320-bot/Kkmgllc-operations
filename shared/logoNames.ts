@@ -82,6 +82,8 @@ export const LOGO_ALTS: string[] = [
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy",
   "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold",
   "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020",
+  "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Hot Pink Est. 2020",
+  "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Purple Est. 2020",
   // Shield of Honor
   "The Golden Eagle Shield",
   "Navy & Gold Eagle Shield",

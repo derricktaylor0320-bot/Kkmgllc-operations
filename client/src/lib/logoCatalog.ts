@@ -89,6 +89,8 @@ import logoPearlGriffinNavy from "@assets/female-polo-shirts/logo_pearl_griffin_
 import logoPearlGriffinRedGold from "@assets/feminine/logo_pearl_griffin_red_gold.png";
 import logoFoundersCrestII from "@assets/masculine/logo_founders_crest_ii_blue_gold.png";
 import logoFeminineEdHardyCrest from "@assets/feminine/logo_feminine_ed_hardy_crest.png";
+import logoFeminineEagleCrownHotPink from "@assets/feminine/logo_feminine_eagle_crown_hot_pink.png";
+import logoFeminineEagleCrownPurple from "@assets/feminine/logo_feminine_eagle_crown_purple.png";
 
 // Seasonal Football Teams Sports Edition — canonical artwork folder:
 // attached_assets/seasonal-football-sports-edition/.
@@ -255,6 +257,9 @@ export const allLogos: Record<string, LogoEntry> = {
   "244": { src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", section: "Badge of Honor" },
   // Founders Crest II — royal blue & gold trident crest
   "245": { src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", section: "Badge of Honor" },
+  // Female Logos — crowned eagle, heart gem, axe & trident crests
+  "246": { src: logoFeminineEagleCrownHotPink, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Hot Pink Est. 2020", color: "Feminine Crowned Eagle Hot Pink", section: "Badge of Honor" },
+  "247": { src: logoFeminineEagleCrownPurple, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Purple Est. 2020", color: "Feminine Crowned Eagle Purple", section: "Badge of Honor" },
   "300": { src: honorAllGold, alt: "The Golden Eagle Shield", color: "All Gold", section: "Shield of Honor" },
   "301": { src: honorNavyGold, alt: "Navy & Gold Eagle Shield", color: "Navy & Gold", section: "Shield of Honor" },
   "302": { src: honorSilverGold, alt: "Silver & Gold Eagle Shield", color: "Silver & Gold", section: "Shield of Honor" },
@@ -276,10 +281,10 @@ export const allLogos: Record<string, LogoEntry> = {
 // Khomplete Khemistri Elements shields in the logo picker (Badge of Honor + #124 Canvas).
 export const KK_ELEMENTS_LOGO_IDS = ["124", "230", "240", "241"] as const;
 
-// Featured feminine crests for /feminine — Royalty Badge of Honor Female Logos (#231–#239).
+// Featured feminine crests for /feminine — Royalty Badge of Honor Female Logos (#231–#239, #246–#247).
 // Elements shields: #230, #240, #241 (+ #124 Canvas). Founders: #242–#245. Polo emblems
 // use #231 and #232–#238 (pearl griffins through Red & Gold).
-export const FEMININE_LOGO_IDS = ["231", "232", "233", "234", "235", "236", "237", "238", "239"] as const;
+export const FEMININE_LOGO_IDS = ["231", "232", "233", "234", "235", "236", "237", "238", "239", "246", "247"] as const;
 
 // Eight men’s eagle-and-swords crests used for premium polos (fixed placement).
 // Files: attached_assets/male-polo-shirts/.

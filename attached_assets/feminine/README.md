@@ -20,7 +20,7 @@ Elements shields pair with the golden shield in Canvas Collection (#124):
 
 ## Female Logos · Royalty Badge of Honor
 
-Female Logos run **#231–#239** (after Elements #230):
+Female Logos run **#231–#239** and **#246–#247** (after Elements #230):
 
 | File | Colorway | Logo ID |
 |------|----------|---------|
@@ -33,6 +33,8 @@ Female Logos run **#231–#239** (after Elements #230):
 | `logo_pearl_griffin_navy.png` | Navy | #237 |
 | `logo_pearl_griffin_red_gold.png` | Red & Gold | #238 |
 | `logo_feminine_ed_hardy_crest.png` | Ed Hardy Style | #239 |
+| `logo_feminine_eagle_crown_hot_pink.png` | Crowned Eagle Hot Pink | #246 |
+| `logo_feminine_eagle_crown_purple.png` | Crowned Eagle Purple | #247 |
 
 **Female premium polos:** #231 and #232–#238 are the emblems for women's premium polo
 shirts (copies + notes in `attached_assets/female-polo-shirts/`).

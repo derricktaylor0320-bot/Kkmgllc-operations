@@ -86,6 +86,18 @@ const FEMININE_LOGO_COPY: Record<
     description:
       "Bold tattoo-luxe feminine crest — crowned eagle, heart-ruby shield, roses, and ornate scrollwork in vibrant Ed Hardy energy.",
   },
+  "246": {
+    name: "Feminine Crowned Eagle — Hot Pink",
+    label: "Royalty Badge · Female",
+    description:
+      "Crowned eagle crest with heart-gem shield, crossed axe and trident, and ornate scrollwork in vibrant hot pink and polished silver.",
+  },
+  "247": {
+    name: "Feminine Crowned Eagle — Purple",
+    label: "Royalty Badge · Female",
+    description:
+      "Regal crowned eagle crest with heart-gem shield, crossed axe and trident, and ornate scrollwork in rich purple and polished silver.",
+  },
 };
 
 function productImageFit(product: StorefrontProduct) {
