@@ -8,24 +8,25 @@ also live in this folder so they stay easy to find when picking by gender —
 Canvas circles stay registered under **Canvas Collection**; pearl griffin crests
 are registered under **Badge of Honor** (Royalty Badge of Honor · Female Logos).
 
-## Featured pearl griffin crests (Female Logos · Royalty Badge of Honor)
-These pearl-crown Apparel & Accessories griffin crests belong to the
-Royalty Badge of Honor collection (not the circular Canvas Collection):
+## Female Logos · Royalty Badge of Honor
+
+Founders Crests occupy **#230–#233** in the main catalog (not listed here).
+Female Logos run **#229** (lead-in eagle) and **#234–#240**:
 
 | File | Colorway | Logo ID |
 |------|----------|---------|
 | `logo_feminine_eagle_electric_blue_silver.png` | Electric Blue & Silver | #229 |
-| `logo_pearl_griffin_grey.png` | Grey | #230 |
-| `logo_pearl_griffin_tie_dye.png` | Tie-Dye | #231 |
-| `logo_pearl_griffin_cotton_candy.png` | Cotton Candy | #232 |
-| `logo_pearl_griffin_purple.png` | Purple | #233 |
-| `logo_pearl_griffin_navy.png` | Navy | #234 |
-| `logo_pearl_griffin_red_gold.png` | Red & Gold | #235 |
-| `logo_feminine_ed_hardy_crest.png` | Ed Hardy Style | #236 |
+| `logo_pearl_griffin_grey.png` | Grey | #234 |
+| `logo_pearl_griffin_tie_dye.png` | Tie-Dye | #235 |
+| `logo_pearl_griffin_cotton_candy.png` | Cotton Candy | #236 |
+| `logo_pearl_griffin_purple.png` | Purple | #237 |
+| `logo_pearl_griffin_navy.png` | Navy | #238 |
+| `logo_pearl_griffin_red_gold.png` | Red & Gold | #239 |
+| `logo_feminine_ed_hardy_crest.png` | Ed Hardy Style | #240 |
 
-**Female premium polos:** #229–#234 are the emblems for women’s premium polo
+**Female premium polos:** #229 and #234–#238 are the emblems for women’s premium polo
 shirts (copies + notes in `attached_assets/female-polo-shirts/`).
-#235 Red & Gold is gallery / logo-picker only (no dedicated polo SKU).
+#239 Red & Gold is gallery / logo-picker only (no dedicated polo SKU).
 Polos ship fixed — left chest, right sleeve, and inside tag — with no placement
 customization.
 
