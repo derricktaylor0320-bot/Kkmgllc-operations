@@ -74,9 +74,9 @@ import eagleCrestMaroonGold from "@assets/IMG_20260628_234856_1782729067418.png"
 import badgeConsolidatusEmpireStandalone from "@assets/badge_consolidatus_empire_standalone_218.png";
 import logoKkElementsBadge from "@assets/logo_kk_elements_badge.png";
 import logoKkApparelLeatherCrest from "@assets/logo_kk_apparel_leather_swords_crest.png";
-import badgeConsolidatusNavySilver from "@assets/brand/consolidatus_empire_crest_navy_silver.png";
-import badgeConsolidatusCharcoalPurple from "@assets/brand/consolidatus_empire_crest_charcoal_purple.png";
-import badgeConsolidatusGoldBrown from "@assets/brand/consolidatus_empire_crest_gold_brown.png";
+import logoFoundersCrestINavySilver from "@assets/masculine/logo_founders_crest_i_navy_silver.png";
+import logoFoundersCrestICharcoalPurple from "@assets/masculine/logo_founders_crest_i_charcoal_purple.png";
+import logoFoundersCrestIGoldBrown from "@assets/masculine/logo_founders_crest_i_gold_brown.png";
 
 
 // Accessory logos — Canvas Collection (118) + Badge of Honor crossed swords (215-216)
@@ -179,9 +179,9 @@ export default function Canvas() {
     { id: "226", src: badgeEaglesSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold", color: "Silver & Gold Eagles", featured: true },
     { id: "227", src: badgeEaglesAllGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold", color: "All Gold Eagles", featured: true },
     { id: "228", src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", featured: true },
-    { id: "236", src: badgeConsolidatusNavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", featured: true },
-    { id: "237", src: badgeConsolidatusCharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", featured: true },
-    { id: "238", src: badgeConsolidatusGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", featured: true },
+    { id: "236", src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", featured: true },
+    { id: "237", src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", featured: true },
+    { id: "238", src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", featured: true },
     { id: "239", src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", featured: true },
   ];
 

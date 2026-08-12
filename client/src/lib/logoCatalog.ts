@@ -55,9 +55,9 @@ import badgeEaglesBurgundyGold from "@assets/male-polo-shirts/logo_eagle_swords_
 import badgeEaglesSilverGold from "@assets/male-polo-shirts/logo_eagle_swords_silver_gold.png";
 import badgeEaglesAllGold from "@assets/male-polo-shirts/logo_eagle_swords_all_gold.png";
 import badgeConsolidatusEmpireStandalone from "@assets/masculine/badge_consolidatus_empire_standalone_218.png";
-import badgeConsolidatusNavySilver from "@assets/brand/consolidatus_empire_crest_navy_silver.png";
-import badgeConsolidatusCharcoalPurple from "@assets/brand/consolidatus_empire_crest_charcoal_purple.png";
-import badgeConsolidatusGoldBrown from "@assets/brand/consolidatus_empire_crest_gold_brown.png";
+import logoFoundersCrestINavySilver from "@assets/masculine/logo_founders_crest_i_navy_silver.png";
+import logoFoundersCrestICharcoalPurple from "@assets/masculine/logo_founders_crest_i_charcoal_purple.png";
+import logoFoundersCrestIGoldBrown from "@assets/masculine/logo_founders_crest_i_gold_brown.png";
 import logoKkElementsBadge from "@assets/feminine/logo_kk_elements_badge.png";
 import logoKkApparelLeatherCrest from "@assets/masculine/logo_kk_apparel_leather_swords_crest.png";
 import compassKKApparel from "@assets/copilot_image_1781366430242_1781369724345.jpeg";
@@ -242,9 +242,9 @@ export const allLogos: Record<string, LogoEntry> = {
   "233": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Badge of Honor" },
   "234": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Badge of Honor" },
   "235": { src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold", section: "Badge of Honor" },
-  "236": { src: badgeConsolidatusNavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", section: "Badge of Honor" },
-  "237": { src: badgeConsolidatusCharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", section: "Badge of Honor" },
-  "238": { src: badgeConsolidatusGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", section: "Badge of Honor" },
+  "236": { src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", section: "Badge of Honor" },
+  "237": { src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", section: "Badge of Honor" },
+  "238": { src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", section: "Badge of Honor" },
   // Founders Crest II — royal blue & gold trident crest
   "239": { src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", section: "Badge of Honor" },
   "240": { src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest", section: "Badge of Honor" },
