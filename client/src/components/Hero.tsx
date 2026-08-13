@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
 import heroBackground from "@assets/brand/empire_headquarters_blue_silver.jpg";
 
 export default function Hero() {
@@ -27,31 +25,6 @@ export default function Hero() {
           <span className="text-primary">Be Your Own Boss</span>, empowering
           vision, building legacies where unity meets opportunity.
         </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col justify-center gap-4 sm:flex-row"
-        >
-          <Link href="/apparel">
-            <Button
-              size="lg"
-              className="h-auto bg-primary px-8 py-6 font-display text-lg uppercase tracking-wider text-primary-foreground hover:bg-foreground hover:text-background"
-            >
-              Shop Khemistri
-            </Button>
-          </Link>
-          <Link href="/hub">
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-auto border-white bg-transparent px-8 py-6 font-display text-lg uppercase tracking-wider text-white hover:bg-white hover:text-black"
-            >
-              Centralized Hub
-            </Button>
-          </Link>
-        </motion.div>
       </div>
     </section>
   );
