@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import LevitatingFoundersThree from "@/components/LevitatingFoundersThree";
 import heroBackground from "@assets/brand/empire_headquarters_blue_silver.jpg";
 
 export default function Hero() {
@@ -26,6 +27,8 @@ export default function Hero() {
           vision, building legacies where unity meets opportunity.
         </motion.p>
       </div>
+
+      <LevitatingFoundersThree />
     </section>
   );
 }

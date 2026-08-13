@@ -192,6 +192,27 @@
     .topaz-glow { animation: none; }
   }
 
+  /* Levitating founders "3" — royal blue + ornate silver, honors the three partners. */
+  .founders-three-numeral {
+    background: linear-gradient(
+      165deg,
+      hsl(219 96% 62%) 0%,
+      hsl(210 34% 93%) 42%,
+      hsl(219 96% 54%) 78%,
+      hsl(210 40% 88%) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 10px hsl(219 96% 54% / 0.55));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .founders-three-launcher {
+      transform: none !important;
+    }
+  }
+
   /* Full-screen navigation compass. Alternating radii keep every destination
      readable on small screens while preserving one clockwise sequence. */
   .compass-rose {
