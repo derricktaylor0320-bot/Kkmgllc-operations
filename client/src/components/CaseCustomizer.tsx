@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Check } from "lucide-react";
+import LogoPickerTile from "@/components/LogoPickerTile";
 import { useCart } from "@/hooks/useCart";
 import { allLogos } from "@/lib/logoCatalog";
 import { PHONE_MODELS_BY_TYPE, PHONE_MODEL_LABEL } from "@shared/phoneModels";
@@ -132,35 +132,16 @@ export default function CaseCustomizer({
           </p>
           <div className="logo-picker-scroll flex-1 min-h-0 max-h-[42vh] pr-1.5 rounded-lg border border-primary/10 bg-muted/20 p-2">
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-              {logoIds.map((id) => {
-                const logo = allLogos[id];
-                if (!logo) return null;
-                const isSelected = selectedLogoId === id;
-                return (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => setSelectedLogoId(id)}
-                    className={`relative rounded-lg border-2 overflow-hidden bg-background/80 transition-colors ${
-                      isSelected ? "border-primary" : "border-transparent hover:border-border"
-                    }`}
-                    data-testid={`button-caselogo-${id}`}
-                    title={logo.alt}
-                  >
-                    <img
-                      src={logo.src}
-                      alt={logo.alt}
-                      className="aspect-square object-contain w-full h-full p-1"
-                      loading="lazy"
-                    />
-                    {isSelected && (
-                      <span className="absolute inset-0 flex items-center justify-center bg-black/40">
-                        <Check className="h-6 w-6 text-primary" />
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
+              {logoIds.map((id) => (
+                <LogoPickerTile
+                  key={id}
+                  logoId={id}
+                  isSelected={selectedLogoId === id}
+                  onSelect={() => setSelectedLogoId(id)}
+                  testId={`button-caselogo-${id}`}
+                  selectLabel="Use this logo"
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -168,7 +149,7 @@ export default function CaseCustomizer({
         <DialogFooter className="flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground" data-testid="text-case-selection">
             {selectedModel && selectedLogoId
-              ? `${selectedModel} \u2014 ${allLogos[selectedLogoId].alt}`
+              ? `${selectedModel} \u2014 #${selectedLogoId} ${allLogos[selectedLogoId].alt}`
               : "Choose a phone model and a logo to continue."}
           </p>
           <Button

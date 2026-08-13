@@ -413,6 +413,14 @@ const COLOR_SYNONYMS: Record<string, string[]> = {
   coral: ["coral", "orange", "red", "pink"],
 };
 
+/** Resolve a catalog logo ID from its `alt` display name. */
+export function logoIdByAlt(alt: string): string | undefined {
+  for (const [id, entry] of Object.entries(allLogos)) {
+    if (entry.alt === alt) return id;
+  }
+  return undefined;
+}
+
 // Logo IDs suggested for a given product color, matched by keyword against each
 // logo's color description and name. Returns [] when nothing matches.
 export function recommendedLogoIdsForColor(color: string): string[] {
