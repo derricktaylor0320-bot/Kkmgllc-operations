@@ -11,7 +11,8 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Check, Minus, Plus } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { useRecentlyViewed, readRecentlyViewed } from "@/hooks/useRecentlyViewed";
-import { allLogos, LOGO_SECTIONS, logoSectionGroups, recommendedLogoIdsForColor } from "@/lib/logoCatalog";
+import { allLogos, LOGO_SECTIONS, logoSectionGroups, logoIdByAlt, recommendedLogoIdsForColor } from "@/lib/logoCatalog";
+import LogoPickerTile from "@/components/LogoPickerTile";
 import { sizeUpchargeDollars } from "@shared/customization";
 import { getSupplementInfo } from "@shared/supplementBenefits";
 
@@ -582,34 +583,18 @@ function ProductDetailContent({
                         {recommendedIds.map((id) => {
                           const logo = allLogos[id];
                           if (!logo) return null;
-                          const isSelected = selectedLogo === logo.alt;
                           return (
-                            <button
+                            <LogoPickerTile
                               key={`rec-${id}`}
-                              type="button"
+                              logoId={id}
+                              isSelected={selectedLogo === logo.alt}
                               disabled={soldOut}
-                              onClick={() => {
+                              onSelect={() => {
                                 setSelectedLogo(logo.alt);
                                 setErrorMessage("");
                               }}
-                              className={`relative rounded-lg border-2 overflow-hidden bg-background/80 transition-colors disabled:opacity-50 ${
-                                isSelected ? "border-primary" : "border-transparent hover:border-border"
-                              }`}
-                              data-testid={`button-detail-recommended-${id}`}
-                              title={logo.alt}
-                            >
-                              <img
-                                src={logo.src}
-                                alt={logo.alt}
-                                className="aspect-square object-contain w-full h-full p-1"
-                                loading="lazy"
-                              />
-                              {isSelected && (
-                                <span className="absolute inset-0 flex items-center justify-center bg-black/40">
-                                  <Check className="h-6 w-6 text-primary" />
-                                </span>
-                              )}
-                            </button>
+                              testId={`button-detail-recommended-${id}`}
+                            />
                           );
                         })}
                       </div>
@@ -656,36 +641,18 @@ function ProductDetailContent({
                             {group.ids.map((id) => {
                               const logo = allLogos[id];
                               if (!logo) return null;
-                              const isSelected = selectedLogo === logo.alt;
                               return (
-                                <button
+                                <LogoPickerTile
                                   key={id}
-                                  type="button"
+                                  logoId={id}
+                                  isSelected={selectedLogo === logo.alt}
                                   disabled={soldOut}
-                                  onClick={() => {
+                                  onSelect={() => {
                                     setSelectedLogo(logo.alt);
                                     setErrorMessage("");
                                   }}
-                                  className={`relative rounded-lg border-2 overflow-hidden bg-background/80 transition-colors disabled:opacity-50 ${
-                                    isSelected
-                                      ? "border-primary"
-                                      : "border-transparent hover:border-border"
-                                  }`}
-                                  data-testid={`button-detail-logo-${id}`}
-                                  title={logo.alt}
-                                >
-                                  <img
-                                    src={logo.src}
-                                    alt={logo.alt}
-                                    className="aspect-square object-contain w-full h-full p-1"
-                                    loading="lazy"
-                                  />
-                                  {isSelected && (
-                                    <span className="absolute inset-0 flex items-center justify-center bg-black/40">
-                                      <Check className="h-6 w-6 text-primary" />
-                                    </span>
-                                  )}
-                                </button>
+                                  testId={`button-detail-logo-${id}`}
+                                />
                               );
                             })}
                           </div>
@@ -695,14 +662,22 @@ function ProductDetailContent({
                     </div>
                   </div>
                   <p className="text-sm" data-testid="text-detail-logo-selection">
-                    {selectedLogo ? (
-                      <>
-                        <span className="text-muted-foreground">Selected logo: </span>
-                        <span className="font-medium" data-testid="text-detail-logo-name">
-                          {selectedLogo}
-                        </span>
-                      </>
-                    ) : (
+                    {selectedLogo ? (() => {
+                      const selectedId = logoIdByAlt(selectedLogo);
+                      return (
+                        <>
+                          <span className="text-muted-foreground">Selected logo: </span>
+                          {selectedId && (
+                            <span className="font-mono text-primary" data-testid="text-detail-logo-id">
+                              #{selectedId}{" "}
+                            </span>
+                          )}
+                          <span className="font-medium" data-testid="text-detail-logo-name">
+                            {selectedLogo}
+                          </span>
+                        </>
+                      );
+                    })() : (
                       <span className="text-muted-foreground">
                         Choose a logo to continue.
                       </span>
