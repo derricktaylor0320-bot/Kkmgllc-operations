@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
+import TopSlideNav from "@/components/TopSlideNav";
 import ProductCard from "@/components/ProductCard";
 import { RecentReviewsPanel } from "@/components/Reviews";
 import { Button } from "@/components/ui/button";
@@ -49,6 +50,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
+      <TopSlideNav />
       <main className="flex-grow">
         <Hero />
 

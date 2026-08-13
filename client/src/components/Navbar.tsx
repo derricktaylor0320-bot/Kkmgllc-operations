@@ -1,6 +1,5 @@
 import { Link, useLocation } from "wouter";
 import { ShoppingCart, LogIn, LogOut, User as UserIcon } from "lucide-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,12 +14,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { useCart } from "@/hooks/useCart";
 import CompassNavigation from "@/components/CompassNavigation";
+import { useCompassNavigation } from "@/hooks/useCompassNavigation";
 
 import logo from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
 
 export default function Navbar() {
   const [, setLocation] = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, setIsOpen } = useCompassNavigation();
   const { user, isAuthenticated } = useAuth();
   const { itemCount } = useCart();
   const queryClient = useQueryClient();
