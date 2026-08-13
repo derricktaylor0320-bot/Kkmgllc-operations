@@ -27,6 +27,11 @@ import {
   Trophy,
 } from "lucide-react";
 import logo from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
+import {
+  DIGIT_THREE_GUIDE_PATH,
+  digitThreeSphere,
+  projectSpherePoint,
+} from "@/lib/digitThreeSphere";
 
 type AppNode = { href: string; label: string; Icon: typeof Shirt };
 
@@ -48,26 +53,13 @@ const APPS: AppNode[] = [
   { href: "/invest", label: "Empire Invest", Icon: CircleDollarSign },
 ];
 
-function fibonacciSphere(n: number) {
-  const pts: { x: number; y: number; z: number }[] = [];
-  const inc = Math.PI * (3 - Math.sqrt(5));
-  const off = 2 / n;
-  for (let i = 0; i < n; i++) {
-    const y = i * off - 1 + off / 2;
-    const r = Math.sqrt(Math.max(0, 1 - y * y));
-    const phi = i * inc;
-    pts.push({ x: Math.cos(phi) * r, y, z: Math.sin(phi) * r });
-  }
-  return pts;
-}
-
 export default function Hub() {
   const [, setLocation] = useLocation();
   const { user, isAuthenticated, isLoading } = useAuth();
   const [angle, setAngle] = useState(0);
   const [hovered, setHovered] = useState<string | null>(null);
   const pausedRef = useRef(false);
-  const points = useRef(fibonacciSphere(APPS.length));
+  const points = useRef(digitThreeSphere(APPS.length));
 
   useEffect(() => {
     const reduceMotion = window.matchMedia(
@@ -88,25 +80,10 @@ export default function Hub() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  const R = 190;
-  const PERSP = 700;
-  const TILT = -0.35;
-  const cosA = Math.cos(angle);
-  const sinA = Math.sin(angle);
-  const cosT = Math.cos(TILT);
-  const sinT = Math.sin(TILT);
-
   const nodes = points.current
     .map((p, i) => {
-      let x = p.x * cosA - p.z * sinA;
-      let z = p.x * sinA + p.z * cosA;
-      let y = p.y;
-      const yT = y * cosT - z * sinT;
-      const zT = y * sinT + z * cosT;
-      y = yT;
-      z = zT;
-      const scale = PERSP / (PERSP - z * R);
-      return { ...APPS[i], left: x * R * scale, top: y * R * scale, z, scale };
+      const projected = projectSpherePoint(p, angle);
+      return { ...APPS[i], ...projected };
     })
     .sort((a, b) => a.z - b.z);
 
@@ -175,11 +152,11 @@ export default function Hub() {
           <EmpireDirectory />
 
           <p className="mb-2 text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            Or explore the interactive app map
+            Or explore the founders three app map
           </p>
           <div
             className="relative mx-auto"
-            style={{ width: "100%", maxWidth: 620, height: 540 }}
+            style={{ width: "100%", maxWidth: 560, height: 620 }}
             onMouseEnter={() => {
               pausedRef.current = true;
             }}
@@ -187,13 +164,35 @@ export default function Hub() {
               pausedRef.current = false;
               setHovered(null);
             }}
-            data-testid="container-hub-sphere"
+            data-testid="container-hub-three"
           >
+            <svg
+              viewBox="-1 -1 2 2"
+              className="pointer-events-none absolute inset-[8%] text-primary/20"
+              aria-hidden="true"
+            >
+              <path
+                d={DIGIT_THREE_GUIDE_PATH}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.045"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d={DIGIT_THREE_GUIDE_PATH}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.11"
+                strokeOpacity="0.35"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
               <div className="relative flex items-center justify-center">
-                <div className="absolute w-64 h-64 rounded-full bg-primary/20 blur-3xl animate-pulse" />
-                <div className="absolute w-44 h-44 rounded-full border border-primary/20" />
-                <div className="absolute w-60 h-60 rounded-full border border-primary/10" />
+                <div className="absolute h-56 w-44 rounded-full bg-primary/20 blur-3xl animate-pulse" />
                 <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/40 to-primary/5 backdrop-blur flex items-center justify-center border border-primary/40 shadow-[0_0_40px_hsl(var(--primary)/0.35)]">
                   <img
                     src={logo}
@@ -243,8 +242,8 @@ export default function Hub() {
           </div>
 
           <p className="text-muted-foreground text-sm mt-6">
-            One command center for every Khomplete Khemistri app. Hover to pause,
-            click any orb to launch.
+            One command center for every Khomplete Khemistri app. The founders
+            three honors the partners — hover to pause, click any orb to launch.
           </p>
         </div>
       </main>
