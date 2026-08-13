@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   ChevronDown,
@@ -17,6 +17,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { SITE_LINKS } from "@/lib/siteNavigation";
+import {
+  DIGIT_THREE_GUIDE_PATH,
+  digitThreeSphere,
+  projectSpherePoint,
+} from "@/lib/digitThreeSphere";
 import compassLogo from "@assets/brand/consolidatus_empire_crest_blue_silver.jpg";
 
 type CompassNavigationProps = {
@@ -27,29 +32,10 @@ type CompassNavigationProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-type CompassLinkStyle = CSSProperties & {
-  "--base-angle": string;
-  "--base-counter-angle": string;
-  "--distance": string;
-};
-
-const START_ANGLE = -90;
-const FULL_CIRCLE = 360;
-const ROTATION_DEGREES_PER_SECOND = 8;
-const POINTER_WINDOW_RATIO = 0.3;
-
-function getPointedIndex(rotation: number, linkCount: number) {
-  const step = FULL_CIRCLE / linkCount;
-  const candidate =
-    ((Math.round(-rotation / step) % linkCount) + linkCount) % linkCount;
-  const candidateAngle = candidate * step + rotation;
-  const distanceFromPointer =
-    ((candidateAngle + 180) % FULL_CIRCLE + FULL_CIRCLE) % FULL_CIRCLE - 180;
-
-  return Math.abs(distanceFromPointer) <= step * POINTER_WINDOW_RATIO
-    ? candidate
-    : null;
-}
+const ROTATION_RADIANS_PER_SECOND = 0.35;
+const COMPASS_RADIUS = 168;
+const COMPASS_PERSPECTIVE = 700;
+const COMPASS_TILT = -0.35;
 
 export default function CompassNavigation({
   accountName,
@@ -59,10 +45,9 @@ export default function CompassNavigation({
   onOpenChange,
 }: CompassNavigationProps) {
   const [location] = useLocation();
-  const compassRoseRef = useRef<HTMLDivElement>(null);
-  const rotationRef = useRef(0);
   const pausedRef = useRef(false);
-  const [pointedIndex, setPointedIndex] = useState<number | null>(0);
+  const pointsRef = useRef(digitThreeSphere(SITE_LINKS.length));
+  const [angle, setAngle] = useState(0);
 
   useEffect(() => {
     pausedRef.current = false;
@@ -73,53 +58,32 @@ export default function CompassNavigation({
 
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (motionQuery.matches) {
-      rotationRef.current = 0;
-      compassRoseRef.current?.style.setProperty("--compass-rotation", "0deg");
-      compassRoseRef.current?.style.setProperty(
-        "--compass-counter-rotation",
-        "0deg",
-      );
-      setPointedIndex(0);
+      setAngle(0);
       return;
     }
 
     let animationFrame = 0;
     let previousTime: number | null = null;
 
-    const rotateCompass = (time: number) => {
+    const rotateThree = (time: number) => {
       if (previousTime === null) {
         previousTime = time;
       }
 
-      const elapsed = Math.min(time - previousTime, 64);
+      const elapsed = Math.min(time - previousTime, 64) / 1000;
       previousTime = time;
 
       if (!pausedRef.current) {
-        const rotation =
-          (rotationRef.current +
-            (elapsed * ROTATION_DEGREES_PER_SECOND) / 1000) %
-          FULL_CIRCLE;
-        rotationRef.current = rotation;
-
-        compassRoseRef.current?.style.setProperty(
-          "--compass-rotation",
-          `${rotation}deg`,
-        );
-        compassRoseRef.current?.style.setProperty(
-          "--compass-counter-rotation",
-          `${-rotation}deg`,
-        );
-
-        const nextPointedIndex = getPointedIndex(rotation, SITE_LINKS.length);
-        setPointedIndex((currentIndex) =>
-          currentIndex === nextPointedIndex ? currentIndex : nextPointedIndex,
+        setAngle(
+          (currentAngle) =>
+            currentAngle + elapsed * ROTATION_RADIANS_PER_SECOND,
         );
       }
 
-      animationFrame = window.requestAnimationFrame(rotateCompass);
+      animationFrame = window.requestAnimationFrame(rotateThree);
     };
 
-    animationFrame = window.requestAnimationFrame(rotateCompass);
+    animationFrame = window.requestAnimationFrame(rotateThree);
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
@@ -127,18 +91,31 @@ export default function CompassNavigation({
     };
   }, [isOpen]);
 
+  const nodes = pointsRef.current
+    .map((point, index) => {
+      const projected = projectSpherePoint(point, angle, {
+        radius: COMPASS_RADIUS,
+        perspective: COMPASS_PERSPECTIVE,
+        tilt: COMPASS_TILT,
+      });
+      return { ...SITE_LINKS[index], ...projected, index };
+    })
+    .sort((a, b) => a.z - b.z);
+
+  const pointedIndex = nodes[nodes.length - 1]?.index ?? 0;
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
         <Button
           variant="outline"
           className="h-10 border-primary/60 bg-primary/10 px-3 text-primary shadow-[0_0_18px_hsl(var(--primary)/0.16)] hover:bg-primary hover:text-primary-foreground"
-          aria-label="Open the Empire compass navigation"
+          aria-label="Open the Empire founders three navigation"
           data-testid="button-compass-navigation"
         >
           <Compass className="h-5 w-5" />
           <span className="ml-2 hidden uppercase tracking-[0.16em] xl:inline">
-            Empire Compass
+            Empire Apps
           </span>
         </Button>
       </SheetTrigger>
@@ -149,7 +126,7 @@ export default function CompassNavigation({
         data-testid="dialog-compass-navigation"
       >
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/25 blur-3xl" />
+          <div className="absolute left-1/2 top-1/2 h-[78vmin] w-[58vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/25 blur-3xl" />
           <div className="absolute inset-0 topaz-glow opacity-55" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,hsl(var(--background))_72%)]" />
         </div>
@@ -160,20 +137,16 @@ export default function CompassNavigation({
               <span className="silver-shine">Explore the Empire</span>
             </SheetTitle>
             <SheetDescription className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:text-xs">
-              {SITE_LINKS.length} destinations — follow the ornate silver pointer or
-              choose any point
+              {SITE_LINKS.length} destinations along the founders three — hover
+              to pause, choose any orb
             </SheetDescription>
           </SheetHeader>
 
           <nav
             className="flex min-h-0 flex-1 items-center justify-center"
-            aria-label="Empire compass"
+            aria-label="Empire founders three navigation"
           >
-            <div
-              ref={compassRoseRef}
-              className="compass-rose"
-              data-testid="compass-rose"
-            >
+            <div className="compass-three" data-testid="compass-rose">
               <div
                 className="compass-pointer"
                 aria-hidden="true"
@@ -184,71 +157,46 @@ export default function CompassNavigation({
               <div className="compass-pointer-axis" aria-hidden="true" />
 
               <svg
-                viewBox="0 0 100 100"
-                className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+                viewBox="-1 -1 2 2"
+                className="pointer-events-none absolute inset-[10%] text-primary/25"
                 aria-hidden="true"
               >
                 <defs>
-                  <radialGradient id="compassGlow">
-                    <stop offset="0%" stopColor="hsl(210 40% 96%)" stopOpacity="0.42" />
-                    <stop offset="45%" stopColor="hsl(220 95% 55%)" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="hsl(224 82% 20%)" stopOpacity="0" />
+                  <radialGradient id="compassThreeGlow">
+                    <stop
+                      offset="0%"
+                      stopColor="hsl(210 40% 96%)"
+                      stopOpacity="0.42"
+                    />
+                    <stop
+                      offset="45%"
+                      stopColor="hsl(220 95% 55%)"
+                      stopOpacity="0.2"
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor="hsl(224 82% 20%)"
+                      stopOpacity="0"
+                    />
                   </radialGradient>
-                  <linearGradient id="compassRay" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="hsl(220 95% 55%)" stopOpacity="0.18" />
-                    <stop offset="100%" stopColor="hsl(210 40% 96%)" stopOpacity="0.85" />
-                  </linearGradient>
                 </defs>
-
-                <circle cx="50" cy="50" r="48" fill="url(#compassGlow)" />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="41.5"
+                <path
+                  d={DIGIT_THREE_GUIDE_PATH}
+                  fill="none"
+                  stroke="url(#compassThreeGlow)"
+                  strokeWidth="0.12"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d={DIGIT_THREE_GUIDE_PATH}
                   fill="none"
                   stroke="hsl(210 40% 96%)"
-                  strokeOpacity="0.45"
-                  strokeWidth="0.4"
-                />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="30.5"
-                  fill="none"
-                  stroke="hsl(220 95% 58%)"
                   strokeOpacity="0.35"
-                  strokeWidth="0.3"
-                  strokeDasharray="1.4 1.4"
+                  strokeWidth="0.045"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
-
-                <g className="compass-rotating-rays">
-                  {SITE_LINKS.map((link, index) => {
-                    const angle =
-                      START_ANGLE + (index * FULL_CIRCLE) / SITE_LINKS.length;
-                    const radians = (angle * Math.PI) / 180;
-                    const endX = 50 + Math.cos(radians) * 44;
-                    const endY = 50 + Math.sin(radians) * 44;
-
-                    return (
-                      <g key={link.href}>
-                        <line
-                          x1="50"
-                          y1="50"
-                          x2={endX}
-                          y2={endY}
-                          stroke="url(#compassRay)"
-                          strokeWidth={index % 2 === 0 ? "0.42" : "0.25"}
-                        />
-                        <circle
-                          cx={endX}
-                          cy={endY}
-                          r={index % 2 === 0 ? "0.9" : "0.65"}
-                          fill="hsl(var(--primary))"
-                        />
-                      </g>
-                    );
-                  })}
-                </g>
               </svg>
 
               <div className="compass-center" aria-hidden="true">
@@ -261,28 +209,24 @@ export default function CompassNavigation({
                 />
               </div>
 
-              {SITE_LINKS.map((link, index) => {
-                const angle =
-                  START_ANGLE + (index * FULL_CIRCLE) / SITE_LINKS.length;
-                const style: CompassLinkStyle = {
-                  "--base-angle": `${angle}deg`,
-                  "--base-counter-angle": `${-angle}deg`,
-                  "--distance":
-                    index % 2 === 0
-                      ? "var(--compass-outer-radius)"
-                      : "var(--compass-inner-radius)",
-                };
-                const isActive = location === link.href;
-                const isPointed = pointedIndex === index;
+              {nodes.map((node) => {
+                const depth = (node.z + 1) / 2;
+                const opacity = 0.28 + depth * 0.72;
+                const isActive = location === node.href;
+                const isPointed = pointedIndex === node.index;
 
                 return (
                   <Link
-                    key={link.href}
-                    href={link.href}
-                    style={style}
-                    className={`compass-nav-link ${
-                      isPointed ? "compass-nav-link-pointed" : ""
-                    } ${isActive ? "compass-nav-link-current" : ""}`}
+                    key={node.href}
+                    href={node.href}
+                    className={`compass-three-link ${
+                      isPointed ? "compass-three-link-pointed" : ""
+                    } ${isActive ? "compass-three-link-current" : ""}`}
+                    style={{
+                      transform: `translate(-50%, -50%) translate(${node.left}px, ${node.top}px) scale(${node.scale})`,
+                      zIndex: Math.round((node.z + 1) * 100),
+                      opacity,
+                    }}
                     onMouseEnter={() => {
                       pausedRef.current = true;
                     }}
@@ -296,17 +240,17 @@ export default function CompassNavigation({
                       pausedRef.current = false;
                     }}
                     onClick={() => onOpenChange(false)}
-                    aria-label={`${index + 1}. ${link.label}`}
+                    aria-label={`${node.index + 1}. ${node.label}`}
                     aria-current={isActive ? "page" : undefined}
-                    title={link.label}
+                    title={node.label}
                     data-pointer-active={isPointed ? "true" : "false"}
-                    data-testid={`link-compass-${link.href === "/" ? "home" : link.href.slice(1)}`}
+                    data-testid={`link-compass-${node.href === "/" ? "home" : node.href.slice(1)}`}
                   >
                     <span className="compass-link-number">
-                      {String(index + 1).padStart(2, "0")}
+                      {String(node.index + 1).padStart(2, "0")}
                     </span>
-                    <span className="sm:hidden">{link.compactLabel}</span>
-                    <span className="hidden sm:inline">{link.label}</span>
+                    <span className="sm:hidden">{node.compactLabel}</span>
+                    <span className="hidden sm:inline">{node.label}</span>
                   </Link>
                 );
               })}

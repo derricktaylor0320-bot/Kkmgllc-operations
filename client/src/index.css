@@ -213,8 +213,92 @@
     }
   }
 
-  /* Full-screen navigation compass. Alternating radii keep every destination
-     readable on small screens while preserving one clockwise sequence. */
+  /* Full-screen founders "3" navigation. Apps keep sphere-like depth while
+     tracing the partners' numeral instead of a circular wheel. */
+  .compass-three {
+    container-type: size;
+    position: relative;
+    width: min(84vw, calc((100dvh - 9.5rem) * 0.72), 34rem);
+    height: min(92vw, calc(100dvh - 9.5rem), 46rem);
+    min-width: 16rem;
+    min-height: 20rem;
+    isolation: isolate;
+  }
+
+  .compass-three-link {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 20;
+    display: flex;
+    width: clamp(2.625rem, 14cqw, 6.4rem);
+    min-height: clamp(2rem, 7.5cqw, 2.8rem);
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    border: 1px solid hsl(var(--primary) / 0.55);
+    border-radius: 9999px;
+    background: hsl(var(--background) / 0.9);
+    color: hsl(var(--primary));
+    padding: 0.2rem 0.35rem;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: clamp(0.5rem, 2.25cqw, 0.75rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+    filter: saturate(0.55);
+    box-shadow:
+      0 0.2rem 0.8rem hsl(var(--background) / 0.75),
+      0 0 1rem hsl(var(--primary) / 0.12);
+    transition:
+      opacity 180ms ease,
+      filter 180ms ease,
+      color 180ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+    will-change: transform, opacity;
+  }
+
+  .compass-three-link-pointed {
+    z-index: 30;
+    border-color: hsl(210 40% 98%);
+    background:
+      radial-gradient(circle at 30% 25%, hsl(0 0% 100% / 0.55), transparent 42%),
+      linear-gradient(160deg, hsl(210 30% 92%), hsl(214 40% 72%));
+    color: hsl(224 82% 12%);
+    opacity: 1 !important;
+    filter: none;
+    box-shadow:
+      0 0 0 0.12rem hsl(224 82% 12%),
+      0 0 0 0.24rem hsl(210 40% 96%),
+      0 0 1.8rem hsl(220 95% 55% / 0.55);
+  }
+
+  .compass-three-link-current:not(.compass-three-link-pointed) {
+    border-color: hsl(var(--primary) / 0.8);
+    opacity: 0.48 !important;
+  }
+
+  .compass-three-link:hover,
+  .compass-three-link:focus-visible {
+    z-index: 30;
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    opacity: 1 !important;
+    filter: none;
+    box-shadow:
+      0 0 0 0.12rem hsl(var(--background)),
+      0 0 0 0.24rem hsl(var(--primary)),
+      0 0 1.4rem hsl(var(--primary) / 0.38);
+    outline: none;
+  }
+
+  /* Legacy circular compass styles kept for reference in older snapshots. */
   .compass-rose {
     --compass-outer-radius: 40cqw;
     --compass-inner-radius: 27cqw;
@@ -404,6 +488,11 @@
   }
 
   @media (max-height: 30rem) {
+    .compass-three {
+      min-width: 14rem;
+      min-height: 17rem;
+    }
+
     .compass-rose {
       min-width: 15rem;
       min-height: 15rem;
