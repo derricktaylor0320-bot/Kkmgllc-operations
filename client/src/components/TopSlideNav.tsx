@@ -1,18 +1,11 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Compass, LayoutGrid, ShoppingBag } from "lucide-react";
+import { ChevronDown, LayoutGrid, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCompassNavigation } from "@/hooks/useCompassNavigation";
 
 export default function TopSlideNav() {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const { openCompass } = useCompassNavigation();
-
-  const handleOpenCompass = () => {
-    setIsExpanded(false);
-    openCompass();
-  };
+  const [isExpanded, setIsExpanded] = useState(true);
 
   return (
     <div
@@ -28,7 +21,7 @@ export default function TopSlideNav() {
         data-testid="button-top-slide-nav-toggle"
       >
         <span className="font-display text-xs uppercase tracking-[0.22em] text-primary sm:text-sm">
-          Shop · Hub · Empire Wheel
+          Shop · Hub
         </span>
         <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
           <span className="hidden sm:inline">
@@ -77,17 +70,6 @@ export default function TopSlideNav() {
                   Centralized Hub
                 </Button>
               </Link>
-
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={handleOpenCompass}
-                className="h-auto w-full border-primary/60 bg-primary/10 px-6 py-4 font-display text-sm uppercase tracking-wider text-primary shadow-[0_0_18px_hsl(var(--primary)/0.16)] hover:bg-primary hover:text-primary-foreground sm:w-auto sm:min-w-[200px]"
-                data-testid="button-top-slide-empire-wheel"
-              >
-                <Compass className="mr-2 h-4 w-4" />
-                Empire Wheel
-              </Button>
             </div>
           </motion.div>
         )}
