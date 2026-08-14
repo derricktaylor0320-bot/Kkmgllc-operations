@@ -19,13 +19,13 @@ export const CUTTING_BOARD_SAMPLE_PHOTOS: {
   alt: string;
 }[] = [
   {
-    teamLogoId: "501",
+    teamLogoId: "401",
     teamName: "Baltimore Ravens",
     src: "/attached_assets/nfl-cutting-boards/baltimore_ravens_cutting_board.jpg",
     alt: "Handmade NFL cutting board — Baltimore Ravens river-style hardwood with purple resin",
   },
   {
-    teamLogoId: "522",
+    teamLogoId: "422",
     teamName: "Pittsburgh Steelers",
     src: "/attached_assets/nfl-cutting-boards/pittsburgh_steelers_cutting_board.jpg",
     alt: "Handmade NFL cutting board — Pittsburgh Steelers river-style hardwood with gold and black resin",

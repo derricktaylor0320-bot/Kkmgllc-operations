@@ -9,8 +9,8 @@ import {
 
 test("game day bundle customize href pre-selects bundle garment", () => {
   assert.equal(
-    gameDayBundleCustomizeHref("501"),
-    `/customize/501?garment=${NFL_GAME_DAY_BUNDLE_GARMENT_ID}`,
+    gameDayBundleCustomizeHref("401"),
+    `/customize/401?garment=${NFL_GAME_DAY_BUNDLE_GARMENT_ID}`,
   );
 });
 
