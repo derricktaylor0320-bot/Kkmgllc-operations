@@ -9,6 +9,14 @@ import CaseCustomizer from "@/components/CaseCustomizer";
 import { allLogos, LOGO_SECTIONS, logoSectionGroups, logoIdByAlt, recommendedLogoIdsForColor } from "@/lib/logoCatalog";
 import LogoPickerTile from "@/components/LogoPickerTile";
 import { sizeUpchargeDollars } from "@shared/customization";
+import {
+  ELEMENTS_DUO_WASH_OPTIONS,
+  elementsDuoSavingsDollars,
+  elementsDuoSeparateDollars,
+  encodeElementsDuoSelection,
+  isElementsDuoProduct,
+} from "@shared/elementsDuo";
+import { resolveStorefrontImageUrl } from "@shared/productImages";
 import type { ProductVariant } from "@/lib/productVariants";
 import { Minus, Plus, PenLine } from "lucide-react";
 
@@ -39,7 +47,7 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
   const hasVariants = !!variants && variants.length > 1;
   const [variantIdx, setVariantIdx] = useState(0);
   const activeVariant = hasVariants ? variants![Math.min(variantIdx, variants!.length - 1)] : undefined;
-  const image = activeVariant?.image || baseImage;
+  const variantImage = activeVariant?.image || baseImage;
   const title = activeVariant?.title ?? baseTitle;
   const price = activeVariant ? activeVariant.price : basePrice;
   const priceId = activeVariant ? (activeVariant.priceId ?? undefined) : basePriceId;
@@ -47,7 +55,7 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
   // Wide multi-item shots (e.g. four lighters) get cropped by cover in the
   // square card frame — prefer contain when the catalog image needs the full perimeter.
   const autoContain =
-    typeof image === "string" && image.includes("kk_branded_logo_lighter");
+    typeof variantImage === "string" && variantImage.includes("kk_branded_logo_lighter");
   const fitClass =
     imageFit === "contain" || autoContain ? "object-contain p-2" : "object-cover";
   const { addItem } = useCart();
@@ -71,10 +79,18 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
   const scentChoices = scents
     ? scents.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
+  const isDuo = isElementsDuoProduct(priceId, title);
   const needsScent = scentChoices.length > 0;
+  const needsWash = isDuo;
   // Sea moss gel (and similar jar products) reuse the scent picker for flavor
   // varieties — label the UI as "flavor" so checkout copy stays accurate.
-  const scentNoun = /\bgel\b/i.test(baseTitle) ? "flavor" : "scent";
+  const scentNoun = isDuo
+    ? "body butter scent"
+    : /\bgel\b/i.test(baseTitle)
+      ? "flavor"
+      : "scent";
+  const duoSavings = elementsDuoSavingsDollars();
+  const duoSeparate = elementsDuoSeparateDollars();
   const soldOutColorSet = new Set(
     (soldOutColors
       ? soldOutColors.split(",").map((s) => s.trim()).filter(Boolean)
@@ -87,6 +103,11 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
   const [selectedApparelSize, setSelectedApparelSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedScent, setSelectedScent] = useState("");
+  const [selectedWash, setSelectedWash] = useState("");
+  const image =
+    isDuo && selectedWash
+      ? resolveStorefrontImageUrl("", selectedWash) || variantImage
+      : variantImage;
   const [errorMessage, setErrorMessage] = useState("");
   const [added, setAdded] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -128,22 +149,36 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
       setErrorMessage("That color is sold out. Please choose another.");
       return;
     }
+    if (needsWash && !selectedWash) {
+      setErrorMessage("Please select a 3-in-1 body wash.");
+      return;
+    }
     if (needsScent && !selectedScent) {
       setErrorMessage(`Please select a ${scentNoun}.`);
       return;
     }
 
+    const cartScent = isDuo
+      ? encodeElementsDuoSelection(selectedWash, selectedScent)
+      : needsScent
+        ? selectedScent
+        : undefined;
+    const cartImage =
+      isDuo && selectedWash
+        ? resolveStorefrontImageUrl("", selectedWash) || image
+        : image;
+
     addItem(
       {
         priceId,
         title,
-        image,
+        image: cartImage,
         category,
         unitPrice: effectiveUnitPrice,
         selectedLogo: needsLogo ? selectedLogo : needsSize ? selectedSize : undefined,
         selectedColor: needsColor ? selectedColor : undefined,
         selectedSize: needsApparelSize ? selectedApparelSize : undefined,
-        selectedScent: needsScent ? selectedScent : undefined,
+        selectedScent: cartScent,
       },
       quantity,
     );
@@ -237,6 +272,14 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
               Sold Out
             </div>
           )}
+          {isDuo && !soldOut && (
+            <div
+              className="absolute top-3 right-3 rounded bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-lg"
+              data-testid={`badge-save-${title.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              Save ${duoSavings}
+            </div>
+          )}
         </CardContent>
         <CardFooter className="flex flex-col items-start p-4 gap-2">
           <span 
@@ -264,12 +307,29 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
               </h3>
             )}
             <span 
-              className="font-medium text-primary"
+              className="font-medium text-primary text-right"
               data-testid={`text-price-${title.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              ${effectiveUnitPrice.toFixed(2)}
+              {isDuo ? (
+                <span className="flex flex-col items-end leading-tight">
+                  <span className="text-xs text-muted-foreground line-through font-normal">
+                    ${duoSeparate.toFixed(2)}
+                  </span>
+                  <span>${effectiveUnitPrice.toFixed(2)}</span>
+                </span>
+              ) : (
+                <>${effectiveUnitPrice.toFixed(2)}</>
+              )}
             </span>
           </div>
+          {isDuo && (
+            <p
+              className="text-xs text-primary"
+              data-testid={`text-duo-savings-${title.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              3-in-1 wash + body butter · save ${duoSavings} vs buying separately
+            </p>
+          )}
           {hasVariants && (
             <div className="w-full mt-1 space-y-1.5">
               <p className="text-xs text-muted-foreground leading-relaxed">
@@ -462,13 +522,44 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                   </Select>
                 </div>
               )}
+              {needsWash && (
+                <div className="w-full mt-1 space-y-2">
+                  <p
+                    className="text-xs text-muted-foreground leading-relaxed"
+                    data-testid={`text-wash-note-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    Choose your 3-in-1 body wash (shampoo &amp; conditioner) — $15 bottle.
+                  </p>
+                  <Select value={selectedWash} onValueChange={(v) => { setSelectedWash(v); setErrorMessage(""); }} disabled={soldOut}>
+                    <SelectTrigger
+                      className="w-full"
+                      data-testid={`select-wash-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      <SelectValue placeholder="Choose your 3-in-1 wash *" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ELEMENTS_DUO_WASH_OPTIONS.map((choice) => (
+                        <SelectItem
+                          key={choice}
+                          value={choice}
+                          data-testid={`option-wash-${choice.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
+                          {choice}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
               {needsScent && (
                 <div className="w-full mt-1 space-y-2">
                   <p
                     className="text-xs text-muted-foreground leading-relaxed"
                     data-testid={`text-scent-note-${title.toLowerCase().replace(/\s+/g, '-')}`}
                   >
-                    Choose your {scentNoun} to complete your order.
+                    {isDuo
+                      ? "Choose your whipped body butter scent — $7 in the Duo (usually $12)."
+                      : `Choose your ${scentNoun} to complete your order.`}
                   </p>
                   <Select value={selectedScent} onValueChange={(v) => { setSelectedScent(v); setErrorMessage(""); }} disabled={soldOut}>
                     <SelectTrigger
@@ -591,7 +682,7 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
               </div>
               <Button 
                 onClick={handleAddToCart}
-                disabled={!priceId || soldOut || (needsLogo && !selectedLogo) || (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) || (needsColor && (!selectedColor || isColorSoldOut(selectedColor))) || (needsScent && !selectedScent)}
+                disabled={!priceId || soldOut || (needsLogo && !selectedLogo) || (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) || (needsColor && (!selectedColor || isColorSoldOut(selectedColor))) || (needsWash && !selectedWash) || (needsScent && !selectedScent)}
                 className={`w-full mt-2 transition-colors uppercase tracking-wider font-display text-sm h-10 disabled:opacity-50 ${
                   soldOut 
                     ? 'bg-gray-400 text-white cursor-not-allowed' 
@@ -601,7 +692,7 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                 }`}
                 data-testid={`button-add-${title.toLowerCase().replace(/\s+/g, '-')}`}
               >
-                {soldOut ? 'Sold Out' : added ? 'Added \u2713' : needsLogo && !selectedLogo ? 'Select a Logo' : (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) ? 'Select a Size' : needsColor && !selectedColor ? 'Select a Color' : needsScent && !selectedScent ? `Select a ${scentNoun === "flavor" ? "Flavor" : "Scent"}` : 'Add to Cart'}
+                {soldOut ? 'Sold Out' : added ? 'Added \u2713' : needsLogo && !selectedLogo ? 'Select a Logo' : (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) ? 'Select a Size' : needsColor && !selectedColor ? 'Select a Color' : needsWash && !selectedWash ? 'Select a Wash' : needsScent && !selectedScent ? `Select a ${scentNoun === "flavor" ? "Flavor" : "Scent"}` : 'Add to Cart'}
               </Button>
               {errorMessage && (
                 <p

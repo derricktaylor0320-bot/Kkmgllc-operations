@@ -6,8 +6,15 @@ import {
   BEDDING_COMFORTER_IMAGE,
   BEDDING_PILLOWCASE_IMAGE,
   BEDDING_SHEET_IMAGE,
+  BODY_WASH_COCOA_SHEA_IMAGE,
   LEGACY_BROWN_BEDDING_IMAGE_PATHS,
 } from "@shared/productImages";
+import {
+  ELEMENTS_DUO_NAME,
+  ELEMENTS_DUO_PRICE_CENTS,
+  ELEMENTS_DUO_PRICE_ID,
+  ELEMENTS_DUO_PRODUCT_ID,
+} from "@shared/elementsDuo";
 
 // Catalog facts that must be true in whatever database this server is connected
 // to. The synced `stripe.products` / `stripe.prices` tables are the durable
@@ -1202,6 +1209,21 @@ const BODY_WASH_PRODUCTS: {
   },
 ];
 
+// Elements Duo — one 3-in-1 wash bottle ($15) + one whipped body butter jar
+// at the bundle price of $7 ($22 total, $5 off buying them separately at $27).
+const ELEMENTS_DUO_DESCRIPTION =
+  "Khomplete Khemistri Elements Duo — one 8 oz 3-in-1 body wash, shampoo & conditioner bottle plus one 4 oz whipped body butter jar. Pay $15 for the wash and only $7 for the butter ($22 for the set). Save $5 vs buying them separately at $27. Choose your wash and your body butter scent at checkout.";
+const ELEMENTS_DUO_META = {
+  category: "Body Care",
+  productType: "elements",
+  sortOrder: "90",
+  imageUrl: BODY_WASH_COCOA_SHEA_IMAGE,
+  customize: "none",
+  scented: "true",
+  elementsDuo: "true",
+  gender: "Unisex",
+};
+
 // Extra accessories that are self-created in prod the same way as bedding
 // (synthetic prod_kk*/price_kk* ids, no Stripe on the Railway frozen snapshot).
 // These carry a `colors` list (multi-color picker) and offer the full logo
@@ -1929,6 +1951,20 @@ export async function ensureCatalogData() {
       }
       console.log(
         `ensureCatalogData: ensured ${BODY_WASH_PRODUCTS.length} Elements 3-in-1 body wash SKUs ($15 each).`,
+      );
+
+      await ensureSyntheticProduct({
+        accountId,
+        productId: ELEMENTS_DUO_PRODUCT_ID,
+        priceId: ELEMENTS_DUO_PRICE_ID,
+        name: ELEMENTS_DUO_NAME,
+        description: ELEMENTS_DUO_DESCRIPTION,
+        priceCents: ELEMENTS_DUO_PRICE_CENTS,
+        meta: ELEMENTS_DUO_META,
+        created,
+      });
+      console.log(
+        "ensureCatalogData: ensured Elements Duo ($22 — 3-in-1 wash + body butter, save $5).",
       );
 
       await db.execute(sql`

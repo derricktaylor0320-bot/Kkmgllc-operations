@@ -36,6 +36,7 @@ const TITLE_IMAGE_OVERRIDES: Array<{ pattern: RegExp; imageUrl: string }> = [
   { pattern: /pillowcase set/i, imageUrl: BEDDING_PILLOWCASE_IMAGE },
   { pattern: /body pillow/i, imageUrl: BEDDING_BODY_PILLOW_IMAGE },
   { pattern: /whipped body butter/i, imageUrl: BODY_BUTTER_IMAGE },
+  { pattern: /elements duo/i, imageUrl: BODY_WASH_COCOA_SHEA_IMAGE },
   { pattern: /cocoa\s*&\s*shea\s*butter/i, imageUrl: BODY_WASH_COCOA_SHEA_IMAGE },
   { pattern: /island\s*tranquility/i, imageUrl: BODY_WASH_ISLAND_TRANQUILITY_IMAGE },
   { pattern: /cocoa\s*mango|coco\s*mango/i, imageUrl: BODY_WASH_COCOA_MANGO_IMAGE },

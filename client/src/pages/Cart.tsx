@@ -13,6 +13,11 @@ import ShipStateTaxSummary, { useShipToState } from "@/components/ShipStateTaxSu
 import BundleUpsell from "@/components/BundleUpsell";
 import { getBundleById } from "@shared/bundlePricing";
 import { DISCOUNT_CODES, parseDiscountCode } from "@shared/discounts";
+import {
+  elementsDuoSavingsDollars,
+  isElementsDuoProduct,
+  parseElementsDuoSelection,
+} from "@shared/elementsDuo";
 
 type DiscountEligibility = {
   paidOrders: number;
@@ -153,6 +158,10 @@ export default function Cart() {
                   .replace(/\s+/g, "-")}-${(item.selectedScent || "")
                   .toLowerCase()
                   .replace(/\s+/g, "-")}`;
+                const isDuoLine = isElementsDuoProduct(item.priceId, item.title);
+                const duoSelection = isDuoLine
+                  ? parseElementsDuoSelection(item.selectedScent)
+                  : null;
                 return (
                   <div
                     key={slug}
@@ -207,12 +216,36 @@ export default function Cart() {
                           Size: {item.selectedSize}
                         </p>
                       )}
-                      {item.selectedScent && (
+                      {duoSelection && (
+                        <>
+                          <p
+                            className="text-xs text-muted-foreground mt-1"
+                            data-testid={`text-cart-wash-${slug}`}
+                          >
+                            3-in-1 wash: {duoSelection.wash}
+                          </p>
+                          <p
+                            className="text-xs text-muted-foreground mt-1"
+                            data-testid={`text-cart-scent-${slug}`}
+                          >
+                            Body butter: {duoSelection.butterScent}
+                          </p>
+                        </>
+                      )}
+                      {item.selectedScent && !duoSelection && (
                         <p
                           className="text-xs text-muted-foreground mt-1"
                           data-testid={`text-cart-scent-${slug}`}
                         >
                           {/\bgel\b/i.test(item.title) ? "Flavor" : "Scent"}: {item.selectedScent}
+                        </p>
+                      )}
+                      {isDuoLine && (
+                        <p
+                          className="text-xs text-primary mt-1"
+                          data-testid={`text-cart-duo-savings-${slug}`}
+                        >
+                          Save ${elementsDuoSavingsDollars()} vs buying separately
                         </p>
                       )}
                       {item.bundleId && getBundleById(item.bundleId) && (

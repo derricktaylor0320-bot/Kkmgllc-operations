@@ -16,6 +16,13 @@
 
 import { PHONE_MODELS_BY_TYPE } from "./phoneModels";
 import { LOGO_ALT_SET } from "./logoNames";
+import {
+  elementsDuoOrderNote,
+  isElementsDuoMetadata,
+  isElementsDuoProduct,
+  isElementsDuoWash,
+  parseElementsDuoSelection,
+} from "./elementsDuo";
 
 // Em dash used by the client to join the choice (color/model) and the logo name.
 const DELIM = " \u2014 ";
@@ -74,6 +81,7 @@ export type CustomizationKind =
   | "color"
   | "colorSoldOut"
   | "scent"
+  | "duo"
   | "none";
 
 export interface CustomizationCheck {
@@ -351,10 +359,28 @@ export function checkCustomization(
     notes.push(`Color: ${color}`);
   }
 
+  // Elements Duo: one 3-in-1 wash + one body-butter scent, packed into
+  // selectedScent as "Wash — Butter". Skip the single-scent check below.
+  const duoRequired =
+    isElementsDuoMetadata(meta) ||
+    isElementsDuoProduct(undefined, typeof productName === "string" ? productName : undefined);
+  if (duoRequired) {
+    const parsed = parseElementsDuoSelection(selectedScent);
+    const butterScents = scentsFor({ ...meta, scented: "true" });
+    if (
+      !parsed ||
+      !isElementsDuoWash(parsed.wash) ||
+      !butterScents.includes(parsed.butterScent)
+    ) {
+      return { required: true, kind: "duo", ok: false };
+    }
+    notes.push(elementsDuoOrderNote(parsed));
+  }
+
   // Scent (candles, body butters). Layered like color/size — required whenever
   // the product is a scented good. The chosen scent is added to the order note.
   const scents = scentsFor(meta);
-  const scentRequired = scents.length > 0;
+  const scentRequired = scents.length > 0 && !duoRequired;
   if (scentRequired) {
     const scent = typeof selectedScent === "string" ? selectedScent.trim() : "";
     if (!scent || !scents.includes(scent)) {
@@ -364,7 +390,7 @@ export function checkCustomization(
   }
 
   const required =
-    base.required || sizeRequired || colorRequired || scentRequired;
+    base.required || sizeRequired || colorRequired || scentRequired || duoRequired;
   const kind: CustomizationKind =
     base.kind !== "none"
       ? base.kind
@@ -372,9 +398,11 @@ export function checkCustomization(
         ? "size"
         : colorRequired
           ? "color"
-          : scentRequired
-            ? "scent"
-            : "none";
+          : duoRequired
+            ? "duo"
+            : scentRequired
+              ? "scent"
+              : "none";
   return {
     required,
     kind,
@@ -403,6 +431,8 @@ export function customizationErrorMessage(
       return `That color of "${productName}" is sold out. Please choose another color.`;
     case "scent":
       return `Please choose a scent for "${productName}" before checking out.`;
+    case "duo":
+      return `Please choose a 3-in-1 body wash and a body butter scent for "${productName}" before checking out.`;
     default:
       return `Please complete your customization for "${productName}" before checking out.`;
   }
