@@ -2,6 +2,9 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
   BODY_BUTTER_IMAGE,
+  BODY_WASH_COCOA_MANGO_IMAGE,
+  BODY_WASH_COCOA_SHEA_IMAGE,
+  BODY_WASH_ISLAND_TRANQUILITY_IMAGE,
   BEDDING_COMFORTER_IMAGE,
   BEDDING_PILLOWCASE_IMAGE,
   HIS_HERS_WATCH_IMAGE,
@@ -61,6 +64,21 @@ describe("resolveStorefrontImageUrl", () => {
     assert.equal(
       resolveStorefrontImageUrl("", "Khomplete Khemistri His & Hers Watch Set"),
       HIS_HERS_WATCH_IMAGE,
+    );
+  });
+
+  it("infers body wash artwork from title when metadata image is empty", () => {
+    assert.equal(
+      resolveStorefrontImageUrl("", "Cocoa & Shea Butter"),
+      BODY_WASH_COCOA_SHEA_IMAGE,
+    );
+    assert.equal(
+      resolveStorefrontImageUrl("", "Island Tranquility"),
+      BODY_WASH_ISLAND_TRANQUILITY_IMAGE,
+    );
+    assert.equal(
+      resolveStorefrontImageUrl("", "Cocoa Mango"),
+      BODY_WASH_COCOA_MANGO_IMAGE,
     );
   });
 });
