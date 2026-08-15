@@ -1139,6 +1139,19 @@ const ELEMENTS_PRODUCTS: {
       comingSoon: "true",
     },
   },
+];
+
+// Khomplete Khemistri Elements 3-in-1 body wash (8 oz, $15). Ensured via
+// ensureSyntheticProduct in the critical SKU block so they cannot be skipped
+// if the generic Elements insert loop exits early.
+const BODY_WASH_PRODUCTS: {
+  productId: string;
+  priceId: string;
+  name: string;
+  description: string;
+  priceCents: number;
+  meta: Record<string, string>;
+}[] = [
   {
     productId: "prod_kkelemsbodywashcocoashea",
     priceId: "price_kkelemsbodywashcocoashea",
@@ -1901,6 +1914,22 @@ export async function ensureCatalogData() {
           "ensureCatalogData: ensured Khomplete Khemistri His & Hers Watch Set.",
         );
       }
+
+      for (const bodyWash of BODY_WASH_PRODUCTS) {
+        await ensureSyntheticProduct({
+          accountId,
+          productId: bodyWash.productId,
+          priceId: bodyWash.priceId,
+          name: bodyWash.name,
+          description: bodyWash.description,
+          priceCents: bodyWash.priceCents,
+          meta: bodyWash.meta,
+          created,
+        });
+      }
+      console.log(
+        `ensureCatalogData: ensured ${BODY_WASH_PRODUCTS.length} Elements 3-in-1 body wash SKUs ($15 each).`,
+      );
 
       await db.execute(sql`
         UPDATE stripe.products
