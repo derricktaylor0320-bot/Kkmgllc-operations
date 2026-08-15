@@ -1139,6 +1139,54 @@ const ELEMENTS_PRODUCTS: {
       comingSoon: "true",
     },
   },
+  {
+    productId: "prod_kkelemsbodywashcocoashea",
+    priceId: "price_kkelemsbodywashcocoashea",
+    name: "Cocoa & Shea Butter",
+    description:
+      "Khomplete Khemistri Elements Cocoa & Shea Butter — 3-in-1 body wash, shampoo & conditioner (8 oz). Hydrating paraben-free, phthalate-free, and cruelty-free formula with glycerin & vitamin E. Leaves skin feeling soft with cocoa butter, coconut & vanilla scent. $15 per bottle.",
+    priceCents: 1500,
+    meta: {
+      category: "Body Care",
+      productType: "elements",
+      sortOrder: "119",
+      imageUrl: "/assets/kk_elements_body_wash_cocoa_shea.png",
+      customize: "none",
+      gender: "Unisex",
+    },
+  },
+  {
+    productId: "prod_kkelemsbodywashisland",
+    priceId: "price_kkelemsbodywashisland",
+    name: "Island Tranquility",
+    description:
+      "Khomplete Khemistri Elements Island Tranquility — 3-in-1 body wash, shampoo & conditioner (8 oz). 100% vegan, paraben-free, sulfate-free, and cruelty-free. Moisturizing shampoo, conditioner & body wash for all skin & hair types. $15 per bottle.",
+    priceCents: 1500,
+    meta: {
+      category: "Body Care",
+      productType: "elements",
+      sortOrder: "120",
+      imageUrl: "/assets/kk_elements_body_wash_island_tranquility.png",
+      customize: "none",
+      gender: "Unisex",
+    },
+  },
+  {
+    productId: "prod_kkelemsbodywashcocoamango",
+    priceId: "price_kkelemsbodywashcocoamango",
+    name: "Cocoa Mango",
+    description:
+      "Khomplete Khemistri Elements Cocoa Mango — 3-in-1 body wash, shampoo & conditioner (8 oz). 100% vegan, cruelty-free, and paraben-free. Moisturizing shampoo, conditioner & body wash for all skin & hair types. $15 per bottle.",
+    priceCents: 1500,
+    meta: {
+      category: "Body Care",
+      productType: "elements",
+      sortOrder: "121",
+      imageUrl: "/assets/kk_elements_body_wash_cocoa_mango.png",
+      customize: "none",
+      gender: "Unisex",
+    },
+  },
 ];
 
 // Extra accessories that are self-created in prod the same way as bedding
