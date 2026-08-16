@@ -67,6 +67,13 @@ describe("resolveStorefrontImageUrl", () => {
     );
   });
 
+  it("infers Elements Duo artwork from title when metadata image is empty", () => {
+    assert.equal(
+      resolveStorefrontImageUrl("", "Elements Duo"),
+      BODY_WASH_COCOA_SHEA_IMAGE,
+    );
+  });
+
   it("infers body wash artwork from title when metadata image is empty", () => {
     assert.equal(
       resolveStorefrontImageUrl("", "Cocoa & Shea Butter"),

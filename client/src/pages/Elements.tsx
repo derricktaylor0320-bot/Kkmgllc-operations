@@ -5,6 +5,12 @@ import BrandSectionBanner from "@/components/BrandSectionBanner";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import elementsHealthSectionArt from "@assets/brand/khomplete_khemistri_elements_health_section.png";
+import {
+  elementsDuoPriceDollars,
+  elementsDuoSavingsDollars,
+  elementsDuoSeparateDollars,
+  isElementsDuoProduct,
+} from "@shared/elementsDuo";
 
 export default function Elements() {
   const { data: products, isLoading: loadingElements } = useQuery({
@@ -18,7 +24,20 @@ export default function Elements() {
   const bodyCare = ((accessory as any[]) || []).filter(
     (p) => p.category === "Body Care",
   );
-  const allProducts = [...((products as any[]) || []), ...bodyCare];
+  const allProducts = [...((products as any[]) || []), ...bodyCare].sort(
+    (a: any, b: any) => {
+      const aDuo = isElementsDuoProduct(a.priceId, a.title) ? 0 : 1;
+      const bDuo = isElementsDuoProduct(b.priceId, b.title) ? 0 : 1;
+      if (aDuo !== bDuo) return aDuo - bDuo;
+      const aSort = typeof a.sortOrder === "number" ? a.sortOrder : 99;
+      const bSort = typeof b.sortOrder === "number" ? b.sortOrder : 99;
+      if (aSort !== bSort) return aSort - bSort;
+      return String(a.title || "").localeCompare(String(b.title || ""));
+    },
+  );
+  const hasDuo = allProducts.some((p: any) =>
+    isElementsDuoProduct(p.priceId, p.title),
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -43,6 +62,23 @@ export default function Elements() {
             Premium supplements, 3-in-1 body wash, and body care to support your wellness inside and
             out. Supplement bottles are 60 count.
           </p>
+          {hasDuo && (
+            <div
+              className="mt-8 mx-auto max-w-xl rounded-xl border border-primary/40 bg-primary/5 px-5 py-4"
+              data-testid="banner-elements-duo"
+            >
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary mb-1">
+                New bundle
+              </p>
+              <p className="font-display font-bold uppercase tracking-tight text-lg">
+                Elements Duo — ${elementsDuoPriceDollars().toFixed(2)}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Any 3-in-1 wash bottle plus a whipped body butter jar. Usually ${elementsDuoSeparateDollars().toFixed(2)}
+                separately — save ${elementsDuoSavingsDollars()} when you bundle.
+              </p>
+            </div>
+          )}
         </motion.div>
 
         {isLoading ? (

@@ -15,6 +15,17 @@ import { allLogos, LOGO_SECTIONS, logoSectionGroups, logoIdByAlt, recommendedLog
 import LogoPickerTile from "@/components/LogoPickerTile";
 import { sizeUpchargeDollars } from "@shared/customization";
 import { getSupplementInfo } from "@shared/supplementBenefits";
+import {
+  ELEMENTS_DUO_WASH_OPTIONS,
+  elementsDuoPriceDollars,
+  elementsDuoSavingsDollars,
+  elementsDuoSeparateDollars,
+  encodeElementsDuoSelection,
+  isElementsBodyButterTitle,
+  isElementsBodyWashTitle,
+  isElementsDuoProduct,
+} from "@shared/elementsDuo";
+import { BODY_BUTTER_IMAGE, resolveStorefrontImageUrl } from "@shared/productImages";
 
 const MAX_QTY = 99;
 
@@ -253,16 +264,37 @@ function ProductDetailContent({
   const scentChoices = product.scents
     ? product.scents.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
+  const isDuo = isElementsDuoProduct(product.priceId, product.title);
   const needsScent = scentChoices.length > 0;
+  const needsWash = isDuo;
   // Sea moss gel reuses the scent picker for Amazon flavor varieties.
-  const scentNoun = /\bgel\b/i.test(product.title) ? "flavor" : "scent";
-  const scentNounTitle = scentNoun === "flavor" ? "Flavor" : "Scent";
+  const scentNoun = isDuo
+    ? "body butter scent"
+    : /\bgel\b/i.test(product.title)
+      ? "flavor"
+      : "scent";
+  const scentNounTitle = isDuo
+    ? "Body Butter Scent"
+    : scentNoun === "flavor"
+      ? "Flavor"
+      : "Scent";
+  const duoSavings = elementsDuoSavingsDollars();
+  const duoSeparate = elementsDuoSeparateDollars();
+  const duoProduct = allProducts.find((p) =>
+    isElementsDuoProduct(p.priceId, p.title),
+  );
+  const showDuoUpsell =
+    !isDuo &&
+    !!duoProduct?.priceId &&
+    (isElementsBodyWashTitle(product.title) ||
+      isElementsBodyButterTitle(product.title));
 
   const [selectedLogo, setSelectedLogo] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedApparelSize, setSelectedApparelSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedScent, setSelectedScent] = useState("");
+  const [selectedWash, setSelectedWash] = useState("");
   const sizeUpcharge = needsApparelSize ? sizeUpchargeDollars(selectedApparelSize) : 0;
   const effectiveUnitPrice = price + sizeUpcharge;
   const recommendedIds = useMemo(
@@ -302,22 +334,36 @@ function ProductDetailContent({
       setErrorMessage("That color is sold out. Please choose another.");
       return;
     }
+    if (needsWash && !selectedWash) {
+      setErrorMessage("Please select a 3-in-1 body wash.");
+      return;
+    }
     if (needsScent && !selectedScent) {
       setErrorMessage(`Please select a ${scentNoun}.`);
       return;
     }
 
+    const cartScent = isDuo
+      ? encodeElementsDuoSelection(selectedWash, selectedScent)
+      : needsScent
+        ? selectedScent
+        : undefined;
+    const cartImage =
+      isDuo && selectedWash
+        ? resolveStorefrontImageUrl("", selectedWash) || product.imageUrl
+        : product.imageUrl;
+
     addItem(
       {
         priceId: product.priceId,
         title: product.title,
-        image: product.imageUrl,
+        image: cartImage,
         category: product.category,
         unitPrice: effectiveUnitPrice,
         selectedLogo: needsLogo ? selectedLogo : needsSize ? selectedSize : undefined,
         selectedColor: needsColor ? selectedColor : undefined,
         selectedSize: needsApparelSize ? selectedApparelSize : undefined,
-        selectedScent: needsScent ? selectedScent : undefined,
+        selectedScent: cartScent,
       },
       quantity,
     );
@@ -408,6 +454,36 @@ function ProductDetailContent({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
+        {isDuo ? (
+          <div className="grid grid-cols-2 gap-3" data-testid="duo-detail-images">
+            <div className="relative aspect-square overflow-hidden rounded-xl bg-muted shadow-2xl">
+              <img
+                src={
+                  selectedWash
+                    ? resolveStorefrontImageUrl("", selectedWash) || product.imageUrl
+                    : product.imageUrl
+                }
+                alt={`${product.title} 3-in-1 body wash`}
+                className="object-cover w-full h-full"
+                data-testid="img-product-detail"
+              />
+              <p className="absolute bottom-2 left-2 right-2 rounded bg-black/60 px-2 py-1 text-[10px] uppercase tracking-widest text-white">
+                3-in-1 wash
+              </p>
+            </div>
+            <div className="relative aspect-square overflow-hidden rounded-xl bg-muted shadow-2xl">
+              <img
+                src={BODY_BUTTER_IMAGE}
+                alt={`${product.title} whipped body butter`}
+                className="object-cover w-full h-full"
+                data-testid="img-product-detail-butter"
+              />
+              <p className="absolute bottom-2 left-2 right-2 rounded bg-black/60 px-2 py-1 text-[10px] uppercase tracking-widest text-white">
+                Body butter
+              </p>
+            </div>
+          </div>
+        ) : (
         <div className="relative aspect-square overflow-hidden rounded-xl bg-muted shadow-2xl">
           <img
             src={product.imageUrl}
@@ -424,6 +500,7 @@ function ProductDetailContent({
             </div>
           )}
         </div>
+        )}
 
         <div className="flex flex-col">
           <span
@@ -440,11 +517,25 @@ function ProductDetailContent({
             {product.title}
           </h1>
           <p
-            className="text-2xl font-medium text-primary mb-6"
+            className={`text-2xl font-medium text-primary ${isDuo ? "mb-2" : "mb-6"}`}
             data-testid="text-detail-price"
           >
-            ${effectiveUnitPrice.toFixed(2)}
+            {isDuo ? (
+              <>
+                <span className="mr-3 text-lg text-muted-foreground line-through font-normal">
+                  ${duoSeparate.toFixed(2)}
+                </span>
+                ${effectiveUnitPrice.toFixed(2)}
+              </>
+            ) : (
+              <>${effectiveUnitPrice.toFixed(2)}</>
+            )}
           </p>
+          {isDuo && (
+            <p className="text-sm text-primary mb-6" data-testid="text-detail-duo-savings">
+              Save ${duoSavings} — $15 for the 3-in-1 wash, $7 for the body butter (usually $12).
+            </p>
+          )}
 
           {product.description && (
             <p
@@ -453,6 +544,25 @@ function ProductDetailContent({
             >
               {product.description}
             </p>
+          )}
+
+          {showDuoUpsell && duoProduct?.priceId && (
+            <Link href={`/product/${duoProduct.priceId}`}>
+              <div
+                className="mb-8 rounded-xl border border-primary/40 bg-primary/5 p-4 hover:border-primary/70 transition-colors"
+                data-testid="banner-elements-duo-upsell"
+              >
+                <p className="text-xs font-medium uppercase tracking-widest text-primary mb-1">
+                  Bundle &amp; save ${duoSavings}
+                </p>
+                <p className="font-display font-semibold uppercase text-sm">
+                  Get the Elements Duo for ${elementsDuoPriceDollars().toFixed(2)}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Pair any 3-in-1 wash with a whipped body butter for ${elementsDuoPriceDollars().toFixed(2)} instead of ${duoSeparate.toFixed(2)}.
+                </p>
+              </div>
+            </Link>
           )}
 
           {usesCaseType ? (
@@ -518,6 +628,50 @@ function ProductDetailContent({
                   ) : (
                     <p className="text-sm text-muted-foreground">
                       Choose a color to continue.
+                    </p>
+                  )}
+                </div>
+              )}
+              {needsWash && (
+                <div className="space-y-2" data-testid="picker-detail-wash">
+                  <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                    Choose your 3-in-1 body wash
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {ELEMENTS_DUO_WASH_OPTIONS.map((wash) => {
+                      const active = selectedWash === wash;
+                      return (
+                        <button
+                          key={wash}
+                          type="button"
+                          disabled={soldOut}
+                          onClick={() => {
+                            setSelectedWash(active ? "" : wash);
+                            setErrorMessage("");
+                          }}
+                          className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-colors disabled:opacity-50 ${
+                            active
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border hover:border-primary/60"
+                          }`}
+                          data-testid={`button-detail-wash-${wash.toLowerCase().replace(/\s+/g, "-")}`}
+                          title={wash}
+                        >
+                          {wash}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {selectedWash ? (
+                    <p className="text-sm" data-testid="text-detail-wash-selection">
+                      <span className="text-muted-foreground">Selected wash: </span>
+                      <span className="font-medium" data-testid="text-detail-wash-name">
+                        {selectedWash}
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Choose a 3-in-1 wash to continue.
                     </p>
                   )}
                 </div>
@@ -825,7 +979,7 @@ function ProductDetailContent({
 
               <Button
                 onClick={handleAddToCart}
-                disabled={!product.priceId || soldOut || (needsLogo && !selectedLogo) || (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) || (needsColor && (!selectedColor || isColorSoldOut(selectedColor))) || (needsScent && !selectedScent)}
+                disabled={!product.priceId || soldOut || (needsLogo && !selectedLogo) || (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) || (needsColor && (!selectedColor || isColorSoldOut(selectedColor))) || (needsWash && !selectedWash) || (needsScent && !selectedScent)}
                 className={`w-full transition-colors uppercase tracking-wider font-display text-sm h-12 disabled:opacity-50 ${
                   soldOut
                     ? "bg-gray-400 text-white cursor-not-allowed"
@@ -835,7 +989,7 @@ function ProductDetailContent({
                 }`}
                 data-testid="button-detail-add"
               >
-                {soldOut ? "Sold Out" : added ? "Added \u2713" : needsLogo && !selectedLogo ? "Select a Logo" : (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) ? "Select a Size" : needsColor && !selectedColor ? "Select a Color" : needsScent && !selectedScent ? `Select a ${scentNounTitle}` : "Add to Cart"}
+                {soldOut ? "Sold Out" : added ? "Added \u2713" : needsLogo && !selectedLogo ? "Select a Logo" : (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) ? "Select a Size" : needsColor && !selectedColor ? "Select a Color" : needsWash && !selectedWash ? "Select a Wash" : needsScent && !selectedScent ? `Select a ${scentNounTitle}` : "Add to Cart"}
               </Button>
 
               {errorMessage && (
