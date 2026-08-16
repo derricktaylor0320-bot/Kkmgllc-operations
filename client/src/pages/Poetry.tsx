@@ -17,6 +17,7 @@ import {
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ShipStateTaxSummary, { useShipToState } from "@/components/ShipStateTaxSummary";
+import { trackBeginCheckout } from "@/lib/analytics";
 
 import plaqueShowcase from "@assets/poetry_plaques_showcase.jpg";
 import glassFrameShowcase from "@assets/glass_frame_showcase.jpg";
@@ -91,6 +92,19 @@ export default function Poetry() {
 
       const data = await response.json();
       if (data.url) {
+        const unitPrice = product.price || 0;
+        trackBeginCheckout(
+          [
+            {
+              item_id: product.priceId,
+              item_name: product.title,
+              price: unitPrice,
+              quantity: 1,
+              item_category: product.category,
+            },
+          ],
+          unitPrice,
+        );
         window.location.href = data.url;
       } else {
         throw new Error(data.error || 'Failed to create checkout');

@@ -38,6 +38,8 @@ import SsoDemo from "@/pages/SsoDemo";
 import Orders from "@/pages/Orders";
 import Profile from "@/pages/Profile";
 import FootballTeams from "@/pages/FootballTeams";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+import CookieConsentBanner from "@/components/CookieConsentBanner";
 
 function Router() {
   return (
@@ -91,6 +93,8 @@ function App() {
       <CartProvider>
         <CompassNavigationProvider>
           <TooltipProvider>
+            <GoogleAnalytics />
+            <CookieConsentBanner />
             <Toaster />
             <Router />
           </TooltipProvider>

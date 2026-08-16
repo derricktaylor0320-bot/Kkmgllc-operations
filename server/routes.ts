@@ -223,6 +223,12 @@ export async function registerRoutes(
     });
   });
 
+  // Public site config (no secrets — GA measurement IDs are public in page source)
+  app.get("/api/site-config", (_req, res) => {
+    const gaMeasurementId = process.env.GA_MEASUREMENT_ID?.trim() || null;
+    res.json({ gaMeasurementId });
+  });
+
   // Ensure the catalog facts (product rows, prices, metadata) hold in whatever
   // DB this server is connected to — dev now, Railway prod on deploy. This is
   // the authoritative source of the storefront's product list; there is no

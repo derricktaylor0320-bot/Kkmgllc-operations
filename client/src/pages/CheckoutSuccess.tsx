@@ -6,6 +6,7 @@ import { CheckCircle, ShoppingBag, Mail, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useCart } from "@/hooks/useCart";
+import { trackPurchase } from "@/lib/analytics";
 
 interface OrderItem {
   name: string;
@@ -75,6 +76,31 @@ export default function CheckoutSuccess() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!order || order.status !== "paid" || order.items.length === 0) return;
+
+    const transactionId = order.id || refFromUrl();
+    if (!transactionId) return;
+
+    const storageKey = `ga_purchase_tracked_${transactionId}`;
+    if (sessionStorage.getItem(storageKey)) return;
+
+    const gaItems = order.items.map((item, idx) => ({
+      item_id: `order-item-${idx}`,
+      item_name: item.name,
+      price: item.amountCents / 100,
+      quantity: item.quantity,
+    }));
+
+    trackPurchase(transactionId, gaItems, order.totalCents / 100);
+    sessionStorage.setItem(storageKey, "1");
+  }, [order]);
+
+  function refFromUrl(): string | null {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("orderId") || params.get("ref");
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
