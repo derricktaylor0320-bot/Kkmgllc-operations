@@ -8,15 +8,14 @@ import EmpireNavigationGrid from "@/components/EmpireNavigationGrid";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LogIn, CheckCircle2 } from "lucide-react";
-import { SITE_LINKS } from "@/lib/siteNavigation";
+import { getSiteLinkNumber, SITE_LINKS } from "@/lib/siteNavigation";
 
 export default function Hub() {
   const [, setLocation] = useLocation();
   const { user, isAuthenticated, isLoading } = useAuth();
-  const apparelNumber = SITE_LINKS.findIndex((link) => link.href === "/apparel") + 1;
-  const elementsNumber = SITE_LINKS.findIndex((link) => link.href === "/elements") + 1;
-  const accessoriesNumber =
-    SITE_LINKS.findIndex((link) => link.href === "/accessories") + 1;
+  const apparelNumber = getSiteLinkNumber("/apparel");
+  const elementsNumber = getSiteLinkNumber("/elements");
+  const accessoriesNumber = getSiteLinkNumber("/accessories");
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -109,7 +108,7 @@ export default function Hub() {
                 .
               </p>
             </div>
-            <EmpireNavigationGrid />
+            <EmpireNavigationGrid variant="rows" showCategories />
           </section>
 
           <EmpireDirectory />
