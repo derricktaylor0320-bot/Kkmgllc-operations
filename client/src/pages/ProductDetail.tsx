@@ -399,7 +399,7 @@ function ProductDetailContent({
             <img
               src={product.imageUrl}
               alt={product.title}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain p-3"
               data-testid="img-product-detail"
             />
             <div
@@ -428,8 +428,52 @@ function ProductDetailContent({
             >
               Coming Soon
             </p>
+            {product.description && (
+              <p
+                className="mt-6 text-secondary-foreground/80 leading-relaxed"
+                data-testid="text-detail-description"
+              >
+                {product.description}
+              </p>
+            )}
           </div>
         </div>
+
+        {supplementInfo && (
+          <section className="max-w-4xl mx-auto mt-16" data-testid="section-supplement-benefits">
+            <div className="rounded-xl border border-primary/25 bg-black/20 p-6 md:p-8">
+              <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-wider text-primary mb-4">
+                {supplementInfo.heading || "Benefits"}
+              </h2>
+              {supplementInfo.intro && (
+                <p
+                  className="text-secondary-foreground/80 leading-relaxed mb-6"
+                  data-testid="text-supplement-intro"
+                >
+                  {supplementInfo.intro}
+                </p>
+              )}
+              <ul className="space-y-4">
+                {supplementInfo.benefits.map((b) => (
+                  <li key={b.label} className="flex gap-3" data-testid={`benefit-${b.label.toLowerCase().replace(/\s+/g, "-")}`}>
+                    <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <p className="text-secondary-foreground/80 leading-relaxed">
+                      <span className="font-semibold text-foreground">{b.label}:</span> {b.text}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              {supplementInfo.note && (
+                <p
+                  className="text-sm text-muted-foreground leading-relaxed mt-6 border-t border-primary/15 pt-4"
+                  data-testid="text-supplement-note"
+                >
+                  {supplementInfo.note}
+                </p>
+              )}
+            </div>
+          </section>
+        )}
       </motion.div>
     );
   }
@@ -1016,7 +1060,7 @@ function ProductDetailContent({
         <section className="max-w-4xl mx-auto mt-16" data-testid="section-supplement-benefits">
           <div className="rounded-xl border border-primary/25 bg-black/20 p-6 md:p-8">
             <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-wider text-primary mb-4">
-              Benefits
+              {supplementInfo.heading || "Benefits"}
             </h2>
             {supplementInfo.intro && (
               <p

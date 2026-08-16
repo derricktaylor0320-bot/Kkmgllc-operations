@@ -1209,6 +1209,51 @@ const BODY_WASH_PRODUCTS: {
   },
 ];
 
+// Khomplete Khemistri Elements natural deodorant sticks (2.5 oz, $15).
+const DEODORANT_PRODUCTS: {
+  productId: string;
+  priceId: string;
+  name: string;
+  description: string;
+  priceCents: number;
+  meta: Record<string, string>;
+}[] = [
+  {
+    productId: "prod_kkelemsdeodorantsandalwood",
+    priceId: "price_kkelemsdeodorantsandalwood",
+    name: "Sandalwood & Teakwood Deodorant",
+    description:
+      "Khomplete Khemistri Elements Sandalwood & Teakwood Deodorant — natural aluminum-free deodorant stick (2.5 oz) with a warm, woodsy scent. Coconut oil, beeswax, arrowroot, baking soda, tea tree, sandalwood, and teakwood essential oils.",
+    priceCents: 1500,
+    meta: {
+      category: "Body Care",
+      productType: "elements",
+      sortOrder: "122",
+      imageUrl: "/assets/kk_elements_deodorant_sandalwood_teakwood.png",
+      customize: "none",
+      gender: "Unisex",
+      comingSoon: "true",
+    },
+  },
+  {
+    productId: "prod_kkelemsdeodorantlavender",
+    priceId: "price_kkelemsdeodorantlavender",
+    name: "Lavender Deodorant",
+    description:
+      "Khomplete Khemistri Elements Lavender Deodorant — natural aluminum-free deodorant stick (2.5 oz) with a calming floral scent. Coconut oil, beeswax, arrowroot, baking soda, tea tree, and lavender essential oils.",
+    priceCents: 1500,
+    meta: {
+      category: "Body Care",
+      productType: "elements",
+      sortOrder: "123",
+      imageUrl: "/assets/kk_elements_deodorant_lavender.png",
+      customize: "none",
+      gender: "Unisex",
+      comingSoon: "true",
+    },
+  },
+];
+
 // Elements Duo — one 3-in-1 wash bottle ($15) + one whipped body butter jar
 // at the bundle price of $7 ($22 total, $5 off buying them separately at $27).
 const ELEMENTS_DUO_DESCRIPTION =
@@ -1951,6 +1996,22 @@ export async function ensureCatalogData() {
       }
       console.log(
         `ensureCatalogData: ensured ${BODY_WASH_PRODUCTS.length} Elements 3-in-1 body wash SKUs ($15 each).`,
+      );
+
+      for (const deodorant of DEODORANT_PRODUCTS) {
+        await ensureSyntheticProduct({
+          accountId,
+          productId: deodorant.productId,
+          priceId: deodorant.priceId,
+          name: deodorant.name,
+          description: deodorant.description,
+          priceCents: deodorant.priceCents,
+          meta: deodorant.meta,
+          created,
+        });
+      }
+      console.log(
+        `ensureCatalogData: ensured ${DEODORANT_PRODUCTS.length} Elements deodorant SKUs (coming soon).`,
       );
 
       await ensureSyntheticProduct({

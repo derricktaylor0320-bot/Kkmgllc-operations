@@ -59,8 +59,8 @@ export default function Elements() {
             Health &amp; Skin Care
           </p>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Premium supplements, 3-in-1 body wash, and body care to support your wellness inside and
-            out. Supplement bottles are 60 count.
+            Premium supplements, 3-in-1 body wash, natural deodorant, and body care to support your
+            wellness inside and out. Supplement bottles are 60 count.
           </p>
           {hasDuo && (
             <div

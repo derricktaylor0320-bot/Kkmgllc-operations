@@ -7,9 +7,46 @@ export interface SupplementInfo {
   intro?: string;
   benefits: SupplementBenefit[];
   note?: string;
+  heading?: string;
 }
 
+const DEODORANT_DISCLAIMER =
+  "For external use only. Perform a patch test on the inner arm before full application. Discontinue use if irritation occurs.";
+
+const DEODORANT_BASE_INGREDIENTS =
+  "Cocos Nucifera (Coconut) Oil, Cera Alba (Beeswax), Maranta Arundinacea (Arrowroot) Root Powder, Sodium Bicarbonate (Baking Soda), Melaleuca Alternifolia (Tea Tree) Leaf Oil";
+
 const SUPPLEMENTS: { match: RegExp; info: SupplementInfo }[] = [
+  {
+    match: /sandalwood\s*&\s*teakwood\s*deodorant/i,
+    info: {
+      intro:
+        "Khomplete Khemistri Elements Sandalwood & Teakwood Deodorant is a natural aluminum-free stick (2.5 oz) with a warm, woodsy scent.",
+      benefits: [
+        {
+          label: "Ingredients",
+          text: `${DEODORANT_BASE_INGREDIENTS}, Santalum Album (Sandalwood) Oil, Tectona Grandis (Teakwood) Oil.`,
+        },
+      ],
+      note: DEODORANT_DISCLAIMER,
+      heading: "Product Details",
+    },
+  },
+  {
+    match: /lavender\s*deodorant/i,
+    info: {
+      intro:
+        "Khomplete Khemistri Elements Lavender Deodorant is a natural aluminum-free stick (2.5 oz) with a calming floral scent.",
+      benefits: [
+        {
+          label: "Ingredients",
+          text: `${DEODORANT_BASE_INGREDIENTS}, Lavandula Angustifolia (Lavender) Oil.`,
+        },
+      ],
+      note: DEODORANT_DISCLAIMER,
+      heading: "Product Details",
+    },
+  },
   {
     match: /natural\s*spring\s*water/i,
     info: {
