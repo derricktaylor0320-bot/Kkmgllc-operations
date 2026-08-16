@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Minus, Plus, ShoppingCart, Check, AlertCircle } from "lucide-react";
 import { allLogos } from "@/lib/logoCatalog";
 import ShipStateTaxSummary, { useShipToState } from "@/components/ShipStateTaxSummary";
+import { trackBeginCheckout } from "@/lib/analytics";
 import { placementSurchargeDollars } from "@shared/customization";
 import {
   GAME_DAY_BUNDLE_FEATURES,
@@ -292,6 +293,19 @@ export default function LogoCustomizer() {
       
       const data = await response.json();
       if (data.url) {
+        const checkoutValue = calculatePrice();
+        trackBeginCheckout(
+          [
+            {
+              item_id: selectedGarment || logoId || "custom-garment",
+              item_name: `${logo.color} — ${garment?.name || "Custom garment"}`,
+              price: checkoutValue,
+              quantity: isCuttingBoard ? cuttingBoardQty : 1,
+              item_category: garment?.category || "custom",
+            },
+          ],
+          checkoutValue,
+        );
         window.location.href = data.url;
       } else {
         throw new Error("No checkout URL received");

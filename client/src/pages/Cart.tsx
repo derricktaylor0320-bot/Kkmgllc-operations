@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCart } from "@/hooks/useCart";
+import { trackBeginCheckout, toGaItemFromCart } from "@/lib/analytics";
 import { useAuth } from "@/hooks/useAuth";
 import { ShoppingBag, Trash2, Minus, Plus, ArrowLeft } from "lucide-react";
 import ShipStateTaxSummary, { useShipToState } from "@/components/ShipStateTaxSummary";
@@ -113,6 +114,10 @@ export default function Cart() {
       });
       const data = await response.json();
       if (data.url) {
+        trackBeginCheckout(
+          items.map((item) => toGaItemFromCart(item)),
+          total,
+        );
         window.location.href = data.url;
       } else {
         setErrorMessage(data.error || "Something went wrong. Please try again.");

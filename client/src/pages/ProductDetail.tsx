@@ -32,6 +32,7 @@ import {
   isElementsDuoProduct,
 } from "@shared/elementsDuo";
 import { BODY_BUTTER_IMAGE, resolveStorefrontImageUrl } from "@shared/productImages";
+import { trackViewItem } from "@/lib/analytics";
 
 const MAX_QTY = 99;
 
@@ -142,6 +143,20 @@ function ProductDetailContent({
   useEffect(() => {
     if (product.priceId) recordView(product.priceId);
   }, [product.priceId, recordView]);
+
+  useEffect(() => {
+    if (!product.priceId || soldOut || comingSoon) return;
+    trackViewItem(
+      {
+        item_id: product.priceId,
+        item_name: product.title,
+        price: price,
+        quantity: 1,
+        item_category: product.category,
+      },
+      price,
+    );
+  }, [product.priceId, product.title, product.category, price, soldOut, comingSoon]);
 
   const RELATED_LIMIT = 4;
 

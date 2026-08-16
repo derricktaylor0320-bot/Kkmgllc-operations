@@ -10,6 +10,7 @@ The Consolidatus Empire LLC is a premium e-commerce platform featuring multiple 
 - **Custom domain:** https://tceholdings.org — **TCE Holdings** = The Consolidatus Empire Holdings (Railway DNS/SSL validation may take up to ~48 hours after purchase/attach)
 - **Interim Railway URL:** https://khomplete-khemistri-apparel.up.railway.app (works until the custom domain verifies)
 - **Env:** Set `APP_URL=https://tceholdings.org` (or `PUBLIC_URL`) on Railway once the domain is live so checkout redirects, password-reset emails, review links, and Open Graph tags use the custom domain
+- **Analytics:** Set `GA_MEASUREMENT_ID=G-XXXXXXXXXX` on Railway (your GA4 measurement ID from Google Analytics → Admin → Data Streams). The storefront loads GA4 after cookie consent and tracks `view_item`, `begin_checkout`, and `purchase` for Square checkout. Test in GA4 Realtime and DebugView (`?ga_debug=1` on any page URL).
 - **Services:**
   - `poetic-balance` — the web app, deployed from GitHub repo `derricktaylor0320-bot/Theconsolidatusempirellc` (branch `main`)
   - `Postgres` — database holding all migrated store data (Stripe-synced catalog + app tables)
