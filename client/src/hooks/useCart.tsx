@@ -11,6 +11,10 @@ import {
   isPremiumLighterProduct,
   lighterUnitPriceWithBundle,
 } from "@shared/bundlePricing";
+import {
+  deodorantTotalDollars,
+  isElementsDeodorantProduct,
+} from "@shared/elementsDeodorant";
 
 export interface CartItem {
   priceId: string;
@@ -91,6 +95,13 @@ function withBundle(item: CartItem, bundleId: string | null): CartItem {
     bundleId,
     unitPrice: lighterUnitPriceWithBundle(base, bundleId),
   };
+}
+
+function lineTotal(item: CartItem): number {
+  if (isElementsDeodorantProduct(item.priceId, item.title)) {
+    return deodorantTotalDollars(item.quantity);
+  }
+  return item.unitPrice * item.quantity;
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -179,7 +190,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clearCart = useCallback(() => setItems([]), []);
 
   const itemCount = items.reduce((n, i) => n + i.quantity, 0);
-  const total = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+  const total = items.reduce((s, i) => s + lineTotal(i), 0);
 
   const lighterLines = items.filter((i) =>
     isPremiumLighterProduct(i.priceId, i.title),

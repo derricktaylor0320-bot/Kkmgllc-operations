@@ -18,6 +18,11 @@ import {
   isElementsDuoProduct,
   parseElementsDuoSelection,
 } from "@shared/elementsDuo";
+import {
+  deodorantPricingLabel,
+  deodorantTotalDollars,
+  isElementsDeodorantProduct,
+} from "@shared/elementsDeodorant";
 
 type DiscountEligibility = {
   paidOrders: number;
@@ -162,6 +167,13 @@ export default function Cart() {
                 const duoSelection = isDuoLine
                   ? parseElementsDuoSelection(item.selectedScent)
                   : null;
+                const isDeodorantLine = isElementsDeodorantProduct(
+                  item.priceId,
+                  item.title,
+                );
+                const lineTotal = isDeodorantLine
+                  ? deodorantTotalDollars(item.quantity)
+                  : item.unitPrice * item.quantity;
                 return (
                   <div
                     key={slug}
@@ -257,7 +269,9 @@ export default function Cart() {
                         </p>
                       )}
                       <p className="text-sm text-primary mt-1">
-                        ${item.unitPrice.toFixed(2)}
+                        {isDeodorantLine
+                          ? deodorantPricingLabel()
+                          : `$${item.unitPrice.toFixed(2)}`}
                       </p>
                       <div className="flex items-center justify-between mt-3">
                         <div className="flex items-center gap-2">
@@ -311,7 +325,7 @@ export default function Cart() {
                           className="font-medium"
                           data-testid={`text-line-total-${slug}`}
                         >
-                          ${(item.unitPrice * item.quantity).toFixed(2)}
+                          ${lineTotal.toFixed(2)}
                         </span>
                       </div>
                     </div>

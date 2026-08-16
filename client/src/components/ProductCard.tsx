@@ -17,6 +17,10 @@ import {
   isElementsDuoProduct,
 } from "@shared/elementsDuo";
 import { resolveStorefrontImageUrl } from "@shared/productImages";
+import {
+  deodorantPricingLabel,
+  isElementsDeodorantProduct,
+} from "@shared/elementsDeodorant";
 import type { ProductVariant } from "@/lib/productVariants";
 import { Minus, Plus, PenLine } from "lucide-react";
 
@@ -55,7 +59,8 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
   // Wide multi-item shots (e.g. four lighters) get cropped by cover in the
   // square card frame — prefer contain when the catalog image needs the full perimeter.
   const autoContain =
-    typeof variantImage === "string" && variantImage.includes("kk_branded_logo_lighter");
+    (typeof variantImage === "string" && variantImage.includes("kk_branded_logo_lighter")) ||
+    (typeof variantImage === "string" && variantImage.includes("kk_elements_deodorant"));
   const fitClass =
     imageFit === "contain" || autoContain ? "object-contain p-2" : "object-cover";
   const { addItem } = useCart();
@@ -80,6 +85,7 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
     ? scents.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
   const isDuo = isElementsDuoProduct(priceId, title);
+  const isDeodorant = isElementsDeodorantProduct(priceId, title);
   const needsScent = scentChoices.length > 0;
   const needsWash = isDuo;
   // Sea moss gel (and similar jar products) reuse the scent picker for flavor
@@ -199,12 +205,23 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
       >
         <Card className="overflow-hidden border-none shadow-none group">
           <CardContent className="p-0 relative aspect-square overflow-hidden bg-muted">
-            <img
-              src={image}
-              alt={title}
-              className={`${fitClass} w-full h-full transition-transform duration-500 group-hover:scale-105`}
-              data-testid={`img-product-${title.toLowerCase().replace(/\s+/g, '-')}`}
-            />
+            {priceId ? (
+              <Link href={`/product/${priceId}`} aria-label={`View ${title}`}>
+                <img
+                  src={image}
+                  alt={title}
+                  className={`${fitClass} w-full h-full transition-transform duration-500 group-hover:scale-105`}
+                  data-testid={`img-product-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                />
+              </Link>
+            ) : (
+              <img
+                src={image}
+                alt={title}
+                className={`${fitClass} w-full h-full transition-transform duration-500 group-hover:scale-105`}
+                data-testid={`img-product-${title.toLowerCase().replace(/\s+/g, '-')}`}
+              />
+            )}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
             <div
               className="absolute top-3 right-3 rounded bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-lg"
@@ -221,17 +238,33 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
               {category}
             </span>
             <div className="flex w-full items-center justify-between gap-3">
-              <h3
-                className="font-display font-semibold text-lg uppercase truncate"
-                data-testid={`text-title-${title.toLowerCase().replace(/\s+/g, '-')}`}
-              >
-                {title}
-              </h3>
+              {priceId ? (
+                <Link href={`/product/${priceId}`} className="min-w-0 pr-4">
+                  <h3
+                    className="font-display font-semibold text-lg uppercase truncate hover:text-primary transition-colors"
+                    data-testid={`text-title-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    {title}
+                  </h3>
+                </Link>
+              ) : (
+                <h3
+                  className="font-display font-semibold text-lg uppercase truncate"
+                  data-testid={`text-title-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  {title}
+                </h3>
+              )}
               <span
-                className="shrink-0 font-display text-sm font-semibold uppercase tracking-wide text-primary"
+                className="shrink-0 font-display text-sm font-semibold uppercase tracking-wide text-primary text-right"
                 data-testid={`text-price-${title.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 Coming Soon
+                {isDeodorant && (
+                  <span className="mt-1 block text-[10px] font-medium normal-case tracking-normal text-muted-foreground">
+                    {deodorantPricingLabel()}
+                  </span>
+                )}
               </span>
             </div>
           </CardFooter>
