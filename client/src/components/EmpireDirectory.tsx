@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import type { LucideIcon } from "lucide-react";
+import { SITE_LINKS } from "@/lib/siteNavigation";
 import {
   BedDouble,
   Beef,
@@ -150,7 +151,7 @@ export default function EmpireDirectory() {
             The Consolidatus Empire
           </h2>
           <p className="mt-2 font-display text-sm uppercase tracking-[0.16em] text-muted-foreground sm:text-base">
-            Khomplete Khemistri Apparel &amp; Accessories
+            Khomplete Khemistri Apparel &amp; Accessories — numbered site map
           </p>
           <a
             href="https://tceholdings.org"
@@ -167,18 +168,36 @@ export default function EmpireDirectory() {
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {DIRECTORY_ITEMS.map(({ href, title, description, Icon, comingSoon }) => (
+          {DIRECTORY_ITEMS.map(({ href, title, description, Icon, comingSoon }) => {
+            const siteIndex = SITE_LINKS.findIndex((link) => link.href === href);
+            const siteNumber = siteIndex >= 0 ? siteIndex + 1 : null;
+
+            return (
             <Link
               key={href}
               href={href}
               className="group flex min-h-32 gap-4 rounded-xl border border-primary/20 bg-background/45 p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/60 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               data-testid={`link-directory-${href.replace(/\//g, "")}`}
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/35 bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
-                <Icon className="h-5 w-5" />
+              <span className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-lg border border-primary/35 bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
+                {siteNumber !== null ? (
+                  <>
+                    <span className="font-display text-[10px] font-bold leading-none">
+                      {siteNumber}
+                    </span>
+                    <Icon className="mt-0.5 h-3.5 w-3.5" />
+                  </>
+                ) : (
+                  <Icon className="h-5 w-5" />
+                )}
               </span>
               <span>
                 <span className="flex flex-wrap items-center gap-2">
+                  {siteNumber !== null && (
+                    <span className="rounded-md border border-primary/30 bg-primary/10 px-1.5 py-0.5 font-display text-[10px] font-bold uppercase tracking-wider text-primary">
+                      #{siteNumber}
+                    </span>
+                  )}
                   <span className="font-display text-base font-bold uppercase tracking-wide text-foreground">
                     {title}
                   </span>
@@ -193,7 +212,8 @@ export default function EmpireDirectory() {
                 </span>
               </span>
             </Link>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-8 rounded-xl border border-primary/30 bg-black/15 px-4 py-6 text-center sm:px-8">
