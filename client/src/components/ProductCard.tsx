@@ -17,6 +17,10 @@ import {
   isElementsDuoProduct,
 } from "@shared/elementsDuo";
 import { resolveStorefrontImageUrl } from "@shared/productImages";
+import {
+  deodorantPricingLabel,
+  isElementsDeodorantProduct,
+} from "@shared/elementsDeodorant";
 import type { ProductVariant } from "@/lib/productVariants";
 import { Minus, Plus, PenLine } from "lucide-react";
 
@@ -81,6 +85,7 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
     ? scents.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
   const isDuo = isElementsDuoProduct(priceId, title);
+  const isDeodorant = isElementsDeodorantProduct(priceId, title);
   const needsScent = scentChoices.length > 0;
   const needsWash = isDuo;
   // Sea moss gel (and similar jar products) reuse the scent picker for flavor
@@ -251,10 +256,15 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                 </h3>
               )}
               <span
-                className="shrink-0 font-display text-sm font-semibold uppercase tracking-wide text-primary"
+                className="shrink-0 font-display text-sm font-semibold uppercase tracking-wide text-primary text-right"
                 data-testid={`text-price-${title.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 Coming Soon
+                {isDeodorant && (
+                  <span className="mt-1 block text-[10px] font-medium normal-case tracking-normal text-muted-foreground">
+                    {deodorantPricingLabel()}
+                  </span>
+                )}
               </span>
             </div>
           </CardFooter>

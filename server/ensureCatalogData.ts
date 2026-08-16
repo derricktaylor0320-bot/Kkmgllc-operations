@@ -1209,7 +1209,7 @@ const BODY_WASH_PRODUCTS: {
   },
 ];
 
-// Khomplete Khemistri Elements natural deodorant sticks (2.5 oz, $15).
+// Khomplete Khemistri Elements natural deodorant sticks (2.5 oz, $12 each · 2 for $22 · 3 for $30).
 const DEODORANT_PRODUCTS: {
   productId: string;
   priceId: string;
@@ -1223,8 +1223,8 @@ const DEODORANT_PRODUCTS: {
     priceId: "price_kkelemsdeodorantsandalwood",
     name: "Sandalwood & Teakwood Deodorant",
     description:
-      "Khomplete Khemistri Elements Sandalwood & Teakwood Deodorant — natural aluminum-free deodorant stick (2.5 oz) with a warm, woodsy scent. Coconut oil, beeswax, arrowroot, baking soda, tea tree, sandalwood, and teakwood essential oils.",
-    priceCents: 1500,
+      "Khomplete Khemistri Elements Sandalwood & Teakwood Deodorant — natural aluminum-free deodorant stick (2.5 oz) with a warm, woodsy scent. $12 each · 2 for $22 · 3 for $30. Coconut oil, beeswax, arrowroot, baking soda, tea tree, sandalwood, and teakwood essential oils.",
+    priceCents: 1200,
     meta: {
       category: "Body Care",
       productType: "elements",
@@ -1240,8 +1240,8 @@ const DEODORANT_PRODUCTS: {
     priceId: "price_kkelemsdeodorantlavender",
     name: "Lavender Deodorant",
     description:
-      "Khomplete Khemistri Elements Lavender Deodorant — natural aluminum-free deodorant stick (2.5 oz) with a calming floral scent. Coconut oil, beeswax, arrowroot, baking soda, tea tree, and lavender essential oils.",
-    priceCents: 1500,
+      "Khomplete Khemistri Elements Lavender Deodorant — natural aluminum-free deodorant stick (2.5 oz) with a calming floral scent. $12 each · 2 for $22 · 3 for $30. Coconut oil, beeswax, arrowroot, baking soda, tea tree, and lavender essential oils.",
+    priceCents: 1200,
     meta: {
       category: "Body Care",
       productType: "elements",

@@ -22,6 +22,11 @@ import {
   NFL_CUTTING_BOARD_GARMENT_ID,
 } from "@shared/footballCuttingBoard";
 import {
+  deodorantPricingLabel,
+  deodorantTotalCents,
+  isElementsDeodorantProduct,
+} from "@shared/elementsDeodorant";
+import {
   GAME_DAY_BUNDLE_PRICE_CENTS,
   NFL_GAME_DAY_BUNDLE_GARMENT_ID,
 } from "@shared/footballGameDayBundle";
@@ -1071,17 +1076,26 @@ export async function registerRoutes(
         }
 
         const amountCents =
-          Number(priceRow.unit_amount) +
-          (check.upchargeCents || 0) +
-          bundleCents;
+          isElementsDeodorantProduct(priceId, priceRow.product_name)
+            ? deodorantTotalCents(quantity)
+            : Number(priceRow.unit_amount) +
+              (check.upchargeCents || 0) +
+              bundleCents;
         if (!amountCents || amountCents <= 0) {
           return res.status(400).json({ error: "Invalid product price." });
         }
 
         const noteParts = [logoNote, bundleNote].filter(Boolean);
+        if (isElementsDeodorantProduct(priceId, priceRow.product_name)) {
+          noteParts.push(
+            `Qty: ${quantity} (${deodorantPricingLabel()})`,
+          );
+        }
         lineItems.push({
           name: (priceRow.product_name as string) || "Item",
-          quantity,
+          quantity: isElementsDeodorantProduct(priceId, priceRow.product_name)
+            ? 1
+            : quantity,
           amountCents,
           note: noteParts.length ? noteParts.join(" | ") : undefined,
         });
