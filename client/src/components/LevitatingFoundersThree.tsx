@@ -12,7 +12,7 @@ export default function LevitatingFoundersThree() {
         className="founders-three-launcher pointer-events-auto group relative flex flex-col items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
         animate={{ y: [0, -12, 0] }}
         transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
-        aria-label="Open Empire apps — numbered site directory"
+        aria-label="Open Empire site directory — all 20 numbered destinations"
         data-testid="button-founders-three-launcher"
       >
         <div
@@ -35,7 +35,7 @@ export default function LevitatingFoundersThree() {
         </div>
 
         <span className="rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[9px] uppercase tracking-[0.22em] text-white/75 backdrop-blur-sm transition-colors group-hover:border-primary/30 group-hover:text-white/95 sm:text-[10px]">
-          Empire Apps
+          Site Directory
         </span>
       </motion.button>
     </div>
