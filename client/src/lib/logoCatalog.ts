@@ -184,82 +184,82 @@ const footballTeamLogos = Object.fromEntries(
 ) as Record<FootballTeamLogoId, LogoEntry>;
 
 export const allLogos: Record<string, LogoEntry> = {
-  "100": { src: logoGold3D, alt: "Gold 3D Emblem", color: "Gold 3D", section: "Canvas Collection" },
-  "101": { src: logoGoldWhite, alt: "Gold & White Emblem", color: "Gold & White", section: "Canvas Collection" },
-  "102": { src: logoBlackWhite, alt: "Classic Black & White", color: "Black & White", section: "Canvas Collection" },
-  "103": { src: logoBWInverted, alt: "Inverted Black & White", color: "Inverted B&W", section: "Canvas Collection" },
-  "104": { src: logoRedBlack, alt: "Red & Black Strike", color: "Red & Black", section: "Canvas Collection" },
-  "105": { src: logoBlueWhite, alt: "Royal Blue Emblem", color: "Royal Blue", section: "Canvas Collection" },
-  "106": { src: logoLightBlue, alt: "Sky Blue Emblem", color: "Sky Blue", section: "Canvas Collection" },
-  "107": { src: logoPinkBlack, alt: "Neon Pink Emblem", color: "Neon Pink", section: "Canvas Collection" },
-  "108": { src: logoGreyWhite, alt: "Slate Grey Emblem", color: "Slate Grey", section: "Canvas Collection" },
-  "109": { src: logoForestGreen, alt: "Forest Green Emblem", color: "Forest Green", section: "Canvas Collection" },
-  "110": { src: logoDeepPurple, alt: "Deep Purple Emblem", color: "Deep Purple", section: "Canvas Collection" },
-  "111": { src: logoBlackGoldCircle, alt: "Black & Gold Emblem", color: "Black & Gold", section: "Canvas Collection" },
-  "112": { src: logoOrange, alt: "Orange Emblem", color: "Orange", section: "Canvas Collection" },
-  "113": { src: logoBrownGold, alt: "Brown & Gold Emblem", color: "Brown & Gold", section: "Canvas Collection" },
-  "114": { src: logoTeal, alt: "Teal Emblem", color: "Teal", section: "Canvas Collection" },
-  "115": { src: logoLimeGreen, alt: "Lime Green Emblem", color: "Lime Green", section: "Canvas Collection" },
-  "116": { src: logoMasterpieceTrident, alt: "Masterpiece Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Masterpiece Trident", section: "Canvas Collection" },
-  "117": { src: medallionCorePrinciples, alt: "10 Core Principles Medallion", color: "Core Principles Medallion", section: "Canvas Collection" },
-  "118": { src: logoAccessoriesEagle, alt: "Khomplete Khemistri Apparel & Accessories Eagle", color: "Maroon & Gold Eagle", section: "Canvas Collection" },
-  "121": { src: logoPrideRainbow, alt: "Khomplete Khemistri Apparel Pride Rainbow Crest", color: "Pride Rainbow", section: "Canvas Collection" },
-  "122": { src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident", section: "Canvas Collection" },
-  "123": { src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular", section: "Canvas Collection" },
-  "124": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", section: "Canvas Collection" },
-  "125": { src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink", section: "Canvas Collection" },
-  "200": { src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", section: "Badge of Honor" },
-  "201": { src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", section: "Badge of Honor" },
-  "202": { src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold", section: "Badge of Honor" },
-  "203": { src: crestBlueValuesSwords, alt: "Khomplete Khemistri Apparel Crest - Unity, Strength, Brotherhood, Entrepreneurship, Harmony", color: "Blue Apparel Crest", section: "Badge of Honor" },
-  "204": { src: shieldGoldBrown, alt: "Classic Gold Crest", color: "Classic Gold", section: "Badge of Honor" },
-  "205": { src: shieldSilver, alt: "Silver Elite Crest", color: "Silver Elite", section: "Badge of Honor" },
-  "206": { src: shieldCyanGold, alt: "Cyan & Gold Crest", color: "Cyan & Gold", section: "Badge of Honor" },
-  "207": { src: shieldBlackWhite, alt: "Monochrome Crest", color: "Monochrome", section: "Badge of Honor" },
-  "208": { src: badgeBrownGoldOrnate, alt: "Brown & Gold Ornate Crest", color: "Brown & Gold Ornate", section: "Badge of Honor" },
-  "209": { src: badgePurpleOrnate, alt: "Purple Ornate Crest", color: "Purple Ornate", section: "Badge of Honor" },
-  "210": { src: badgeNavySilver, alt: "Navy & Silver Crest", color: "Navy & Silver", section: "Badge of Honor" },
-  "211": { src: badgeNavyGold, alt: "Navy & Gold Crest", color: "Navy & Gold", section: "Badge of Honor" },
-  "212": { src: badgePurpleSwords, alt: "Purple with Swords", color: "Purple Swords", section: "Badge of Honor" },
-  "213": { src: badgeGreenSwords, alt: "Green with Swords", color: "Emerald Swords", section: "Badge of Honor" },
-  "214": { src: badgeRedGoldSwords, alt: "Red & Gold with Swords", color: "Red & Gold Swords", section: "Badge of Honor" },
-  "215": { src: logoCrossedSwords, alt: "Crossed Swords with Khomplete Khemistri", color: "Crossed Swords", section: "Badge of Honor" },
-  "216": { src: logoKKACrossedSwords, alt: "KKA Crossed Swords Logo", color: "KKA Swords", section: "Badge of Honor" },
-  "217": { src: crestGoldApparel, alt: "Khomplete Khemistri Apparel Gold Crest", color: "Gold Apparel Crest", section: "Badge of Honor" },
-  "218": { src: kkmgEagleShield, alt: "Khomplete Khemistri Apparel Silver & Blue Values Eagle Shield", color: "Silver & Blue Values Eagle", section: "Badge of Honor" },
-  "219": { src: eagleCrestMaroonGold, alt: "Apparel Eagle Crest - Maroon & Gold", color: "Maroon & Gold Eagle Crest", section: "Badge of Honor" },
-  "220": { src: badgeEaglesBlackWhite, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Black & White Est. 2020", color: "Black & White Eagles", section: "Badge of Honor" },
-  "221": { src: badgeEaglesNavyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Navy & Gold Est. 2020", color: "Navy & Gold Eagles", section: "Badge of Honor" },
-  "222": { src: badgeEaglesPurpleGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Purple & Gold", color: "Purple & Gold Eagles", section: "Badge of Honor" },
-  "223": { src: badgeEaglesBrownGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Brown & Gold", color: "Brown & Gold Eagles", section: "Badge of Honor" },
-  "224": { src: badgeEaglesRedGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Red & Gold", color: "Red & Gold Eagles", section: "Badge of Honor" },
-  "225": { src: badgeEaglesBurgundyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Burgundy & Gold", color: "Burgundy & Gold Eagles", section: "Badge of Honor" },
-  "226": { src: badgeEaglesSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold", color: "Silver & Gold Eagles", section: "Badge of Honor" },
-  "227": { src: badgeEaglesAllGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold", color: "All Gold Eagles", section: "Badge of Honor" },
-  "228": { src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", section: "Badge of Honor" },
-  // Khomplete Khemistri Elements shields — Badge of Honor (pair with #124 in Canvas Collection)
-  "230": { src: logoKkElementsShieldBlueSilver, alt: "Khomplete Khemistri Elements Shield - Royal Blue & Silver", color: "Elements Shield Blue & Silver", section: "Badge of Honor" },
+  "200": { src: logoGold3D, alt: "Gold 3D Emblem", color: "Gold 3D", section: "Canvas Collection" },
+  "201": { src: logoGoldWhite, alt: "Gold & White Emblem", color: "Gold & White", section: "Canvas Collection" },
+  "202": { src: logoBlackWhite, alt: "Classic Black & White", color: "Black & White", section: "Canvas Collection" },
+  "203": { src: logoBWInverted, alt: "Inverted Black & White", color: "Inverted B&W", section: "Canvas Collection" },
+  "204": { src: logoRedBlack, alt: "Red & Black Strike", color: "Red & Black", section: "Canvas Collection" },
+  "205": { src: logoBlueWhite, alt: "Royal Blue Emblem", color: "Royal Blue", section: "Canvas Collection" },
+  "206": { src: logoLightBlue, alt: "Sky Blue Emblem", color: "Sky Blue", section: "Canvas Collection" },
+  "207": { src: logoPinkBlack, alt: "Neon Pink Emblem", color: "Neon Pink", section: "Canvas Collection" },
+  "208": { src: logoGreyWhite, alt: "Slate Grey Emblem", color: "Slate Grey", section: "Canvas Collection" },
+  "209": { src: logoForestGreen, alt: "Forest Green Emblem", color: "Forest Green", section: "Canvas Collection" },
+  "210": { src: logoDeepPurple, alt: "Deep Purple Emblem", color: "Deep Purple", section: "Canvas Collection" },
+  "211": { src: logoBlackGoldCircle, alt: "Black & Gold Emblem", color: "Black & Gold", section: "Canvas Collection" },
+  "212": { src: logoOrange, alt: "Orange Emblem", color: "Orange", section: "Canvas Collection" },
+  "213": { src: logoBrownGold, alt: "Brown & Gold Emblem", color: "Brown & Gold", section: "Canvas Collection" },
+  "214": { src: logoTeal, alt: "Teal Emblem", color: "Teal", section: "Canvas Collection" },
+  "215": { src: logoLimeGreen, alt: "Lime Green Emblem", color: "Lime Green", section: "Canvas Collection" },
+  "216": { src: logoMasterpieceTrident, alt: "Masterpiece Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Masterpiece Trident", section: "Canvas Collection" },
+  "217": { src: medallionCorePrinciples, alt: "10 Core Principles Medallion", color: "Core Principles Medallion", section: "Canvas Collection" },
+  "218": { src: logoAccessoriesEagle, alt: "Khomplete Khemistri Apparel & Accessories Eagle", color: "Maroon & Gold Eagle", section: "Canvas Collection" },
+  "221": { src: logoPrideRainbow, alt: "Khomplete Khemistri Apparel Pride Rainbow Crest", color: "Pride Rainbow", section: "Canvas Collection" },
+  "222": { src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident", section: "Canvas Collection" },
+  "223": { src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular", section: "Canvas Collection" },
+  "224": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", section: "Canvas Collection" },
+  "225": { src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink", section: "Canvas Collection" },
+  "100": { src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", section: "Badge of Honor" },
+  "101": { src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", section: "Badge of Honor" },
+  "102": { src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold", section: "Badge of Honor" },
+  "103": { src: crestBlueValuesSwords, alt: "Khomplete Khemistri Apparel Crest - Unity, Strength, Brotherhood, Entrepreneurship, Harmony", color: "Blue Apparel Crest", section: "Badge of Honor" },
+  "104": { src: shieldGoldBrown, alt: "Classic Gold Crest", color: "Classic Gold", section: "Badge of Honor" },
+  "105": { src: shieldSilver, alt: "Silver Elite Crest", color: "Silver Elite", section: "Badge of Honor" },
+  "106": { src: shieldCyanGold, alt: "Cyan & Gold Crest", color: "Cyan & Gold", section: "Badge of Honor" },
+  "107": { src: shieldBlackWhite, alt: "Monochrome Crest", color: "Monochrome", section: "Badge of Honor" },
+  "108": { src: badgeBrownGoldOrnate, alt: "Brown & Gold Ornate Crest", color: "Brown & Gold Ornate", section: "Badge of Honor" },
+  "109": { src: badgePurpleOrnate, alt: "Purple Ornate Crest", color: "Purple Ornate", section: "Badge of Honor" },
+  "110": { src: badgeNavySilver, alt: "Navy & Silver Crest", color: "Navy & Silver", section: "Badge of Honor" },
+  "111": { src: badgeNavyGold, alt: "Navy & Gold Crest", color: "Navy & Gold", section: "Badge of Honor" },
+  "112": { src: badgePurpleSwords, alt: "Purple with Swords", color: "Purple Swords", section: "Badge of Honor" },
+  "113": { src: badgeGreenSwords, alt: "Green with Swords", color: "Emerald Swords", section: "Badge of Honor" },
+  "114": { src: badgeRedGoldSwords, alt: "Red & Gold with Swords", color: "Red & Gold Swords", section: "Badge of Honor" },
+  "115": { src: logoCrossedSwords, alt: "Crossed Swords with Khomplete Khemistri", color: "Crossed Swords", section: "Badge of Honor" },
+  "116": { src: logoKKACrossedSwords, alt: "KKA Crossed Swords Logo", color: "KKA Swords", section: "Badge of Honor" },
+  "117": { src: crestGoldApparel, alt: "Khomplete Khemistri Apparel Gold Crest", color: "Gold Apparel Crest", section: "Badge of Honor" },
+  "118": { src: kkmgEagleShield, alt: "Khomplete Khemistri Apparel Silver & Blue Values Eagle Shield", color: "Silver & Blue Values Eagle", section: "Badge of Honor" },
+  "119": { src: eagleCrestMaroonGold, alt: "Apparel Eagle Crest - Maroon & Gold", color: "Maroon & Gold Eagle Crest", section: "Badge of Honor" },
+  "120": { src: badgeEaglesBlackWhite, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Black & White Est. 2020", color: "Black & White Eagles", section: "Badge of Honor" },
+  "121": { src: badgeEaglesNavyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Navy & Gold Est. 2020", color: "Navy & Gold Eagles", section: "Badge of Honor" },
+  "122": { src: badgeEaglesPurpleGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Purple & Gold", color: "Purple & Gold Eagles", section: "Badge of Honor" },
+  "123": { src: badgeEaglesBrownGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Brown & Gold", color: "Brown & Gold Eagles", section: "Badge of Honor" },
+  "124": { src: badgeEaglesRedGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Red & Gold", color: "Red & Gold Eagles", section: "Badge of Honor" },
+  "125": { src: badgeEaglesBurgundyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Burgundy & Gold", color: "Burgundy & Gold Eagles", section: "Badge of Honor" },
+  "126": { src: badgeEaglesSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold", color: "Silver & Gold Eagles", section: "Badge of Honor" },
+  "127": { src: badgeEaglesAllGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold", color: "All Gold Eagles", section: "Badge of Honor" },
+  "128": { src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", section: "Badge of Honor" },
+  // Khomplete Khemistri Elements shields — Badge of Honor (pair with #224 in Canvas Collection)
+  "130": { src: logoKkElementsShieldBlueSilver, alt: "Khomplete Khemistri Elements Shield - Royal Blue & Silver", color: "Elements Shield Blue & Silver", section: "Badge of Honor" },
   // Female Logos — pearl-crown griffin crests + Ed Hardy (Royalty Badge of Honor)
-  "231": { src: logoFeminineEagleElectricBlue, alt: "Khomplete Khemistri Apparel Feminine Eagle Crest - Electric Blue & Silver Est. 2020", color: "Feminine Eagle Electric Blue & Silver", section: "Badge of Honor" },
-  "232": { src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim", section: "Badge of Honor" },
-  "233": { src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey", section: "Badge of Honor" },
-  "234": { src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye", section: "Badge of Honor" },
-  "235": { src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy", section: "Badge of Honor" },
-  "236": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Badge of Honor" },
-  "237": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Badge of Honor" },
-  "238": { src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold", section: "Badge of Honor" },
-  "239": { src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest", section: "Badge of Honor" },
-  "240": { src: logoKkElementsShieldBlackSilver, alt: "Khomplete Khemistri Elements Shield - Black & Silver", color: "Elements Shield Black & Silver", section: "Badge of Honor" },
-  "241": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", section: "Badge of Honor" },
+  "131": { src: logoFeminineEagleElectricBlue, alt: "Khomplete Khemistri Apparel Feminine Eagle Crest - Electric Blue & Silver Est. 2020", color: "Feminine Eagle Electric Blue & Silver", section: "Badge of Honor" },
+  "132": { src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim", section: "Badge of Honor" },
+  "133": { src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey", section: "Badge of Honor" },
+  "134": { src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye", section: "Badge of Honor" },
+  "135": { src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy", section: "Badge of Honor" },
+  "136": { src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple", section: "Badge of Honor" },
+  "137": { src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy", section: "Badge of Honor" },
+  "138": { src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold", section: "Badge of Honor" },
+  "139": { src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest", section: "Badge of Honor" },
+  "140": { src: logoKkElementsShieldBlackSilver, alt: "Khomplete Khemistri Elements Shield - Black & Silver", color: "Elements Shield Black & Silver", section: "Badge of Honor" },
+  "141": { src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", section: "Badge of Honor" },
   // Founders Crest I — three colorways (Navy & Silver, Charcoal & Purple, Gold & Brown)
-  "242": { src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", section: "Badge of Honor" },
-  "243": { src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", section: "Badge of Honor" },
-  "244": { src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", section: "Badge of Honor" },
+  "142": { src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", section: "Badge of Honor" },
+  "143": { src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", section: "Badge of Honor" },
+  "144": { src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", section: "Badge of Honor" },
   // Founders Crest II — royal blue & gold trident crest
-  "245": { src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", section: "Badge of Honor" },
+  "145": { src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", section: "Badge of Honor" },
   // Female Logos — crowned eagle, heart gem, axe & trident crests
-  "246": { src: logoFeminineEagleCrownHotPink, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Hot Pink Est. 2020", color: "Feminine Crowned Eagle Hot Pink", section: "Badge of Honor" },
-  "247": { src: logoFeminineEagleCrownPurple, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Purple Est. 2020", color: "Feminine Crowned Eagle Purple", section: "Badge of Honor" },
+  "146": { src: logoFeminineEagleCrownHotPink, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Hot Pink Est. 2020", color: "Feminine Crowned Eagle Hot Pink", section: "Badge of Honor" },
+  "147": { src: logoFeminineEagleCrownPurple, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Purple Est. 2020", color: "Feminine Crowned Eagle Purple", section: "Badge of Honor" },
   "300": { src: honorAllGold, alt: "The Golden Eagle Shield", color: "All Gold", section: "Shield of Honor" },
   "301": { src: honorNavyGold, alt: "Navy & Gold Eagle Shield", color: "Navy & Gold", section: "Shield of Honor" },
   "302": { src: honorSilverGold, alt: "Silver & Gold Eagle Shield", color: "Silver & Gold", section: "Shield of Honor" },
@@ -278,52 +278,52 @@ export const allLogos: Record<string, LogoEntry> = {
   ...footballTeamLogos,
 };
 
-// Khomplete Khemistri Elements shields in the logo picker (Badge of Honor + #124 Canvas).
-export const KK_ELEMENTS_LOGO_IDS = ["124", "230", "240", "241"] as const;
+// Khomplete Khemistri Elements shields in the logo picker (Badge of Honor + #224 Canvas).
+export const KK_ELEMENTS_LOGO_IDS = ["224", "130", "140", "141"] as const;
 
-// Featured feminine crests for /feminine — Royalty Badge of Honor Female Logos (#231–#239, #246–#247).
-// Elements shields: #230, #240, #241 (+ #124 Canvas). Founders: #242–#245. Polo emblems
-// use #231 and #232–#238 (pearl griffins through Red & Gold).
-export const FEMININE_LOGO_IDS = ["231", "232", "233", "234", "235", "236", "237", "238", "239", "246", "247"] as const;
+// Featured feminine crests for /feminine — Royalty Badge of Honor Female Logos (#131–#139, #146–#147).
+// Elements shields: #130, #140, #141 (+ #224 Canvas). Founders: #142–#145. Polo emblems
+// use #131 and #132–#138 (pearl griffins through Red & Gold).
+export const FEMININE_LOGO_IDS = ["131", "132", "133", "134", "135", "136", "137", "138", "139", "146", "147"] as const;
 
 // Eight men’s eagle-and-swords crests used for premium polos (fixed placement).
 // Files: attached_assets/male-polo-shirts/.
-export const MALE_POLO_LOGO_IDS = ["220", "221", "222", "223", "224", "225", "226", "227"] as const;
+export const MALE_POLO_LOGO_IDS = ["120", "121", "122", "123", "124", "125", "126", "127"] as const;
 
 // Eight women’s Female Logos used for premium polos (fixed placement).
-export const FEMALE_POLO_LOGO_IDS = ["231", "232", "233", "234", "235", "236", "237", "238"] as const;
+export const FEMALE_POLO_LOGO_IDS = ["131", "132", "133", "134", "135", "136", "137", "138"] as const;
 
 // Full feminine folder — every crest available under the Feminine Collection
 // filter in logo pickers (featured six plus additional feminine colorways).
 export const FEMININE_FOLDER_LOGO_IDS = [
   ...FEMININE_LOGO_IDS,
   ...KK_ELEMENTS_LOGO_IDS,
-  "125",
-  "208",
-  "205",
-  "209",
-  "212",
-  "213",
-  "210",
-  "107",
+  "225",
+  "108",
+  "105",
+  "109",
+  "112",
+  "113",
   "110",
-  "121",
+  "207",
+  "210",
+  "221",
 ] as const;
 
 // Featured masculine sword / eagle crests for /masculine.
 // Files live in attached_assets/masculine/.
-export const MASCULINE_LOGO_IDS = ["214", "201", "215", "216", "219", "300"] as const;
+export const MASCULINE_LOGO_IDS = ["114", "101", "115", "116", "119", "300"] as const;
 
 // Full masculine folder for the Masculine Collection logo-picker filter.
 export const MASCULINE_FOLDER_LOGO_IDS = [
   ...MASCULINE_LOGO_IDS,
-  "218",
+  "118",
   ...MALE_POLO_LOGO_IDS,
-  "228",
-  "242",
-  "243",
-  "244",
-  "245",
+  "128",
+  "142",
+  "143",
+  "144",
+  "145",
   "301",
   "309",
   "310",
