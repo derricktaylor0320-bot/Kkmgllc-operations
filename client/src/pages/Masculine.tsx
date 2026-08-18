@@ -32,31 +32,31 @@ const MASCULINE_LOGO_COPY: Record<
   (typeof MASCULINE_LOGO_IDS)[number],
   { name: string; label: string; description: string }
 > = {
-  "214": {
+  "114": {
     name: "Red & Gold with Swords",
     label: "Bold sword crest",
     description:
       "A striking red shield with crossed gold swords — classic masculine Badge of Honor energy.",
   },
-  "201": {
+  "101": {
     name: "Apparel Leather Swords Crest",
     label: "Leather sword crest",
     description:
       "The Khomplete Khemistri Apparel leather swords crest built for strong custom gear.",
   },
-  "215": {
+  "115": {
     name: "Crossed Swords",
     label: "Crossed swords emblem",
     description:
       "A direct crossed-swords mark that reads clean on jackets, tees, and accessories.",
   },
-  "216": {
+  "116": {
     name: "KKA Crossed Swords",
     label: "KKA sword mark",
     description:
       "The KKA crossed-swords logo — sharp, compact, and ready for masculine apparel.",
   },
-  "219": {
+  "119": {
     name: "Maroon & Gold Eagle Crest",
     label: "Eagle crest",
     description:

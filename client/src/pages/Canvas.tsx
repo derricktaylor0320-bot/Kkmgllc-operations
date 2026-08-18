@@ -6,7 +6,7 @@ import royaltyBadgeSectionArt from "@assets/brand/versatile_royalty_badge_of_hon
 import canvasCollectionSectionArt from "@assets/brand/versatile_canvas_collection_section.png";
 import armoredShieldSectionArt from "@assets/brand/versatile_armored_shield_section.png";
 
-// Canvas Collection — color logos 100-117
+// Canvas Collection — color logos 200-218, 221-225
 import logoGold3D from "@assets/Screenshot_20251126_202749_Photos_1764207404143.jpg";
 import logoBlueWhite from "@assets/Screenshot_20251126_202727_Photos_1764207404154.jpg";
 import logoBlackWhite from "@assets/Screenshot_20251126_202703_Photos_1764207404162.jpg";
@@ -26,7 +26,7 @@ import logoLimeGreen from "@assets/logo_lime_green.jpg";
 import logoMasterpieceTrident from "@assets/logo_masterpiece_trident_three.png";
 import medallionCorePrinciples from "@assets/copilot_image_1781210586301_1781211927468.jpeg";
 
-// Badge of Honor Collection — crests 200-228 + Elements #230/#240/#241 + Female Logos #231-239 + Founders #242-245
+// Badge of Honor Collection — crests 100-128 + Elements #130/#140/#141 + Female Logos #131-139/#146-147 + Founders #142-145
 import shieldBlackWhite from "@assets/Screenshot_20251126_205145_Photos_1764208360832.jpg";
 import shieldBlueGold from "@assets/Screenshot_20251126_205125_Photos_1764208373884.jpg";
 import crestBlueValuesSwords from "@assets/image000009_1781214860404.jpg";
@@ -90,7 +90,7 @@ import logoPrideRainbow from "@assets/1781582068026_1781668463902.png";
 import logoKKAShield from "@assets/masculine/logo_kka_shield_royal_blue_silver.png";
 import logoFoundersTrident from "@assets/logo_founders_trident_three.jpg";
 
-// Compass Collection — 400-403
+// Compass Collection — 500-503
 import compassKKApparel from "@assets/copilot_image_1781366430242_1781369724345.jpeg";
 import compassKMG1 from "@assets/image_1781365445486_1781369761822.jpeg";
 import compassKMG2 from "@assets/image_1781365494182_1781369761833.jpeg";
@@ -113,85 +113,85 @@ import logoFeminineEagleCrownPurple from "@assets/feminine/logo_feminine_eagle_c
 
 export default function Canvas() {
   const logos = [
-    { id: "100", src: logoGold3D, alt: "Gold 3D Emblem", color: "Gold 3D" },
-    { id: "101", src: logoGoldWhite, alt: "Gold & White Emblem", color: "Gold & White" },
-    { id: "102", src: logoBlackWhite, alt: "Classic Black & White", color: "Black & White" },
-    { id: "103", src: logoBWInverted, alt: "Inverted Black & White", color: "Inverted B&W" },
-    { id: "104", src: logoRedBlack, alt: "Red & Black Strike", color: "Red & Black" },
-    { id: "105", src: logoBlueWhite, alt: "Royal Blue Emblem", color: "Royal Blue" },
-    { id: "106", src: logoLightBlue, alt: "Sky Blue Emblem", color: "Sky Blue" },
-    { id: "107", src: logoPinkBlack, alt: "Neon Pink Emblem", color: "Neon Pink" },
-    { id: "108", src: logoGreyWhite, alt: "Slate Grey Emblem", color: "Slate Grey" },
-    { id: "109", src: logoForestGreen, alt: "Forest Green Emblem", color: "Forest Green" },
-    { id: "110", src: logoDeepPurple, alt: "Deep Purple Emblem", color: "Deep Purple" },
-    { id: "111", src: logoBlackGoldCircle, alt: "Black & Gold Emblem", color: "Black & Gold" },
-    { id: "112", src: logoOrange, alt: "Orange Emblem", color: "Orange" },
-    { id: "113", src: logoBrownGold, alt: "Brown & Gold Emblem", color: "Brown & Gold" },
-    { id: "114", src: logoTeal, alt: "Teal Emblem", color: "Teal" },
-    { id: "115", src: logoLimeGreen, alt: "Lime Green Emblem", color: "Lime Green" },
-    { id: "116", src: logoMasterpieceTrident, alt: "Masterpiece Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Masterpiece Trident" },
-    { id: "117", src: medallionCorePrinciples, alt: "10 Core Principles Medallion", color: "Core Principles Medallion" },
-    { id: "118", src: logoAccessoriesEagle, alt: "Khomplete Khemistri Apparel & Accessories Eagle", color: "Maroon & Gold Eagle" },
-    { id: "121", src: logoPrideRainbow, alt: "Khomplete Khemistri Apparel Pride Rainbow Crest", color: "Pride Rainbow" },
-    { id: "122", src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident" },
-    { id: "123", src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular" },
-    { id: "124", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield" },
-    { id: "125", src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink" },
+    { id: "200", src: logoGold3D, alt: "Gold 3D Emblem", color: "Gold 3D" },
+    { id: "201", src: logoGoldWhite, alt: "Gold & White Emblem", color: "Gold & White" },
+    { id: "202", src: logoBlackWhite, alt: "Classic Black & White", color: "Black & White" },
+    { id: "203", src: logoBWInverted, alt: "Inverted Black & White", color: "Inverted B&W" },
+    { id: "204", src: logoRedBlack, alt: "Red & Black Strike", color: "Red & Black" },
+    { id: "205", src: logoBlueWhite, alt: "Royal Blue Emblem", color: "Royal Blue" },
+    { id: "206", src: logoLightBlue, alt: "Sky Blue Emblem", color: "Sky Blue" },
+    { id: "207", src: logoPinkBlack, alt: "Neon Pink Emblem", color: "Neon Pink" },
+    { id: "208", src: logoGreyWhite, alt: "Slate Grey Emblem", color: "Slate Grey" },
+    { id: "209", src: logoForestGreen, alt: "Forest Green Emblem", color: "Forest Green" },
+    { id: "210", src: logoDeepPurple, alt: "Deep Purple Emblem", color: "Deep Purple" },
+    { id: "211", src: logoBlackGoldCircle, alt: "Black & Gold Emblem", color: "Black & Gold" },
+    { id: "212", src: logoOrange, alt: "Orange Emblem", color: "Orange" },
+    { id: "213", src: logoBrownGold, alt: "Brown & Gold Emblem", color: "Brown & Gold" },
+    { id: "214", src: logoTeal, alt: "Teal Emblem", color: "Teal" },
+    { id: "215", src: logoLimeGreen, alt: "Lime Green Emblem", color: "Lime Green" },
+    { id: "216", src: logoMasterpieceTrident, alt: "Masterpiece Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Masterpiece Trident" },
+    { id: "217", src: medallionCorePrinciples, alt: "10 Core Principles Medallion", color: "Core Principles Medallion" },
+    { id: "218", src: logoAccessoriesEagle, alt: "Khomplete Khemistri Apparel & Accessories Eagle", color: "Maroon & Gold Eagle" },
+    { id: "221", src: logoPrideRainbow, alt: "Khomplete Khemistri Apparel Pride Rainbow Crest", color: "Pride Rainbow" },
+    { id: "222", src: logoFoundersTrident, alt: "Founders' Trident Three Crest - D. Taylor, C. Oliver, J. Young Jr.", color: "Founders' Trident" },
+    { id: "223", src: logoGoldenEagle, alt: "Golden Eagle Circular Emblem", color: "Golden Eagle Circular" },
+    { id: "224", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield" },
+    { id: "225", src: logoSilverPinkFeminine, alt: "Khomplete Khemistri Apparel Silver & Pink Feminine Medallion", color: "Silver & Pink" },
   ];
 
   // Female Logos — pearl-crown griffin crests belong to Royalty Badge of Honor
   // (not the circular Canvas Collection).
   const femaleBadges = [
-    { id: "231", src: logoFeminineEagleElectricBlue, alt: "Khomplete Khemistri Apparel Feminine Eagle Crest - Electric Blue & Silver Est. 2020", color: "Feminine Eagle Electric Blue & Silver" },
-    { id: "232", src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim" },
-    { id: "233", src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey" },
-    { id: "234", src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye" },
-    { id: "235", src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy" },
-    { id: "236", src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple" },
-    { id: "237", src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy" },
-    { id: "238", src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold" },
-    { id: "239", src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest" },
-    { id: "246", src: logoFeminineEagleCrownHotPink, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Hot Pink Est. 2020", color: "Feminine Crowned Eagle Hot Pink" },
-    { id: "247", src: logoFeminineEagleCrownPurple, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Purple Est. 2020", color: "Feminine Crowned Eagle Purple" },
+    { id: "131", src: logoFeminineEagleElectricBlue, alt: "Khomplete Khemistri Apparel Feminine Eagle Crest - Electric Blue & Silver Est. 2020", color: "Feminine Eagle Electric Blue & Silver" },
+    { id: "132", src: logoPearlGriffinBlueDenim, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Blue Denim", color: "Pearl Griffin Blue Denim" },
+    { id: "133", src: logoPearlGriffinGrey, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Grey", color: "Pearl Griffin Grey" },
+    { id: "134", src: logoPearlGriffinTieDye, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Tie-Dye", color: "Pearl Griffin Tie-Dye" },
+    { id: "135", src: logoPearlGriffinCottonCandy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Cotton Candy", color: "Pearl Griffin Cotton Candy" },
+    { id: "136", src: logoPearlGriffinPurple, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Purple", color: "Pearl Griffin Purple" },
+    { id: "137", src: logoPearlGriffinNavy, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Navy", color: "Pearl Griffin Navy" },
+    { id: "138", src: logoPearlGriffinRedGold, alt: "Khomplete Khemistri Apparel & Accessories Pearl Griffin Crest - Red & Gold", color: "Pearl Griffin Red & Gold" },
+    { id: "139", src: logoFeminineEdHardyCrest, alt: "Khomplete Khemistri Apparel Feminine Ornate Eagle Crest - Ed Hardy Style Est. 2020", color: "Feminine Ed Hardy Crest" },
+    { id: "146", src: logoFeminineEagleCrownHotPink, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Hot Pink Est. 2020", color: "Feminine Crowned Eagle Hot Pink" },
+    { id: "147", src: logoFeminineEagleCrownPurple, alt: "Khomplete Khemistri Apparel Feminine Crowned Eagle Crest - Purple Est. 2020", color: "Feminine Crowned Eagle Purple" },
   ];
 
   const badges = [
-    { id: "200", src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", featured: true },
-    { id: "201", src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", featured: true },
-    { id: "202", src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold" },
-    { id: "203", src: crestBlueValuesSwords, alt: "Khomplete Khemistri Apparel Crest - Unity, Strength, Brotherhood, Entrepreneurship, Harmony", color: "Blue Apparel Crest", featured: true },
-    { id: "204", src: shieldGoldBrown, alt: "Classic Gold Crest", color: "Classic Gold" },
-    { id: "205", src: shieldSilver, alt: "Silver Elite Crest", color: "Silver Elite" },
-    { id: "206", src: shieldCyanGold, alt: "Cyan & Gold Crest", color: "Cyan & Gold" },
-    { id: "207", src: shieldBlackWhite, alt: "Monochrome Crest", color: "Monochrome" },
-    { id: "208", src: badgeBrownGoldOrnate, alt: "Brown & Gold Ornate Crest", color: "Brown & Gold Ornate" },
-    { id: "209", src: badgePurpleOrnate, alt: "Purple Ornate Crest", color: "Purple Ornate" },
-    { id: "210", src: badgeNavySilver, alt: "Navy & Silver Crest", color: "Navy & Silver" },
-    { id: "211", src: badgeNavyGold, alt: "Navy & Gold Crest", color: "Navy & Gold", featured: true },
-    { id: "212", src: badgePurpleSwords, alt: "Purple with Swords", color: "Purple Swords" },
-    { id: "213", src: badgeGreenSwords, alt: "Green with Swords", color: "Emerald Swords" },
-    { id: "214", src: badgeRedGoldSwords, alt: "Red & Gold with Swords", color: "Red & Gold Swords" },
-    { id: "215", src: logoCrossedSwords, alt: "Crossed Swords with Khomplete Khemistri", color: "Crossed Swords", featured: true },
-    { id: "216", src: logoKKACrossedSwords, alt: "KKA Crossed Swords Logo", color: "KKA Swords", featured: true },
-    { id: "217", src: crestGoldApparel, alt: "Khomplete Khemistri Apparel Gold Crest", color: "Gold Apparel Crest", featured: true },
-    { id: "218", src: kkmgEagleShield, alt: "Khomplete Khemistri Apparel Silver & Blue Values Eagle Shield", color: "Silver & Blue Values Eagle", featured: true },
-    { id: "219", src: eagleCrestMaroonGold, alt: "Apparel Eagle Crest - Maroon & Gold", color: "Maroon & Gold Eagle Crest", featured: true },
-    { id: "220", src: badgeEaglesBlackWhite, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Black & White Est. 2020", color: "Black & White Eagles", featured: true },
-    { id: "221", src: badgeEaglesNavyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Navy & Gold Est. 2020", color: "Navy & Gold Eagles", featured: true },
-    { id: "222", src: badgeEaglesPurpleGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Purple & Gold", color: "Purple & Gold Eagles", featured: true },
-    { id: "223", src: badgeEaglesBrownGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Brown & Gold", color: "Brown & Gold Eagles", featured: true },
-    { id: "224", src: badgeEaglesRedGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Red & Gold", color: "Red & Gold Eagles", featured: true },
-    { id: "225", src: badgeEaglesBurgundyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Burgundy & Gold", color: "Burgundy & Gold Eagles", featured: true },
-    { id: "226", src: badgeEaglesSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold", color: "Silver & Gold Eagles", featured: true },
-    { id: "227", src: badgeEaglesAllGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold", color: "All Gold Eagles", featured: true },
-    { id: "228", src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", featured: true },
-    { id: "230", src: logoKkElementsShieldBlueSilver, alt: "Khomplete Khemistri Elements Shield - Royal Blue & Silver", color: "Elements Shield Blue & Silver", featured: true },
-    { id: "240", src: logoKkElementsShieldBlackSilver, alt: "Khomplete Khemistri Elements Shield - Black & Silver", color: "Elements Shield Black & Silver", featured: true },
-    { id: "241", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", featured: true },
-    { id: "242", src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", featured: true },
-    { id: "243", src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", featured: true },
-    { id: "244", src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", featured: true },
-    { id: "245", src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", featured: true },
+    { id: "100", src: badgeBlueValues, alt: "Blue & Gold Values Crest - Friendship, Trust, Harmony", color: "Blue Values Crest", featured: true },
+    { id: "101", src: logoKkApparelLeatherCrest, alt: "Khomplete Khemistri Apparel Leather Swords Crest", color: "Apparel Leather Swords Crest", featured: true },
+    { id: "102", src: shieldBlueGold, alt: "Royal Blue & Gold Crest", color: "Royal Blue & Gold" },
+    { id: "103", src: crestBlueValuesSwords, alt: "Khomplete Khemistri Apparel Crest - Unity, Strength, Brotherhood, Entrepreneurship, Harmony", color: "Blue Apparel Crest", featured: true },
+    { id: "104", src: shieldGoldBrown, alt: "Classic Gold Crest", color: "Classic Gold" },
+    { id: "105", src: shieldSilver, alt: "Silver Elite Crest", color: "Silver Elite" },
+    { id: "106", src: shieldCyanGold, alt: "Cyan & Gold Crest", color: "Cyan & Gold" },
+    { id: "107", src: shieldBlackWhite, alt: "Monochrome Crest", color: "Monochrome" },
+    { id: "108", src: badgeBrownGoldOrnate, alt: "Brown & Gold Ornate Crest", color: "Brown & Gold Ornate" },
+    { id: "109", src: badgePurpleOrnate, alt: "Purple Ornate Crest", color: "Purple Ornate" },
+    { id: "110", src: badgeNavySilver, alt: "Navy & Silver Crest", color: "Navy & Silver" },
+    { id: "111", src: badgeNavyGold, alt: "Navy & Gold Crest", color: "Navy & Gold", featured: true },
+    { id: "112", src: badgePurpleSwords, alt: "Purple with Swords", color: "Purple Swords" },
+    { id: "113", src: badgeGreenSwords, alt: "Green with Swords", color: "Emerald Swords" },
+    { id: "114", src: badgeRedGoldSwords, alt: "Red & Gold with Swords", color: "Red & Gold Swords" },
+    { id: "115", src: logoCrossedSwords, alt: "Crossed Swords with Khomplete Khemistri", color: "Crossed Swords", featured: true },
+    { id: "116", src: logoKKACrossedSwords, alt: "KKA Crossed Swords Logo", color: "KKA Swords", featured: true },
+    { id: "117", src: crestGoldApparel, alt: "Khomplete Khemistri Apparel Gold Crest", color: "Gold Apparel Crest", featured: true },
+    { id: "118", src: kkmgEagleShield, alt: "Khomplete Khemistri Apparel Silver & Blue Values Eagle Shield", color: "Silver & Blue Values Eagle", featured: true },
+    { id: "119", src: eagleCrestMaroonGold, alt: "Apparel Eagle Crest - Maroon & Gold", color: "Maroon & Gold Eagle Crest", featured: true },
+    { id: "120", src: badgeEaglesBlackWhite, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Black & White Est. 2020", color: "Black & White Eagles", featured: true },
+    { id: "121", src: badgeEaglesNavyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Navy & Gold Est. 2020", color: "Navy & Gold Eagles", featured: true },
+    { id: "122", src: badgeEaglesPurpleGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Purple & Gold", color: "Purple & Gold Eagles", featured: true },
+    { id: "123", src: badgeEaglesBrownGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Brown & Gold", color: "Brown & Gold Eagles", featured: true },
+    { id: "124", src: badgeEaglesRedGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Red & Gold", color: "Red & Gold Eagles", featured: true },
+    { id: "125", src: badgeEaglesBurgundyGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Burgundy & Gold", color: "Burgundy & Gold Eagles", featured: true },
+    { id: "126", src: badgeEaglesSilverGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - Silver & Gold", color: "Silver & Gold Eagles", featured: true },
+    { id: "127", src: badgeEaglesAllGold, alt: "Khomplete Khemistri Apparel & Accessories Eagle Crest - All Gold", color: "All Gold Eagles", featured: true },
+    { id: "128", src: badgeConsolidatusEmpireStandalone, alt: "The Consolidatus Empire LLC Standalone Crest - Est. 2020", color: "Consolidatus Empire LLC", featured: true },
+    { id: "130", src: logoKkElementsShieldBlueSilver, alt: "Khomplete Khemistri Elements Shield - Royal Blue & Silver", color: "Elements Shield Blue & Silver", featured: true },
+    { id: "140", src: logoKkElementsShieldBlackSilver, alt: "Khomplete Khemistri Elements Shield - Black & Silver", color: "Elements Shield Black & Silver", featured: true },
+    { id: "141", src: logoKkElementsBadge, alt: "Khomplete Khemistri Elements Golden Shield", color: "Elements Golden Shield", featured: true },
+    { id: "142", src: logoFoundersCrestINavySilver, alt: "The Founders Crest I - Navy & Silver Est. 2020", color: "Founders Crest I Navy & Silver", featured: true },
+    { id: "143", src: logoFoundersCrestICharcoalPurple, alt: "The Founders Crest I - Charcoal & Purple Est. 2020", color: "Founders Crest I Charcoal & Purple", featured: true },
+    { id: "144", src: logoFoundersCrestIGoldBrown, alt: "The Founders Crest I - Gold & Brown Est. 2020", color: "Founders Crest I Gold & Brown", featured: true },
+    { id: "145", src: logoFoundersCrestII, alt: "The Founders Crest II - Royal Blue & Gold Est. 2020", color: "Founders Crest II Blue & Gold", featured: true },
   ];
 
   const honorShields = [
@@ -209,10 +209,10 @@ export default function Canvas() {
   ];
 
   const compassCollection = [
-    { id: "400", src: compassKKApparel, alt: "Khomplete Khemistri Apparel Compass", color: "KK Apparel Compass", featured: true },
-    { id: "401", src: compassKMG1, alt: "KKMG LLC Compass", color: "KKMG LLC Compass", featured: true },
-    { id: "402", src: compassKMG2, alt: "KKMG LLC Compass II", color: "KKMG LLC Compass II" },
-    { id: "403", src: compassSunburst, alt: "Khomplete Khemistri Apparel Sunburst Emblem", color: "Apparel Sunburst", featured: true },
+    { id: "500", src: compassKKApparel, alt: "Khomplete Khemistri Apparel Compass", color: "KK Apparel Compass", featured: true },
+    { id: "501", src: compassKMG1, alt: "KKMG LLC Compass", color: "KKMG LLC Compass", featured: true },
+    { id: "502", src: compassKMG2, alt: "KKMG LLC Compass II", color: "KKMG LLC Compass II" },
+    { id: "503", src: compassSunburst, alt: "Khomplete Khemistri Apparel Sunburst Emblem", color: "Apparel Sunburst", featured: true },
   ];
 
   return (

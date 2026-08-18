@@ -13,15 +13,15 @@ No placement customization at checkout — size only. Shirt color matches the em
 
 | File | Colorway | Logo catalog ID | Shirt color |
 |------|----------|-----------------|-------------|
-| `logo_feminine_eagle_electric_blue_silver.png` | Electric Blue & Silver | #231 | Lake Blue |
-| `logo_pearl_griffin_blue_denim.png` | Blue Denim | #232 | Blue Denim |
-| `logo_pearl_griffin_grey.png` | Grey | #233 | Grey |
-| `logo_pearl_griffin_tie_dye.png` | Tie-Dye | #234 | Light Blue |
-| `logo_pearl_griffin_cotton_candy.png` | Cotton Candy | #235 | Pink |
-| `logo_pearl_griffin_purple.png` | Purple | #236 | Purple |
-| `logo_pearl_griffin_navy.png` | Navy | #237 | Navy Blue |
-| `logo_pearl_griffin_red_gold.png` | Red & Gold | #238 | Red |
+| `logo_feminine_eagle_electric_blue_silver.png` | Electric Blue & Silver | #131 | Lake Blue |
+| `logo_pearl_griffin_blue_denim.png` | Blue Denim | #132 | Blue Denim |
+| `logo_pearl_griffin_grey.png` | Grey | #133 | Grey |
+| `logo_pearl_griffin_tie_dye.png` | Tie-Dye | #134 | Light Blue |
+| `logo_pearl_griffin_cotton_candy.png` | Cotton Candy | #135 | Pink |
+| `logo_pearl_griffin_purple.png` | Purple | #136 | Purple |
+| `logo_pearl_griffin_navy.png` | Navy | #137 | Navy Blue |
+| `logo_pearl_griffin_red_gold.png` | Red & Gold | #138 | Red |
 
-These are the same Royalty Badge of Honor **Female Logos** kept in `attached_assets/feminine/` for the Feminine Collection / logo pickers (plus gallery-only #239 Ed Hardy in that folder). This folder marks them specifically as the **female polo shirt** set.
+These are the same Royalty Badge of Honor **Female Logos** kept in `attached_assets/feminine/` for the Feminine Collection / logo pickers (plus gallery-only #139 Ed Hardy in that folder). This folder marks them specifically as the **female polo shirt** set.
 
 Fulfillment: Printful. **Polo products themselves do not offer logo/placement choice.**

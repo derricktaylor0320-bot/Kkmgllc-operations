@@ -10,8 +10,8 @@ import {
 
 test("cutting board customize href pre-selects garment", () => {
   assert.equal(
-    cuttingBoardCustomizeHref("501"),
-    `/customize/501?garment=${NFL_CUTTING_BOARD_GARMENT_ID}`,
+    cuttingBoardCustomizeHref("401"),
+    `/customize/401?garment=${NFL_CUTTING_BOARD_GARMENT_ID}`,
   );
 });
 

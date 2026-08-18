@@ -4,7 +4,7 @@ These photos appear in the **Football Sports Edition** gallery and help shoppers
 
 | File | Team | Logo id |
 |------|------|---------|
-| `baltimore_ravens_cutting_board.jpg` | Baltimore Ravens | 501 |
-| `pittsburgh_steelers_cutting_board.jpg` | Pittsburgh Steelers | 522 |
+| `baltimore_ravens_cutting_board.jpg` | Baltimore Ravens | 401 |
+| `pittsburgh_steelers_cutting_board.jpg` | Pittsburgh Steelers | 422 |
 
 Add additional samples by extending `CUTTING_BOARD_SAMPLE_PHOTOS` in `shared/footballCuttingBoard.ts`.

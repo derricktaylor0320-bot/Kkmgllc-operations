@@ -1,7 +1,7 @@
 # Football Teams Sports Edition
 
 Seasonal Khomplete Khemistri football crest artwork for the August–February
-collection. The 28 uploaded designs are registered as logo IDs `500`–`527` in
+collection. The 28 uploaded designs are registered as logo IDs `400`–`427` in
 `client/src/lib/logoCatalog.ts` and can be selected on customizable products.
 
 The uploaded Raiders artwork reads “Oakland Raiders,” so the storefront labels
