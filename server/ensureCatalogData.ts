@@ -9,6 +9,7 @@ import {
   BODY_WASH_COCOA_SHEA_IMAGE,
   LEGACY_BROWN_BEDDING_IMAGE_PATHS,
 } from "@shared/productImages";
+import { BODY_BUTTER_SCENT_OPTIONS } from "@shared/elementsBodyButter";
 import {
   ELEMENTS_DUO_NAME,
   ELEMENTS_DUO_PRICE_CENTS,
@@ -252,12 +253,13 @@ const BODY_BUTTER_NAME = "Whipped Body Butters";
 const BODY_BUTTER_PRICE_CENTS = 1500;
 const BODY_BUTTER_IMAGE_PATH = BODY_BUTTER_IMAGE;
 const BODY_BUTTER_DESCRIPTION =
-  "Luxurious Khomplete Khemistri whipped body butter in a 4 oz jar. Rich, fast-absorbing moisture that leaves skin soft and smooth. $15 per jar. 3 for $36 — Buy 2, Get 1 50% Off (Save $9 Instantly, $12/jar).";
+  "Luxurious Khomplete Khemistri whipped body butter in a 4 oz jar. Rich, fast-absorbing moisture that leaves skin soft and smooth. Choose from 17 provocative scents — The Initial 3, Men's & Unisex, and Sweet, Gourmand & Provocative. $15 per jar. 3 for $36 — Buy 2, Get 1 50% Off (Save $9 Instantly, $12/jar).";
 const BODY_BUTTER_META = {
   category: "Body Care",
   productType: "accessory",
   customize: "none",
   scented: "true",
+  scentOptions: BODY_BUTTER_SCENT_OPTIONS,
   imageUrl: BODY_BUTTER_IMAGE_PATH,
 };
 
@@ -1265,6 +1267,7 @@ const ELEMENTS_DUO_META = {
   imageUrl: BODY_WASH_COCOA_SHEA_IMAGE,
   customize: "none",
   scented: "true",
+  scentOptions: BODY_BUTTER_SCENT_OPTIONS,
   elementsDuo: "true",
   gender: "Unisex",
 };

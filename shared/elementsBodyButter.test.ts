@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import {
+  BODY_BUTTER_SCENT_NAMES,
+  BODY_BUTTER_SCENT_OPTIONS,
   BODY_BUTTER_TRIPLE_PRICE_CENTS,
   BODY_BUTTER_UNIT_PRICE_CENTS,
   bodyButterBundlePitch,
   bodyButterPricingLabel,
+  bodyButterScentNotes,
   bodyButterTotalCents,
   isElementsBodyButterProduct,
 } from "./elementsBodyButter";
@@ -36,5 +39,15 @@ describe("elementsBodyButter pricing", () => {
       true,
     );
     assert.equal(isElementsBodyButterProduct(undefined, "BCAA Complex"), false);
+  });
+});
+
+describe("elementsBodyButter scents", () => {
+  test("catalog lists 17 named scents with notes", () => {
+    assert.equal(BODY_BUTTER_SCENT_NAMES.length, 17);
+    assert.equal(BODY_BUTTER_SCENT_OPTIONS.split(", ").length, 17);
+    assert.equal(bodyButterScentNotes("Forbidden Taste"), "Rich Plum, Dark Berry & Vanilla Bourbon");
+    assert.equal(bodyButterScentNotes("Delicious Vulva"), "Sweet Strawberry, Whipped Cream & Exotic Jasmine");
+    assert.equal(bodyButterScentNotes("Not A Scent"), undefined);
   });
 });
