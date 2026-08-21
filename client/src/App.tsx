@@ -29,6 +29,7 @@ import ProductDetail from "@/pages/ProductDetail";
 import Vintage from "@/pages/Vintage";
 import Policies from "@/pages/Policies";
 import HotDogs from "@/pages/HotDogs";
+import Wine from "@/pages/Wine";
 import Poetry from "@/pages/Poetry";
 import Media from "@/pages/Media";
 import VIP from "@/pages/VIP";
@@ -74,6 +75,7 @@ function Router() {
       <Route path="/cart" component={Cart} />
       <Route path="/product/:priceId" component={ProductDetail} />
       <Route path="/vintage" component={Vintage} />
+      <Route path="/wine" component={Wine} />
       <Route path="/policies" component={Policies} />
       <Route path="/poetry" component={Poetry} />
       <Route path="/hot-dogs" component={HotDogs} />

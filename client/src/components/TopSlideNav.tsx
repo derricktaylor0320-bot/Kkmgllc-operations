@@ -25,7 +25,7 @@ export default function TopSlideNav() {
         data-testid="button-top-slide-nav-toggle"
       >
         <span className="font-display text-xs uppercase tracking-[0.22em] text-primary sm:text-sm">
-          Site Directory · All 20 Destinations
+          Site Directory · All 21 Destinations
         </span>
         <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
           <span className="hidden sm:inline">

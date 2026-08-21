@@ -18,6 +18,7 @@ import {
   Trophy,
   WalletCards,
   Watch,
+  Wine,
 } from "lucide-react";
 import InstallAppButton from "@/components/InstallAppButton";
 
@@ -84,6 +85,14 @@ const DIRECTORY_ITEMS: DirectoryItem[] = [
     title: "Vintage Baltimore",
     description: "Nostalgic Baltimore-themed apparel and memorabilia.",
     Icon: Landmark,
+  },
+  {
+    href: "/wine",
+    title: "Founder's Signature Wine",
+    description:
+      "The Empire's premium wine collection — more flavors and pricing coming soon.",
+    Icon: Wine,
+    comingSoon: true,
   },
   {
     href: "/media",
