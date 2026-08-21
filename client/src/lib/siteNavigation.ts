@@ -44,9 +44,9 @@ export const SITE_LINK_CATEGORIES: SiteLinkCategoryMeta[] = [
 ];
 
 /**
- * Desktop row layout for the full 20-destination directory (6 + 6 + 8).
+ * Desktop row layout for the full 21-destination directory (7 + 7 + 7).
  */
-export const SITE_DIRECTORY_ROW_LAYOUT = [6, 6, 8] as const;
+export const SITE_DIRECTORY_ROW_LAYOUT = [7, 7, 7] as const;
 
 /**
  * The canonical order for the global site directory.
@@ -114,6 +114,12 @@ export const SITE_LINKS: SiteLink[] = [
     href: "/vintage",
     label: "Vintage Baltimore",
     compactLabel: "Vintage",
+    category: "shop",
+  },
+  {
+    href: "/wine",
+    label: "Founder's Signature Wine",
+    compactLabel: "Wine",
     category: "shop",
   },
   {

@@ -30,6 +30,7 @@ export default function Footer() {
               <li><Link href="/feminine" className="hover:text-primary transition-colors">Feminine Collection</Link></li>
               <li><Link href="/masculine" className="hover:text-primary transition-colors">Masculine Collection</Link></li>
               <li><Link href="/accessories" className="hover:text-primary transition-colors">Accessories</Link></li>
+              <li><Link href="/wine" className="hover:text-primary transition-colors">Founder's Signature Wine</Link></li>
               <li><Link href="/hub" className="hover:text-primary transition-colors">Centralized Hub</Link></li>
             </ul>
           </div>
