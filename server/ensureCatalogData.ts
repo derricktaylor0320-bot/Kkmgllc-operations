@@ -257,7 +257,7 @@ const BODY_BUTTER_NAME = BODY_BUTTER_LINE_NAME;
 const BODY_BUTTER_PRICE_CENTS = 1500;
 const BODY_BUTTER_IMAGE_PATH = BODY_BUTTER_IMAGE;
 const BODY_BUTTER_DESCRIPTION =
-  "Luxurious Khomplete Khemistri whipped body butter in a 4 oz jar. Rich, fast-absorbing moisture that leaves skin soft and smooth. Our Exotic Body Butter Scents — choose from 17 provocative fragrances with notes listed on the product page. Collections include Men's & Unisex and Sweet, Gourmand & Provocative. $15 per jar. 3 for $36 — Buy 2, Get 1 50% Off (Save $9 Instantly, $12/jar).";
+  "Luxurious Khomplete Khemistri whipped body butter in a 4 oz jar. Rich, fast-absorbing moisture that leaves skin soft and smooth. Our Exotic Body Butter Scents — choose from 18 provocative fragrances with notes listed on the product page. Collections include Men's & Unisex and Sweet, Gourmand & Provocative. $15 per jar. 3 for $36 — Buy 2, Get 1 50% Off (Save $9 Instantly, $12/jar).";
 const BODY_BUTTER_META = {
   category: "Body Care",
   productType: "accessory",

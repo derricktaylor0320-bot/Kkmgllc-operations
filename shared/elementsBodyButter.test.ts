@@ -55,11 +55,12 @@ describe("elementsBodyButter pricing", () => {
 });
 
 describe("elementsBodyButter scents", () => {
-  test("catalog lists 17 named scents with notes", () => {
-    assert.equal(BODY_BUTTER_SCENT_NAMES.length, 17);
-    assert.equal(BODY_BUTTER_SCENT_OPTIONS.split(", ").length, 17);
+  test("catalog lists 18 named scents with notes", () => {
+    assert.equal(BODY_BUTTER_SCENT_NAMES.length, 18);
+    assert.equal(BODY_BUTTER_SCENT_OPTIONS.split(", ").length, 18);
     assert.equal(bodyButterScentNotes("Forbidden Taste"), "Rich Plum, Dark Berry & Vanilla Bourbon");
     assert.equal(bodyButterScentNotes("Delicious Vulva"), "Sweet Strawberry, Whipped Cream & Exotic Jasmine");
+    assert.equal(bodyButterScentNotes("PHATT"), "Warm Amber, Spiced Vanilla & Soft Musk — Pretty Hot And Tempting To Touch");
     assert.equal(bodyButterScentNotes("Not A Scent"), undefined);
   });
 
@@ -67,7 +68,7 @@ describe("elementsBodyButter scents", () => {
     const grouped = bodyButterScentsByCategory();
     assert.equal(grouped["The Initial 3"].length, 3);
     assert.equal(grouped["Men's & Unisex"].length, 7);
-    assert.equal(grouped["Sweet, Gourmand & Provocative"].length, 7);
+    assert.equal(grouped["Sweet, Gourmand & Provocative"].length, 8);
     assert.equal(BODY_BUTTER_SCENT_CATEGORY_ORDER.length, 3);
     assert.equal(bodyButterScentCategoryLabel("The Initial 3"), null);
     assert.equal(bodyButterScentCategoryLabel("Men's & Unisex"), "Men's & Unisex");
