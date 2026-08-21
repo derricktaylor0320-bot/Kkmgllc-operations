@@ -24,6 +24,7 @@ import {
 import {
   bodyButterBundlePitch,
   bodyButterPricingLabel,
+  bodyButterScentNotes,
   isElementsBodyButterProduct,
 } from "@shared/elementsBodyButter";
 import type { ProductVariant } from "@/lib/productVariants";
@@ -623,15 +624,19 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                       <SelectValue placeholder={`Choose your ${scentNoun} *`} />
                     </SelectTrigger>
                     <SelectContent>
-                      {scentChoices.map((choice) => (
+                      {scentChoices.map((choice) => {
+                        const notes =
+                          (isBodyButter || isDuo) ? bodyButterScentNotes(choice) : undefined;
+                        return (
                         <SelectItem
                           key={choice}
                           value={choice}
                           data-testid={`option-scent-${choice.toLowerCase().replace(/\s+/g, '-')}`}
                         >
-                          {choice}
+                          {notes ? `${choice} — ${notes}` : choice}
                         </SelectItem>
-                      ))}
+                        );
+                      })}
                     </SelectContent>
                   </Select>
                 </div>

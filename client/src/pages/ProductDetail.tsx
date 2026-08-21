@@ -22,9 +22,13 @@ import {
   isElementsDeodorantProduct,
 } from "@shared/elementsDeodorant";
 import {
+  BODY_BUTTER_LINE_NAME,
+  BODY_BUTTER_SCENT_CATEGORY_ORDER,
   bodyButterBundlePitch,
   bodyButterPricingLabel,
+  bodyButterScentCategoryLabel,
   bodyButterScentNotes,
+  bodyButterScentsByCategory,
   bodyButterTotalDollars,
   bodyButterUnitPriceDollars,
   isElementsBodyButterProduct,
@@ -127,6 +131,57 @@ export default function ProductDetail() {
       </main>
       <Footer />
     </div>
+  );
+}
+
+function BodyButterScentGuideSection() {
+  const bodyButterScentGuide = bodyButterScentsByCategory();
+
+  return (
+    <section className="max-w-4xl mx-auto mt-16" data-testid="section-body-butter-scents">
+      <div className="rounded-xl border border-primary/25 bg-black/20 p-6 md:p-8">
+        <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-wider text-primary mb-4">
+          {BODY_BUTTER_LINE_NAME}
+        </h2>
+        <p
+          className="text-secondary-foreground/80 leading-relaxed mb-8"
+          data-testid="text-body-butter-scent-intro"
+        >
+          Every jar is a 4 oz whipped body butter. Choose your scent at checkout — each fragrance
+          is listed below with its notes so you know exactly what you are getting.
+        </p>
+        <div className="space-y-8">
+          {BODY_BUTTER_SCENT_CATEGORY_ORDER.map((category) => {
+            const scents = bodyButterScentGuide[category];
+            const categoryLabel = bodyButterScentCategoryLabel(category);
+            return (
+              <div key={category} data-testid={`scent-group-${category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
+                {categoryLabel ? (
+                  <h3 className="font-display text-lg font-semibold uppercase tracking-wider text-foreground mb-4">
+                    {categoryLabel}
+                  </h3>
+                ) : null}
+                <ul className="space-y-3">
+                  {scents.map((scent) => (
+                    <li
+                      key={scent.name}
+                      className="flex gap-3"
+                      data-testid={`scent-${scent.name.toLowerCase().replace(/\s+/g, "-")}`}
+                    >
+                      <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <p className="text-secondary-foreground/80 leading-relaxed">
+                        <span className="font-semibold text-foreground">{scent.name}:</span>{" "}
+                        {scent.notes}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -523,6 +578,8 @@ function ProductDetailContent({
             </div>
           </section>
         )}
+
+        {showScentNotes && <BodyButterScentGuideSection />}
       </motion.div>
     );
   }
@@ -572,7 +629,7 @@ function ProductDetailContent({
                 data-testid="img-product-detail-butter"
               />
               <p className="absolute bottom-2 left-2 right-2 rounded bg-black/60 px-2 py-1 text-[10px] uppercase tracking-widest text-white">
-                Body butter
+                {BODY_BUTTER_LINE_NAME}
               </p>
             </div>
           </div>
@@ -1174,6 +1231,8 @@ function ProductDetailContent({
           </div>
         </section>
       )}
+
+      {showScentNotes && <BodyButterScentGuideSection />}
 
       {soldOut && alternatives.length > 0 && (
         <section className="max-w-6xl mx-auto mt-20" data-testid="section-alternatives">

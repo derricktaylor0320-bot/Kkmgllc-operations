@@ -22,6 +22,7 @@ import {
   isElementsDuoWash,
   parseElementsDuoSelection,
 } from "./elementsDuo";
+import { BODY_BUTTER_LEGACY_NAME, BODY_BUTTER_LINE_NAME } from "./elementsBodyButter";
 
 test("Elements Duo is $22: $15 wash + $7 butter, $8 off $30", () => {
   assert.equal(BODY_WASH_RETAIL_CENTS, 1500);
@@ -67,8 +68,9 @@ test("wash and butter title helpers match the standalone SKUs", () => {
   assert.equal(isElementsBodyWashTitle("Cocoa & Shea Butter"), true);
   assert.equal(isElementsBodyWashTitle("Island Tranquility"), true);
   assert.equal(isElementsBodyWashTitle("Cocoa Mango"), true);
-  assert.equal(isElementsBodyWashTitle("Whipped Body Butters"), false);
-  assert.equal(isElementsBodyButterTitle("Whipped Body Butters"), true);
+  assert.equal(isElementsBodyWashTitle(BODY_BUTTER_LEGACY_NAME), false);
+  assert.equal(isElementsBodyButterTitle(BODY_BUTTER_LEGACY_NAME), true);
+  assert.equal(isElementsBodyButterTitle(BODY_BUTTER_LINE_NAME), true);
   assert.equal(isElementsBodyButterTitle("Cocoa Mango"), false);
   assert.equal(isElementsDuoWash("Cocoa Mango"), true);
   assert.equal(isElementsDuoWash("Lavender"), false);
