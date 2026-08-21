@@ -31,6 +31,8 @@ test("invalid placement counts never add a fee", () => {
 const DUO_META = {
   customize: "none",
   scented: "true",
+  scentOptions:
+    "Forbidden Taste, Too Tempting, Pure Havoc, Midnight Habit, Sinfull Seduction, Dark Chemistry, Uncensored, Wicked Touch, Raw Attraction, After Dark, Lethal Charm, Sweet Addiction, Velvet Desire, Guilty Pleasure, Dangerous Craving, Delicious Lava, Delicious Vulva",
   elementsDuo: "true",
   productType: "elements",
 };
@@ -57,13 +59,13 @@ test("Elements Duo requires a wash and a body butter scent", () => {
     undefined,
     undefined,
     "Elements Duo",
-    encodeElementsDuoSelection("Island Tranquility", "Lavender"),
+    encodeElementsDuoSelection("Island Tranquility", "Forbidden Taste"),
   );
   assert.equal(ok.ok, true);
   assert.equal(ok.kind, "duo");
   assert.equal(
     ok.note,
-    "3-in-1 wash: Island Tranquility | Body butter: Lavender",
+    "3-in-1 wash: Island Tranquility | Body butter: Forbidden Taste",
   );
 });
 
@@ -74,7 +76,7 @@ test("Elements Duo rejects an unknown wash or butter scent", () => {
     undefined,
     undefined,
     "Elements Duo",
-    encodeElementsDuoSelection("Fake Wash", "Lavender"),
+    encodeElementsDuoSelection("Fake Wash", "Forbidden Taste"),
   );
   assert.equal(badWash.ok, false);
 

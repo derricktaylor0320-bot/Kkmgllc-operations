@@ -38,19 +38,19 @@ test("Elements Duo is $22: $15 wash + $7 butter, $8 off $30", () => {
 test("encodes and parses wash + body butter scent", () => {
   const encoded = encodeElementsDuoSelection(
     "Island Tranquility",
-    "Lavender",
+    "Forbidden Taste",
   );
-  assert.equal(encoded, "Island Tranquility \u2014 Lavender");
+  assert.equal(encoded, "Island Tranquility \u2014 Forbidden Taste");
   assert.deepEqual(parseElementsDuoSelection(encoded), {
     wash: "Island Tranquility",
-    butterScent: "Lavender",
+    butterScent: "Forbidden Taste",
   });
 });
 
 test("parse rejects missing or one-sided selections", () => {
   assert.equal(parseElementsDuoSelection(""), null);
   assert.equal(parseElementsDuoSelection("Island Tranquility"), null);
-  assert.equal(parseElementsDuoSelection(" \u2014 Lavender"), null);
+  assert.equal(parseElementsDuoSelection(" \u2014 Forbidden Taste"), null);
   assert.equal(parseElementsDuoSelection(undefined), null);
 });
 
@@ -79,8 +79,8 @@ test("order note names both items for fulfillment", () => {
   assert.equal(
     elementsDuoOrderNote({
       wash: "Cocoa Mango",
-      butterScent: "Georgia Peach",
+      butterScent: "Too Tempting",
     }),
-    "3-in-1 wash: Cocoa Mango | Body butter: Georgia Peach",
+    "3-in-1 wash: Cocoa Mango | Body butter: Too Tempting",
   );
 });

@@ -24,6 +24,7 @@ import {
 import {
   bodyButterBundlePitch,
   bodyButterPricingLabel,
+  bodyButterScentNotes,
   bodyButterTotalDollars,
   bodyButterUnitPriceDollars,
   isElementsBodyButterProduct,
@@ -298,6 +299,7 @@ function ProductDetailContent({
   const isDuo = isElementsDuoProduct(product.priceId, product.title);
   const needsScent = scentChoices.length > 0;
   const needsWash = isDuo;
+  const showScentNotes = isBodyButter || isDuo;
   // Sea moss gel reuses the scent picker for Amazon flavor varieties.
   const scentNoun = isDuo
     ? "body butter scent"
@@ -801,6 +803,7 @@ function ProductDetailContent({
                   <div className="flex flex-wrap gap-2">
                     {scentChoices.map((scent) => {
                       const active = selectedScent === scent;
+                      const notes = showScentNotes ? bodyButterScentNotes(scent) : undefined;
                       return (
                         <button
                           key={scent}
@@ -816,7 +819,7 @@ function ProductDetailContent({
                               : "border-border hover:border-primary/60"
                           }`}
                           data-testid={`button-detail-scent-${scent.toLowerCase().replace(/\s+/g, "-")}`}
-                          title={scent}
+                          title={notes ? `${scent} — ${notes}` : scent}
                         >
                           {scent}
                         </button>
@@ -824,12 +827,19 @@ function ProductDetailContent({
                     })}
                   </div>
                   {selectedScent ? (
-                    <p className="text-sm" data-testid="text-detail-scent-selection">
-                      <span className="text-muted-foreground">Selected {scentNoun}: </span>
-                      <span className="font-medium" data-testid="text-detail-scent-name">
-                        {selectedScent}
-                      </span>
-                    </p>
+                    <div className="text-sm space-y-1" data-testid="text-detail-scent-selection">
+                      <p>
+                        <span className="text-muted-foreground">Selected {scentNoun}: </span>
+                        <span className="font-medium" data-testid="text-detail-scent-name">
+                          {selectedScent}
+                        </span>
+                      </p>
+                      {showScentNotes && bodyButterScentNotes(selectedScent) ? (
+                        <p className="text-muted-foreground" data-testid="text-detail-scent-notes">
+                          {bodyButterScentNotes(selectedScent)}
+                        </p>
+                      ) : null}
+                    </div>
                   ) : (
                     <p className="text-sm text-muted-foreground">
                       Choose a {scentNoun} to continue.

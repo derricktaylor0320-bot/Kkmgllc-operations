@@ -1,3 +1,112 @@
+export type BodyButterScentCategory =
+  | "The Initial 3"
+  | "Men's & Unisex"
+  | "Sweet, Gourmand & Provocative";
+
+export interface BodyButterScent {
+  name: string;
+  notes: string;
+  category: BodyButterScentCategory;
+}
+
+/** Canonical whipped body butter scent lineup (17 scents). */
+export const BODY_BUTTER_SCENTS: readonly BodyButterScent[] = [
+  {
+    name: "Forbidden Taste",
+    notes: "Rich Plum, Dark Berry & Vanilla Bourbon",
+    category: "The Initial 3",
+  },
+  {
+    name: "Too Tempting",
+    notes: "Strawberry, Cream & Warm Cocoa",
+    category: "The Initial 3",
+  },
+  {
+    name: "Pure Havoc",
+    notes: "Peppered Cedar, Mahogany & Amber",
+    category: "The Initial 3",
+  },
+  {
+    name: "Midnight Habit",
+    notes: "Cashmere, Black Amber & Teakwood",
+    category: "Men's & Unisex",
+  },
+  {
+    name: "Sinfull Seduction",
+    notes: "Black Cherry, Vanilla Bean & Sandalwood",
+    category: "Men's & Unisex",
+  },
+  {
+    name: "Dark Chemistry",
+    notes: "Oakmoss, Leather & Sweet Grape",
+    category: "Men's & Unisex",
+  },
+  {
+    name: "Uncensored",
+    notes: "Wild Jasmine, Bergamot & White Musk",
+    category: "Men's & Unisex",
+  },
+  {
+    name: "Wicked Touch",
+    notes: "Smoked Bourbon, Tonka & Vanilla",
+    category: "Men's & Unisex",
+  },
+  {
+    name: "Raw Attraction",
+    notes: "Sandalwood, Cardamom & Warm Amber",
+    category: "Men's & Unisex",
+  },
+  {
+    name: "After Dark",
+    notes: "Eucalyptus, Lavender & Driftwood",
+    category: "Men's & Unisex",
+  },
+  {
+    name: "Lethal Charm",
+    notes: "Blood Orange, Fig & Dark Chocolate",
+    category: "Sweet, Gourmand & Provocative",
+  },
+  {
+    name: "Sweet Addiction",
+    notes: "Salted Caramel, Vanilla & Roasted Almond",
+    category: "Sweet, Gourmand & Provocative",
+  },
+  {
+    name: "Velvet Desire",
+    notes: "Cashmere, Jasmine & Pink Pepper",
+    category: "Sweet, Gourmand & Provocative",
+  },
+  {
+    name: "Guilty Pleasure",
+    notes: "Brown Sugar, Pecan & Warm Milk",
+    category: "Sweet, Gourmand & Provocative",
+  },
+  {
+    name: "Dangerous Craving",
+    notes: "Juicy Peach, Honey & Cream",
+    category: "Sweet, Gourmand & Provocative",
+  },
+  {
+    name: "Delicious Lava",
+    notes: "Spiced Cinnamon, Hot Cocoa & Warm Vanilla",
+    category: "Sweet, Gourmand & Provocative",
+  },
+  {
+    name: "Delicious Vulva",
+    notes: "Sweet Strawberry, Whipped Cream & Exotic Jasmine",
+    category: "Sweet, Gourmand & Provocative",
+  },
+] as const;
+
+export const BODY_BUTTER_SCENT_NAMES = BODY_BUTTER_SCENTS.map((scent) => scent.name);
+
+/** Comma-separated list for Stripe `scentOptions` metadata. */
+export const BODY_BUTTER_SCENT_OPTIONS = BODY_BUTTER_SCENT_NAMES.join(", ");
+
+export function bodyButterScentNotes(name: string): string | undefined {
+  return BODY_BUTTER_SCENTS.find((scent) => scent.name === name)?.notes;
+}
+
 /** Single whipped body butter jar (4 oz). */
 export const BODY_BUTTER_UNIT_PRICE_CENTS = 1500;
 
