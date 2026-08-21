@@ -22,6 +22,13 @@ import {
   isElementsDeodorantProduct,
 } from "@shared/elementsDeodorant";
 import {
+  bodyButterBundlePitch,
+  bodyButterPricingLabel,
+  bodyButterTotalDollars,
+  bodyButterUnitPriceDollars,
+  isElementsBodyButterProduct,
+} from "@shared/elementsBodyButter";
+import {
   ELEMENTS_DUO_WASH_OPTIONS,
   elementsDuoPriceDollars,
   elementsDuoSavingsDollars,
@@ -137,6 +144,8 @@ function ProductDetailContent({
   const comingSoon = !!product.comingSoon;
   const supplementInfo = getSupplementInfo(product.title);
   const isDeodorant = isElementsDeodorantProduct(product.priceId, product.title);
+  const isBodyButter = isElementsBodyButterProduct(product.priceId, product.title);
+  const hasTieredPricing = isDeodorant || isBodyButter;
 
   const usesCaseType = !!product.caseType && product.caseType.trim().length > 0;
 
@@ -458,6 +467,14 @@ function ProductDetailContent({
                 {deodorantPricingLabel()}
               </p>
             )}
+            {isBodyButter && (
+              <p
+                className="mt-3 text-sm font-medium uppercase tracking-widest text-muted-foreground"
+                data-testid="text-detail-body-butter-pricing"
+              >
+                {bodyButterPricingLabel()} · {bodyButterBundlePitch()}
+              </p>
+            )}
             {product.description && (
               <p
                 className="mt-6 text-secondary-foreground/80 leading-relaxed"
@@ -591,7 +608,7 @@ function ProductDetailContent({
             {product.title}
           </h1>
           <p
-            className={`text-2xl font-medium text-primary ${isDuo || isDeodorant ? "mb-2" : "mb-6"}`}
+            className={`text-2xl font-medium text-primary ${isDuo || hasTieredPricing ? "mb-2" : "mb-6"}`}
             data-testid="text-detail-price"
           >
             {isDuo ? (
@@ -603,6 +620,8 @@ function ProductDetailContent({
               </>
             ) : isDeodorant ? (
               <>${deodorantUnitPriceDollars().toFixed(2)}</>
+            ) : isBodyButter ? (
+              <>${bodyButterUnitPriceDollars().toFixed(2)}</>
             ) : (
               <>${effectiveUnitPrice.toFixed(2)}</>
             )}
@@ -618,9 +637,20 @@ function ProductDetailContent({
               )}
             </p>
           )}
+          {isBodyButter && (
+            <p className="text-sm text-primary mb-6" data-testid="text-detail-body-butter-pricing">
+              {bodyButterPricingLabel()} · {bodyButterBundlePitch()}
+              {quantity > 1 && (
+                <>
+                  {" "}
+                  · ${bodyButterTotalDollars(quantity).toFixed(2)} for {quantity}
+                </>
+              )}
+            </p>
+          )}
           {isDuo && (
             <p className="text-sm text-primary mb-6" data-testid="text-detail-duo-savings">
-              Save ${duoSavings} — $15 for the 3-in-1 wash, $7 for the body butter (usually $12).
+              Save ${duoSavings} — $15 for the 3-in-1 wash, $7 for the body butter (usually $15).
             </p>
           )}
 

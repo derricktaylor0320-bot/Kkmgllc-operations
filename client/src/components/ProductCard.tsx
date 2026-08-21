@@ -21,6 +21,11 @@ import {
   deodorantPricingLabel,
   isElementsDeodorantProduct,
 } from "@shared/elementsDeodorant";
+import {
+  bodyButterBundlePitch,
+  bodyButterPricingLabel,
+  isElementsBodyButterProduct,
+} from "@shared/elementsBodyButter";
 import type { ProductVariant } from "@/lib/productVariants";
 import { Minus, Plus, PenLine } from "lucide-react";
 
@@ -86,6 +91,7 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
     : [];
   const isDuo = isElementsDuoProduct(priceId, title);
   const isDeodorant = isElementsDeodorantProduct(priceId, title);
+  const isBodyButter = isElementsBodyButterProduct(priceId, title);
   const needsScent = scentChoices.length > 0;
   const needsWash = isDuo;
   // Sea moss gel (and similar jar products) reuse the scent picker for flavor
@@ -265,6 +271,11 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                     {deodorantPricingLabel()}
                   </span>
                 )}
+                {isBodyButter && (
+                  <span className="mt-1 block text-[10px] font-medium normal-case tracking-normal text-muted-foreground">
+                    {bodyButterPricingLabel()} · {bodyButterBundlePitch()}
+                  </span>
+                )}
               </span>
             </div>
           </CardFooter>
@@ -361,6 +372,14 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
               data-testid={`text-duo-savings-${title.toLowerCase().replace(/\s+/g, '-')}`}
             >
               3-in-1 wash + body butter · save ${duoSavings} vs buying separately
+            </p>
+          )}
+          {isBodyButter && (
+            <p
+              className="text-xs text-primary"
+              data-testid={`text-body-butter-pricing-${title.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              {bodyButterPricingLabel()} · {bodyButterBundlePitch()}
             </p>
           )}
           {hasVariants && (
@@ -591,8 +610,10 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                     data-testid={`text-scent-note-${title.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     {isDuo
-                      ? "Choose your whipped body butter scent — $7 in the Duo (usually $12)."
-                      : `Choose your ${scentNoun} to complete your order.`}
+                      ? "Choose your whipped body butter scent — $7 in the Duo (usually $15)."
+                      : isBodyButter
+                        ? `Choose your ${scentNoun} — ${bodyButterPricingLabel()}. ${bodyButterBundlePitch()}.`
+                        : `Choose your ${scentNoun} to complete your order.`}
                   </p>
                   <Select value={selectedScent} onValueChange={(v) => { setSelectedScent(v); setErrorMessage(""); }} disabled={soldOut}>
                     <SelectTrigger

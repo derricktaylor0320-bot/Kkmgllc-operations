@@ -240,7 +240,7 @@ const TUMBLER_30_META = {
   variantLabel: "30 oz",
 };
 
-// Whipped Body Butters. New consumable product ($12, 4 oz jar). Same
+// Whipped Body Butters. New consumable product ($15, 4 oz jar; 3 for $36). Same
 // self-applying pattern as the cases/hat: in dev seedProducts creates it in
 // Stripe (synced to the DB) so the guarded insert is a no-op; on the Railway
 // prod frozen snapshot (no Stripe) the insert is what actually creates it.
@@ -249,10 +249,10 @@ const TUMBLER_30_META = {
 const BODY_BUTTER_PRODUCT_ID = "prod_kkbodybutter";
 const BODY_BUTTER_PRICE_ID = "price_kkbodybutter";
 const BODY_BUTTER_NAME = "Whipped Body Butters";
-const BODY_BUTTER_PRICE_CENTS = 1200;
+const BODY_BUTTER_PRICE_CENTS = 1500;
 const BODY_BUTTER_IMAGE_PATH = BODY_BUTTER_IMAGE;
 const BODY_BUTTER_DESCRIPTION =
-  "Luxurious Khomplete Khemistri whipped body butter in a 4 oz jar. Rich, fast-absorbing moisture that leaves skin soft and smooth. $12 per jar.";
+  "Luxurious Khomplete Khemistri whipped body butter in a 4 oz jar. Rich, fast-absorbing moisture that leaves skin soft and smooth. $15 per jar. 3 for $36 — Buy 2, Get 1 50% Off (Save $9 Instantly, $12/jar).";
 const BODY_BUTTER_META = {
   category: "Body Care",
   productType: "accessory",
@@ -1255,9 +1255,9 @@ const DEODORANT_PRODUCTS: {
 ];
 
 // Elements Duo — one 3-in-1 wash bottle ($15) + one whipped body butter jar
-// at the bundle price of $7 ($22 total, $5 off buying them separately at $27).
+// at the bundle price of $7 ($22 total, $8 off buying them separately at $30).
 const ELEMENTS_DUO_DESCRIPTION =
-  "Khomplete Khemistri Elements Duo — one 8 oz 3-in-1 body wash, shampoo & conditioner bottle plus one 4 oz whipped body butter jar. Pay $15 for the wash and only $7 for the butter ($22 for the set). Save $5 vs buying them separately at $27. Choose your wash and your body butter scent at checkout.";
+  "Khomplete Khemistri Elements Duo — one 8 oz 3-in-1 body wash, shampoo & conditioner bottle plus one 4 oz whipped body butter jar. Pay $15 for the wash and only $7 for the butter ($22 for the set). Save $8 vs buying them separately at $30. Choose your wash and your body butter scent at checkout.";
 const ELEMENTS_DUO_META = {
   category: "Body Care",
   productType: "elements",
@@ -2025,7 +2025,7 @@ export async function ensureCatalogData() {
         created,
       });
       console.log(
-        "ensureCatalogData: ensured Elements Duo ($22 — 3-in-1 wash + body butter, save $5).",
+        "ensureCatalogData: ensured Elements Duo ($22 — 3-in-1 wash + body butter, save $8).",
       );
 
       await db.execute(sql`
@@ -2137,7 +2137,7 @@ export async function ensureCatalogData() {
       `);
     }
 
-    // 5b) Whipped Body Butters ($12, 4 oz). Create only when absent (no-op in dev
+    // 5b) Whipped Body Butters ($15, 4 oz; 3 for $36). Create only when absent (no-op in dev
     //     where Stripe sync made it; the real creator on the Railway prod
     //     snapshot), then ensure the metadata/description/price stay current.
     const bodyButterProductRaw = JSON.stringify({
@@ -2197,7 +2197,7 @@ export async function ensureCatalogData() {
         AND (id = ${BODY_BUTTER_PRODUCT_ID} OR name = ${BODY_BUTTER_NAME})
     `);
 
-    // Force the body butter's active price to $12 (self-heals any drift), the
+    // Force the body butter's active price to $15 (self-heals any drift), the
     // same convergence the tumbler uses. Pricing stays server-authoritative.
     await db.execute(sql`
       UPDATE stripe.prices
