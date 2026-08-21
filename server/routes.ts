@@ -27,6 +27,12 @@ import {
   isElementsDeodorantProduct,
 } from "@shared/elementsDeodorant";
 import {
+  bodyButterBundlePitch,
+  bodyButterPricingLabel,
+  bodyButterTotalCents,
+  isElementsBodyButterProduct,
+} from "@shared/elementsBodyButter";
+import {
   GAME_DAY_BUNDLE_PRICE_CENTS,
   NFL_GAME_DAY_BUNDLE_GARMENT_ID,
 } from "@shared/footballGameDayBundle";
@@ -1081,9 +1087,20 @@ export async function registerRoutes(
           bundleNote = bundleOrderNote(requestedBundleId);
         }
 
-        const amountCents =
-          isElementsDeodorantProduct(priceId, priceRow.product_name)
-            ? deodorantTotalCents(quantity)
+        const isDeodorantLine = isElementsDeodorantProduct(
+          priceId,
+          priceRow.product_name,
+        );
+        const isBodyButterLine = isElementsBodyButterProduct(
+          priceId,
+          priceRow.product_name,
+        );
+        const isTieredElementsLine = isDeodorantLine || isBodyButterLine;
+
+        const amountCents = isDeodorantLine
+          ? deodorantTotalCents(quantity)
+          : isBodyButterLine
+            ? bodyButterTotalCents(quantity)
             : Number(priceRow.unit_amount) +
               (check.upchargeCents || 0) +
               bundleCents;
@@ -1092,16 +1109,18 @@ export async function registerRoutes(
         }
 
         const noteParts = [logoNote, bundleNote].filter(Boolean);
-        if (isElementsDeodorantProduct(priceId, priceRow.product_name)) {
+        if (isDeodorantLine) {
           noteParts.push(
             `Qty: ${quantity} (${deodorantPricingLabel()})`,
+          );
+        } else if (isBodyButterLine) {
+          noteParts.push(
+            `Qty: ${quantity} (${bodyButterPricingLabel()}; ${bodyButterBundlePitch()})`,
           );
         }
         lineItems.push({
           name: (priceRow.product_name as string) || "Item",
-          quantity: isElementsDeodorantProduct(priceId, priceRow.product_name)
-            ? 1
-            : quantity,
+          quantity: isTieredElementsLine ? 1 : quantity,
           amountCents,
           note: noteParts.length ? noteParts.join(" | ") : undefined,
         });

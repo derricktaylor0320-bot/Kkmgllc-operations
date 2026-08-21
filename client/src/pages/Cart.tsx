@@ -24,6 +24,12 @@ import {
   deodorantTotalDollars,
   isElementsDeodorantProduct,
 } from "@shared/elementsDeodorant";
+import {
+  bodyButterBundlePitch,
+  bodyButterPricingLabel,
+  bodyButterTotalDollars,
+  isElementsBodyButterProduct,
+} from "@shared/elementsBodyButter";
 
 type DiscountEligibility = {
   paidOrders: number;
@@ -176,9 +182,15 @@ export default function Cart() {
                   item.priceId,
                   item.title,
                 );
+                const isBodyButterLine = isElementsBodyButterProduct(
+                  item.priceId,
+                  item.title,
+                );
                 const lineTotal = isDeodorantLine
                   ? deodorantTotalDollars(item.quantity)
-                  : item.unitPrice * item.quantity;
+                  : isBodyButterLine
+                    ? bodyButterTotalDollars(item.quantity)
+                    : item.unitPrice * item.quantity;
                 return (
                   <div
                     key={slug}
@@ -276,7 +288,9 @@ export default function Cart() {
                       <p className="text-sm text-primary mt-1">
                         {isDeodorantLine
                           ? deodorantPricingLabel()
-                          : `$${item.unitPrice.toFixed(2)}`}
+                          : isBodyButterLine
+                            ? `${bodyButterPricingLabel()} · ${bodyButterBundlePitch()}`
+                            : `$${item.unitPrice.toFixed(2)}`}
                       </p>
                       <div className="flex items-center justify-between mt-3">
                         <div className="flex items-center gap-2">

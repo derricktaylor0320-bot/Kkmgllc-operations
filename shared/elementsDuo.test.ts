@@ -23,16 +23,16 @@ import {
   parseElementsDuoSelection,
 } from "./elementsDuo";
 
-test("Elements Duo is $22: $15 wash + $7 butter, $5 off $27", () => {
+test("Elements Duo is $22: $15 wash + $7 butter, $8 off $30", () => {
   assert.equal(BODY_WASH_RETAIL_CENTS, 1500);
-  assert.equal(BODY_BUTTER_RETAIL_CENTS, 1200);
+  assert.equal(BODY_BUTTER_RETAIL_CENTS, 1500);
   assert.equal(BODY_BUTTER_DUO_CENTS, 700);
   assert.equal(ELEMENTS_DUO_PRICE_CENTS, 2200);
-  assert.equal(ELEMENTS_DUO_SEPARATE_CENTS, 2700);
-  assert.equal(ELEMENTS_DUO_SAVINGS_CENTS, 500);
+  assert.equal(ELEMENTS_DUO_SEPARATE_CENTS, 3000);
+  assert.equal(ELEMENTS_DUO_SAVINGS_CENTS, 800);
   assert.equal(elementsDuoPriceDollars(), 22);
-  assert.equal(elementsDuoSeparateDollars(), 27);
-  assert.equal(elementsDuoSavingsDollars(), 5);
+  assert.equal(elementsDuoSeparateDollars(), 30);
+  assert.equal(elementsDuoSavingsDollars(), 8);
 });
 
 test("encodes and parses wash + body butter scent", () => {

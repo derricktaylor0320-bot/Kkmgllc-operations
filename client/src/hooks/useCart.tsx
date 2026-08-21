@@ -15,6 +15,10 @@ import {
   deodorantTotalDollars,
   isElementsDeodorantProduct,
 } from "@shared/elementsDeodorant";
+import {
+  bodyButterTotalDollars,
+  isElementsBodyButterProduct,
+} from "@shared/elementsBodyButter";
 
 export interface CartItem {
   priceId: string;
@@ -100,6 +104,9 @@ function withBundle(item: CartItem, bundleId: string | null): CartItem {
 function lineTotal(item: CartItem): number {
   if (isElementsDeodorantProduct(item.priceId, item.title)) {
     return deodorantTotalDollars(item.quantity);
+  }
+  if (isElementsBodyButterProduct(item.priceId, item.title)) {
+    return bodyButterTotalDollars(item.quantity);
   }
   return item.unitPrice * item.quantity;
 }
