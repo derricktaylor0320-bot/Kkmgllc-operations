@@ -9,6 +9,8 @@
  * existing cart / checkout field can carry both without a new line-item shape.
  */
 
+import { isBodyButterProductTitle } from "./elementsBodyButter";
+
 export const ELEMENTS_DUO_PRODUCT_ID = "prod_kkelemsduo";
 export const ELEMENTS_DUO_PRICE_ID = "price_kkelemsduo";
 export const ELEMENTS_DUO_NAME = "Elements Duo";
@@ -72,7 +74,7 @@ export function isElementsBodyWashTitle(title?: string | null): boolean {
 }
 
 export function isElementsBodyButterTitle(title?: string | null): boolean {
-  return /whipped body butter/i.test(title || "");
+  return isBodyButterProductTitle(title);
 }
 
 export function isElementsDuoWash(value: unknown): value is ElementsDuoWash {

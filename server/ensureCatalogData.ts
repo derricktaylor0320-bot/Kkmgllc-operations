@@ -9,7 +9,11 @@ import {
   BODY_WASH_COCOA_SHEA_IMAGE,
   LEGACY_BROWN_BEDDING_IMAGE_PATHS,
 } from "@shared/productImages";
-import { BODY_BUTTER_SCENT_OPTIONS } from "@shared/elementsBodyButter";
+import {
+  BODY_BUTTER_LINE_NAME,
+  BODY_BUTTER_LEGACY_NAME,
+  BODY_BUTTER_SCENT_OPTIONS,
+} from "@shared/elementsBodyButter";
 import {
   ELEMENTS_DUO_NAME,
   ELEMENTS_DUO_PRICE_CENTS,
@@ -241,7 +245,7 @@ const TUMBLER_30_META = {
   variantLabel: "30 oz",
 };
 
-// Whipped Body Butters. New consumable product ($15, 4 oz jar; 3 for $36). Same
+// Our Exotic Body Butter Scents. New consumable product ($15, 4 oz jar; 3 for $36). Same
 // self-applying pattern as the cases/hat: in dev seedProducts creates it in
 // Stripe (synced to the DB) so the guarded insert is a no-op; on the Railway
 // prod frozen snapshot (no Stripe) the insert is what actually creates it.
@@ -249,11 +253,11 @@ const TUMBLER_30_META = {
 // `customize: 'none'` metadata flag in shared/customization.ts.
 const BODY_BUTTER_PRODUCT_ID = "prod_kkbodybutter";
 const BODY_BUTTER_PRICE_ID = "price_kkbodybutter";
-const BODY_BUTTER_NAME = "Whipped Body Butters";
+const BODY_BUTTER_NAME = BODY_BUTTER_LINE_NAME;
 const BODY_BUTTER_PRICE_CENTS = 1500;
 const BODY_BUTTER_IMAGE_PATH = BODY_BUTTER_IMAGE;
 const BODY_BUTTER_DESCRIPTION =
-  "Luxurious Khomplete Khemistri whipped body butter in a 4 oz jar. Rich, fast-absorbing moisture that leaves skin soft and smooth. Choose from 17 provocative scents — The Initial 3, Men's & Unisex, and Sweet, Gourmand & Provocative. $15 per jar. 3 for $36 — Buy 2, Get 1 50% Off (Save $9 Instantly, $12/jar).";
+  "Luxurious Khomplete Khemistri whipped body butter in a 4 oz jar. Rich, fast-absorbing moisture that leaves skin soft and smooth. Our Exotic Body Butter Scents — choose from 17 provocative fragrances with notes listed on the product page. Collections include Men's & Unisex and Sweet, Gourmand & Provocative. $15 per jar. 3 for $36 — Buy 2, Get 1 50% Off (Save $9 Instantly, $12/jar).";
 const BODY_BUTTER_META = {
   category: "Body Care",
   productType: "accessory",
@@ -1885,7 +1889,12 @@ export async function ensureCatalogData() {
       UPDATE stripe.products
       SET _raw_data = jsonb_set(
             jsonb_set(
-              jsonb_set(_raw_data, '{description}', ${JSON.stringify(BODY_BUTTER_DESCRIPTION)}::jsonb, true),
+              jsonb_set(
+                jsonb_set(_raw_data, '{description}', ${JSON.stringify(BODY_BUTTER_DESCRIPTION)}::jsonb, true),
+                '{name}',
+                to_jsonb(${BODY_BUTTER_NAME}::text),
+                true
+              ),
               '{metadata}',
               COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(BODY_BUTTER_META)}::jsonb,
               true
@@ -1896,7 +1905,11 @@ export async function ensureCatalogData() {
           ),
           _updated_at = now()
       WHERE active = true
-        AND (id = ${BODY_BUTTER_PRODUCT_ID} OR name = ${BODY_BUTTER_NAME})
+        AND (
+          id = ${BODY_BUTTER_PRODUCT_ID}
+          OR name = ${BODY_BUTTER_NAME}
+          OR name = ${BODY_BUTTER_LEGACY_NAME}
+        )
     `);
 
     // 3d) Self-heal any snapshot that still points at retired brown bedding
@@ -2140,7 +2153,7 @@ export async function ensureCatalogData() {
       `);
     }
 
-    // 5b) Whipped Body Butters ($15, 4 oz; 3 for $36). Create only when absent (no-op in dev
+    // 5b) Our Exotic Body Butter Scents ($15, 4 oz; 3 for $36). Create only when absent (no-op in dev
     //     where Stripe sync made it; the real creator on the Railway prod
     //     snapshot), then ensure the metadata/description/price stay current.
     const bodyButterProductRaw = JSON.stringify({
@@ -2171,7 +2184,10 @@ export async function ensureCatalogData() {
     await db.execute(sql`
       INSERT INTO stripe.products (_raw_data, _account_id, _updated_at, _last_synced_at)
       SELECT ${bodyButterProductRaw}::jsonb, ${accountId}, now(), now()
-      WHERE NOT EXISTS (SELECT 1 FROM stripe.products WHERE name = ${BODY_BUTTER_NAME})
+      WHERE NOT EXISTS (
+        SELECT 1 FROM stripe.products
+        WHERE name = ${BODY_BUTTER_NAME} OR name = ${BODY_BUTTER_LEGACY_NAME} OR id = ${BODY_BUTTER_PRODUCT_ID}
+      )
     `);
 
     await db.execute(sql`
@@ -2186,7 +2202,12 @@ export async function ensureCatalogData() {
       UPDATE stripe.products
       SET _raw_data = jsonb_set(
             jsonb_set(
-              jsonb_set(_raw_data, '{description}', ${JSON.stringify(BODY_BUTTER_DESCRIPTION)}::jsonb, true),
+              jsonb_set(
+                jsonb_set(_raw_data, '{description}', ${JSON.stringify(BODY_BUTTER_DESCRIPTION)}::jsonb, true),
+                '{name}',
+                to_jsonb(${BODY_BUTTER_NAME}::text),
+                true
+              ),
               '{metadata}',
               COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(BODY_BUTTER_META)}::jsonb,
               true
@@ -2197,7 +2218,11 @@ export async function ensureCatalogData() {
           ),
           _updated_at = now()
       WHERE active = true
-        AND (id = ${BODY_BUTTER_PRODUCT_ID} OR name = ${BODY_BUTTER_NAME})
+        AND (
+          id = ${BODY_BUTTER_PRODUCT_ID}
+          OR name = ${BODY_BUTTER_NAME}
+          OR name = ${BODY_BUTTER_LEGACY_NAME}
+        )
     `);
 
     // Force the body butter's active price to $15 (self-heals any drift), the
@@ -2207,7 +2232,15 @@ export async function ensureCatalogData() {
       SET _raw_data = jsonb_set(_raw_data, '{unit_amount}', ${String(BODY_BUTTER_PRICE_CENTS)}::jsonb, true),
           _updated_at = now()
       WHERE active = true
-        AND product IN (SELECT id FROM stripe.products WHERE name = ${BODY_BUTTER_NAME} AND active = true)
+        AND product IN (
+          SELECT id FROM stripe.products
+          WHERE active = true
+            AND (
+              name = ${BODY_BUTTER_NAME}
+              OR name = ${BODY_BUTTER_LEGACY_NAME}
+              OR id = ${BODY_BUTTER_PRODUCT_ID}
+            )
+        )
         AND (_raw_data->>'unit_amount') IS DISTINCT FROM ${String(BODY_BUTTER_PRICE_CENTS)}
     `);
 

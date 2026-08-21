@@ -3,6 +3,18 @@ export type BodyButterScentCategory =
   | "Men's & Unisex"
   | "Sweet, Gourmand & Provocative";
 
+/** Storefront product line name (4 oz whipped body butter jars). */
+export const BODY_BUTTER_LINE_NAME = "Our Exotic Body Butter Scents";
+
+/** Legacy catalog name kept for order history and DB migration matching. */
+export const BODY_BUTTER_LEGACY_NAME = "Whipped Body Butters";
+
+export const BODY_BUTTER_SCENT_CATEGORY_ORDER: readonly BodyButterScentCategory[] = [
+  "The Initial 3",
+  "Men's & Unisex",
+  "Sweet, Gourmand & Provocative",
+];
+
 export interface BodyButterScent {
   name: string;
   notes: string;
@@ -107,6 +119,39 @@ export function bodyButterScentNotes(name: string): string | undefined {
   return BODY_BUTTER_SCENTS.find((scent) => scent.name === name)?.notes;
 }
 
+/** Group the full scent lineup by category for storefront display. */
+export function bodyButterScentsByCategory(): Readonly<
+  Record<BodyButterScentCategory, readonly BodyButterScent[]>
+> {
+  const grouped = Object.fromEntries(
+    BODY_BUTTER_SCENT_CATEGORY_ORDER.map((category) => [category, [] as BodyButterScent[]]),
+  ) as Record<BodyButterScentCategory, BodyButterScent[]>;
+
+  for (const scent of BODY_BUTTER_SCENTS) {
+    grouped[scent.category].push(scent);
+  }
+
+  return grouped;
+}
+
+/** Category heading for the scent guide; the first trio has no separate label. */
+export function bodyButterScentCategoryLabel(
+  category: BodyButterScentCategory,
+): string | null {
+  if (category === "The Initial 3") return null;
+  return category;
+}
+
+export function isBodyButterProductTitle(title?: string | null): boolean {
+  if (!title) return false;
+  const normalized = title.trim().toLowerCase();
+  return (
+    normalized === BODY_BUTTER_LINE_NAME.toLowerCase() ||
+    normalized === BODY_BUTTER_LEGACY_NAME.toLowerCase() ||
+    /(?:our exotic|whipped) body butter/i.test(title)
+  );
+}
+
 /** Single whipped body butter jar (4 oz). */
 export const BODY_BUTTER_UNIT_PRICE_CENTS = 1500;
 
@@ -120,7 +165,7 @@ export function isElementsBodyButterProduct(
   title?: string | null,
 ): boolean {
   if (priceId === BODY_BUTTER_PRICE_ID) return true;
-  return typeof title === "string" && /whipped body butter/i.test(title);
+  return isBodyButterProductTitle(title);
 }
 
 /** Total in cents: $15 each, 3 for $36 (best pack mix per line). */

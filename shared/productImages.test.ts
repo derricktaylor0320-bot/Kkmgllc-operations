@@ -10,6 +10,7 @@ import {
   HIS_HERS_WATCH_IMAGE,
   resolveStorefrontImageUrl,
 } from "./productImages";
+import { BODY_BUTTER_LEGACY_NAME, BODY_BUTTER_LINE_NAME } from "./elementsBodyButter";
 
 describe("resolveStorefrontImageUrl", () => {
   it("rewrites retired brown comforter path to blue silver artwork", () => {
@@ -38,7 +39,11 @@ describe("resolveStorefrontImageUrl", () => {
 
   it("infers body butter artwork from title when metadata image is empty", () => {
     assert.equal(
-      resolveStorefrontImageUrl("", "Whipped Body Butters"),
+      resolveStorefrontImageUrl("", BODY_BUTTER_LINE_NAME),
+      BODY_BUTTER_IMAGE,
+    );
+    assert.equal(
+      resolveStorefrontImageUrl("", BODY_BUTTER_LEGACY_NAME),
       BODY_BUTTER_IMAGE,
     );
   });

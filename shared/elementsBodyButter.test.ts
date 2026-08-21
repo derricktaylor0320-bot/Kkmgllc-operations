@@ -1,14 +1,20 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import {
+  BODY_BUTTER_LEGACY_NAME,
+  BODY_BUTTER_LINE_NAME,
+  BODY_BUTTER_SCENT_CATEGORY_ORDER,
   BODY_BUTTER_SCENT_NAMES,
   BODY_BUTTER_SCENT_OPTIONS,
   BODY_BUTTER_TRIPLE_PRICE_CENTS,
   BODY_BUTTER_UNIT_PRICE_CENTS,
   bodyButterBundlePitch,
   bodyButterPricingLabel,
+  bodyButterScentCategoryLabel,
   bodyButterScentNotes,
+  bodyButterScentsByCategory,
   bodyButterTotalCents,
+  isBodyButterProductTitle,
   isElementsBodyButterProduct,
 } from "./elementsBodyButter";
 
@@ -35,9 +41,15 @@ describe("elementsBodyButter pricing", () => {
       true,
     );
     assert.equal(
-      isElementsBodyButterProduct(undefined, "Whipped Body Butters"),
+      isElementsBodyButterProduct(undefined, BODY_BUTTER_LINE_NAME),
       true,
     );
+    assert.equal(
+      isElementsBodyButterProduct(undefined, BODY_BUTTER_LEGACY_NAME),
+      true,
+    );
+    assert.equal(isBodyButterProductTitle(BODY_BUTTER_LINE_NAME), true);
+    assert.equal(isBodyButterProductTitle(BODY_BUTTER_LEGACY_NAME), true);
     assert.equal(isElementsBodyButterProduct(undefined, "BCAA Complex"), false);
   });
 });
@@ -49,5 +61,15 @@ describe("elementsBodyButter scents", () => {
     assert.equal(bodyButterScentNotes("Forbidden Taste"), "Rich Plum, Dark Berry & Vanilla Bourbon");
     assert.equal(bodyButterScentNotes("Delicious Vulva"), "Sweet Strawberry, Whipped Cream & Exotic Jasmine");
     assert.equal(bodyButterScentNotes("Not A Scent"), undefined);
+  });
+
+  test("scents group by category for storefront display", () => {
+    const grouped = bodyButterScentsByCategory();
+    assert.equal(grouped["The Initial 3"].length, 3);
+    assert.equal(grouped["Men's & Unisex"].length, 7);
+    assert.equal(grouped["Sweet, Gourmand & Provocative"].length, 7);
+    assert.equal(BODY_BUTTER_SCENT_CATEGORY_ORDER.length, 3);
+    assert.equal(bodyButterScentCategoryLabel("The Initial 3"), null);
+    assert.equal(bodyButterScentCategoryLabel("Men's & Unisex"), "Men's & Unisex");
   });
 });
