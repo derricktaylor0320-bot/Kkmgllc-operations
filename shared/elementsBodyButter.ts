@@ -21,7 +21,7 @@ export interface BodyButterScent {
   category: BodyButterScentCategory;
 }
 
-/** Canonical whipped body butter scent lineup (17 scents). */
+/** Canonical whipped body butter scent lineup (18 scents). */
 export const BODY_BUTTER_SCENTS: readonly BodyButterScent[] = [
   {
     name: "Forbidden Taste",
@@ -106,6 +106,11 @@ export const BODY_BUTTER_SCENTS: readonly BodyButterScent[] = [
   {
     name: "Delicious Vulva",
     notes: "Sweet Strawberry, Whipped Cream & Exotic Jasmine",
+    category: "Sweet, Gourmand & Provocative",
+  },
+  {
+    name: "PHATT",
+    notes: "Warm Amber, Spiced Vanilla & Soft Musk — Pretty Hot And Tempting To Touch",
     category: "Sweet, Gourmand & Provocative",
   },
 ] as const;

@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Wine as WineIcon } from "lucide-react";
-import foundersSignatureCollection from "@assets/wine/founders_signature_collection.jpg";
+import foundersSignatureCollection from "@assets/wine/founders_signature_collection.png";
 
 const launchVarieties = [
   {
