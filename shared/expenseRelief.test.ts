@@ -15,6 +15,7 @@ import {
   applyPayoutCaps,
   earlyActivationBreakdown,
   earlyActivationTierExamples,
+  tierPayoutCapsSummary,
   evaluateFirstClaimEligibility,
   reimbursementForAmount,
   submitExpenseClaimSchema,
@@ -25,12 +26,28 @@ describe("TCE Expense Advantage Program", () => {
     assert.equal(EXPENSE_RELIEF_TIERS.length, 4);
     assert.equal(EXPENSE_RELIEF_TIERS[0].monthlyFee, 10);
     assert.equal(EXPENSE_RELIEF_TIERS[0].reimbursementRate, 0.25);
+    assert.equal(EXPENSE_RELIEF_TIERS[0].monthlyPayoutCap, 100);
+    assert.equal(EXPENSE_RELIEF_TIERS[0].annualPayoutCap, 600);
     assert.equal(EXPENSE_RELIEF_TIERS[1].monthlyFee, 20);
     assert.equal(EXPENSE_RELIEF_TIERS[1].reimbursementRate, 0.4);
+    assert.equal(EXPENSE_RELIEF_TIERS[1].monthlyPayoutCap, 160);
+    assert.equal(EXPENSE_RELIEF_TIERS[1].annualPayoutCap, 960);
     assert.equal(EXPENSE_RELIEF_TIERS[2].monthlyFee, 40);
     assert.equal(EXPENSE_RELIEF_TIERS[2].reimbursementRate, 0.55);
+    assert.equal(EXPENSE_RELIEF_TIERS[2].monthlyPayoutCap, 220);
+    assert.equal(EXPENSE_RELIEF_TIERS[2].annualPayoutCap, 1320);
     assert.equal(EXPENSE_RELIEF_TIERS[3].monthlyFee, 60);
     assert.equal(EXPENSE_RELIEF_TIERS[3].reimbursementRate, 0.65);
+    assert.equal(EXPENSE_RELIEF_TIERS[3].monthlyPayoutCap, 260);
+    assert.equal(EXPENSE_RELIEF_TIERS[3].annualPayoutCap, 1560);
+  });
+
+  it("summarizes tier payout caps for policy copy", () => {
+    const summary = tierPayoutCapsSummary();
+    assert.match(summary, /Starter: \$100\/mo cap, \$600\/yr cap/);
+    assert.match(summary, /Basic: \$160\/mo cap, \$960\/yr cap/);
+    assert.match(summary, /Premium: \$220\/mo cap, \$1,320\/yr cap/);
+    assert.match(summary, /Elite: \$260\/mo cap, \$1,560\/yr cap/);
   });
 
   it("pays tier-based reimbursement percentages", () => {
@@ -131,7 +148,17 @@ describe("TCE Expense Advantage Program", () => {
       EXPENSE_RELIEF_RULES[EXPENSE_RELIEF_RULES.length - 1]?.id,
       "wait_or_accelerate",
     );
+    const capsRule = EXPENSE_RELIEF_RULES.find((r) => r.id === "caps");
+    assert.match(capsRule?.body ?? "", /Starter: \$100\/mo cap/);
+    assert.match(capsRule?.body ?? "", /Elite: \$260\/mo cap, \$1,560\/yr cap/);
+    const earlyRule = EXPENSE_RELIEF_RULES.find((r) => r.id === "wait_or_accelerate");
+    assert.match(earlyRule?.body ?? "", /payout caps/);
     assert.equal(ACTIVATION_POLICY.earlyActivation.total, 125);
+    assert.ok(
+      ACTIVATION_POLICY.earlyActivation.notes.some((note) =>
+        note.includes("Starter: $100/mo cap"),
+      ),
+    );
     assert.ok(ACCEPTABLE_CLAIMS.length > 0);
     assert.ok(NOT_ACCEPTABLE_CLAIMS.length > 0);
     assert.match(EXPENSE_RELIEF_DISCLAIMER, /we are not insurance/i);
