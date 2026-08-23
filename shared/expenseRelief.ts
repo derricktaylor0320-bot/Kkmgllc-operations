@@ -150,6 +150,18 @@ export function earlyActivationTierExamples(): string {
     .join(", ");
 }
 
+/** Human-readable monthly + annual payout caps for each membership tier. */
+export function tierPayoutCapsSummary(): string {
+  return EXPENSE_RELIEF_TIERS.map((tier) => {
+    const shortName = tier.name.replace(" Tier", "");
+    const annual =
+      tier.annualPayoutCap >= 1000
+        ? `$${tier.annualPayoutCap.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
+        : `$${tier.annualPayoutCap.toFixed(0)}`;
+    return `${shortName}: $${tier.monthlyPayoutCap.toFixed(0)}/mo cap, ${annual}/yr cap`;
+  }).join("; ");
+}
+
 export const EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS = 2;
 export const EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS = 5;
 
@@ -271,7 +283,7 @@ export const CLAIM_STATUSES = [
 
 export type ClaimStatus = (typeof CLAIM_STATUSES)[number];
 
-const EARLY_ACTIVATION_RULE_BODY = `New memberships wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days before the first claim can be filed. Skip the wait with Early Activation: $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} early activation + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing fee = $${EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal.toFixed(0)} one-time, plus your chosen tier's monthly fee (${earlyActivationTierExamples()}). Early Activation activates within ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours instead of ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days. It does not raise your reimbursement %.`;
+const EARLY_ACTIVATION_RULE_BODY = `New memberships wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days before the first claim can be filed. Skip the wait with Early Activation: $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} early activation + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing fee = $${EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal.toFixed(0)} one-time, plus your chosen tier's monthly fee (${earlyActivationTierExamples()}). Early Activation activates within ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours instead of ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days. It does not raise your reimbursement % or payout caps — those follow your tier (${tierPayoutCapsSummary()}).`;
 
 export const EXPENSE_RELIEF_RULES = [
   {
@@ -292,7 +304,7 @@ export const EXPENSE_RELIEF_RULES = [
   {
     id: "caps",
     title: "Tier payout caps protect the pool",
-    body: "Each tier has its own monthly and annual payout ceiling. Higher tiers unlock higher reimbursement % and higher caps.",
+    body: `Each tier has its own monthly and annual payout ceiling. Higher tiers unlock higher reimbursement % and higher caps. Per tier: ${tierPayoutCapsSummary()}.`,
   },
   {
     id: "not_fr2p",
@@ -331,7 +343,8 @@ export const ACTIVATION_POLICY = {
       "Early Activation is optional.",
       "Early Activation is $125 one-time plus your chosen tier's monthly fee (e.g. $10 + $125 = $135, $20 + $125 = $145, $40 + $125 = $165, $60 + $125 = $185).",
       "Early Activation activates membership for first-claim filing within 72 hours instead of 30 days.",
-      "Early Activation does not increase reimbursement percentages.",
+      "Early Activation does not increase reimbursement percentages or payout caps.",
+      `Payout caps follow your tier: ${tierPayoutCapsSummary()}.`,
       "Early Activation applies to all four tiers.",
       "Early Activation unlocks claim eligibility only — payouts still require Compensation Vault capital.",
     ],
@@ -364,7 +377,8 @@ export const CLAIM_SUBMISSION_POLICY = {
     ],
   },
   approvedNotes: [
-    "Reimbursement is released according to the member’s tier percentage (and caps).",
+    "Reimbursement is released according to the member’s tier percentage and payout caps.",
+    `Tier caps (monthly / annual): ${tierPayoutCapsSummary()}.`,
     "Payout issues only when the Compensation Vault has available capital.",
     "Members receive confirmation in the app (and email when configured).",
   ],

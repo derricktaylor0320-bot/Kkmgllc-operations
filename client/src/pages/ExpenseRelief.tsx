@@ -44,6 +44,7 @@ import {
   NOT_ACCEPTABLE_CLAIMS,
   earlyActivationBreakdown,
   earlyActivationTierExamples,
+  tierPayoutCapsSummary,
   reimbursementForAmount,
   type ExpenseCategoryId,
   type ExpenseReliefTier,
@@ -371,7 +372,7 @@ export default function ExpenseRelief() {
       {
         icon: Wallet,
         title: "Four clean tiers",
-        body: "$10 Starter (25%), $20 Basic (40%), $40 Premium (55%), $60 Elite (65%). Pick the coverage that fits.",
+        body: `$10 Starter (25%), $20 Basic (40%), $40 Premium (55%), $60 Elite (65%). Payout caps per tier: ${tierPayoutCapsSummary()}.`,
       },
       {
         icon: FileCheck2,
@@ -386,7 +387,7 @@ export default function ExpenseRelief() {
       {
         icon: TimerReset,
         title: "30-day activation — or $125 Early Activation",
-        body: `New memberships wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days before the first claim. Skip the wait: $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} early activation + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing = $${earlyTotal.toFixed(0)} one-time, plus your tier fee (${earlyActivationTierExamples()}). Activates within ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours instead of ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days.`,
+        body: `New memberships wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days before the first claim. Skip the wait: $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} early activation + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing = $${earlyTotal.toFixed(0)} one-time, plus your tier fee (${earlyActivationTierExamples()}). Activates within ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours instead of ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days. Caps stay at your tier (${tierPayoutCapsSummary()}).`,
       },
     ],
     [earlyTotal],
@@ -483,6 +484,7 @@ export default function ExpenseRelief() {
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             Reimbursement % rises with the tier. Early Activation ($125 + your
             tier fee) activates within 72 hours instead of waiting 30 days.
+            Monthly and annual payout caps: {tierPayoutCapsSummary()}.
           </p>
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
