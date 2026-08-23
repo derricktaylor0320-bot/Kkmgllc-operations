@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -20,6 +20,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BrandSectionBanner from "@/components/BrandSectionBanner";
+import ExpenseReliefTierCard from "@/components/ExpenseReliefTierCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,7 +30,6 @@ import { apiRequest } from "@/lib/queryClient";
 import {
   ACCEPTABLE_CLAIMS,
   ACTIVATION_POLICY,
-  categoriesForTierRate,
   CLAIM_SUBMISSION_POLICY,
   EXPENSE_CATEGORIES,
   EXPENSE_RELIEF_DEFAULTS,
@@ -173,9 +173,9 @@ export default function ExpenseRelief() {
   const vaultCanPay = vaultAvailable > 0;
 
   const [selectedTierId, setSelectedTierId] =
-    useState<ExpenseReliefTierId>("premium");
+    useState<ExpenseReliefTierId>("starter");
   const selectedTier =
-    tiers.find((t) => t.id === selectedTierId) ?? tiers[2] ?? tiers[0];
+    tiers.find((t) => t.id === selectedTierId) ?? tiers[0];
 
   const [categoryId, setCategoryId] = useState<ExpenseCategoryId>("auto_deductible");
   const [expenseAmount, setExpenseAmount] = useState("");
@@ -194,14 +194,17 @@ export default function ExpenseRelief() {
     String(P2P_MIN_INVESTMENT_AMOUNT),
   );
 
+  useEffect(() => {
+    if (membership?.planId && membership.subscriptionStatus === "active") {
+      setSelectedTierId(membership.planId as ExpenseReliefTierId);
+    }
+  }, [membership?.planId, membership?.subscriptionStatus]);
+
   const rateForPreview = activeTier
     ? activeTier.reimbursementRate
     : selectedTier.reimbursementRate;
-  const tierCategoryOptions = useMemo(
-    () => categoriesForTierRate(rateForPreview),
-    [rateForPreview],
-  );
   const tierPercentLabel = formatReimbursementPercent(rateForPreview);
+  const displayTier = activeTier ?? selectedTier;
   const parsedExpense = Number(expenseAmount);
   const previewPayout = Number.isFinite(parsedExpense)
     ? reimbursementForAmount(parsedExpense, rateForPreview)
@@ -480,45 +483,16 @@ export default function ExpenseRelief() {
             outside the tiers and works with any plan.
           </p>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {tiers.map((tier) => {
-              const selected = selectedTierId === tier.id;
-              const active = membership?.planId === tier.id;
-              return (
-                <button
-                  key={tier.id}
-                  type="button"
-                  onClick={() => setSelectedTierId(tier.id)}
-                  className={`rounded-xl border p-5 text-left transition ${
-                    selected || active
-                      ? "border-primary bg-primary/10 shadow-[0_0_0_1px_hsl(var(--primary)/0.35)]"
-                      : "border-primary/20 bg-card/40 hover:border-primary/50"
-                  }`}
-                  data-testid={`button-select-tier-${tier.id}`}
-                >
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
-                    {tier.name}
-                    {active ? " · Active" : ""}
-                  </p>
-                  <p className="mt-2 font-display text-3xl font-bold">
-                    ${tier.monthlyFee}
-                    <span className="text-sm font-normal text-muted-foreground">
-                      /mo
-                    </span>
-                  </p>
-                  <p className="mt-1 text-lg font-semibold text-foreground">
-                    {(tier.reimbursementRate * 100).toFixed(0)}% back
-                  </p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {tier.bestFor}
-                  </p>
-                  <p className="mt-3 text-[11px] text-muted-foreground">
-                    Caps {formatMoney(tier.monthlyPayoutCap)}/mo ·{" "}
-                    {formatMoney(tier.annualPayoutCap)}/yr
-                  </p>
-                </button>
-              );
-            })}
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {tiers.map((tier) => (
+              <ExpenseReliefTierCard
+                key={tier.id}
+                tier={tier}
+                selected={selectedTierId === tier.id}
+                active={membership?.planId === tier.id}
+                onSelect={() => setSelectedTierId(tier.id)}
+              />
+            ))}
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-3 rounded-xl border border-primary/25 bg-black/20 p-4">
@@ -823,17 +797,64 @@ export default function ExpenseRelief() {
                 <h3 className="font-display text-xl font-bold uppercase tracking-wide">
                   Membership status
                 </h3>
-                {membership?.subscriptionStatus === "active" ? (
-                  <>
+                <p className="text-sm text-muted-foreground">
+                  {membership?.subscriptionStatus === "active"
+                    ? "Your active membership card and reimbursement rate."
+                    : "Choose your tier — reimbursement % varies by membership ($10 = 25%, $20 = 40%, $40 = 55%, $60 = 65%)."}
+                </p>
+
+                {membership?.subscriptionStatus === "active" && displayTier ? (
+                  <div className="space-y-4">
+                    <ExpenseReliefTierCard tier={displayTier} active />
                     <p className="text-sm text-muted-foreground">
-                      {activeTier?.name ?? membership.planId} ·{" "}
-                      {formatMoney(membership.monthlyFee)}/mo · up to{" "}
-                      {(
-                        parseFloat(membership.reimbursementRate) * 100
-                      ).toFixed(0)}
-                      % back · caps {formatMoney(membership.monthlyPayoutCap)}
-                      /mo
+                      <strong className="text-foreground">{displayTier.name}</strong>{" "}
+                      · {formatMoney(membership.monthlyFee)}/mo ·{" "}
+                      <strong className="text-foreground">{tierPercentLabel}</strong>{" "}
+                      back on eligible deductibles · caps{" "}
+                      {formatMoney(membership.monthlyPayoutCap)}/mo
                     </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      {tiers.map((tier) => (
+                        <ExpenseReliefTierCard
+                          key={tier.id}
+                          tier={tier}
+                          selected={selectedTierId === tier.id}
+                          onSelect={() => setSelectedTierId(tier.id)}
+                          compact
+                        />
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Selected:{" "}
+                      <strong className="text-foreground">{selectedTier.name}</strong>{" "}
+                      · ${selectedTier.monthlyFee}/mo ·{" "}
+                      <strong className="text-foreground">
+                        {formatReimbursementPercent(selectedTier.reimbursementRate)}
+                      </strong>{" "}
+                      back · caps {formatMoney(selectedTier.monthlyPayoutCap)}/mo
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Your first month seeds the Compensation Vault.
+                    </p>
+                    <Button
+                      onClick={() => activateMutation.mutate(selectedTier.id)}
+                      disabled={activateMutation.isPending}
+                      data-testid="button-activate-expense-relief-desk"
+                    >
+                      {activateMutation.isPending ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : null}
+                      Activate {selectedTier.name} ·{" "}
+                      {formatMoney(selectedTier.monthlyFee)}/mo
+                    </Button>
+                  </div>
+                )}
+
+                {membership?.subscriptionStatus === "active" && (
+                  <>
                     {eligibility && (
                       <div className="rounded-lg border border-primary/20 bg-background/40 p-4 text-sm">
                         <div className="mb-1 flex items-center gap-2 font-semibold">
@@ -866,24 +887,6 @@ export default function ExpenseRelief() {
                       </p>
                     )}
                   </>
-                ) : (
-                  <>
-                    <p className="text-sm text-muted-foreground">
-                      Choose a tier above, then activate. Your first month seeds
-                      the Compensation Vault.
-                    </p>
-                    <Button
-                      onClick={() => activateMutation.mutate(selectedTier.id)}
-                      disabled={activateMutation.isPending}
-                      data-testid="button-activate-expense-relief-desk"
-                    >
-                      {activateMutation.isPending ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : null}
-                      Activate {selectedTier.name} ·{" "}
-                      {formatMoney(selectedTier.monthlyFee)}/mo
-                    </Button>
-                  </>
                 )}
               </div>
 
@@ -895,11 +898,13 @@ export default function ExpenseRelief() {
                   <ClipboardList className="h-5 w-5 text-primary" />
                   Claim application
                 </h3>
-                {activeTier && (
+                {displayTier && (
                   <p className="text-xs text-muted-foreground">
-                    Your {activeTier.name} reimburses eligible expenses at{" "}
+                    Your <strong className="text-foreground">{displayTier.name}</strong>{" "}
+                    reimburses eligible expenses at{" "}
                     <strong className="text-foreground">{tierPercentLabel}</strong>.
-                    Category labels below reflect your membership rate.
+                    Categories below list what you can claim — your rate applies to
+                    each deductible type.
                   </p>
                 )}
                 {!vaultCanPay && (
@@ -924,7 +929,7 @@ export default function ExpenseRelief() {
                         setCategoryId(e.target.value as ExpenseCategoryId)
                       }
                     >
-                      {tierCategoryOptions.map((c) => (
+                      {EXPENSE_CATEGORIES.map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.label}
                         </option>
