@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   ACCEPTABLE_CLAIMS,
   ACTIVATION_POLICY,
+  EXPENSE_CATEGORIES,
   EXPENSE_RELIEF_DEFAULTS,
   EXPENSE_RELIEF_DISCLAIMER,
   EXPENSE_RELIEF_PLAN,
@@ -114,11 +115,31 @@ describe("TCE Expense Advantage Program", () => {
     assert.match(EXPENSE_RELIEF_DISCLAIMER, /we are not insurance/i);
   });
 
-  it("allows verifiable work commute and member school supplies, blocks personal lifestyle", () => {
+  it("lists claim categories in the required order and labels", () => {
+    const labels = EXPENSE_CATEGORIES.map((c) => c.label);
+    assert.deepEqual(labels, [
+      "65% Auto Deductible",
+      "65% Traffic Violations",
+      "65% Toll Way Violations",
+      "65% Cell Phone Deductible",
+      "65% Medical Co-Pay",
+      "65% Dental Co-Pay",
+      "65% Vision Co-Pay",
+      "Investment Program-Empire Invest",
+    ]);
+    assert.equal(EXPENSE_CATEGORIES.length, 8);
+  });
+
+  it("blocks personal lifestyle claims including commute, education, and household essentials", () => {
     const acceptableText = ACCEPTABLE_CLAIMS.flatMap((g) => g.items).join(" ");
     const notText = NOT_ACCEPTABLE_CLAIMS.flatMap((g) => g.items).join(" ");
-    assert.match(acceptableText, /Commute to and from work/i);
-    assert.match(acceptableText, /School supplies for yourself/i);
+    assert.match(acceptableText, /65% Auto Deductible/i);
+    assert.match(acceptableText, /65% Cell Phone Deductible/i);
+    assert.match(acceptableText, /Investment Program-Empire Invest/i);
+    assert.doesNotMatch(acceptableText, /Work commute|member education|Household Essentials/i);
+    assert.match(notText, /Work commute/i);
+    assert.match(notText, /Member education/i);
+    assert.match(notText, /Household essentials/i);
     assert.match(notText, /Haircuts|barbershop|nail salon/i);
     assert.match(notText, /Lunch money/i);
     assert.match(notText, /School supplies bought for your children/i);
