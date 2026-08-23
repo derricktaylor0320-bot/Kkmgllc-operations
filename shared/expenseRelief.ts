@@ -142,91 +142,70 @@ export function earlyActivationBreakdown(monthlyFee: number) {
   };
 }
 
-/** Eligible out-of-pocket categories (not FR2P rewards — real paid costs). */
+/** Eligible out-of-pocket categories for the claim application dropdown. */
 export const EXPENSE_CATEGORIES = [
   {
-    id: "veterinary",
-    label: "Veterinary",
+    id: "auto_deductible",
+    label: "65% Auto Deductible",
     examples: [
-      "Checkups & wellness visits",
-      "Vaccinations",
-      "Medications",
-      "Emergency visits",
-      "Diagnostics & surgery",
-      "Dental cleaning",
+      "Auto insurance deductible after a covered claim",
+      "Repair or towing costs tied to a verifiable accident claim",
     ],
   },
   {
-    id: "dental",
-    label: "Dental",
+    id: "traffic_violations",
+    label: "65% Traffic Violations",
     examples: [
-      "Cleanings & exams",
-      "Fillings",
-      "Crowns & bridges",
-      "Root canals",
-      "Extractions",
-      "Orthodontics",
+      "Paid traffic tickets with agency or court receipt",
+      "Administrative court fees tied to traffic violations",
     ],
   },
   {
-    id: "healthcare",
-    label: "Healthcare & Medical",
+    id: "toll_way_violations",
+    label: "65% Toll Way Violations",
     examples: [
-      "Copays",
-      "Deductibles",
-      "Coinsurance",
-      "Prescriptions",
-      "OTC meds",
-      "Therapy & PT",
-      "Vision care",
-      "Medical supplies",
+      "Paid toll bills with agency or statement proof",
+      "Toll violation fines with proof of payment",
     ],
   },
   {
-    id: "insurance_oop",
-    label: "Insurance Out-of-Pocket",
+    id: "cell_phone_deductible",
+    label: "65% Cell Phone Deductible",
     examples: [
-      "Non-covered services",
-      "Out-of-network fees",
-      "Prescription tiers",
-      "Copays & coinsurance beyond plan coverage",
+      "Cell phone insurance or carrier deductible",
+      "Replacement or repair costs with carrier or repair receipt",
+      "Accessories purchased with the phone repair or replacement",
     ],
   },
   {
-    id: "tickets_tolls",
-    label: "Tolls, Tickets & Violations",
+    id: "medical_copay",
+    label: "65% Medical Co-Pay",
     examples: [
-      "Toll bills",
-      "Parking tickets",
-      "Traffic violations (paid fines)",
-      "Administrative court fees",
+      "Medical office copays with provider receipt",
+      "Hospital, urgent care, or clinic copays you paid",
     ],
   },
   {
-    id: "household",
-    label: "Household Essentials (verifiable)",
+    id: "dental_copay",
+    label: "65% Dental Co-Pay",
     examples: [
-      "Documented utility shortfalls with bill + proof of payment",
-      "Essential repairs with contractor invoice you can verify by phone",
+      "Dental office copays with provider receipt",
+      "Dental visit out-of-pocket share with invoice proof",
     ],
   },
   {
-    id: "work_education",
-    label: "Work commute & member education",
+    id: "vision_copay",
+    label: "65% Vision Co-Pay",
     examples: [
-      "Commute to/from work (transit, tolls, parking) with proof",
-      "Required work uniforms / employer-required gear with receipt",
-      "School supplies for yourself if you are currently enrolled",
-      "Required work supplies with verifiable merchant receipt",
+      "Eye exam or vision care copays",
+      "Optical visit out-of-pocket share with receipt",
     ],
   },
   {
-    id: "admin_fees",
-    label: "Financial & Administrative Fees",
+    id: "investment_program_empire_invest",
+    label: "Investment Program-Empire Invest",
     examples: [
-      "Bank fees with statement proof",
-      "Late fees with bill + proof of payment",
-      "Documented service / processing fees",
+      "Qualifying Empire Invest program participation with verifiable documentation",
     ],
   },
 ] as const;
@@ -323,7 +302,7 @@ export const CLAIM_SUBMISSION_POLICY = {
     "The business address or location when available",
     "The date of service or purchase",
     "The amount paid out-of-pocket",
-    "A brief description of the expense and why it qualifies (work commute, enrolled-student supplies, etc.)",
+    "A brief description of the expense and why it qualifies under the selected category",
     "The member’s name on the receipt (or pet’s name for veterinary claims)",
   ],
   verificationWindow: {
@@ -355,43 +334,31 @@ export const CLAIM_SUBMISSION_POLICY = {
 
 export const ACCEPTABLE_CLAIMS = [
   {
-    group: "Healthcare, dental & veterinary (verifiable)",
+    group: "Auto & transportation (verifiable)",
     items: [
-      "Copays, deductibles, coinsurance, prescriptions with pharmacy/clinic receipt",
-      "Dental and medical visits with provider invoice you can verify by phone",
-      "Veterinary care with clinic receipt showing pet/member info",
-      "Vision care and medical supplies with legitimate merchant proof",
+      "65% Auto Deductible — auto insurance deductible or accident-related out-of-pocket with claim proof",
+      "65% Traffic Violations — paid traffic tickets and court fees with agency receipt",
+      "65% Toll Way Violations — paid toll bills and toll violation fines with statement proof",
     ],
   },
   {
-    group: "Tolls, tickets & violations",
+    group: "Cell phone (business & personal bridge)",
     items: [
-      "Paid toll bills with statement or agency receipt",
-      "Paid parking tickets and traffic fines with proof of payment",
-      "Paid administrative / court fees tied to those fines",
+      "65% Cell Phone Deductible — carrier or insurance deductible, repair, replacement, and accessories with merchant proof",
     ],
   },
   {
-    group: "Work commute & required work costs",
+    group: "Healthcare copays (verifiable)",
     items: [
-      "Commute to and from work — transit, tolls, parking — with proof of the back-and-forth",
-      "Required work uniforms or employer-required gear with verifiable receipt",
-      "Required work supplies purchased for your job with merchant proof",
+      "65% Medical Co-Pay — medical office, hospital, urgent care, or clinic copays with provider receipt",
+      "65% Dental Co-Pay — dental office copays and out-of-pocket share with invoice proof",
+      "65% Vision Co-Pay — eye exam or optical visit copays with receipt",
     ],
   },
   {
-    group: "Member’s own school / education",
+    group: "Empire Invest",
     items: [
-      "School supplies for yourself when you are currently enrolled and on an active plan",
-      "Required course materials with school/bookstore receipt in your name",
-    ],
-  },
-  {
-    group: "Other verifiable paid costs",
-    items: [
-      "Insurance out-of-pocket amounts with EOBs / itemized paid bills",
-      "Documented utility shortfalls or essential repairs with bill + proof of payment",
-      "Bank, late, or service fees with statement proof",
+      "Investment Program-Empire Invest — qualifying Empire Invest participation with verifiable documentation",
     ],
   },
 ] as const;
@@ -404,6 +371,9 @@ export const NOT_ACCEPTABLE_CLAIMS = [
       "Lunch money, café runs, fast food, snacks, or everyday meals",
       "Entertainment, streaming, hobbies, vacations, luxury goods",
       "Elective cosmetic procedures that are not medically necessary",
+      "Work commute, transit, parking, or tolls for personal commuting",
+      "Member education, school supplies, or course materials",
+      "Household essentials, groceries, utilities, or personal home expenses",
     ],
   },
   {

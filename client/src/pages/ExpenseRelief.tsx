@@ -171,7 +171,7 @@ export default function ExpenseRelief() {
   const selectedTier =
     tiers.find((t) => t.id === selectedTierId) ?? tiers[2] ?? tiers[0];
 
-  const [categoryId, setCategoryId] = useState<ExpenseCategoryId>("healthcare");
+  const [categoryId, setCategoryId] = useState<ExpenseCategoryId>("auto_deductible");
   const [expenseAmount, setExpenseAmount] = useState("");
   const [merchantName, setMerchantName] = useState("");
   const [businessPhone, setBusinessPhone] = useState("");
