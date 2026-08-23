@@ -9,7 +9,7 @@ import { z } from "zod";
  *
  * Funding: Zero-Capital (Subscription + Vault Powered)
  *  - Monthly membership fees seed the Compensation Vault
- *  - Optional $125 Early Activation ($100 + $25 processing) seeds the vault
+ *  - Optional $125 Early Activation ($100 + $25 processing) plus tier fee seeds the vault
  *  - Empire Invest RPUs can expand the vault
  *  - No vault capital = no payout
  */
@@ -29,7 +29,7 @@ export const EXPENSE_RELIEF_DISCLAIMER =
 /** Shared timing / fee constants across all tiers */
 export const EXPENSE_RELIEF_DEFAULTS = {
   firstClaimWaitDays: 30,
-  /** $100 early activation + $25 processing — flat, outside tier pricing */
+  /** $100 early activation + $25 processing — add-on on top of the chosen tier fee */
   earlyActivationFee: 100.0,
   processingFee: 25.0,
   get earlyActivationTotal() {
@@ -117,7 +117,7 @@ export const EXPENSE_RELIEF_PLAN = {
   reviewHoursMin: EXPENSE_RELIEF_DEFAULTS.reviewHoursMin,
   reviewHoursMax: EXPENSE_RELIEF_DEFAULTS.reviewHoursMax,
   description:
-    "Four tiers ($10 / $20 / $40 / $60). Optional $125 Early Activation unlocks filing before 30 days.",
+    "Four tiers ($10 / $20 / $40 / $60). Optional $125 Early Activation (+ tier fee) unlocks 72-hour activation instead of 30 days.",
 } as const;
 
 export type ExpenseReliefPlan = typeof EXPENSE_RELIEF_PLAN;
@@ -140,6 +140,14 @@ export function earlyActivationBreakdown(monthlyFee: number) {
     /** First-month total if member buys Early Activation with membership */
     firstMonthWithEarlyActivation: monthlyFee + addOn,
   };
+}
+
+/** Human-readable first-month totals: $125 Early Activation + each tier fee. */
+export function earlyActivationTierExamples(): string {
+  const addOn = EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal;
+  return EXPENSE_RELIEF_TIERS
+    .map((tier) => `$${tier.monthlyFee.toFixed(0)} plan = $${(tier.monthlyFee + addOn).toFixed(0)}`)
+    .join(", ");
 }
 
 export const EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS = 2;
@@ -263,16 +271,13 @@ export const CLAIM_STATUSES = [
 
 export type ClaimStatus = (typeof CLAIM_STATUSES)[number];
 
+const EARLY_ACTIVATION_RULE_BODY = `New memberships wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days before the first claim can be filed. Skip the wait with Early Activation: $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} early activation + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing fee = $${EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal.toFixed(0)} one-time, plus your chosen tier's monthly fee (${earlyActivationTierExamples()}). Early Activation activates within ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours instead of ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days. It does not raise your reimbursement %.`;
+
 export const EXPENSE_RELIEF_RULES = [
   {
     id: "membership",
     title: "Active tier membership required",
     body: "Choose Starter, Basic, Premium, or Elite. Your reimbursement % and payout caps follow that tier. Keep the subscription active to file claims.",
-  },
-  {
-    id: "wait_or_accelerate",
-    title: "30-day activation — or $125 Early Activation",
-    body: `New memberships wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days before the first claim. Skip the wait with Early Activation: $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} early activation + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing = $${EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal.toFixed(0)} one-time (any tier). Early Activation does not raise your reimbursement %.`,
   },
   {
     id: "vault_required",
@@ -293,6 +298,11 @@ export const EXPENSE_RELIEF_RULES = [
     id: "not_fr2p",
     title: "Not a rewards / affiliate program",
     body: "TCE Expense Advantage reimburses verified expenses. Pocket Booster handles cash cushions. FR2P / FARSUP stay separate for rewards.",
+  },
+  {
+    id: "wait_or_accelerate",
+    title: "30-day activation — or $125 Early Activation",
+    body: EARLY_ACTIVATION_RULE_BODY,
   },
 ] as const;
 
@@ -319,6 +329,8 @@ export const ACTIVATION_POLICY = {
     total: EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal,
     notes: [
       "Early Activation is optional.",
+      "Early Activation is $125 one-time plus your chosen tier's monthly fee (e.g. $10 + $125 = $135, $20 + $125 = $145, $40 + $125 = $165, $60 + $125 = $185).",
+      "Early Activation activates membership for first-claim filing within 72 hours instead of 30 days.",
       "Early Activation does not increase reimbursement percentages.",
       "Early Activation applies to all four tiers.",
       "Early Activation unlocks claim eligibility only — payouts still require Compensation Vault capital.",
@@ -463,6 +475,13 @@ export function daysSince(from: Date | string, to: Date = new Date()): number {
   return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)));
 }
 
+export function hoursSince(from: Date | string, to: Date = new Date()): number {
+  const start = from instanceof Date ? from : new Date(from);
+  if (Number.isNaN(start.getTime())) return 0;
+  const ms = to.getTime() - start.getTime();
+  return Math.max(0, ms / (1000 * 60 * 60));
+}
+
 export type ClaimEligibility = {
   canFile: boolean;
   reason: string;
@@ -478,18 +497,20 @@ export type ClaimEligibility = {
 /**
  * First-claim gate:
  * - Active membership required
- * - Wait 30 days, OR pay flat $125 Early Activation
+ * - Wait 30 days, OR pay $125 Early Activation (+ tier fee) for 72-hour activation
  */
 export function evaluateFirstClaimEligibility(input: {
   membershipActive: boolean;
   membershipStartedAt: Date | string | null;
   accelerationPaid: boolean;
+  accelerationPaidAt?: Date | string | null;
   hasPriorClaim: boolean;
   now?: Date;
 }): ClaimEligibility {
   const earlyActivationFee = EXPENSE_RELIEF_DEFAULTS.earlyActivationFee;
   const processingFee = EXPENSE_RELIEF_DEFAULTS.processingFee;
   const accelerationFee = EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal;
+  const now = input.now ?? new Date();
 
   if (!input.membershipActive) {
     return {
@@ -504,12 +525,50 @@ export function evaluateFirstClaimEligibility(input: {
     };
   }
 
-  if (input.hasPriorClaim || input.accelerationPaid) {
+  if (input.hasPriorClaim) {
     return {
       canFile: true,
-      reason: input.accelerationPaid
-        ? "Early Activation on file — you may submit claims. Payouts still require vault capital after verification."
-        : "Activation period satisfied — you may submit claims. Payouts still require vault capital after verification.",
+      reason:
+        "Activation period satisfied — you may submit claims. Payouts still require vault capital after verification.",
+      waitingDaysRemaining: 0,
+      accelerationFeeRequired: false,
+      accelerationFee,
+      earlyActivationFee,
+      processingFee,
+      membershipActive: true,
+    };
+  }
+
+  if (input.accelerationPaid) {
+    const activationStart =
+      input.accelerationPaidAt ?? input.membershipStartedAt;
+    const hoursElapsed = activationStart ? hoursSince(activationStart, now) : 0;
+    const hoursRemaining = Math.max(
+      0,
+      EXPENSE_RELIEF_DEFAULTS.reviewHoursMin - hoursElapsed,
+    );
+
+    if (hoursRemaining > 0) {
+      const hoursLabel =
+        hoursRemaining < 1
+          ? "less than 1 hour"
+          : `about ${Math.ceil(hoursRemaining)} hour${Math.ceil(hoursRemaining) === 1 ? "" : "s"}`;
+      return {
+        canFile: false,
+        reason: `Early Activation is processing — first claim opens within ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours (${hoursLabel} remaining). Payouts still require vault capital after verification.`,
+        waitingDaysRemaining: Math.ceil(hoursRemaining / 24),
+        accelerationFeeRequired: false,
+        accelerationFee,
+        earlyActivationFee,
+        processingFee,
+        membershipActive: true,
+      };
+    }
+
+    return {
+      canFile: true,
+      reason:
+        "Early Activation complete — you may submit your first claim. Payouts still require vault capital after verification.",
       waitingDaysRemaining: 0,
       accelerationFeeRequired: false,
       accelerationFee,
@@ -520,7 +579,7 @@ export function evaluateFirstClaimEligibility(input: {
   }
 
   const elapsed = input.membershipStartedAt
-    ? daysSince(input.membershipStartedAt, input.now ?? new Date())
+    ? daysSince(input.membershipStartedAt, now)
     : 0;
   const remaining = Math.max(
     0,
@@ -542,7 +601,7 @@ export function evaluateFirstClaimEligibility(input: {
 
   return {
     canFile: false,
-    reason: `First claim opens in ${remaining} day${remaining === 1 ? "" : "s"}. Prefer not to wait? Pay Early Activation: $${earlyActivationFee.toFixed(0)} + $${processingFee.toFixed(0)} processing = $${accelerationFee.toFixed(0)} one-time (any tier). That fee unlocks filing only — payouts still need vault capital.`,
+    reason: `First claim opens in ${remaining} day${remaining === 1 ? "" : "s"}. Prefer not to wait? Pay Early Activation: $${earlyActivationFee.toFixed(0)} + $${processingFee.toFixed(0)} processing = $${accelerationFee.toFixed(0)} one-time, plus your tier fee. Early Activation activates within ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours instead of ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days. Payouts still need vault capital.`,
     waitingDaysRemaining: remaining,
     accelerationFeeRequired: true,
     accelerationFee,

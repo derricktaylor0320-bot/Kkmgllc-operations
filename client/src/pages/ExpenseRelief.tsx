@@ -43,6 +43,7 @@ import {
   formatAcceptableClaimItem,
   NOT_ACCEPTABLE_CLAIMS,
   earlyActivationBreakdown,
+  earlyActivationTierExamples,
   reimbursementForAmount,
   type ExpenseCategoryId,
   type ExpenseReliefTier,
@@ -373,11 +374,6 @@ export default function ExpenseRelief() {
         body: "$10 Starter (25%), $20 Basic (40%), $40 Premium (55%), $60 Elite (65%). Pick the coverage that fits.",
       },
       {
-        icon: TimerReset,
-        title: "30 days — or $125 Early Activation",
-        body: `Wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days, or pay $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing = $${earlyTotal.toFixed(0)} one-time (any tier). Early Activation does not raise your %.`,
-      },
-      {
         icon: FileCheck2,
         title: "Claim application + verification",
         body: "Submit receipt details. Review runs 72 hours to about a week before any payout.",
@@ -386,6 +382,11 @@ export default function ExpenseRelief() {
         icon: Landmark,
         title: "No vault money = no payout",
         body: "Membership fees and Early Activation seed the Compensation Vault. Empty vault means approved claims wait. Companion to Pocket Booster cushions.",
+      },
+      {
+        icon: TimerReset,
+        title: "30-day activation — or $125 Early Activation",
+        body: `New memberships wait ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days before the first claim. Skip the wait: $${EXPENSE_RELIEF_DEFAULTS.earlyActivationFee.toFixed(0)} early activation + $${EXPENSE_RELIEF_DEFAULTS.processingFee.toFixed(0)} processing = $${earlyTotal.toFixed(0)} one-time, plus your tier fee (${earlyActivationTierExamples()}). Activates within ${EXPENSE_RELIEF_DEFAULTS.reviewHoursMin} hours instead of ${EXPENSE_RELIEF_DEFAULTS.firstClaimWaitDays} days.`,
       },
     ],
     [earlyTotal],
@@ -420,8 +421,9 @@ export default function ExpenseRelief() {
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
                 {catalog?.tagline ?? EXPENSE_RELIEF_PLATFORM.tagline} Four
-                membership tiers. Optional $125 Early Activation. Claims pay
-                only when the Compensation Vault has capital.
+                membership tiers. Optional $125 Early Activation (+ tier fee,
+                72-hour activation). Claims pay only when the Compensation Vault
+                has capital.
               </p>
               <p
                 className="mt-4 max-w-2xl rounded-xl border border-primary/25 bg-background/40 p-4 text-sm leading-relaxed text-muted-foreground"
@@ -479,8 +481,8 @@ export default function ExpenseRelief() {
             Membership tiers
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Reimbursement % rises with the tier. Early Activation ($125) sits
-            outside the tiers and works with any plan.
+            Reimbursement % rises with the tier. Early Activation ($125 + your
+            tier fee) activates within 72 hours instead of waiting 30 days.
           </p>
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

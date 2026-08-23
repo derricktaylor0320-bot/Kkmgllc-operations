@@ -260,7 +260,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
       claimSubmissionPolicy: CLAIM_SUBMISSION_POLICY,
       disclaimer: EXPENSE_RELIEF_DISCLAIMER,
       note:
-        "Four tiers ($10 / $20 / $40 / $60). Optional $125 Early Activation ($100 + $25 processing) unlocks filing before 30 days. Empty vault means no payout.",
+        "Four tiers ($10 / $20 / $40 / $60). Optional $125 Early Activation ($100 + $25 processing) plus tier fee activates within 72 hours instead of 30 days. Empty vault means no payout.",
     });
   });
 
@@ -300,6 +300,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
           membershipActive: !!active,
           membershipStartedAt: membership?.createdAt ?? null,
           accelerationPaid: !!membership?.accelerationPaidAt,
+          accelerationPaidAt: membership?.accelerationPaidAt ?? null,
           hasPriorClaim: claims.length > 0,
         });
         const paidThisMonth = await sumPaidSince(user.id, startOfMonth());
@@ -393,7 +394,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
         res.json({
           membership: membershipPayload(membership),
           tier,
-          message: `${tier.name} activated at $${tier.monthlyFee.toFixed(0)}/mo (${(tier.reimbursementRate * 100).toFixed(0)}% back). First claim opens after 30 days, or pay $${EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal.toFixed(0)} Early Activation to file sooner.`,
+          message: `${tier.name} activated at $${tier.monthlyFee.toFixed(0)}/mo (${(tier.reimbursementRate * 100).toFixed(0)}% back). First claim opens after 30 days, or pay $${EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal.toFixed(0)} Early Activation (+ tier fee) to activate within 72 hours.`,
         });
       } catch (err) {
         console.error("[expense-relief] activate failed", err);
@@ -453,7 +454,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
             total: fee,
           },
           message:
-            "Early Activation paid ($125). You may file claims now. Verification still takes 72 hours to about a week, and payouts only happen when the Compensation Vault has capital.",
+            "Early Activation paid ($125). Your membership activates within 72 hours for first-claim filing. Verification still takes 72 hours to about a week, and payouts only happen when the Compensation Vault has capital.",
         });
       } catch (err) {
         console.error("[expense-relief] acceleration failed", err);
@@ -497,6 +498,7 @@ export function registerExpenseReliefRoutes(app: Express): void {
           membershipActive: true,
           membershipStartedAt: membership.createdAt,
           accelerationPaid: !!membership.accelerationPaidAt,
+          accelerationPaidAt: membership.accelerationPaidAt,
           hasPriorClaim: priorClaims.length > 0,
         });
         if (!eligibility.canFile) {
