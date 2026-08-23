@@ -3,17 +3,20 @@ import { describe, it } from "node:test";
 import {
   ACCEPTABLE_CLAIMS,
   ACTIVATION_POLICY,
+  categoriesForTierRate,
   EXPENSE_CATEGORIES,
   EXPENSE_RELIEF_DEFAULTS,
   EXPENSE_RELIEF_DISCLAIMER,
   EXPENSE_RELIEF_PLAN,
   EXPENSE_RELIEF_RULES,
   EXPENSE_RELIEF_TIERS,
+  formatAcceptableClaimItem,
   NOT_ACCEPTABLE_CLAIMS,
   applyPayoutCaps,
   earlyActivationBreakdown,
   evaluateFirstClaimEligibility,
   reimbursementForAmount,
+  submitExpenseClaimSchema,
 } from "./expenseRelief";
 
 describe("TCE Expense Advantage Program", () => {
@@ -115,26 +118,71 @@ describe("TCE Expense Advantage Program", () => {
     assert.match(EXPENSE_RELIEF_DISCLAIMER, /we are not insurance/i);
   });
 
-  it("lists claim categories in the required order and labels", () => {
+  it("lists claim categories without hardcoded tier percentages", () => {
     const labels = EXPENSE_CATEGORIES.map((c) => c.label);
     assert.deepEqual(labels, [
-      "65% Auto Deductible",
-      "65% Traffic Violations",
-      "65% Toll Way Violations",
-      "65% Cell Phone Deductible",
-      "65% Medical Co-Pay",
-      "65% Dental Co-Pay",
-      "65% Vision Co-Pay",
+      "Auto Deductible",
+      "Traffic Violations",
+      "Toll Way Violations",
+      "Cell Phone Deductible",
+      "Medical Co-Pay",
+      "Dental Co-Pay",
+      "Vision Co-Pay",
       "Investment Program-Empire Invest",
     ]);
     assert.equal(EXPENSE_CATEGORIES.length, 8);
   });
 
+  it("builds tier-aware category labels from membership rate", () => {
+    const starter = categoriesForTierRate(0.25);
+    assert.equal(starter[0]?.label, "25% Auto Deductible");
+    assert.equal(
+      starter[7]?.label,
+      "Investment Program-Empire Invest",
+    );
+
+    const elite = categoriesForTierRate(0.65);
+    assert.equal(elite[3]?.label, "65% Cell Phone Deductible");
+    assert.equal(
+      formatAcceptableClaimItem(
+        "Auto Deductible — auto insurance deductible",
+        0.4,
+      ),
+      "40% Auto Deductible — auto insurance deductible",
+    );
+  });
+
+  it("requires receipt photo uploads on claim submission", () => {
+    const missingPhotos = submitExpenseClaimSchema.safeParse({
+      categoryId: "auto_deductible",
+      expenseAmount: 100,
+      merchantName: "Auto Shop",
+      serviceDate: "2026-08-01",
+      recipientName: "Jane Doe",
+      receiptPhotoUrls: ["/media-files/expense-relief-receipts/one.jpg"],
+    });
+    assert.equal(missingPhotos.success, false);
+
+    const valid = submitExpenseClaimSchema.safeParse({
+      categoryId: "auto_deductible",
+      expenseAmount: 100,
+      merchantName: "Auto Shop",
+      serviceDate: "2026-08-01",
+      recipientName: "Jane Doe",
+      receiptPhotoUrls: [
+        "/media-files/expense-relief-receipts/front.jpg",
+        "/media-files/expense-relief-receipts/back.jpg",
+      ],
+      description: "Visited around 2:30 PM — not printed on receipt.",
+    });
+    assert.equal(valid.success, true);
+  });
+
   it("blocks personal lifestyle claims including commute, education, and household essentials", () => {
     const acceptableText = ACCEPTABLE_CLAIMS.flatMap((g) => g.items).join(" ");
     const notText = NOT_ACCEPTABLE_CLAIMS.flatMap((g) => g.items).join(" ");
-    assert.match(acceptableText, /65% Auto Deductible/i);
-    assert.match(acceptableText, /65% Cell Phone Deductible/i);
+    assert.match(acceptableText, /Auto Deductible/i);
+    assert.match(acceptableText, /Cell Phone Deductible/i);
     assert.match(acceptableText, /Investment Program-Empire Invest/i);
     assert.doesNotMatch(acceptableText, /Work commute|member education|Household Essentials/i);
     assert.match(notText, /Work commute/i);

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -8,12 +8,14 @@ import {
   ClipboardList,
   Clock3,
   FileCheck2,
+  ImagePlus,
   Landmark,
   Loader2,
   Rocket,
   ShieldCheck,
   TimerReset,
   Wallet,
+  X,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -27,13 +29,18 @@ import { apiRequest } from "@/lib/queryClient";
 import {
   ACCEPTABLE_CLAIMS,
   ACTIVATION_POLICY,
+  categoriesForTierRate,
   CLAIM_SUBMISSION_POLICY,
   EXPENSE_CATEGORIES,
   EXPENSE_RELIEF_DEFAULTS,
   EXPENSE_RELIEF_DISCLAIMER,
+  EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS,
+  EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS,
   EXPENSE_RELIEF_PLATFORM,
   EXPENSE_RELIEF_RULES,
   EXPENSE_RELIEF_TIERS,
+  formatReimbursementPercent,
+  formatAcceptableClaimItem,
   NOT_ACCEPTABLE_CLAIMS,
   earlyActivationBreakdown,
   reimbursementForAmount,
@@ -155,7 +162,6 @@ export default function ExpenseRelief() {
   const notAcceptable = catalog?.notAcceptable ?? NOT_ACCEPTABLE_CLAIMS;
   const activationPolicy = catalog?.activationPolicy ?? ACTIVATION_POLICY;
   const claimPolicy = catalog?.claimSubmissionPolicy ?? CLAIM_SUBMISSION_POLICY;
-  const categories = catalog?.categories ?? EXPENSE_CATEGORIES;
   const earlyTotal =
     catalog?.earlyActivationTotal ??
     EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal;
@@ -180,6 +186,10 @@ export default function ExpenseRelief() {
   const [recipientName, setRecipientName] = useState("");
   const [description, setDescription] = useState("");
   const [evidenceNotes, setEvidenceNotes] = useState("");
+  const [receiptPhotoUrls, setReceiptPhotoUrls] = useState<string[]>([]);
+  const [uploadingReceipts, setUploadingReceipts] = useState(false);
+  const [receiptUploadError, setReceiptUploadError] = useState("");
+  const receiptInputRef = useRef<HTMLInputElement>(null);
   const [investAmount, setInvestAmount] = useState(
     String(P2P_MIN_INVESTMENT_AMOUNT),
   );
@@ -187,6 +197,11 @@ export default function ExpenseRelief() {
   const rateForPreview = activeTier
     ? activeTier.reimbursementRate
     : selectedTier.reimbursementRate;
+  const tierCategoryOptions = useMemo(
+    () => categoriesForTierRate(rateForPreview),
+    [rateForPreview],
+  );
+  const tierPercentLabel = formatReimbursementPercent(rateForPreview);
   const parsedExpense = Number(expenseAmount);
   const previewPayout = Number.isFinite(parsedExpense)
     ? reimbursementForAmount(parsedExpense, rateForPreview)
@@ -198,6 +213,44 @@ export default function ExpenseRelief() {
     p2pInvestmentAmountSchema.safeParse(parsedInvestAmount).success;
 
   const earlyBreakdown = earlyActivationBreakdown(selectedTier.monthlyFee);
+
+  const uploadReceiptPhotos = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const remaining = EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS - receiptPhotoUrls.length;
+    if (remaining <= 0) {
+      setReceiptUploadError(
+        `You can upload up to ${EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS} receipt photos.`,
+      );
+      return;
+    }
+    setUploadingReceipts(true);
+    setReceiptUploadError("");
+    try {
+      const next = [...receiptPhotoUrls];
+      for (const file of Array.from(files).slice(0, remaining)) {
+        const formData = new FormData();
+        formData.append("photo", file);
+        const res = await fetch("/api/expense-relief/claims/receipt-photos", {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(body.error || "Receipt photo upload failed.");
+        }
+        if (body.url) next.push(body.url);
+      }
+      setReceiptPhotoUrls(next);
+    } catch (err: unknown) {
+      setReceiptUploadError(
+        err instanceof Error ? err.message : "Receipt photo upload failed.",
+      );
+    } finally {
+      setUploadingReceipts(false);
+      if (receiptInputRef.current) receiptInputRef.current.value = "";
+    }
+  };
 
   const activateMutation = useMutation({
     mutationFn: async (planId: ExpenseReliefTierId) => {
@@ -253,8 +306,9 @@ export default function ExpenseRelief() {
         businessAddress: businessAddress || undefined,
         serviceDate,
         recipientName,
-        description,
-        evidenceNotes,
+        description: description.trim() || undefined,
+        evidenceNotes: evidenceNotes.trim() || undefined,
+        receiptPhotoUrls,
       });
       return res.json();
     },
@@ -268,6 +322,8 @@ export default function ExpenseRelief() {
       setRecipientName("");
       setDescription("");
       setEvidenceNotes("");
+      setReceiptPhotoUrls([]);
+      setReceiptUploadError("");
       toast({ title: "Application submitted", description: data.message });
     },
     onError: (err: unknown) => {
@@ -676,7 +732,9 @@ export default function ExpenseRelief() {
                     </p>
                     <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">
                       {group.items.map((item) => (
-                        <li key={item}>· {item}</li>
+                        <li key={item}>
+                          · {formatAcceptableClaimItem(item, rateForPreview)}
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -837,6 +895,13 @@ export default function ExpenseRelief() {
                   <ClipboardList className="h-5 w-5 text-primary" />
                   Claim application
                 </h3>
+                {activeTier && (
+                  <p className="text-xs text-muted-foreground">
+                    Your {activeTier.name} reimburses eligible expenses at{" "}
+                    <strong className="text-foreground">{tierPercentLabel}</strong>.
+                    Category labels below reflect your membership rate.
+                  </p>
+                )}
                 {!vaultCanPay && (
                   <div
                     className="rounded-lg border border-sky-500/40 bg-sky-500/10 p-3 text-xs text-sky-100"
@@ -859,7 +924,7 @@ export default function ExpenseRelief() {
                         setCategoryId(e.target.value as ExpenseCategoryId)
                       }
                     >
-                      {categories.map((c) => (
+                      {tierCategoryOptions.map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.label}
                         </option>
@@ -926,22 +991,96 @@ export default function ExpenseRelief() {
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <Label htmlFor="description">Expense description</Label>
+                    <Label>Receipt photos (required)</Label>
+                    <p className="mt-1 text-[11px] text-muted-foreground">
+                      Upload clear photos of the actual receipt — front and back.
+                      Include the business phone number when it appears on the receipt.
+                      You can add up to {EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS} photos
+                      ({EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS} minimum).
+                    </p>
+                    <input
+                      ref={receiptInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      multiple
+                      className="hidden"
+                      data-testid="input-receipt-photos"
+                      onChange={(e) => uploadReceiptPhotos(e.target.files)}
+                    />
+                    <div className="mt-3 flex flex-wrap gap-3">
+                      {receiptPhotoUrls.map((url, index) => (
+                        <div
+                          key={url}
+                          className="relative h-24 w-24 overflow-hidden rounded-lg border border-primary/30 bg-black/20"
+                        >
+                          <img
+                            src={url}
+                            alt={`Receipt photo ${index + 1}`}
+                            className="h-full w-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-1 top-1 rounded-full bg-black/70 p-1 text-white"
+                            aria-label={`Remove receipt photo ${index + 1}`}
+                            data-testid={`button-remove-receipt-photo-${index}`}
+                            onClick={() =>
+                              setReceiptPhotoUrls((prev) =>
+                                prev.filter((item) => item !== url),
+                              )
+                            }
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                      {receiptPhotoUrls.length < EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS && (
+                        <button
+                          type="button"
+                          className="flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-primary/40 bg-background/40 text-[10px] text-muted-foreground transition hover:border-primary hover:text-foreground"
+                          data-testid="button-upload-receipt-photo"
+                          disabled={uploadingReceipts}
+                          onClick={() => receiptInputRef.current?.click()}
+                        >
+                          {uploadingReceipts ? (
+                            <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                          ) : (
+                            <ImagePlus className="h-5 w-5 text-primary" />
+                          )}
+                          Add photo
+                        </button>
+                      )}
+                    </div>
+                    {receiptUploadError && (
+                      <p className="mt-2 text-xs text-red-400">{receiptUploadError}</p>
+                    )}
+                    <p className="mt-2 text-[11px] text-muted-foreground">
+                      {receiptPhotoUrls.length} of {EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS}{" "}
+                      photos uploaded
+                      {receiptPhotoUrls.length < EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS
+                        ? ` — need at least ${EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS} (front + back)`
+                        : ""}
+                    </p>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <Label htmlFor="description">
+                      Extra details (optional)
+                    </Label>
                     <textarea
                       id="description"
                       className="mt-1 min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Visit time, context, or anything the receipt does not show…"
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <Label htmlFor="evidence">Verification / receipt notes</Label>
+                    <Label htmlFor="evidence">Verification notes (optional)</Label>
                     <textarea
                       id="evidence"
                       className="mt-1 min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                       value={evidenceNotes}
                       onChange={(e) => setEvidenceNotes(e.target.value)}
-                      placeholder="Invoice #, how we verify the merchant, receipt details…"
+                      placeholder="Invoice #, how we can verify the merchant, fax number, etc."
                     />
                   </div>
                 </div>
@@ -949,6 +1088,8 @@ export default function ExpenseRelief() {
                   onClick={() => claimMutation.mutate()}
                   disabled={
                     claimMutation.isPending ||
+                    uploadingReceipts ||
+                    receiptPhotoUrls.length < EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS ||
                     !membership ||
                     membership.subscriptionStatus !== "active"
                   }
