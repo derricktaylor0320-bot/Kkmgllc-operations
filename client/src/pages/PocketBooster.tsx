@@ -477,9 +477,10 @@ export default function PocketBooster() {
                 Pocket Booster gives interest-free cushions when you need cash
                 now. TCE Expense Advantage is separate — four membership tiers
                 reimburse a portion of verified medical, dental, vet, toll, and
-                similar expenses. Optional $125 Early Activation skips the
-                30-day wait. If that program&apos;s Compensation Vault is empty,
-                claims cannot be paid until it is funded.
+                similar expenses. Optional $125 Early Activation (+ tier fee)
+                activates within 72 hours instead of the 30-day wait. If that
+                program&apos;s Compensation Vault is empty, claims cannot be
+                paid until it is funded.
               </p>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:items-end">

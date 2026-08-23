@@ -14,6 +14,7 @@ import {
   NOT_ACCEPTABLE_CLAIMS,
   applyPayoutCaps,
   earlyActivationBreakdown,
+  earlyActivationTierExamples,
   evaluateFirstClaimEligibility,
   reimbursementForAmount,
   submitExpenseClaimSchema,
@@ -39,7 +40,7 @@ describe("TCE Expense Advantage Program", () => {
     assert.equal(reimbursementForAmount(100, 0.65), 65);
   });
 
-  it("uses a flat $125 Early Activation add-on outside tiers", () => {
+  it("uses a $125 Early Activation add-on plus the chosen tier fee", () => {
     assert.equal(EXPENSE_RELIEF_DEFAULTS.earlyActivationFee, 100);
     assert.equal(EXPENSE_RELIEF_DEFAULTS.processingFee, 25);
     assert.equal(EXPENSE_RELIEF_DEFAULTS.earlyActivationTotal, 125);
@@ -48,6 +49,8 @@ describe("TCE Expense Advantage Program", () => {
     assert.equal(starter.firstMonthWithEarlyActivation, 135);
     const elite = earlyActivationBreakdown(60);
     assert.equal(elite.firstMonthWithEarlyActivation, 185);
+    assert.match(earlyActivationTierExamples(), /\$10 plan = \$135/);
+    assert.match(earlyActivationTierExamples(), /\$60 plan = \$185/);
   });
 
   it("blocks first claim during 30-day wait unless Early Activation is paid", () => {
@@ -66,12 +69,24 @@ describe("TCE Expense Advantage Program", () => {
     assert.equal(waiting.accelerationFeeRequired, true);
     assert.equal(waiting.accelerationFee, 125);
 
+    const acceleratedTooSoon = evaluateFirstClaimEligibility({
+      membershipActive: true,
+      membershipStartedAt: started,
+      accelerationPaid: true,
+      accelerationPaidAt: day10,
+      hasPriorClaim: false,
+      now: new Date("2026-07-11T12:00:00Z"),
+    });
+    assert.equal(acceleratedTooSoon.canFile, false);
+    assert.match(acceleratedTooSoon.reason, /72 hours/i);
+
     const accelerated = evaluateFirstClaimEligibility({
       membershipActive: true,
       membershipStartedAt: started,
       accelerationPaid: true,
+      accelerationPaidAt: day10,
       hasPriorClaim: false,
-      now: day10,
+      now: new Date("2026-07-14T00:00:00Z"),
     });
     assert.equal(accelerated.canFile, true);
     assert.equal(accelerated.waitingDaysRemaining, 0);
@@ -112,6 +127,10 @@ describe("TCE Expense Advantage Program", () => {
   it("documents vault-empty rules and official activation policy", () => {
     assert.ok(EXPENSE_RELIEF_RULES.some((r) => r.id === "vault_required"));
     assert.ok(EXPENSE_RELIEF_RULES.some((r) => r.id === "wait_or_accelerate"));
+    assert.equal(
+      EXPENSE_RELIEF_RULES[EXPENSE_RELIEF_RULES.length - 1]?.id,
+      "wait_or_accelerate",
+    );
     assert.equal(ACTIVATION_POLICY.earlyActivation.total, 125);
     assert.ok(ACCEPTABLE_CLAIMS.length > 0);
     assert.ok(NOT_ACCEPTABLE_CLAIMS.length > 0);
