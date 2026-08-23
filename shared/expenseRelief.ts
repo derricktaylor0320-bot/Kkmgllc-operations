@@ -142,11 +142,20 @@ export function earlyActivationBreakdown(monthlyFee: number) {
   };
 }
 
+export const EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS = 2;
+export const EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS = 5;
+
+/** Format a reimbursement rate (0–1) as a whole-number percent label. */
+export function formatReimbursementPercent(rate: number): string {
+  if (!Number.isFinite(rate) || rate <= 0) return "0%";
+  return `${Math.round(rate * 100)}%`;
+}
+
 /** Eligible out-of-pocket categories for the claim application dropdown. */
 export const EXPENSE_CATEGORIES = [
   {
     id: "auto_deductible",
-    label: "65% Auto Deductible",
+    label: "Auto Deductible",
     examples: [
       "Auto insurance deductible after a covered claim",
       "Repair or towing costs tied to a verifiable accident claim",
@@ -154,7 +163,7 @@ export const EXPENSE_CATEGORIES = [
   },
   {
     id: "traffic_violations",
-    label: "65% Traffic Violations",
+    label: "Traffic Violations",
     examples: [
       "Paid traffic tickets with agency or court receipt",
       "Administrative court fees tied to traffic violations",
@@ -162,7 +171,7 @@ export const EXPENSE_CATEGORIES = [
   },
   {
     id: "toll_way_violations",
-    label: "65% Toll Way Violations",
+    label: "Toll Way Violations",
     examples: [
       "Paid toll bills with agency or statement proof",
       "Toll violation fines with proof of payment",
@@ -170,7 +179,7 @@ export const EXPENSE_CATEGORIES = [
   },
   {
     id: "cell_phone_deductible",
-    label: "65% Cell Phone Deductible",
+    label: "Cell Phone Deductible",
     examples: [
       "Cell phone insurance or carrier deductible",
       "Replacement or repair costs with carrier or repair receipt",
@@ -179,7 +188,7 @@ export const EXPENSE_CATEGORIES = [
   },
   {
     id: "medical_copay",
-    label: "65% Medical Co-Pay",
+    label: "Medical Co-Pay",
     examples: [
       "Medical office copays with provider receipt",
       "Hospital, urgent care, or clinic copays you paid",
@@ -187,7 +196,7 @@ export const EXPENSE_CATEGORIES = [
   },
   {
     id: "dental_copay",
-    label: "65% Dental Co-Pay",
+    label: "Dental Co-Pay",
     examples: [
       "Dental office copays with provider receipt",
       "Dental visit out-of-pocket share with invoice proof",
@@ -195,7 +204,7 @@ export const EXPENSE_CATEGORIES = [
   },
   {
     id: "vision_copay",
-    label: "65% Vision Co-Pay",
+    label: "Vision Co-Pay",
     examples: [
       "Eye exam or vision care copays",
       "Optical visit out-of-pocket share with receipt",
@@ -211,6 +220,32 @@ export const EXPENSE_CATEGORIES = [
 ] as const;
 
 export type ExpenseCategoryId = (typeof EXPENSE_CATEGORIES)[number]["id"];
+
+/** Build a tier-aware category label (investment program has no %). */
+export function categoryLabelWithRate(
+  category: (typeof EXPENSE_CATEGORIES)[number],
+  rate: number,
+): string {
+  if (category.id === "investment_program_empire_invest") return category.label;
+  return `${formatReimbursementPercent(rate)} ${category.label}`;
+}
+
+export function categoriesForTierRate(rate: number) {
+  return EXPENSE_CATEGORIES.map((category) => ({
+    ...category,
+    label: categoryLabelWithRate(category, rate),
+  }));
+}
+
+/** Prefix acceptable-claim copy with the member's tier reimbursement %. */
+export function formatAcceptableClaimItem(item: string, rate: number): string {
+  if (item.startsWith("Investment Program")) return item;
+  const dash = item.indexOf(" — ");
+  if (dash === -1) return `${formatReimbursementPercent(rate)} ${item}`;
+  const label = item.slice(0, dash);
+  const rest = item.slice(dash);
+  return `${formatReimbursementPercent(rate)} ${label}${rest}`;
+}
 
 export const EXPENSE_CATEGORY_IDS = EXPENSE_CATEGORIES.map(
   (c) => c.id,
@@ -297,12 +332,12 @@ export const CLAIM_SUBMISSION_POLICY = {
   intro:
     "To maintain fairness and prevent fraudulent activity, all claims must follow the rules below.",
   filingRequirements: [
-    "A clear photo or scan of a legitimate receipt (or detailed verification notes while upload rolls out)",
+    "Clear photos of the actual receipt — front and back (upload required). Include the business phone number when it appears on the receipt.",
     "The business name and a reachable phone number so we can verify by call or fax",
     "The business address or location when available",
     "The date of service or purchase",
     "The amount paid out-of-pocket",
-    "A brief description of the expense and why it qualifies under the selected category",
+    "A brief description for details the receipt may not show (visit time, extra context). Receipt photos are required.",
     "The member’s name on the receipt (or pet’s name for veterinary claims)",
   ],
   verificationWindow: {
@@ -336,23 +371,23 @@ export const ACCEPTABLE_CLAIMS = [
   {
     group: "Auto & transportation (verifiable)",
     items: [
-      "65% Auto Deductible — auto insurance deductible or accident-related out-of-pocket with claim proof",
-      "65% Traffic Violations — paid traffic tickets and court fees with agency receipt",
-      "65% Toll Way Violations — paid toll bills and toll violation fines with statement proof",
+      "Auto Deductible — auto insurance deductible or accident-related out-of-pocket with claim proof",
+      "Traffic Violations — paid traffic tickets and court fees with agency receipt",
+      "Toll Way Violations — paid toll bills and toll violation fines with statement proof",
     ],
   },
   {
     group: "Cell phone (business & personal bridge)",
     items: [
-      "65% Cell Phone Deductible — carrier or insurance deductible, repair, replacement, and accessories with merchant proof",
+      "Cell Phone Deductible — carrier or insurance deductible, repair, replacement, and accessories with merchant proof",
     ],
   },
   {
     group: "Healthcare copays (verifiable)",
     items: [
-      "65% Medical Co-Pay — medical office, hospital, urgent care, or clinic copays with provider receipt",
-      "65% Dental Co-Pay — dental office copays and out-of-pocket share with invoice proof",
-      "65% Vision Co-Pay — eye exam or optical visit copays with receipt",
+      "Medical Co-Pay — medical office, hospital, urgent care, or clinic copays with provider receipt",
+      "Dental Co-Pay — dental office copays and out-of-pocket share with invoice proof",
+      "Vision Co-Pay — eye exam or optical visit copays with receipt",
     ],
   },
   {
@@ -577,13 +612,30 @@ export const submitExpenseClaimSchema = z.object({
     .min(2)
     .max(200)
     .describe("Member or pet name as it appears on the receipt"),
-  description: z.string().trim().min(8).max(2000),
+  description: z
+    .string()
+    .trim()
+    .max(2000)
+    .optional()
+    .describe(
+      "Optional notes for details the receipt may not show (visit time, context)",
+    ),
   evidenceNotes: z
     .string()
     .trim()
-    .min(8)
     .max(2000)
-    .describe("Where the receipt/invoice came from and how to verify it"),
+    .optional()
+    .describe("Optional verification notes beyond the uploaded receipt photos"),
+  receiptPhotoUrls: z
+    .array(z.string().trim().min(1))
+    .min(
+      EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS,
+      `Upload at least ${EXPENSE_RELIEF_MIN_RECEIPT_PHOTOS} receipt photos (front and back).`,
+    )
+    .max(
+      EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS,
+      `You can upload up to ${EXPENSE_RELIEF_MAX_RECEIPT_PHOTOS} receipt photos.`,
+    ),
 });
 
 export type SubmitExpenseClaimInput = z.infer<typeof submitExpenseClaimSchema>;

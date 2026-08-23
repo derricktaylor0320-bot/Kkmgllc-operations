@@ -1,5 +1,9 @@
 import type { Express, Request, Response } from "express";
 import { and, desc, eq, gte, inArray, sql } from "drizzle-orm";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { randomUUID } from "crypto";
 import { db } from "./db";
 import { requireAuth, requireOwner } from "./auth";
 import type { User } from "@shared/schema";
@@ -31,6 +35,48 @@ import {
   reviewExpenseClaimSchema,
   submitExpenseClaimSchema,
 } from "@shared/expenseRelief";
+
+const MEDIA_DIR =
+  process.env.MEDIA_DIR || path.resolve(process.cwd(), "uploads", "media");
+const RECEIPT_PHOTO_DIR = path.join(MEDIA_DIR, "expense-relief-receipts");
+try {
+  fs.mkdirSync(RECEIPT_PHOTO_DIR, { recursive: true });
+} catch (err) {
+  console.error("Failed to create RECEIPT_PHOTO_DIR:", err);
+}
+
+const ALLOWED_RECEIPT_TYPES = new Map<string, string>([
+  ["image/jpeg", ".jpg"],
+  ["image/png", ".png"],
+  ["image/webp", ".webp"],
+  ["image/gif", ".gif"],
+]);
+
+const receiptPhotoUpload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => cb(null, RECEIPT_PHOTO_DIR),
+    filename: (_req, file, cb) => {
+      const ext = ALLOWED_RECEIPT_TYPES.get(file.mimetype) || ".bin";
+      cb(null, `${randomUUID()}${ext}`);
+    },
+  }),
+  limits: { fileSize: 8 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (ALLOWED_RECEIPT_TYPES.has(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Please upload a JPG, PNG, WebP, or GIF receipt photo."));
+    }
+  },
+});
+
+function isOwnedReceiptPhotoUrl(url: unknown): url is string {
+  return (
+    typeof url === "string" &&
+    url.startsWith("/media-files/expense-relief-receipts/") &&
+    !url.includes("..")
+  );
+}
 
 function currentUser(req: Request): User {
   return req.user as User;
@@ -168,6 +214,37 @@ function membershipPayload(membership: ExpenseReliefMembership | undefined) {
 }
 
 export function registerExpenseReliefRoutes(app: Express): void {
+  app.post(
+    "/api/expense-relief/claims/receipt-photos",
+    requireAuth,
+    (req, res, next) => {
+      receiptPhotoUpload.single("photo")(req, res, (err: unknown) => {
+        if (err) {
+          const message =
+            err &&
+            typeof err === "object" &&
+            "code" in err &&
+            err.code === "LIMIT_FILE_SIZE"
+              ? "Receipt photo is too large (max 8 MB)."
+              : err instanceof Error
+                ? err.message
+                : "Upload failed";
+          return res.status(400).json({ error: message });
+        }
+        next();
+      });
+    },
+    async (req: Request, res: Response) => {
+      const file = req.file;
+      if (!file) {
+        return res.status(400).json({ error: "No receipt photo was uploaded." });
+      }
+      res.status(201).json({
+        url: `/media-files/expense-relief-receipts/${file.filename}`,
+      });
+    },
+  );
+
   app.get("/api/expense-relief/plan", (_req, res) => {
     res.json({
       ...EXPENSE_RELIEF_PLATFORM,
@@ -397,6 +474,16 @@ export function registerExpenseReliefRoutes(app: Express): void {
           });
         }
 
+        const invalidReceipt = parsed.data.receiptPhotoUrls.find(
+          (url) => !isOwnedReceiptPhotoUrl(url),
+        );
+        if (invalidReceipt) {
+          return res.status(400).json({
+            error:
+              "Receipt photos must be uploaded through the claim form before submitting.",
+          });
+        }
+
         const user = currentUser(req);
         const membership = await getMembership(user.id);
         if (!membership || membership.subscriptionStatus !== "active") {
@@ -436,13 +523,19 @@ export function registerExpenseReliefRoutes(app: Express): void {
           });
         }
 
-        const evidenceParts = [parsed.data.evidenceNotes];
+        const evidenceParts: string[] = [];
+        if (parsed.data.evidenceNotes?.trim()) {
+          evidenceParts.push(parsed.data.evidenceNotes.trim());
+        }
         if (parsed.data.businessPhone) {
           evidenceParts.push(`Business phone: ${parsed.data.businessPhone}`);
         }
         if (parsed.data.businessAddress) {
           evidenceParts.push(`Business address: ${parsed.data.businessAddress}`);
         }
+        evidenceParts.push(
+          `Receipt photos (${parsed.data.receiptPhotoUrls.length}): ${parsed.data.receiptPhotoUrls.join(", ")}`,
+        );
 
         const vaultAvailable = await getExpenseReliefVaultAvailable();
         const [claim] = await db
@@ -456,8 +549,9 @@ export function registerExpenseReliefRoutes(app: Express): void {
             merchantName: parsed.data.merchantName,
             serviceDate: parsed.data.serviceDate,
             recipientName: parsed.data.recipientName,
-            description: parsed.data.description,
+            description: parsed.data.description?.trim() ?? "",
             evidenceNotes: evidenceParts.join("\n"),
+            receiptPhotoUrls: parsed.data.receiptPhotoUrls,
             status: "under_review",
             updatedAt: new Date(),
           })

@@ -571,8 +571,12 @@ export const expenseReliefClaims = pgTable("expense_relief_claims", {
   merchantName: text("merchant_name").notNull(),
   serviceDate: text("service_date").notNull(),
   recipientName: text("recipient_name").notNull(),
-  description: text("description").notNull(),
-  evidenceNotes: text("evidence_notes").notNull(),
+  description: text("description").notNull().default(""),
+  evidenceNotes: text("evidence_notes").notNull().default(""),
+  receiptPhotoUrls: jsonb("receipt_photo_urls")
+    .$type<string[]>()
+    .notNull()
+    .default([]),
   status: text("status").notNull().default("submitted"), // submitted | under_review | approved | approved_pending_funds | paid | denied | cancelled
   reviewNotes: text("review_notes"),
   reviewedAt: timestamp("reviewed_at"),
