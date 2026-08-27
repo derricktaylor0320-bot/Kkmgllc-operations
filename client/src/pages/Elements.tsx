@@ -6,6 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import elementsHealthSectionArt from "@assets/brand/khomplete_khemistri_elements_health_section.png";
 import {
+  elementsCareBasketPriceDollars,
+  elementsCareBasketSavingsDollars,
+  elementsCareBasketSeparateDollars,
+  isElementsCareBasketProduct,
+} from "@shared/elementsCareBasket";
+import {
   elementsDuoPriceDollars,
   elementsDuoSavingsDollars,
   elementsDuoSeparateDollars,
@@ -27,6 +33,9 @@ export default function Elements() {
   );
   const allProducts = groupProductVariants(
     [...((products as any[]) || []), ...bodyCare].sort((a: any, b: any) => {
+      const aCareBasket = isElementsCareBasketProduct(a.priceId, a.title) ? 0 : 1;
+      const bCareBasket = isElementsCareBasketProduct(b.priceId, b.title) ? 0 : 1;
+      if (aCareBasket !== bCareBasket) return aCareBasket - bCareBasket;
       const aDuo = isElementsDuoProduct(a.priceId, a.title) ? 0 : 1;
       const bDuo = isElementsDuoProduct(b.priceId, b.title) ? 0 : 1;
       if (aDuo !== bDuo) return aDuo - bDuo;
@@ -35,6 +44,9 @@ export default function Elements() {
       if (aSort !== bSort) return aSort - bSort;
       return String(a.title || "").localeCompare(String(b.title || ""));
     }),
+  );
+  const hasCareBasket = allProducts.some((p: any) =>
+    isElementsCareBasketProduct(p.priceId, p.title),
   );
   const hasDuo = allProducts.some((p: any) =>
     isElementsDuoProduct(p.priceId, p.title),
@@ -63,6 +75,23 @@ export default function Elements() {
             Premium supplements, 3-in-1 body wash, natural deodorant, and body care to support your
             wellness inside and out. Supplement bottles are 60 count.
           </p>
+          {hasCareBasket && (
+            <div
+              className="mt-8 mx-auto max-w-xl rounded-xl border border-primary/40 bg-primary/5 px-5 py-4"
+              data-testid="banner-elements-care-basket"
+            >
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary mb-1">
+                Our store bundle
+              </p>
+              <p className="font-display font-bold uppercase tracking-tight text-lg">
+                Elements Care Basket — ${elementsCareBasketPriceDollars().toFixed(2)}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                3-in-1 wash, whipped body butter, deodorant, and 2 body oils. Usually ${elementsCareBasketSeparateDollars().toFixed(2)}
+                separately — save ${elementsCareBasketSavingsDollars()} when you bundle.
+              </p>
+            </div>
+          )}
           {hasDuo && (
             <div
               className="mt-8 mx-auto max-w-xl rounded-xl border border-primary/40 bg-primary/5 px-5 py-4"

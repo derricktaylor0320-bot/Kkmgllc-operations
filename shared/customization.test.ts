@@ -8,6 +8,9 @@ import {
   placementSurchargeDollars,
 } from "./customization";
 import { encodeElementsDuoSelection } from "./elementsDuo";
+import {
+  encodeElementsCareBasketSelection,
+} from "./elementsCareBasket";
 
 test("one print location is included in the garment price", () => {
   assert.equal(placementSurchargeCents(0), 0);
@@ -89,6 +92,53 @@ test("Elements Duo rejects an unknown wash or butter scent", () => {
     encodeElementsDuoSelection("Cocoa Mango", "Not A Scent"),
   );
   assert.equal(badButter.ok, false);
+});
+
+test("Elements Care Basket checkout copy asks for all picks", () => {
+  assert.match(
+    customizationErrorMessage("careBasket", "Elements Care Basket"),
+    /wash, body butter, deodorant, and two body oil scents/,
+  );
+});
+
+const CARE_BASKET_META = {
+  customize: "none",
+  scented: "true",
+  scentOptions:
+    "Forbidden Taste, Too Tempting, Pure Havoc, Midnight Habit, Sinfull Seduction, Dark Chemistry, Uncensored, Wicked Touch, Raw Attraction, After Dark, Lethal Charm, Sweet Addiction, Velvet Desire, Guilty Pleasure, Dangerous Craving, Delicious Lava, Delicious Vulva",
+  elementsCareBasket: "true",
+  productType: "elements",
+};
+
+test("Elements Care Basket requires all five scent picks", () => {
+  const missing = checkCustomization(
+    CARE_BASKET_META,
+    undefined,
+    undefined,
+    undefined,
+    "Elements Care Basket",
+  );
+  assert.equal(missing.ok, false);
+  assert.equal(missing.kind, "careBasket");
+
+  const ok = checkCustomization(
+    CARE_BASKET_META,
+    undefined,
+    undefined,
+    undefined,
+    "Elements Care Basket",
+    encodeElementsCareBasketSelection({
+      wash: "Cocoa Mango",
+      butterScent: "Forbidden Taste",
+      deodorant: "Lavender",
+      bodyOil1: "Prada",
+      bodyOil2: "YSL",
+    }),
+  );
+  assert.equal(ok.ok, true);
+  assert.equal(ok.kind, "careBasket");
+  assert.match(ok.note || "", /3-in-1 wash: Cocoa Mango/);
+  assert.match(ok.note || "", /Body oil 2: YSL/);
 });
 
 test("Elements Duo checkout copy asks for both picks", () => {

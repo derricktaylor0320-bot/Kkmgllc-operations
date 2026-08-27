@@ -15,6 +15,11 @@ import BundleUpsell from "@/components/BundleUpsell";
 import { getBundleById } from "@shared/bundlePricing";
 import { DISCOUNT_CODES, parseDiscountCode } from "@shared/discounts";
 import {
+  elementsCareBasketSavingsDollars,
+  isElementsCareBasketProduct,
+  parseElementsCareBasketSelection,
+} from "@shared/elementsCareBasket";
+import {
   elementsDuoSavingsDollars,
   isElementsDuoProduct,
   parseElementsDuoSelection,
@@ -174,6 +179,10 @@ export default function Cart() {
                   .replace(/\s+/g, "-")}-${(item.selectedScent || "")
                   .toLowerCase()
                   .replace(/\s+/g, "-")}`;
+                const isCareBasketLine = isElementsCareBasketProduct(item.priceId, item.title);
+                const careBasketSelection = isCareBasketLine
+                  ? parseElementsCareBasketSelection(item.selectedScent)
+                  : null;
                 const isDuoLine = isElementsDuoProduct(item.priceId, item.title);
                 const duoSelection = isDuoLine
                   ? parseElementsDuoSelection(item.selectedScent)
@@ -245,6 +254,40 @@ export default function Cart() {
                           Size: {item.selectedSize}
                         </p>
                       )}
+                      {careBasketSelection && (
+                        <>
+                          <p
+                            className="text-xs text-muted-foreground mt-1"
+                            data-testid={`text-cart-wash-${slug}`}
+                          >
+                            3-in-1 wash: {careBasketSelection.wash}
+                          </p>
+                          <p
+                            className="text-xs text-muted-foreground mt-1"
+                            data-testid={`text-cart-butter-${slug}`}
+                          >
+                            Body butter: {careBasketSelection.butterScent}
+                          </p>
+                          <p
+                            className="text-xs text-muted-foreground mt-1"
+                            data-testid={`text-cart-deodorant-${slug}`}
+                          >
+                            Deodorant: {careBasketSelection.deodorant}
+                          </p>
+                          <p
+                            className="text-xs text-muted-foreground mt-1"
+                            data-testid={`text-cart-body-oil-1-${slug}`}
+                          >
+                            Body oil 1: {careBasketSelection.bodyOil1}
+                          </p>
+                          <p
+                            className="text-xs text-muted-foreground mt-1"
+                            data-testid={`text-cart-body-oil-2-${slug}`}
+                          >
+                            Body oil 2: {careBasketSelection.bodyOil2}
+                          </p>
+                        </>
+                      )}
                       {duoSelection && (
                         <>
                           <p
@@ -261,12 +304,20 @@ export default function Cart() {
                           </p>
                         </>
                       )}
-                      {item.selectedScent && !duoSelection && (
+                      {item.selectedScent && !duoSelection && !careBasketSelection && (
                         <p
                           className="text-xs text-muted-foreground mt-1"
                           data-testid={`text-cart-scent-${slug}`}
                         >
                           {/\bgel\b/i.test(item.title) ? "Flavor" : "Scent"}: {item.selectedScent}
+                        </p>
+                      )}
+                      {isCareBasketLine && (
+                        <p
+                          className="text-xs text-primary mt-1"
+                          data-testid={`text-cart-care-basket-savings-${slug}`}
+                        >
+                          Save ${elementsCareBasketSavingsDollars()} vs buying separately
                         </p>
                       )}
                       {isDuoLine && (
