@@ -6,7 +6,7 @@ import EmpireNavigationGrid from "@/components/EmpireNavigationGrid";
 import { getSiteLinkNumber } from "@/lib/siteNavigation";
 
 export default function TopSlideNav() {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const apparelNumber = getSiteLinkNumber("/apparel");
   const elementsNumber = getSiteLinkNumber("/elements");
   const accessoriesNumber = getSiteLinkNumber("/accessories");
@@ -25,11 +25,13 @@ export default function TopSlideNav() {
         data-testid="button-top-slide-nav-toggle"
       >
         <span className="font-display text-xs uppercase tracking-[0.22em] text-primary sm:text-sm">
-          Site Directory · All 21 Destinations
+          {isExpanded
+            ? "Site Directory · All 21 Destinations"
+            : "Click Below — Site Directory for All 21 Destinations"}
         </span>
         <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
           <span className="hidden sm:inline">
-            {isExpanded ? "Hide" : "Open"}
+            {isExpanded ? "Hide" : "Open directory"}
           </span>
           <ChevronDown
             className={`h-4 w-4 text-primary transition-transform duration-300 ${
@@ -52,6 +54,14 @@ export default function TopSlideNav() {
             data-testid="panel-top-slide-nav"
           >
             <div className="container mx-auto px-4 py-4">
+              <p className="mb-4 text-center text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                Tap{" "}
+                <span className="font-semibold text-primary">
+                  Click Here — Site Directory
+                </span>{" "}
+                in the center of the menu bar above for the full directory, or
+                browse every numbered destination right here.
+              </p>
               <p className="mb-4 text-center text-xs leading-relaxed text-muted-foreground sm:text-sm">
                 Every button is numbered and labeled — go straight where you
                 need. Shop clothing at{" "}

@@ -18,6 +18,8 @@ type CompassNavigationProps = {
   isOpen: boolean;
   onLogout: () => void;
   onOpenChange: (open: boolean) => void;
+  /** Centered navbar placement shows a clearer click-here call-to-action. */
+  variant?: "default" | "centered";
 };
 
 export default function CompassNavigation({
@@ -26,24 +28,44 @@ export default function CompassNavigation({
   isOpen,
   onLogout,
   onOpenChange,
+  variant = "default",
 }: CompassNavigationProps) {
   const apparelNumber = getSiteLinkNumber("/apparel");
   const elementsNumber = getSiteLinkNumber("/elements");
   const accessoriesNumber = getSiteLinkNumber("/accessories");
+
+  const isCentered = variant === "centered";
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
         <Button
           variant="outline"
-          className="h-10 border-primary/60 bg-primary/10 px-3 text-primary shadow-[0_0_18px_hsl(var(--primary)/0.16)] hover:bg-primary hover:text-primary-foreground"
-          aria-label="Open the Empire site directory"
+          className={
+            isCentered
+              ? "group h-auto min-h-10 max-w-[min(100%,20rem)] flex-col gap-0.5 border-primary/70 bg-primary/15 px-3 py-1.5 text-primary shadow-[0_0_22px_hsl(var(--primary)/0.22)] hover:bg-primary hover:text-primary-foreground sm:px-4 sm:py-2"
+              : "h-10 border-primary/60 bg-primary/10 px-3 text-primary shadow-[0_0_18px_hsl(var(--primary)/0.16)] hover:bg-primary hover:text-primary-foreground"
+          }
+          aria-label="Open the Empire site directory — all 21 numbered destinations"
           data-testid="button-compass-navigation"
         >
-          <Compass className="h-5 w-5" />
-          <span className="ml-2 hidden uppercase tracking-[0.16em] xl:inline">
-            Site Directory
+          <span className="flex items-center gap-2">
+            <Compass className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
+            {isCentered ? (
+              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] sm:text-xs sm:tracking-[0.16em]">
+                Click Here — Site Directory
+              </span>
+            ) : (
+              <span className="ml-2 hidden uppercase tracking-[0.16em] xl:inline">
+                Site Directory
+              </span>
+            )}
           </span>
+          {isCentered && (
+            <span className="text-[9px] uppercase tracking-[0.12em] text-primary/80 group-hover:text-primary-foreground/90 sm:text-[10px] sm:tracking-[0.14em]">
+              All {SITE_LINKS.length} destinations · tap to browse
+            </span>
+          )}
         </Button>
       </SheetTrigger>
 

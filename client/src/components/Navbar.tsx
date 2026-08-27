@@ -38,14 +38,28 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-primary/50 bg-secondary/95 backdrop-blur supports-[backdrop-filter]:bg-secondary/85 shadow-[0_0_2rem_hsl(219_96%_54%/0.35)]">
-      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 font-display font-bold text-2xl tracking-tighter uppercase hover:text-primary transition-colors">
+      <div className="container mx-auto flex h-20 items-center justify-between gap-2 px-4">
+        <Link
+          href="/"
+          className="flex shrink-0 items-center gap-3 font-display text-2xl font-bold uppercase tracking-tighter transition-colors hover:text-primary"
+        >
           <img src={logo} alt="The Consolidatus Empire LLC crest" className="brand-crest-glow h-12 w-12 rounded-full object-contain ring-1 ring-primary/70" />
-          <span className="hidden sm:inline silver-shine">The Consolidatus Empire LLC</span>
-          <span className="silver-shine text-lg sm:hidden">TCE</span>
+          <span className="hidden silver-shine lg:inline">The Consolidatus Empire LLC</span>
+          <span className="silver-shine text-lg lg:hidden">TCE</span>
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 flex-1 justify-center px-1 sm:px-2">
+          <CompassNavigation
+            accountName={accountName}
+            isAuthenticated={isAuthenticated}
+            isOpen={isOpen}
+            onLogout={handleLogout}
+            onOpenChange={setIsOpen}
+            variant="centered"
+          />
+        </div>
+
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           {/* Auth control (desktop) */}
           <div className="hidden md:block">
             {isAuthenticated ? (
@@ -133,14 +147,6 @@ export default function Navbar() {
               )}
             </Button>
           </Link>
-
-          <CompassNavigation
-            accountName={accountName}
-            isAuthenticated={isAuthenticated}
-            isOpen={isOpen}
-            onLogout={handleLogout}
-            onOpenChange={setIsOpen}
-          />
         </div>
       </div>
     </nav>
