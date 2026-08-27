@@ -34,6 +34,15 @@ import {
   isElementsBodyButterProduct,
 } from "@shared/elementsBodyButter";
 import {
+  CARE_BASKET_BODY_OIL_OPTIONS,
+  CARE_BASKET_DEODORANT_OPTIONS,
+  elementsCareBasketPriceDollars,
+  elementsCareBasketSavingsDollars,
+  elementsCareBasketSeparateDollars,
+  encodeElementsCareBasketSelection,
+  isElementsCareBasketProduct,
+} from "@shared/elementsCareBasket";
+import {
   ELEMENTS_DUO_WASH_OPTIONS,
   elementsDuoPriceDollars,
   elementsDuoSavingsDollars,
@@ -354,9 +363,13 @@ function ProductDetailContent({
     ? product.scents.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
   const isDuo = isElementsDuoProduct(product.priceId, product.title);
-  const needsScent = scentChoices.length > 0;
-  const needsWash = isDuo;
-  const showScentNotes = isBodyButter || isDuo;
+  const isCareBasket = isElementsCareBasketProduct(product.priceId, product.title);
+  const needsScent = scentChoices.length > 0 && !isCareBasket;
+  const needsWash = isDuo || isCareBasket;
+  const needsButterScent = isCareBasket;
+  const needsDeodorantPick = isCareBasket;
+  const needsBodyOils = isCareBasket;
+  const showScentNotes = isBodyButter || isDuo || isCareBasket;
   const variantSiblings = useMemo(() => {
     if (!product.variantGroup) return [];
     return allProducts
@@ -375,18 +388,20 @@ function ProductDetailContent({
   }, [allProducts, product.variantGroup]);
   const hasPackVariants = variantSiblings.length > 1;
   // Sea moss gel reuses the scent picker for Amazon flavor varieties.
-  const scentNoun = isDuo
+  const scentNoun = isDuo || isCareBasket
     ? "body butter scent"
     : /\bgel\b/i.test(product.title)
       ? "flavor"
       : "scent";
-  const scentNounTitle = isDuo
+  const scentNounTitle = isDuo || isCareBasket
     ? "Body Butter Scent"
     : scentNoun === "flavor"
       ? "Flavor"
       : "Scent";
   const duoSavings = elementsDuoSavingsDollars();
   const duoSeparate = elementsDuoSeparateDollars();
+  const careBasketSavings = elementsCareBasketSavingsDollars();
+  const careBasketSeparate = elementsCareBasketSeparateDollars();
   const duoProduct = allProducts.find((p) =>
     isElementsDuoProduct(p.priceId, p.title),
   );
@@ -401,6 +416,10 @@ function ProductDetailContent({
   const [selectedApparelSize, setSelectedApparelSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedScent, setSelectedScent] = useState("");
+  const [selectedButterScent, setSelectedButterScent] = useState("");
+  const [selectedDeodorant, setSelectedDeodorant] = useState("");
+  const [selectedBodyOil1, setSelectedBodyOil1] = useState("");
+  const [selectedBodyOil2, setSelectedBodyOil2] = useState("");
   const [selectedWash, setSelectedWash] = useState("");
   const sizeUpcharge = needsApparelSize ? sizeUpchargeDollars(selectedApparelSize) : 0;
   const effectiveUnitPrice = price + sizeUpcharge;
@@ -445,18 +464,38 @@ function ProductDetailContent({
       setErrorMessage("Please select a 3-in-1 body wash.");
       return;
     }
+    if (needsButterScent && !selectedButterScent) {
+      setErrorMessage("Please select a body butter scent.");
+      return;
+    }
+    if (needsDeodorantPick && !selectedDeodorant) {
+      setErrorMessage("Please select a deodorant scent.");
+      return;
+    }
+    if (needsBodyOils && (!selectedBodyOil1 || !selectedBodyOil2)) {
+      setErrorMessage("Please select both body oil scents.");
+      return;
+    }
     if (needsScent && !selectedScent) {
       setErrorMessage(`Please select a ${scentNoun}.`);
       return;
     }
 
-    const cartScent = isDuo
-      ? encodeElementsDuoSelection(selectedWash, selectedScent)
-      : needsScent
-        ? selectedScent
-        : undefined;
+    const cartScent = isCareBasket
+      ? encodeElementsCareBasketSelection({
+          wash: selectedWash,
+          butterScent: selectedButterScent,
+          deodorant: selectedDeodorant,
+          bodyOil1: selectedBodyOil1,
+          bodyOil2: selectedBodyOil2,
+        })
+      : isDuo
+        ? encodeElementsDuoSelection(selectedWash, selectedScent)
+        : needsScent
+          ? selectedScent
+          : undefined;
     const cartImage =
-      isDuo && selectedWash
+      (isDuo || isCareBasket) && selectedWash
         ? resolveStorefrontImageUrl("", selectedWash) || product.imageUrl
         : product.imageUrl;
 
@@ -652,6 +691,22 @@ function ProductDetailContent({
               </p>
             </div>
           </div>
+        ) : isCareBasket ? (
+          <div className="relative aspect-square overflow-hidden rounded-xl bg-muted shadow-2xl">
+            <img
+              src={
+                selectedWash
+                  ? resolveStorefrontImageUrl("", selectedWash) || product.imageUrl
+                  : product.imageUrl
+              }
+              alt={product.title}
+              className="object-cover w-full h-full"
+              data-testid="img-product-detail"
+            />
+            <p className="absolute bottom-2 left-2 right-2 rounded bg-black/60 px-2 py-1 text-[10px] uppercase tracking-widest text-white">
+              Wash + butter + deodorant + 2 body oils
+            </p>
+          </div>
         ) : (
         <div className="relative aspect-square overflow-hidden rounded-xl bg-muted shadow-2xl">
           <img
@@ -686,10 +741,17 @@ function ProductDetailContent({
             {product.title}
           </h1>
           <p
-            className={`text-2xl font-medium text-primary ${isDuo || hasTieredPricing ? "mb-2" : "mb-6"}`}
+            className={`text-2xl font-medium text-primary ${isDuo || isCareBasket || hasTieredPricing ? "mb-2" : "mb-6"}`}
             data-testid="text-detail-price"
           >
-            {isDuo ? (
+            {isCareBasket ? (
+              <>
+                <span className="mr-3 text-lg text-muted-foreground line-through font-normal">
+                  ${careBasketSeparate.toFixed(2)}
+                </span>
+                ${effectiveUnitPrice.toFixed(2)}
+              </>
+            ) : isDuo ? (
               <>
                 <span className="mr-3 text-lg text-muted-foreground line-through font-normal">
                   ${duoSeparate.toFixed(2)}
@@ -724,6 +786,11 @@ function ProductDetailContent({
                   · ${bodyButterTotalDollars(quantity).toFixed(2)} for {quantity}
                 </>
               )}
+            </p>
+          )}
+          {isCareBasket && (
+            <p className="text-sm text-primary mb-6" data-testid="text-detail-care-basket-savings">
+              Save ${careBasketSavings} — 3-in-1 wash, body butter, deodorant, and 2 body oils (usually $62 separately).
             </p>
           )}
           {isDuo && (
@@ -904,6 +971,132 @@ function ProductDetailContent({
                     </p>
                   )}
                 </div>
+              )}
+              {needsButterScent && (
+                <div className="space-y-2" data-testid="picker-detail-butter">
+                  <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                    Choose your body butter scent
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {scentChoices.map((scent) => {
+                      const active = selectedButterScent === scent;
+                      const notes = bodyButterScentNotes(scent);
+                      return (
+                        <button
+                          key={scent}
+                          type="button"
+                          disabled={soldOut}
+                          onClick={() => {
+                            setSelectedButterScent(active ? "" : scent);
+                            setErrorMessage("");
+                          }}
+                          className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-colors disabled:opacity-50 ${
+                            active
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border hover:border-primary/60"
+                          }`}
+                          data-testid={`button-detail-butter-${scent.toLowerCase().replace(/\s+/g, "-")}`}
+                          title={notes ? `${scent} — ${notes}` : scent}
+                        >
+                          {scent}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              {needsDeodorantPick && (
+                <div className="space-y-2" data-testid="picker-detail-deodorant">
+                  <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                    Choose your deodorant
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {CARE_BASKET_DEODORANT_OPTIONS.map((choice) => {
+                      const active = selectedDeodorant === choice;
+                      return (
+                        <button
+                          key={choice}
+                          type="button"
+                          disabled={soldOut}
+                          onClick={() => {
+                            setSelectedDeodorant(active ? "" : choice);
+                            setErrorMessage("");
+                          }}
+                          className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-colors disabled:opacity-50 ${
+                            active
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border hover:border-primary/60"
+                          }`}
+                          data-testid={`button-detail-deodorant-${choice.toLowerCase().replace(/\s+/g, "-")}`}
+                        >
+                          {choice}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              {needsBodyOils && (
+                <>
+                  <div className="space-y-2" data-testid="picker-detail-body-oil-1">
+                    <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                      Choose body oil #1
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {CARE_BASKET_BODY_OIL_OPTIONS.map((choice) => {
+                        const active = selectedBodyOil1 === choice;
+                        return (
+                          <button
+                            key={choice}
+                            type="button"
+                            disabled={soldOut}
+                            onClick={() => {
+                              setSelectedBodyOil1(active ? "" : choice);
+                              setErrorMessage("");
+                            }}
+                            className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-colors disabled:opacity-50 ${
+                              active
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border hover:border-primary/60"
+                            }`}
+                            data-testid={`button-detail-body-oil-1-${choice.toLowerCase().replace(/\s+/g, "-")}`}
+                          >
+                            {choice}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="space-y-2" data-testid="picker-detail-body-oil-2">
+                    <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                      Choose body oil #2
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {CARE_BASKET_BODY_OIL_OPTIONS.map((choice) => {
+                        const active = selectedBodyOil2 === choice;
+                        return (
+                          <button
+                            key={choice}
+                            type="button"
+                            disabled={soldOut}
+                            onClick={() => {
+                              setSelectedBodyOil2(active ? "" : choice);
+                              setErrorMessage("");
+                            }}
+                            className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-colors disabled:opacity-50 ${
+                              active
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border hover:border-primary/60"
+                            }`}
+                            data-testid={`button-detail-body-oil-2-${choice.toLowerCase().replace(/\s+/g, "-")}`}
+                          >
+                            {choice}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
               )}
               {needsScent && (
                 <div className="space-y-2" data-testid="picker-detail-scent">
@@ -1216,7 +1409,7 @@ function ProductDetailContent({
 
               <Button
                 onClick={handleAddToCart}
-                disabled={!product.priceId || soldOut || (needsLogo && !selectedLogo) || (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) || (needsColor && (!selectedColor || isColorSoldOut(selectedColor))) || (needsWash && !selectedWash) || (needsScent && !selectedScent)}
+                disabled={!product.priceId || soldOut || (needsLogo && !selectedLogo) || (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) || (needsColor && (!selectedColor || isColorSoldOut(selectedColor))) || (needsWash && !selectedWash) || (needsButterScent && !selectedButterScent) || (needsDeodorantPick && !selectedDeodorant) || (needsBodyOils && (!selectedBodyOil1 || !selectedBodyOil2)) || (needsScent && !selectedScent)}
                 className={`w-full transition-colors uppercase tracking-wider font-display text-sm h-12 disabled:opacity-50 ${
                   soldOut
                     ? "bg-gray-400 text-white cursor-not-allowed"
@@ -1226,7 +1419,7 @@ function ProductDetailContent({
                 }`}
                 data-testid="button-detail-add"
               >
-                {soldOut ? "Sold Out" : added ? "Added \u2713" : needsLogo && !selectedLogo ? "Select a Logo" : (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) ? "Select a Size" : needsColor && !selectedColor ? "Select a Color" : needsWash && !selectedWash ? "Select a Wash" : needsScent && !selectedScent ? `Select a ${scentNounTitle}` : "Add to Cart"}
+                {soldOut ? "Sold Out" : added ? "Added \u2713" : needsLogo && !selectedLogo ? "Select a Logo" : (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) ? "Select a Size" : needsColor && !selectedColor ? "Select a Color" : needsWash && !selectedWash ? "Select a Wash" : needsButterScent && !selectedButterScent ? "Select Body Butter" : needsDeodorantPick && !selectedDeodorant ? "Select Deodorant" : needsBodyOils && (!selectedBodyOil1 || !selectedBodyOil2) ? "Select Body Oils" : needsScent && !selectedScent ? `Select a ${scentNounTitle}` : "Add to Cart"}
               </Button>
 
               {errorMessage && (

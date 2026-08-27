@@ -17,6 +17,16 @@
 import { PHONE_MODELS_BY_TYPE } from "./phoneModels";
 import { LOGO_ALT_SET } from "./logoNames";
 import {
+  elementsCareBasketOrderNote,
+  isCareBasketBodyOil,
+  isCareBasketButterScent,
+  isCareBasketDeodorant,
+  isCareBasketWash,
+  isElementsCareBasketMetadata,
+  isElementsCareBasketProduct,
+  parseElementsCareBasketSelection,
+} from "./elementsCareBasket";
+import {
   elementsDuoOrderNote,
   isElementsDuoMetadata,
   isElementsDuoProduct,
@@ -82,6 +92,7 @@ export type CustomizationKind =
   | "colorSoldOut"
   | "scent"
   | "duo"
+  | "careBasket"
   | "none";
 
 export interface CustomizationCheck {
@@ -359,11 +370,34 @@ export function checkCustomization(
     notes.push(`Color: ${color}`);
   }
 
+  // Elements Care Basket: wash + butter + deodorant + 2 body oils in selectedScent.
+  const careBasketRequired =
+    isElementsCareBasketMetadata(meta) ||
+    isElementsCareBasketProduct(
+      undefined,
+      typeof productName === "string" ? productName : undefined,
+    );
+  if (careBasketRequired) {
+    const parsed = parseElementsCareBasketSelection(selectedScent);
+    if (
+      !parsed ||
+      !isCareBasketWash(parsed.wash) ||
+      !isCareBasketButterScent(parsed.butterScent) ||
+      !isCareBasketDeodorant(parsed.deodorant) ||
+      !isCareBasketBodyOil(parsed.bodyOil1) ||
+      !isCareBasketBodyOil(parsed.bodyOil2)
+    ) {
+      return { required: true, kind: "careBasket", ok: false };
+    }
+    notes.push(elementsCareBasketOrderNote(parsed));
+  }
+
   // Elements Duo: one 3-in-1 wash + one body-butter scent, packed into
   // selectedScent as "Wash — Butter". Skip the single-scent check below.
   const duoRequired =
-    isElementsDuoMetadata(meta) ||
-    isElementsDuoProduct(undefined, typeof productName === "string" ? productName : undefined);
+    !careBasketRequired &&
+    (isElementsDuoMetadata(meta) ||
+      isElementsDuoProduct(undefined, typeof productName === "string" ? productName : undefined));
   if (duoRequired) {
     const parsed = parseElementsDuoSelection(selectedScent);
     const butterScents = scentsFor({ ...meta, scented: "true" });
@@ -380,7 +414,7 @@ export function checkCustomization(
   // Scent (candles, body butters). Layered like color/size — required whenever
   // the product is a scented good. The chosen scent is added to the order note.
   const scents = scentsFor(meta);
-  const scentRequired = scents.length > 0 && !duoRequired;
+  const scentRequired = scents.length > 0 && !duoRequired && !careBasketRequired;
   if (scentRequired) {
     const scent = typeof selectedScent === "string" ? selectedScent.trim() : "";
     if (!scent || !scents.includes(scent)) {
@@ -390,7 +424,12 @@ export function checkCustomization(
   }
 
   const required =
-    base.required || sizeRequired || colorRequired || scentRequired || duoRequired;
+    base.required ||
+    sizeRequired ||
+    colorRequired ||
+    scentRequired ||
+    duoRequired ||
+    careBasketRequired;
   const kind: CustomizationKind =
     base.kind !== "none"
       ? base.kind
@@ -398,11 +437,13 @@ export function checkCustomization(
         ? "size"
         : colorRequired
           ? "color"
-          : duoRequired
-            ? "duo"
-            : scentRequired
-              ? "scent"
-              : "none";
+          : careBasketRequired
+            ? "careBasket"
+            : duoRequired
+              ? "duo"
+              : scentRequired
+                ? "scent"
+                : "none";
   return {
     required,
     kind,
@@ -433,6 +474,8 @@ export function customizationErrorMessage(
       return `Please choose a scent for "${productName}" before checking out.`;
     case "duo":
       return `Please choose a 3-in-1 body wash and a body butter scent for "${productName}" before checking out.`;
+    case "careBasket":
+      return `Please choose your wash, body butter, deodorant, and two body oil scents for "${productName}" before checking out.`;
     default:
       return `Please complete your customization for "${productName}" before checking out.`;
   }

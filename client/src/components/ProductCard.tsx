@@ -10,6 +10,14 @@ import { allLogos, LOGO_SECTIONS, logoSectionGroups, logoIdByAlt, recommendedLog
 import LogoPickerTile from "@/components/LogoPickerTile";
 import { sizeUpchargeDollars } from "@shared/customization";
 import {
+  CARE_BASKET_BODY_OIL_OPTIONS,
+  CARE_BASKET_DEODORANT_OPTIONS,
+  elementsCareBasketSavingsDollars,
+  elementsCareBasketSeparateDollars,
+  encodeElementsCareBasketSelection,
+  isElementsCareBasketProduct,
+} from "@shared/elementsCareBasket";
+import {
   ELEMENTS_DUO_WASH_OPTIONS,
   elementsDuoSavingsDollars,
   elementsDuoSeparateDollars,
@@ -91,19 +99,25 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
     ? scents.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
   const isDuo = isElementsDuoProduct(priceId, title);
+  const isCareBasket = isElementsCareBasketProduct(priceId, title);
   const isDeodorant = isElementsDeodorantProduct(priceId, title);
   const isBodyButter = isElementsBodyButterProduct(priceId, title);
-  const needsScent = scentChoices.length > 0;
-  const needsWash = isDuo;
+  const needsScent = scentChoices.length > 0 && !isCareBasket;
+  const needsWash = isDuo || isCareBasket;
+  const needsButterScent = isCareBasket;
+  const needsDeodorantPick = isCareBasket;
+  const needsBodyOils = isCareBasket;
   // Sea moss gel (and similar jar products) reuse the scent picker for flavor
   // varieties — label the UI as "flavor" so checkout copy stays accurate.
-  const scentNoun = isDuo
+  const scentNoun = isDuo || isCareBasket
     ? "body butter scent"
     : /\bgel\b/i.test(baseTitle)
       ? "flavor"
       : "scent";
   const duoSavings = elementsDuoSavingsDollars();
   const duoSeparate = elementsDuoSeparateDollars();
+  const careBasketSavings = elementsCareBasketSavingsDollars();
+  const careBasketSeparate = elementsCareBasketSeparateDollars();
   const soldOutColorSet = new Set(
     (soldOutColors
       ? soldOutColors.split(",").map((s) => s.trim()).filter(Boolean)
@@ -116,9 +130,13 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
   const [selectedApparelSize, setSelectedApparelSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedScent, setSelectedScent] = useState("");
+  const [selectedButterScent, setSelectedButterScent] = useState("");
+  const [selectedDeodorant, setSelectedDeodorant] = useState("");
+  const [selectedBodyOil1, setSelectedBodyOil1] = useState("");
+  const [selectedBodyOil2, setSelectedBodyOil2] = useState("");
   const [selectedWash, setSelectedWash] = useState("");
   const image =
-    isDuo && selectedWash
+    (isDuo || isCareBasket) && selectedWash
       ? resolveStorefrontImageUrl("", selectedWash) || variantImage
       : variantImage;
   const [errorMessage, setErrorMessage] = useState("");
@@ -166,18 +184,38 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
       setErrorMessage("Please select a 3-in-1 body wash.");
       return;
     }
+    if (needsButterScent && !selectedButterScent) {
+      setErrorMessage("Please select a body butter scent.");
+      return;
+    }
+    if (needsDeodorantPick && !selectedDeodorant) {
+      setErrorMessage("Please select a deodorant scent.");
+      return;
+    }
+    if (needsBodyOils && (!selectedBodyOil1 || !selectedBodyOil2)) {
+      setErrorMessage("Please select both body oil scents.");
+      return;
+    }
     if (needsScent && !selectedScent) {
       setErrorMessage(`Please select a ${scentNoun}.`);
       return;
     }
 
-    const cartScent = isDuo
-      ? encodeElementsDuoSelection(selectedWash, selectedScent)
-      : needsScent
-        ? selectedScent
-        : undefined;
+    const cartScent = isCareBasket
+      ? encodeElementsCareBasketSelection({
+          wash: selectedWash,
+          butterScent: selectedButterScent,
+          deodorant: selectedDeodorant,
+          bodyOil1: selectedBodyOil1,
+          bodyOil2: selectedBodyOil2,
+        })
+      : isDuo
+        ? encodeElementsDuoSelection(selectedWash, selectedScent)
+        : needsScent
+          ? selectedScent
+          : undefined;
     const cartImage =
-      isDuo && selectedWash
+      (isDuo || isCareBasket) && selectedWash
         ? resolveStorefrontImageUrl("", selectedWash) || image
         : image;
 
@@ -317,12 +355,12 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
               Sold Out
             </div>
           )}
-          {isDuo && !soldOut && (
+          {(isDuo || isCareBasket) && !soldOut && (
             <div
               className="absolute top-3 right-3 rounded bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-lg"
               data-testid={`badge-save-${title.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              Save ${duoSavings}
+              Save ${isCareBasket ? careBasketSavings : duoSavings}
             </div>
           )}
         </CardContent>
@@ -355,10 +393,10 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
               className="font-medium text-primary text-right"
               data-testid={`text-price-${title.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              {isDuo ? (
+              {isDuo || isCareBasket ? (
                 <span className="flex flex-col items-end leading-tight">
                   <span className="text-xs text-muted-foreground line-through font-normal">
-                    ${duoSeparate.toFixed(2)}
+                    ${(isCareBasket ? careBasketSeparate : duoSeparate).toFixed(2)}
                   </span>
                   <span>${effectiveUnitPrice.toFixed(2)}</span>
                 </span>
@@ -367,6 +405,14 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
               )}
             </span>
           </div>
+          {isCareBasket && (
+            <p
+              className="text-xs text-primary"
+              data-testid={`text-care-basket-savings-${title.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              Wash + butter + deodorant + 2 body oils · save ${careBasketSavings} vs buying separately
+            </p>
+          )}
           {isDuo && (
             <p
               className="text-xs text-primary"
@@ -604,6 +650,125 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                   </Select>
                 </div>
               )}
+              {needsButterScent && (
+                <div className="w-full mt-1 space-y-2">
+                  <p
+                    className="text-xs text-muted-foreground leading-relaxed"
+                    data-testid={`text-butter-note-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    Choose your whipped body butter scent — included in the basket.
+                  </p>
+                  <Select value={selectedButterScent} onValueChange={(v) => { setSelectedButterScent(v); setErrorMessage(""); }} disabled={soldOut}>
+                    <SelectTrigger
+                      className="w-full"
+                      data-testid={`select-butter-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      <SelectValue placeholder="Choose your body butter scent *" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {scentChoices.map((choice) => {
+                        const notes = bodyButterScentNotes(choice);
+                        return (
+                          <SelectItem
+                            key={choice}
+                            value={choice}
+                            data-testid={`option-butter-${choice.toLowerCase().replace(/\s+/g, '-')}`}
+                          >
+                            {notes ? `${choice} — ${notes}` : choice}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              {needsDeodorantPick && (
+                <div className="w-full mt-1 space-y-2">
+                  <p
+                    className="text-xs text-muted-foreground leading-relaxed"
+                    data-testid={`text-deodorant-note-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    Choose your natural deodorant — included in the basket.
+                  </p>
+                  <Select value={selectedDeodorant} onValueChange={(v) => { setSelectedDeodorant(v); setErrorMessage(""); }} disabled={soldOut}>
+                    <SelectTrigger
+                      className="w-full"
+                      data-testid={`select-deodorant-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      <SelectValue placeholder="Choose your deodorant *" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CARE_BASKET_DEODORANT_OPTIONS.map((choice) => (
+                        <SelectItem
+                          key={choice}
+                          value={choice}
+                          data-testid={`option-deodorant-${choice.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
+                          {choice}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              {needsBodyOils && (
+                <>
+                  <div className="w-full mt-1 space-y-2">
+                    <p
+                      className="text-xs text-muted-foreground leading-relaxed"
+                      data-testid={`text-body-oil-1-note-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      Choose your first body oil — included in the basket.
+                    </p>
+                    <Select value={selectedBodyOil1} onValueChange={(v) => { setSelectedBodyOil1(v); setErrorMessage(""); }} disabled={soldOut}>
+                      <SelectTrigger
+                        className="w-full"
+                        data-testid={`select-body-oil-1-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                      >
+                        <SelectValue placeholder="Choose body oil #1 *" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CARE_BASKET_BODY_OIL_OPTIONS.map((choice) => (
+                          <SelectItem
+                            key={choice}
+                            value={choice}
+                            data-testid={`option-body-oil-1-${choice.toLowerCase().replace(/\s+/g, '-')}`}
+                          >
+                            {choice}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="w-full mt-1 space-y-2">
+                    <p
+                      className="text-xs text-muted-foreground leading-relaxed"
+                      data-testid={`text-body-oil-2-note-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      Choose your second body oil — included in the basket.
+                    </p>
+                    <Select value={selectedBodyOil2} onValueChange={(v) => { setSelectedBodyOil2(v); setErrorMessage(""); }} disabled={soldOut}>
+                      <SelectTrigger
+                        className="w-full"
+                        data-testid={`select-body-oil-2-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                      >
+                        <SelectValue placeholder="Choose body oil #2 *" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CARE_BASKET_BODY_OIL_OPTIONS.map((choice) => (
+                          <SelectItem
+                            key={choice}
+                            value={choice}
+                            data-testid={`option-body-oil-2-${choice.toLowerCase().replace(/\s+/g, '-')}`}
+                          >
+                            {choice}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </>
+              )}
               {needsScent && (
                 <div className="w-full mt-1 space-y-2">
                   <p
@@ -741,7 +906,7 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
               </div>
               <Button 
                 onClick={handleAddToCart}
-                disabled={!priceId || soldOut || (needsLogo && !selectedLogo) || (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) || (needsColor && (!selectedColor || isColorSoldOut(selectedColor))) || (needsWash && !selectedWash) || (needsScent && !selectedScent)}
+                disabled={!priceId || soldOut || (needsLogo && !selectedLogo) || (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) || (needsColor && (!selectedColor || isColorSoldOut(selectedColor))) || (needsWash && !selectedWash) || (needsButterScent && !selectedButterScent) || (needsDeodorantPick && !selectedDeodorant) || (needsBodyOils && (!selectedBodyOil1 || !selectedBodyOil2)) || (needsScent && !selectedScent)}
                 className={`w-full mt-2 transition-colors uppercase tracking-wider font-display text-sm h-10 disabled:opacity-50 ${
                   soldOut 
                     ? 'bg-gray-400 text-white cursor-not-allowed' 
@@ -751,7 +916,7 @@ export default function ProductCard({ image: baseImage, title: baseTitle, price:
                 }`}
                 data-testid={`button-add-${title.toLowerCase().replace(/\s+/g, '-')}`}
               >
-                {soldOut ? 'Sold Out' : added ? 'Added \u2713' : needsLogo && !selectedLogo ? 'Select a Logo' : (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) ? 'Select a Size' : needsColor && !selectedColor ? 'Select a Color' : needsWash && !selectedWash ? 'Select a Wash' : needsScent && !selectedScent ? `Select a ${scentNoun === "flavor" ? "Flavor" : "Scent"}` : 'Add to Cart'}
+                {soldOut ? 'Sold Out' : added ? 'Added \u2713' : needsLogo && !selectedLogo ? 'Select a Logo' : (needsSize && !selectedSize) || (needsApparelSize && !selectedApparelSize) ? 'Select a Size' : needsColor && !selectedColor ? 'Select a Color' : needsWash && !selectedWash ? 'Select a Wash' : needsButterScent && !selectedButterScent ? 'Select Body Butter' : needsDeodorantPick && !selectedDeodorant ? 'Select Deodorant' : needsBodyOils && (!selectedBodyOil1 || !selectedBodyOil2) ? 'Select Body Oils' : needsScent && !selectedScent ? `Select a ${scentNoun === "flavor" ? "Flavor" : "Scent"}` : 'Add to Cart'}
               </Button>
               {errorMessage && (
                 <p

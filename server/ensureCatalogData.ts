@@ -23,6 +23,12 @@ import {
   SPA_BASKET_SCENT_OPTIONS,
 } from "@shared/luxurySpaBaskets";
 import {
+  ELEMENTS_CARE_BASKET_NAME,
+  ELEMENTS_CARE_BASKET_PRICE_CENTS,
+  ELEMENTS_CARE_BASKET_PRICE_ID,
+  ELEMENTS_CARE_BASKET_PRODUCT_ID,
+} from "@shared/elementsCareBasket";
+import {
   ELEMENTS_DUO_NAME,
   ELEMENTS_DUO_PRICE_CENTS,
   ELEMENTS_DUO_PRICE_ID,
@@ -1357,6 +1363,22 @@ const ELEMENTS_DUO_META = {
   gender: "Unisex",
 };
 
+// Elements Care Basket — our own store bundle: 3-in-1 wash + body butter +
+// deodorant + 2 body oils for $40 ($62 separately, save $22).
+const ELEMENTS_CARE_BASKET_DESCRIPTION =
+  "Khomplete Khemistri Elements Care Basket — our own bundle from the store: one 8 oz 3-in-1 body wash, shampoo & conditioner; one 4 oz whipped body butter; one natural deodorant stick; and two fragrance body oils. $40 flat (save $22 vs $62 separately). Choose your wash, body butter, deodorant, and two body oil scents at checkout.";
+const ELEMENTS_CARE_BASKET_META = {
+  category: "Body Care",
+  productType: "elements",
+  sortOrder: "89",
+  imageUrl: BODY_WASH_COCOA_SHEA_IMAGE,
+  customize: "none",
+  scented: "true",
+  scentOptions: BODY_BUTTER_SCENT_OPTIONS,
+  elementsCareBasket: "true",
+  gender: "Unisex",
+};
+
 // Extra accessories that are self-created in prod the same way as bedding
 // (synthetic prod_kk*/price_kk* ids, no Stripe on the Railway frozen snapshot).
 // These carry a `colors` list (multi-color picker) and offer the full logo
@@ -2168,6 +2190,20 @@ export async function ensureCatalogData() {
       }
       console.log(
         `ensureCatalogData: ensured ${DEODORANT_PRODUCTS.length} Elements deodorant SKUs (coming soon).`,
+      );
+
+      await ensureSyntheticProduct({
+        accountId,
+        productId: ELEMENTS_CARE_BASKET_PRODUCT_ID,
+        priceId: ELEMENTS_CARE_BASKET_PRICE_ID,
+        name: ELEMENTS_CARE_BASKET_NAME,
+        description: ELEMENTS_CARE_BASKET_DESCRIPTION,
+        priceCents: ELEMENTS_CARE_BASKET_PRICE_CENTS,
+        meta: ELEMENTS_CARE_BASKET_META,
+        created,
+      });
+      console.log(
+        "ensureCatalogData: ensured Elements Care Basket ($40 — wash + butter + deodorant + 2 body oils, save $22).",
       );
 
       await ensureSyntheticProduct({
