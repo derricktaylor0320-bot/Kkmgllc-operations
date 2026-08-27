@@ -190,6 +190,9 @@ export default function Feminine() {
       product.category === "Spa & Gifts" ||
       isLuxurySpaBasketProduct(product.priceId, product.title),
   );
+  const beddingProducts = accessoryProducts.filter(
+    (product) => product.category === "Bedding",
+  );
   const womensProducts = apparelProducts.filter(
     (product) => product.gender === "Women",
   );
@@ -209,7 +212,8 @@ export default function Feminine() {
     customizableFavorites.length +
     womensApparel.length +
     loungeAndIntimates.length +
-    spaGiftProducts.length >
+    spaGiftProducts.length +
+    beddingProducts.length >
     0;
 
   return (
@@ -347,6 +351,13 @@ export default function Feminine() {
                   title="Spa & Gift Baskets"
                   description="Aqua Elegante luxury spa gift sets — curated bath and body baskets in seven soothing scents, perfect for gifting."
                   products={spaGiftProducts}
+                />
+                <ProductSection
+                  id="bedding"
+                  eyebrow="Sleep in luxury"
+                  title="Bedding Sets"
+                  description="Royal blue comforter and sheet sets with the Khomplete Khemistri mark — a favorite gift for her."
+                  products={beddingProducts}
                 />
                 <ProductSection
                   id="customizable-favorites"
