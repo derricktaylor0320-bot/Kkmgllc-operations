@@ -13,6 +13,7 @@ import {
 } from "@shared/footballGameDayBundle";
 import { CUTTING_BOARD_SAMPLE_PHOTOS } from "@shared/footballCuttingBoard";
 import accessoriesSectionArt from "@assets/generated_images/kk_accessories_apparel_banner.jpeg";
+import HomeCareLaundryCollection from "@/components/HomeCareLaundryCollection";
 
 const FLOOR_MATS_IMAGE = "/assets/kk_custom_car_floor_mats.png";
 const FLOOR_MATS_TITLE = "Custom Car Floor Mats";
@@ -36,7 +37,8 @@ export default function Accessories() {
         p.category !== "Bedding" &&
         p.category !== "Sleepwear" &&
         p.category !== "Intimates" &&
-        p.category !== "Body Care",
+        p.category !== "Body Care" &&
+        p.category !== "Home Care",
     ),
   );
 
@@ -72,6 +74,8 @@ export default function Accessories() {
           imageAlt="Khomplete Khemistri Accessories — Apparel & Accessories"
           caption="Branded essentials for your lifestyle. Watches, duffle bags, tumblers, car floor mats, umbrellas, candles, and more."
         />
+
+        <HomeCareLaundryCollection />
 
         <div className="mb-12 grid gap-6 lg:grid-cols-3">
           <div
