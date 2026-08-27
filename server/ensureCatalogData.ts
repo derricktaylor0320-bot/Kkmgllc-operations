@@ -28,6 +28,12 @@ import {
   ELEMENTS_DUO_PRICE_ID,
   ELEMENTS_DUO_PRODUCT_ID,
 } from "@shared/elementsDuo";
+import {
+  ECO_LAUNDRY_SHEETS_PACKS,
+  ECO_LAUNDRY_SHEETS_VARIANT_GROUP,
+  ecoLaundrySheetsDescription,
+  ecoLaundrySheetsPackLabel,
+} from "@shared/homeCareLaundry";
 
 // Catalog facts that must be true in whatever database this server is connected
 // to. The synced `stripe.products` / `stripe.prices` tables are the durable
@@ -1382,13 +1388,12 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       imageUrl: "/assets/kk_duffle_bag_black.png",
     },
   },
-  {
-    productId: "prod_kk_ecolaundrysheets",
-    priceId: "price_kk_ecolaundrysheets",
-    name: "Eco Laundry Sheets",
-    description:
-      "Dissolvable, eco-conscious detergent sheets designed for standard and HE washers. Eliminates plastic heavy bottles, fights tough stains, and delivers zero waste. Free shipping included.",
-    priceCents: 1899,
+  ...ECO_LAUNDRY_SHEETS_PACKS.map((pack) => ({
+    productId: pack.productId,
+    priceId: pack.priceId,
+    name: `${ecoLaundrySheetsPackLabel(pack.count)} Eco Laundry Sheets`,
+    description: ecoLaundrySheetsDescription(pack.count),
+    priceCents: pack.priceCents,
     meta: {
       category: "Home Care",
       productType: "accessory",
@@ -1396,8 +1401,10 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       gender: "Unisex",
       fulfillment: "Amazon",
       customize: "none",
+      variantGroup: ECO_LAUNDRY_SHEETS_VARIANT_GROUP,
+      variantLabel: ecoLaundrySheetsPackLabel(pack.count),
     },
-  },
+  })),
   {
     productId: "prod_kk_machinecleaner",
     priceId: "price_kk_machinecleaner",

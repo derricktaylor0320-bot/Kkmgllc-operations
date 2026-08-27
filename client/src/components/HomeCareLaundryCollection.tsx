@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { Droplets, Sparkles, WashingMachine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+  ECO_LAUNDRY_SHEETS_PACKS,
   ECO_LAUNDRY_SHEETS_PRICE_CENTS,
-  ECO_LAUNDRY_SHEETS_PRICE_ID,
   LAUNDRY_SAUCE_REFERRAL_URL,
   LAUNDRY_SAUCE_STARTING_PRICE_DOLLARS,
   MACHINE_CLEANER_TABLETS_PRICE_CENTS,
@@ -16,7 +17,13 @@ function formatDollars(cents: number) {
 }
 
 export default function HomeCareLaundryCollection() {
-  const sheetsPrice = formatDollars(ECO_LAUNDRY_SHEETS_PRICE_CENTS);
+  const [selectedPackIdx, setSelectedPackIdx] = useState(0);
+  const selectedPack =
+    ECO_LAUNDRY_SHEETS_PACKS[
+      Math.min(selectedPackIdx, ECO_LAUNDRY_SHEETS_PACKS.length - 1)
+    ];
+  const startingPrice = formatDollars(ECO_LAUNDRY_SHEETS_PRICE_CENTS);
+  const selectedPrice = formatDollars(selectedPack.priceCents);
   const tabletsPrice = formatDollars(MACHINE_CLEANER_TABLETS_PRICE_CENTS);
 
   return (
@@ -60,19 +67,48 @@ export default function HomeCareLaundryCollection() {
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
               Dissolvable, eco-conscious detergent sheets designed for standard and HE
               washers. Eliminates plastic heavy bottles, fights tough stains, and
-              delivers zero waste.
+              delivers zero waste. Available in 32, 64, and 96-count packs.
             </p>
           </div>
           <div className="mt-6">
-            <div className="mb-4 flex flex-wrap items-baseline gap-2">
-              <span className="text-2xl font-extrabold text-foreground">
-                ${sheetsPrice}
-              </span>
-              <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                Free Shipping
-              </span>
+            <div className="mb-4 space-y-3">
+              <div className="flex flex-wrap items-baseline gap-2">
+                <span className="text-sm text-muted-foreground">From</span>
+                <span className="text-2xl font-extrabold text-foreground">
+                  ${startingPrice}
+                </span>
+                <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                  Free Shipping
+                </span>
+              </div>
+              <div
+                className="flex flex-wrap gap-2"
+                data-testid="picker-eco-laundry-sheets-pack"
+              >
+                {ECO_LAUNDRY_SHEETS_PACKS.map((pack, i) => {
+                  const isSelected = i === selectedPackIdx;
+                  return (
+                    <button
+                      key={pack.priceId}
+                      type="button"
+                      onClick={() => setSelectedPackIdx(i)}
+                      className={`rounded-md border px-3 py-1.5 text-xs font-medium uppercase tracking-wide transition-colors ${
+                        isSelected
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-border text-muted-foreground hover:border-primary/40"
+                      }`}
+                      data-testid={`button-eco-laundry-pack-${pack.count}`}
+                    >
+                      {pack.count} Count — ${formatDollars(pack.priceCents)}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-sm font-medium text-foreground">
+                Selected: {selectedPack.count}-count pack — ${selectedPrice}
+              </p>
             </div>
-            <Link href={`/product/${ECO_LAUNDRY_SHEETS_PRICE_ID}`}>
+            <Link href={`/product/${selectedPack.priceId}`}>
               <Button
                 className="w-full font-display uppercase tracking-wider"
                 data-testid="link-buy-eco-laundry-sheets"

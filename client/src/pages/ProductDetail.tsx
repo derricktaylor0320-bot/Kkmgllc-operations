@@ -68,6 +68,8 @@ interface ApiProduct {
   colors?: string | null;
   soldOutColors?: string | null;
   scents?: string | null;
+  variantGroup?: string | null;
+  variantLabel?: string | null;
 }
 
 function listingForProduct(product: { productType?: string; category?: string }) {
@@ -355,6 +357,23 @@ function ProductDetailContent({
   const needsScent = scentChoices.length > 0;
   const needsWash = isDuo;
   const showScentNotes = isBodyButter || isDuo;
+  const variantSiblings = useMemo(() => {
+    if (!product.variantGroup) return [];
+    return allProducts
+      .filter(
+        (p) =>
+          p.variantGroup === product.variantGroup &&
+          p.priceId &&
+          !p.soldOut &&
+          !p.comingSoon,
+      )
+      .sort(
+        (a, b) =>
+          (parseFloat(a.variantLabel || a.title) || 0) -
+          (parseFloat(b.variantLabel || b.title) || 0),
+      );
+  }, [allProducts, product.variantGroup]);
+  const hasPackVariants = variantSiblings.length > 1;
   // Sea moss gel reuses the scent picker for Amazon flavor varieties.
   const scentNoun = isDuo
     ? "body butter scent"
@@ -761,6 +780,40 @@ function ProductDetailContent({
             </div>
           ) : (
             <div className="mt-auto space-y-4">
+              {hasPackVariants && (
+                <div className="space-y-2" data-testid="picker-detail-pack-size">
+                  <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                    Choose your pack size
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {variantSiblings.map((sibling) => {
+                      const isActive = sibling.priceId === product.priceId;
+                      const siblingPrice = parseFloat(sibling.price || "0");
+                      return isActive ? (
+                        <span
+                          key={sibling.priceId}
+                          className="rounded-md border border-primary bg-primary/10 px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-primary"
+                          data-testid={`button-pack-size-${(sibling.variantLabel || sibling.title).toLowerCase().replace(/\s+/g, "-")}`}
+                        >
+                          {sibling.variantLabel || sibling.title} — $
+                          {siblingPrice.toFixed(2)}
+                        </span>
+                      ) : (
+                        <Link key={sibling.priceId} href={`/product/${sibling.priceId}`}>
+                          <button
+                            type="button"
+                            className="rounded-md border border-border px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground transition-colors hover:border-primary/40"
+                            data-testid={`button-pack-size-${(sibling.variantLabel || sibling.title).toLowerCase().replace(/\s+/g, "-")}`}
+                          >
+                            {sibling.variantLabel || sibling.title} — $
+                            {siblingPrice.toFixed(2)}
+                          </button>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
               {needsColor && (
                 <div className="space-y-2" data-testid="picker-detail-color">
                   <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
