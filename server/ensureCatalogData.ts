@@ -990,7 +990,7 @@ const BEDDING_PRODUCTS: {
     description:
       'Luxury velvet comforter set featuring the Khomplete Khemistri Accessories eagle badge and "Sleep and Dream in Luxury" in silver. Rich royal blue. Includes comforter and matching pillow shams. Select your size at checkout: Twin, Full, Queen, or King.',
     priceCents: BEDDING_PRICE_COMFORTER_CENTS,
-    meta: { category: "Bedding", productType: "accessory", sortOrder: "50", imageUrl: BEDDING_COMFORTER_IMAGE, fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
+    meta: { category: "Bedding", productType: "accessory", sortOrder: "50", gender: "Women", imageUrl: BEDDING_COMFORTER_IMAGE, fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
   },
   {
     productId: "prod_kksheetset",
@@ -999,7 +999,7 @@ const BEDDING_PRODUCTS: {
     description:
       'Premium satin sheet set featuring the Khomplete Khemistri Accessories eagle badge and "Sleep and Dream in Luxury" in silver. Elegant royal blue. Includes fitted sheet, flat sheet, and matching pillowcases. Select your size at checkout: Twin, Full, Queen, or King.',
     priceCents: BEDDING_PRICE_SHEET_CENTS,
-    meta: { category: "Bedding", productType: "accessory", sortOrder: "51", imageUrl: BEDDING_SHEET_IMAGE, fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
+    meta: { category: "Bedding", productType: "accessory", sortOrder: "51", gender: "Women", imageUrl: BEDDING_SHEET_IMAGE, fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
   },
   {
     productId: "prod_kkpillowcaseset",
@@ -1008,7 +1008,7 @@ const BEDDING_PRODUCTS: {
     description:
       'Luxury branded pillowcase set — pack of 2. Featuring the Khomplete Khemistri Accessories eagle badge and "Sleep and Dream in Luxury" in silver on rich royal blue. Select your size at checkout: Twin, Full, Queen, or King.',
     priceCents: BEDDING_PRICE_PILLOWCASE_CENTS,
-    meta: { category: "Bedding", productType: "accessory", sortOrder: "52", imageUrl: BEDDING_PILLOWCASE_IMAGE, fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
+    meta: { category: "Bedding", productType: "accessory", sortOrder: "52", gender: "Women", imageUrl: BEDDING_PILLOWCASE_IMAGE, fulfillment: "Amazon", sizes: "Twin, Full, Queen, King" },
   },
   {
     productId: "prod_kkbodypillow",
@@ -1017,7 +1017,7 @@ const BEDDING_PRODUCTS: {
     description:
       'Luxury branded body pillow featuring the Khomplete Khemistri Accessories eagle badge and "Sleep and Dream in Luxury" in silver on rich royal blue. Generous 60" x 20" size for full-body comfort.',
     priceCents: BEDDING_PRICE_BODYPILLOW_CENTS,
-    meta: { category: "Bedding", productType: "accessory", sortOrder: "53", imageUrl: BEDDING_BODY_PILLOW_IMAGE, fulfillment: "Amazon", customize: "none" },
+    meta: { category: "Bedding", productType: "accessory", sortOrder: "53", gender: "Women", imageUrl: BEDDING_BODY_PILLOW_IMAGE, fulfillment: "Amazon", customize: "none" },
   },
 ];
 

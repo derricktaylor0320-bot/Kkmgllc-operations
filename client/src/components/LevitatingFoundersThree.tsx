@@ -5,7 +5,7 @@ export default function LevitatingFoundersThree() {
   const { openCompass } = useCompassNavigation();
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-6 z-20 flex justify-end px-4 sm:bottom-10 sm:px-8 md:bottom-14">
+    <div className="pointer-events-none absolute inset-x-0 bottom-6 z-20 flex justify-center px-4 sm:bottom-10 sm:px-8 md:bottom-14">
       <motion.button
         type="button"
         onClick={openCompass}
@@ -35,7 +35,7 @@ export default function LevitatingFoundersThree() {
         </div>
 
         <span className="rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[9px] uppercase tracking-[0.22em] text-white/75 backdrop-blur-sm transition-colors group-hover:border-primary/30 group-hover:text-white/95 sm:text-[10px]">
-          Site Directory
+          Click Here — Site Directory
         </span>
       </motion.button>
     </div>
