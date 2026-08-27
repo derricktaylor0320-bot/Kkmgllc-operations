@@ -1308,6 +1308,38 @@ const EXTRA_ACCESSORY_PRODUCTS: {
     },
   },
   {
+    productId: "prod_kk_ecolaundrysheets",
+    priceId: "price_kk_ecolaundrysheets",
+    name: "Eco Laundry Sheets",
+    description:
+      "Dissolvable, eco-conscious detergent sheets designed for standard and HE washers. Eliminates plastic heavy bottles, fights tough stains, and delivers zero waste. Free shipping included.",
+    priceCents: 1899,
+    meta: {
+      category: "Home Care",
+      productType: "accessory",
+      sortOrder: "52",
+      gender: "Unisex",
+      fulfillment: "Amazon",
+      customize: "none",
+    },
+  },
+  {
+    productId: "prod_kk_machinecleaner",
+    priceId: "price_kk_machinecleaner",
+    name: "Deep Clean Washing Machine Tablets",
+    description:
+      "Powerful eco-conscious cleaner tablets (24 per cylinder). Safely dissolves residue, odor, and detergent buildup from inside the drum, tub seals, and lines for top/front loading HE washers. Free shipping included.",
+    priceCents: 1999,
+    meta: {
+      category: "Home Care",
+      productType: "accessory",
+      sortOrder: "53",
+      gender: "Unisex",
+      fulfillment: "Amazon",
+      customize: "none",
+    },
+  },
+  {
     productId: "prod_kkcarfloormats",
     priceId: "price_kkcarfloormats",
     name: "Custom Car Floor Mats",
