@@ -245,6 +245,56 @@ const TUMBLER_30_META = {
   variantLabel: "30 oz",
 };
 
+// Laundry Detergent Sheets — Amazon-fulfilled (The Clean People, ASIN B095J2SZWV /
+// https://a.co/d/0igKXrSW). Two pack sizes share one storefront card via
+// `variantGroup`; shoppers pick scent at checkout.
+const LAUNDRY_DETERGENT_VARIANT_GROUP = "Laundry Detergent Sheets";
+const LAUNDRY_DETERGENT_IMAGE = "/assets/kk_elements_laundry_detergent_sheets.jpg";
+const LAUNDRY_DETERGENT_AMAZON_LINK = "https://a.co/d/0igKXrSW";
+const LAUNDRY_DETERGENT_SCENT_OPTIONS =
+  "Fresh Scent, Fragrance Free, Lavender, Peppermint, Spring Scent, Sweet Petals";
+
+function laundryDetergentDescription(count: number): string {
+  return `The Clean People Laundry Detergent Sheets — ultra-concentrated, plant-derived laundry soap in recyclable paper packaging. Hypoallergenic, vegan, and effective on stains and odors. Works in all washing machines including HE. ${count}-count pack. SELECT YOUR SCENT at checkout. Amazon-fulfilled. Available in 6 scents: Fresh Scent, Fragrance Free, Lavender, Peppermint, Spring Scent, and Sweet Petals.`;
+}
+
+const LAUNDRY_DETERGENT_META_BASE = {
+  category: "Elements",
+  productType: "elements",
+  sortOrder: "119",
+  imageUrl: LAUNDRY_DETERGENT_IMAGE,
+  customize: "none",
+  fulfillment: "Amazon",
+  amazonLink: LAUNDRY_DETERGENT_AMAZON_LINK,
+  scented: "true",
+  scentOptions: LAUNDRY_DETERGENT_SCENT_OPTIONS,
+  variantGroup: LAUNDRY_DETERGENT_VARIANT_GROUP,
+};
+
+const LAUNDRY_DETERGENT_96_PRODUCT_ID = "prod_kkelemslaundry96";
+const LAUNDRY_DETERGENT_96_PRICE_ID = "price_kkelemslaundry96";
+const LAUNDRY_DETERGENT_96_NAME = "96 Count Laundry Detergent Sheets";
+const LAUNDRY_DETERGENT_96_PRICE_CENTS = 5000;
+const LAUNDRY_DETERGENT_96_DESCRIPTION = laundryDetergentDescription(96);
+const LAUNDRY_DETERGENT_96_META = {
+  ...LAUNDRY_DETERGENT_META_BASE,
+  cost: "33.00",
+  profitMargin: "17.00",
+  variantLabel: "96 Count",
+};
+
+const LAUNDRY_DETERGENT_192_PRODUCT_ID = "prod_kkelemslaundry192";
+const LAUNDRY_DETERGENT_192_PRICE_ID = "price_kkelemslaundry192";
+const LAUNDRY_DETERGENT_192_NAME = "192 Count Laundry Detergent Sheets";
+const LAUNDRY_DETERGENT_192_PRICE_CENTS = 7049;
+const LAUNDRY_DETERGENT_192_DESCRIPTION = laundryDetergentDescription(192);
+const LAUNDRY_DETERGENT_192_META = {
+  ...LAUNDRY_DETERGENT_META_BASE,
+  cost: "55.49",
+  profitMargin: "15.00",
+  variantLabel: "192 Count",
+};
+
 // Our Exotic Body Butter Scents. New consumable product ($15, 4 oz jar; 3 for $36). Same
 // self-applying pattern as the cases/hat: in dev seedProducts creates it in
 // Stripe (synced to the DB) so the guarded insert is a no-op; on the Railway
@@ -2182,6 +2232,87 @@ export async function ensureCatalogData() {
         WHERE active = true
           AND product IN (SELECT id FROM stripe.products WHERE name = ${t.name} AND active = true)
           AND (_raw_data->>'unit_amount') IS DISTINCT FROM ${String(t.priceCents)}
+      `);
+    }
+
+    // 5a2) Laundry Detergent Sheets (96 / 192 count, Amazon-fulfilled). Same
+    //      variant-group pattern as the branded tumblers above.
+    const laundryDetergentVariants = [
+      {
+        productId: LAUNDRY_DETERGENT_96_PRODUCT_ID,
+        priceId: LAUNDRY_DETERGENT_96_PRICE_ID,
+        name: LAUNDRY_DETERGENT_96_NAME,
+        priceCents: LAUNDRY_DETERGENT_96_PRICE_CENTS,
+        description: LAUNDRY_DETERGENT_96_DESCRIPTION,
+        meta: LAUNDRY_DETERGENT_96_META,
+      },
+      {
+        productId: LAUNDRY_DETERGENT_192_PRODUCT_ID,
+        priceId: LAUNDRY_DETERGENT_192_PRICE_ID,
+        name: LAUNDRY_DETERGENT_192_NAME,
+        priceCents: LAUNDRY_DETERGENT_192_PRICE_CENTS,
+        description: LAUNDRY_DETERGENT_192_DESCRIPTION,
+        meta: LAUNDRY_DETERGENT_192_META,
+      },
+    ];
+
+    for (const v of laundryDetergentVariants) {
+      const productRaw = JSON.stringify({
+        id: v.productId,
+        object: "product",
+        active: true,
+        name: v.name,
+        description: v.description,
+        metadata: v.meta,
+        images: [],
+        created,
+        livemode: false,
+      });
+      const priceRaw = JSON.stringify({
+        id: v.priceId,
+        object: "price",
+        active: true,
+        currency: "usd",
+        unit_amount: v.priceCents,
+        product: v.productId,
+        type: "one_time",
+        billing_scheme: "per_unit",
+        created,
+        livemode: false,
+      });
+
+      await db.execute(sql`
+        INSERT INTO stripe.products (_raw_data, _account_id, _updated_at, _last_synced_at)
+        SELECT ${productRaw}::jsonb, ${accountId}, now(), now()
+        WHERE NOT EXISTS (SELECT 1 FROM stripe.products WHERE name = ${v.name})
+      `);
+
+      await db.execute(sql`
+        INSERT INTO stripe.prices (_raw_data, _account_id, _updated_at, _last_synced_at)
+        SELECT ${priceRaw}::jsonb, ${accountId}, now(), now()
+        WHERE NOT EXISTS (SELECT 1 FROM stripe.prices WHERE id = ${v.priceId})
+          AND EXISTS (SELECT 1 FROM stripe.products WHERE id = ${v.productId})
+      `);
+
+      await db.execute(sql`
+        UPDATE stripe.products
+        SET _raw_data = jsonb_set(
+              jsonb_set(_raw_data, '{description}', ${JSON.stringify(v.description)}::jsonb, true),
+              '{metadata}',
+              COALESCE(_raw_data->'metadata', '{}'::jsonb) || ${JSON.stringify(v.meta)}::jsonb,
+              true
+            ),
+            _updated_at = now()
+        WHERE name = ${v.name} AND active = true
+      `);
+
+      await db.execute(sql`
+        UPDATE stripe.prices
+        SET _raw_data = jsonb_set(_raw_data, '{unit_amount}', ${String(v.priceCents)}::jsonb, true),
+            _updated_at = now()
+        WHERE active = true
+          AND product IN (SELECT id FROM stripe.products WHERE name = ${v.name} AND active = true)
+          AND (_raw_data->>'unit_amount') IS DISTINCT FROM ${String(v.priceCents)}
       `);
     }
 

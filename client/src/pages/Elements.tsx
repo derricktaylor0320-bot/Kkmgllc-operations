@@ -11,6 +11,7 @@ import {
   elementsDuoSeparateDollars,
   isElementsDuoProduct,
 } from "@shared/elementsDuo";
+import { groupProductVariants } from "@/lib/productVariants";
 
 export default function Elements() {
   const { data: products, isLoading: loadingElements } = useQuery({
@@ -24,8 +25,8 @@ export default function Elements() {
   const bodyCare = ((accessory as any[]) || []).filter(
     (p) => p.category === "Body Care",
   );
-  const allProducts = [...((products as any[]) || []), ...bodyCare].sort(
-    (a: any, b: any) => {
+  const allProducts = groupProductVariants(
+    [...((products as any[]) || []), ...bodyCare].sort((a: any, b: any) => {
       const aDuo = isElementsDuoProduct(a.priceId, a.title) ? 0 : 1;
       const bDuo = isElementsDuoProduct(b.priceId, b.title) ? 0 : 1;
       if (aDuo !== bDuo) return aDuo - bDuo;
@@ -33,7 +34,7 @@ export default function Elements() {
       const bSort = typeof b.sortOrder === "number" ? b.sortOrder : 99;
       if (aSort !== bSort) return aSort - bSort;
       return String(a.title || "").localeCompare(String(b.title || ""));
-    },
+    }),
   );
   const hasDuo = allProducts.some((p: any) =>
     isElementsDuoProduct(p.priceId, p.title),
@@ -110,6 +111,7 @@ export default function Elements() {
                 colors={product.colors}
                 soldOutColors={product.soldOutColors}
                 scents={product.scents}
+                variants={product.variants}
               />
             ))}
           </div>
