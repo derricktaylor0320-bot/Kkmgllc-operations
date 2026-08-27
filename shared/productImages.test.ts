@@ -9,8 +9,10 @@ import {
   BEDDING_PILLOWCASE_IMAGE,
   HIS_HERS_WATCH_IMAGE,
   BEARD_GROOMING_SET_IMAGE,
+  LUXURY_SPA_BASKET_IMAGE,
   resolveStorefrontImageUrl,
 } from "./productImages";
+import { SPA_BASKET_LINE_NAME } from "./luxurySpaBaskets";
 import { BODY_BUTTER_LEGACY_NAME, BODY_BUTTER_LINE_NAME } from "./elementsBodyButter";
 
 describe("resolveStorefrontImageUrl", () => {
@@ -77,6 +79,13 @@ describe("resolveStorefrontImageUrl", () => {
     assert.equal(
       resolveStorefrontImageUrl("", "Full Beard Grooming Set"),
       BEARD_GROOMING_SET_IMAGE,
+    );
+  });
+
+  it("infers luxury spa basket artwork from title when metadata image is empty", () => {
+    assert.equal(
+      resolveStorefrontImageUrl("", SPA_BASKET_LINE_NAME),
+      LUXURY_SPA_BASKET_IMAGE,
     );
   });
 

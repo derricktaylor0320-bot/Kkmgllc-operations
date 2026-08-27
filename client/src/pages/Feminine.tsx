@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { allLogos, FEMININE_LOGO_IDS } from "@/lib/logoCatalog";
+import { isLuxurySpaBasketProduct } from "@shared/luxurySpaBaskets";
 
 type StorefrontProduct = {
   id: string;
@@ -184,6 +185,11 @@ export default function Feminine() {
     (apparel as StorefrontProduct[] | undefined) ?? [];
   const accessoryProducts =
     (accessories as StorefrontProduct[] | undefined) ?? [];
+  const spaGiftProducts = accessoryProducts.filter(
+    (product) =>
+      product.category === "Spa & Gifts" ||
+      isLuxurySpaBasketProduct(product.priceId, product.title),
+  );
   const womensProducts = apparelProducts.filter(
     (product) => product.gender === "Women",
   );
@@ -200,7 +206,10 @@ export default function Feminine() {
   );
   const isLoading = apparelLoading || accessoriesLoading;
   const hasProducts =
-    customizableFavorites.length + womensApparel.length + loungeAndIntimates.length >
+    customizableFavorites.length +
+    womensApparel.length +
+    loungeAndIntimates.length +
+    spaGiftProducts.length >
     0;
 
   return (
@@ -332,6 +341,13 @@ export default function Feminine() {
               </div>
             ) : hasProducts ? (
               <>
+                <ProductSection
+                  id="spa-and-gifts"
+                  eyebrow="Relax & unwind"
+                  title="Spa & Gift Baskets"
+                  description="Aqua Elegante luxury spa gift sets — curated bath and body baskets in seven soothing scents, perfect for gifting."
+                  products={spaGiftProducts}
+                />
                 <ProductSection
                   id="customizable-favorites"
                   eyebrow="Make it yours"
