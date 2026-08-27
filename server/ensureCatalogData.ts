@@ -8,12 +8,20 @@ import {
   BEDDING_SHEET_IMAGE,
   BODY_WASH_COCOA_SHEA_IMAGE,
   LEGACY_BROWN_BEDDING_IMAGE_PATHS,
+  LUXURY_SPA_BASKET_IMAGE,
 } from "@shared/productImages";
 import {
   BODY_BUTTER_LINE_NAME,
   BODY_BUTTER_LEGACY_NAME,
   BODY_BUTTER_SCENT_OPTIONS,
 } from "@shared/elementsBodyButter";
+import {
+  SPA_BASKET_LINE_NAME,
+  SPA_BASKET_PRICE_CENTS,
+  SPA_BASKET_PRICE_ID,
+  SPA_BASKET_PRODUCT_ID,
+  SPA_BASKET_SCENT_OPTIONS,
+} from "@shared/luxurySpaBaskets";
 import {
   ELEMENTS_DUO_NAME,
   ELEMENTS_DUO_PRICE_CENTS,
@@ -315,6 +323,23 @@ const BODY_BUTTER_META = {
   scented: "true",
   scentOptions: BODY_BUTTER_SCENT_OPTIONS,
   imageUrl: BODY_BUTTER_IMAGE_PATH,
+};
+
+// Aqua Elegante luxury spa gift baskets — Amazon-fulfilled curated bath &
+// body gift sets. One storefront SKU at $45; shoppers pick a scent at checkout.
+const SPA_BASKET_NAME = SPA_BASKET_LINE_NAME;
+const SPA_BASKET_DESCRIPTION =
+  "Aqua Elegante luxury spa gift baskets — curated bath and body sets perfect for gifting. Each basket includes spa essentials in your choice of fragrance. One flat $45 price. SELECT YOUR SCENT at checkout. Amazon-fulfilled. Available in 7 scents: Jasmine & Lavender, Jasmine (14pc Set), Coconut & Vanilla, Lavender & Tea Tree, Honey & Almond, Lavender & Chamomile, and Ocean & Coconut.";
+const SPA_BASKET_META = {
+  category: "Spa & Gifts",
+  productType: "accessory",
+  sortOrder: "23",
+  gender: "Women",
+  customize: "none",
+  fulfillment: "Amazon",
+  scented: "true",
+  scentOptions: SPA_BASKET_SCENT_OPTIONS,
+  imageUrl: LUXURY_SPA_BASKET_IMAGE,
 };
 
 // Custom phone cases. These must exist in whatever DB this server is connected
@@ -1447,6 +1472,14 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       fulfillment: "eBay",
       ebayLink: "https://ebay.io/m/r1DXqD",
     },
+  },
+  {
+    productId: SPA_BASKET_PRODUCT_ID,
+    priceId: SPA_BASKET_PRICE_ID,
+    name: SPA_BASKET_NAME,
+    description: SPA_BASKET_DESCRIPTION,
+    priceCents: SPA_BASKET_PRICE_CENTS,
+    meta: SPA_BASKET_META,
   },
   {
     productId: "prod_kksatinrobe",
