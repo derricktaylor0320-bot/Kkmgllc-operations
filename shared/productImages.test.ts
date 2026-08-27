@@ -8,6 +8,7 @@ import {
   BEDDING_COMFORTER_IMAGE,
   BEDDING_PILLOWCASE_IMAGE,
   HIS_HERS_WATCH_IMAGE,
+  BEARD_GROOMING_SET_IMAGE,
   resolveStorefrontImageUrl,
 } from "./productImages";
 import { BODY_BUTTER_LEGACY_NAME, BODY_BUTTER_LINE_NAME } from "./elementsBodyButter";
@@ -69,6 +70,13 @@ describe("resolveStorefrontImageUrl", () => {
     assert.equal(
       resolveStorefrontImageUrl("", "Khomplete Khemistri His & Hers Watch Set"),
       HIS_HERS_WATCH_IMAGE,
+    );
+  });
+
+  it("infers beard grooming set artwork from title when metadata image is empty", () => {
+    assert.equal(
+      resolveStorefrontImageUrl("", "Full Beard Grooming Set"),
+      BEARD_GROOMING_SET_IMAGE,
     );
   });
 

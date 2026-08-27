@@ -146,9 +146,19 @@ export default function Masculine() {
   const { data: apparel, isLoading: apparelLoading } = useQuery({
     queryKey: ["/api/products/type/apparel"],
   });
+  const { data: accessories, isLoading: accessoriesLoading } = useQuery({
+    queryKey: ["/api/products/type/accessory"],
+  });
 
   const apparelProducts =
     (apparel as StorefrontProduct[] | undefined) ?? [];
+  const groomingProducts =
+    ((accessories as StorefrontProduct[] | undefined) ?? []).filter(
+      (product) =>
+        product.gender === "Men" &&
+        (product.category === "Grooming" ||
+          /beard grooming/i.test(product.title)),
+    );
   const mensProducts = apparelProducts.filter(
     (product) => product.gender === "Men",
   );
@@ -156,8 +166,9 @@ export default function Masculine() {
     (product) => product.logoOptions,
   );
   const mensApparel = mensProducts.filter((product) => !product.logoOptions);
-  const isLoading = apparelLoading;
-  const hasProducts = customizableFavorites.length + mensApparel.length > 0;
+  const isLoading = apparelLoading || accessoriesLoading;
+  const hasProducts =
+    customizableFavorites.length + mensApparel.length + groomingProducts.length > 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -288,6 +299,13 @@ export default function Masculine() {
               </div>
             ) : hasProducts ? (
               <>
+                <ProductSection
+                  id="mens-grooming"
+                  eyebrow="Grooming essentials"
+                  title="Beard & Grooming"
+                  description="Complete grooming kits built for beard care — cleanse, condition, shape, and maintain."
+                  products={groomingProducts}
+                />
                 <ProductSection
                   id="customizable-favorites"
                   eyebrow="Make it yours"

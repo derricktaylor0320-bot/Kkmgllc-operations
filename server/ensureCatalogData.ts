@@ -1431,6 +1431,24 @@ const EXTRA_ACCESSORY_PRODUCTS: {
     },
   },
   {
+    productId: "prod_kkbeardgroomingset",
+    priceId: "price_kkbeardgroomingset",
+    name: "Full Beard Grooming Set",
+    description:
+      "Complete men's beard grooming kit with beard wash, beard oil, beard balm, a wooden comb, a boar-bristle brush, trimming scissors, and a travel bag — everything needed to cleanse, condition, shape, and maintain a healthy beard. One flat $40 price for the full set. eBay-fulfilled.",
+    priceCents: 4000,
+    meta: {
+      category: "Grooming",
+      productType: "accessory",
+      sortOrder: "25",
+      gender: "Men",
+      imageUrl: "/assets/kk_beard_grooming_set.jpg",
+      customize: "none",
+      fulfillment: "eBay",
+      ebayLink: "https://ebay.io/m/r1DXqD",
+    },
+  },
+  {
     productId: "prod_kksatinrobe",
     priceId: "price_kksatinrobe",
     name: "Khomplete Khemistri Elements Satin Robe",

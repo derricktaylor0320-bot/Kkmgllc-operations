@@ -23,6 +23,7 @@ export const LEGACY_BROWN_BEDDING_IMAGE_PATHS: Record<string, string> = {
 };
 
 export const HIS_HERS_WATCH_IMAGE = "/assets/kk_his_hers_watch_set.jpg";
+export const BEARD_GROOMING_SET_IMAGE = "/assets/kk_beard_grooming_set.jpg";
 
 /** Retired gold watch image paths (replaced by silver His & Hers artwork). */
 export const LEGACY_WATCH_IMAGE_PATHS: Record<string, string> = {
@@ -41,6 +42,7 @@ const TITLE_IMAGE_OVERRIDES: Array<{ pattern: RegExp; imageUrl: string }> = [
   { pattern: /island\s*tranquility/i, imageUrl: BODY_WASH_ISLAND_TRANQUILITY_IMAGE },
   { pattern: /cocoa\s*mango|coco\s*mango/i, imageUrl: BODY_WASH_COCOA_MANGO_IMAGE },
   { pattern: /his & hers watch/i, imageUrl: HIS_HERS_WATCH_IMAGE },
+  { pattern: /full beard grooming set/i, imageUrl: BEARD_GROOMING_SET_IMAGE },
 ];
 
 function isBlueSilverArtwork(path: string): boolean {
