@@ -39,6 +39,7 @@ import {
   ECO_LAUNDRY_SHEETS_VARIANT_GROUP,
   ecoLaundrySheetsDescription,
   ecoLaundrySheetsPackLabel,
+  MACHINE_CLEANER_TABLETS_IMAGE,
 } from "@shared/homeCareLaundry";
 
 // Catalog facts that must be true in whatever database this server is connected
@@ -1425,6 +1426,7 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       customize: "none",
       variantGroup: ECO_LAUNDRY_SHEETS_VARIANT_GROUP,
       variantLabel: ecoLaundrySheetsPackLabel(pack.count),
+      imageUrl: pack.imageUrl,
     },
   })),
   {
@@ -1441,6 +1443,7 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       gender: "Unisex",
       fulfillment: "Amazon",
       customize: "none",
+      imageUrl: MACHINE_CLEANER_TABLETS_IMAGE,
     },
   },
   {

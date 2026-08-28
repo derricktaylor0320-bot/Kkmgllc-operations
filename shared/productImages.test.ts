@@ -14,6 +14,10 @@ import {
 } from "./productImages";
 import { SPA_BASKET_LINE_NAME } from "./luxurySpaBaskets";
 import { BODY_BUTTER_LEGACY_NAME, BODY_BUTTER_LINE_NAME } from "./elementsBodyButter";
+import {
+  ECO_LAUNDRY_SHEETS_32_IMAGE,
+  ECO_LAUNDRY_SHEETS_96_IMAGE,
+} from "./homeCareLaundry";
 
 describe("resolveStorefrontImageUrl", () => {
   it("rewrites retired brown comforter path to blue silver artwork", () => {
@@ -108,6 +112,17 @@ describe("resolveStorefrontImageUrl", () => {
     assert.equal(
       resolveStorefrontImageUrl("", "Cocoa Mango"),
       BODY_WASH_COCOA_MANGO_IMAGE,
+    );
+  });
+
+  it("infers eco laundry sheets artwork from title when metadata image is empty", () => {
+    assert.equal(
+      resolveStorefrontImageUrl("", "32 Count Eco Laundry Sheets"),
+      ECO_LAUNDRY_SHEETS_32_IMAGE,
+    );
+    assert.equal(
+      resolveStorefrontImageUrl("", "96 Count Eco Laundry Sheets"),
+      ECO_LAUNDRY_SHEETS_96_IMAGE,
     );
   });
 });
