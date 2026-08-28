@@ -1,6 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  ECO_LAUNDRY_SHEETS_PACKS,
+  ECO_LAUNDRY_SHEETS_PRICE_CENTS,
+  ECO_LAUNDRY_SHEETS_VARIANT_GROUP,
+  ECO_LAUNDRY_SHEETS_32_IMAGE,
+  ECO_LAUNDRY_SHEETS_96_IMAGE,
+  ecoLaundrySheetsDescription,
+  ecoLaundrySheetsImageUrl,
+  ecoLaundrySheetsPackLabel,
   LAUNDRY_DETERGENT_SHEETS_PACKS,
   LAUNDRY_DETERGENT_SHEETS_PRICE_CENTS,
   LAUNDRY_DETERGENT_SHEETS_VARIANT_GROUP,
@@ -32,4 +40,12 @@ test("laundry detergent sheets pack helpers include count in copy", () => {
   );
   assert.match(laundryDetergentSheetsDescription(32), /32-count pack/);
   assert.equal(LAUNDRY_DETERGENT_SHEETS_VARIANT_GROUP, "Laundry Detergent Sheets");
+});
+
+test("eco laundry sheets use correct pack artwork", () => {
+  assert.equal(ecoLaundrySheetsImageUrl(32), ECO_LAUNDRY_SHEETS_32_IMAGE);
+  assert.equal(ecoLaundrySheetsImageUrl(64), ECO_LAUNDRY_SHEETS_32_IMAGE);
+  assert.equal(ecoLaundrySheetsImageUrl(96), ECO_LAUNDRY_SHEETS_96_IMAGE);
+  assert.equal(ECO_LAUNDRY_SHEETS_PACKS[0].imageUrl, ECO_LAUNDRY_SHEETS_32_IMAGE);
+  assert.equal(ECO_LAUNDRY_SHEETS_PACKS[2].imageUrl, ECO_LAUNDRY_SHEETS_96_IMAGE);
 });

@@ -35,6 +35,11 @@ import {
   ELEMENTS_DUO_PRODUCT_ID,
 } from "@shared/elementsDuo";
 import {
+  ECO_LAUNDRY_SHEETS_PACKS,
+  ECO_LAUNDRY_SHEETS_VARIANT_GROUP,
+  ecoLaundrySheetsDescription,
+  ecoLaundrySheetsPackLabel,
+  MACHINE_CLEANER_TABLETS_IMAGE,
   LAUNDRY_DETERGENT_SHEETS_AMAZON_LINK,
   LAUNDRY_DETERGENT_SHEETS_IMAGE,
   LAUNDRY_DETERGENT_SHEETS_PACKS,
@@ -1385,6 +1390,24 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       imageUrl: "/assets/kk_duffle_bag_black.png",
     },
   },
+  ...ECO_LAUNDRY_SHEETS_PACKS.map((pack) => ({
+    productId: pack.productId,
+    priceId: pack.priceId,
+    name: `${ecoLaundrySheetsPackLabel(pack.count)} Eco Laundry Sheets`,
+    description: ecoLaundrySheetsDescription(pack.count),
+    priceCents: pack.priceCents,
+    meta: {
+      category: "Home Care",
+      productType: "accessory",
+      sortOrder: "52",
+      gender: "Unisex",
+      fulfillment: "Amazon",
+      customize: "none",
+      variantGroup: ECO_LAUNDRY_SHEETS_VARIANT_GROUP,
+      variantLabel: ecoLaundrySheetsPackLabel(pack.count),
+      imageUrl: pack.imageUrl,
+    },
+  })),
   {
     productId: "prod_kk_machinecleaner",
     priceId: "price_kk_machinecleaner",
@@ -1399,6 +1422,7 @@ const EXTRA_ACCESSORY_PRODUCTS: {
       gender: "Unisex",
       fulfillment: "Amazon",
       customize: "none",
+      imageUrl: MACHINE_CLEANER_TABLETS_IMAGE,
     },
   },
   {

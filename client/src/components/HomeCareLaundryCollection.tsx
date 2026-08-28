@@ -4,16 +4,57 @@ import { motion } from "framer-motion";
 import { Droplets, Sparkles, WashingMachine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+  ECO_LAUNDRY_SHEETS_PACKS,
+  ECO_LAUNDRY_SHEETS_PRICE_CENTS,
+  LAUNDRY_SAUCE_PODS_IMAGE,
   LAUNDRY_DETERGENT_SHEETS_PACKS,
   LAUNDRY_DETERGENT_SHEETS_PRICE_CENTS,
   LAUNDRY_SAUCE_REFERRAL_URL,
   LAUNDRY_SAUCE_STARTING_PRICE_DOLLARS,
+  MACHINE_CLEANER_TABLETS_IMAGE,
   MACHINE_CLEANER_TABLETS_PRICE_CENTS,
   MACHINE_CLEANER_TABLETS_PRICE_ID,
 } from "@shared/homeCareLaundry";
 
 function formatDollars(cents: number) {
   return (cents / 100).toFixed(2);
+}
+
+function ProductPreviewImage({
+  src,
+  alt,
+  href,
+  testId,
+}: {
+  src: string;
+  alt: string;
+  href?: string;
+  testId: string;
+}) {
+  const image = (
+    <img
+      src={src}
+      alt={alt}
+      className="aspect-[4/3] w-full object-contain p-3 transition-transform duration-300 group-hover:scale-[1.02]"
+      loading="lazy"
+      data-testid={testId}
+    />
+  );
+
+  return (
+    <figure
+      className="group mt-4 overflow-hidden rounded-xl border border-primary/25 bg-muted"
+      data-testid={`figure-${testId}`}
+    >
+      {href ? (
+        <Link href={href} aria-label={`View ${alt}`} className="block">
+          {image}
+        </Link>
+      ) : (
+        image
+      )}
+    </figure>
+  );
 }
 
 export default function HomeCareLaundryCollection() {
@@ -58,6 +99,12 @@ export default function HomeCareLaundryCollection() {
             <span className="inline-block rounded-full bg-emerald-500/15 px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
               Everyday Value
             </span>
+            <ProductPreviewImage
+              src={selectedPack.imageUrl}
+              alt={`Eco Laundry Sheets — ${selectedPack.count} count`}
+              href={`/product/${selectedPack.priceId}`}
+              testId="img-eco-laundry-sheets"
+            />
             <div className="mt-4 flex items-center gap-2 text-primary">
               <Droplets className="h-5 w-5" aria-hidden="true" />
               <h3 className="font-display text-lg font-bold uppercase text-foreground">
@@ -137,6 +184,26 @@ export default function HomeCareLaundryCollection() {
             <span className="inline-block rounded-full bg-purple-500/15 px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-wide text-purple-800 dark:text-purple-300">
               Luxury Scented
             </span>
+            <a
+              href={LAUNDRY_SAUCE_REFERRAL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+              aria-label="View Laundry Sauce fragrance pods on partner site"
+            >
+              <figure
+                className="group mt-4 overflow-hidden rounded-xl border border-primary/25 bg-muted"
+                data-testid="figure-img-laundry-sauce-pods"
+              >
+                <img
+                  src={LAUNDRY_SAUCE_PODS_IMAGE}
+                  alt="Laundry Sauce fine fragrance laundry pods"
+                  className="aspect-[4/3] w-full object-contain p-3 transition-transform duration-300 group-hover:scale-[1.02]"
+                  loading="lazy"
+                  data-testid="img-laundry-sauce-pods"
+                />
+              </figure>
+            </a>
             <div className="mt-4 flex items-center gap-2 text-primary">
               <Sparkles className="h-5 w-5" aria-hidden="true" />
               <h3 className="font-display text-lg font-bold uppercase text-foreground">
@@ -147,6 +214,11 @@ export default function HomeCareLaundryCollection() {
               Ultra-concentrated bio-enzyme pods crafted with top perfumer scents like
               Sandalwood, Saffron, and Egyptian Rose. Available in 30-count or
               high-value 69-count boxes (~$1.00/load).
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              Laundry Sauce is a direct partner — browse fragrance pods, scent
+              boosters, fabric refresher, washing machine tablets, and the full
+              laundry lineup on their site.
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
               *Save up to 15% when you select the subscription option on checkout.
@@ -193,6 +265,12 @@ export default function HomeCareLaundryCollection() {
             <span className="inline-block rounded-full bg-sky-500/15 px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-wide text-sky-800 dark:text-sky-300">
               Machine Maintenance
             </span>
+            <ProductPreviewImage
+              src={MACHINE_CLEANER_TABLETS_IMAGE}
+              alt="Deep Clean Washing Machine Tablets"
+              href={`/product/${MACHINE_CLEANER_TABLETS_PRICE_ID}`}
+              testId="img-machine-cleaner-tablets"
+            />
             <div className="mt-4 flex items-center gap-2 text-primary">
               <WashingMachine className="h-5 w-5" aria-hidden="true" />
               <h3 className="font-display text-lg font-bold uppercase text-foreground">

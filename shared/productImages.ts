@@ -2,6 +2,11 @@
  * Canonical storefront image paths for bedding and body butter, plus legacy
  * brown artwork paths retired when the catalog switched to royal blue / silver.
  */
+import {
+  ECO_LAUNDRY_SHEETS_32_IMAGE,
+  ECO_LAUNDRY_SHEETS_96_IMAGE,
+  MACHINE_CLEANER_TABLETS_IMAGE,
+} from "./homeCareLaundry";
 export const BEDDING_COMFORTER_IMAGE = "/assets/kk_bedding_set_blue_silver.jpeg";
 export const BEDDING_SHEET_IMAGE = "/assets/kk_bedding_set_blue_silver.jpeg";
 export const BEDDING_PILLOWCASE_IMAGE = "/assets/kk_pillowcase_set_blue_silver.jpeg";
@@ -46,6 +51,12 @@ const TITLE_IMAGE_OVERRIDES: Array<{ pattern: RegExp; imageUrl: string }> = [
   { pattern: /his & hers watch/i, imageUrl: HIS_HERS_WATCH_IMAGE },
   { pattern: /full beard grooming set/i, imageUrl: BEARD_GROOMING_SET_IMAGE },
   { pattern: /luxury spa gift basket|aqua elegante.*spa/i, imageUrl: LUXURY_SPA_BASKET_IMAGE },
+  { pattern: /96 count eco laundry sheets/i, imageUrl: ECO_LAUNDRY_SHEETS_96_IMAGE },
+  { pattern: /eco laundry sheets/i, imageUrl: ECO_LAUNDRY_SHEETS_32_IMAGE },
+  {
+    pattern: /washing machine tablets|machine cleaner tablets/i,
+    imageUrl: MACHINE_CLEANER_TABLETS_IMAGE,
+  },
 ];
 
 function isBlueSilverArtwork(path: string): boolean {

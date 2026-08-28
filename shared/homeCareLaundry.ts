@@ -10,6 +10,17 @@ export const LAUNDRY_DETERGENT_SHEETS_AMAZON_LINK = "https://a.co/d/0igKXrSW";
 export const LAUNDRY_DETERGENT_SHEETS_SCENT_OPTIONS =
   "Fresh Scent, Fragrance Free, Lavender, Peppermint, Spring Scent, Sweet Petals";
 
+/** Clean People 32-load box artwork (correct count label for the starter pack). */
+export const ECO_LAUNDRY_SHEETS_32_IMAGE =
+  "/assets/kk_eco_laundry_sheets_32_loads.jpg";
+/** Existing catalog photo showing the 96-load Clean People box. */
+export const ECO_LAUNDRY_SHEETS_96_IMAGE =
+  "/assets/kk_elements_laundry_detergent_sheets.jpg";
+export const LAUNDRY_SAUCE_PODS_IMAGE = "/assets/kk_laundry_sauce_pods.jpg";
+export const MACHINE_CLEANER_TABLETS_IMAGE =
+  "/assets/kk_washing_machine_cleaner_tablets.jpg";
+
+export const ECO_LAUNDRY_SHEETS_PACKS = [
 export const LAUNDRY_DETERGENT_SHEETS_PACKS = [
   {
     count: 32,
@@ -62,4 +73,10 @@ export function laundryDetergentSheetsName(count: number): string {
 
 export function laundryDetergentSheetsDescription(count: number): string {
   return `The Clean People Laundry Detergent Sheets — ultra-concentrated, plant-derived laundry soap in recyclable paper packaging. Hypoallergenic, vegan, and effective on stains and odors. Works in all washing machines including HE. ${count}-count pack. SELECT YOUR SCENT at checkout. Amazon-fulfilled. Available in 6 scents: Fresh Scent, Fragrance Free, Lavender, Peppermint, Spring Scent, and Sweet Petals.`;
+}
+
+/** Storefront image for an eco laundry sheets pack size. */
+export function ecoLaundrySheetsImageUrl(count: number): string {
+  if (count === 96) return ECO_LAUNDRY_SHEETS_96_IMAGE;
+  return ECO_LAUNDRY_SHEETS_32_IMAGE;
 }
