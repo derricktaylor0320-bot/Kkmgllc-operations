@@ -7,6 +7,8 @@ import {
   ECO_LAUNDRY_SHEETS_PACKS,
   ECO_LAUNDRY_SHEETS_PRICE_CENTS,
   LAUNDRY_SAUCE_PODS_IMAGE,
+  LAUNDRY_DETERGENT_SHEETS_PACKS,
+  LAUNDRY_DETERGENT_SHEETS_PRICE_CENTS,
   LAUNDRY_SAUCE_REFERRAL_URL,
   LAUNDRY_SAUCE_STARTING_PRICE_DOLLARS,
   MACHINE_CLEANER_TABLETS_IMAGE,
@@ -58,10 +60,10 @@ function ProductPreviewImage({
 export default function HomeCareLaundryCollection() {
   const [selectedPackIdx, setSelectedPackIdx] = useState(0);
   const selectedPack =
-    ECO_LAUNDRY_SHEETS_PACKS[
-      Math.min(selectedPackIdx, ECO_LAUNDRY_SHEETS_PACKS.length - 1)
+    LAUNDRY_DETERGENT_SHEETS_PACKS[
+      Math.min(selectedPackIdx, LAUNDRY_DETERGENT_SHEETS_PACKS.length - 1)
     ];
-  const startingPrice = formatDollars(ECO_LAUNDRY_SHEETS_PRICE_CENTS);
+  const startingPrice = formatDollars(LAUNDRY_DETERGENT_SHEETS_PRICE_CENTS);
   const selectedPrice = formatDollars(selectedPack.priceCents);
   const tabletsPrice = formatDollars(MACHINE_CLEANER_TABLETS_PRICE_CENTS);
 
@@ -85,13 +87,13 @@ export default function HomeCareLaundryCollection() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {/* Everyday Value — Eco Laundry Sheets */}
+        {/* Everyday Value — The Clean People Laundry Detergent Sheets */}
         <motion.article
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           className="flex flex-col justify-between rounded-xl border border-primary/20 bg-card p-6 shadow-sm"
-          data-testid="card-eco-laundry-sheets"
+          data-testid="card-laundry-detergent-sheets"
         >
           <div>
             <span className="inline-block rounded-full bg-emerald-500/15 px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
@@ -106,13 +108,13 @@ export default function HomeCareLaundryCollection() {
             <div className="mt-4 flex items-center gap-2 text-primary">
               <Droplets className="h-5 w-5" aria-hidden="true" />
               <h3 className="font-display text-lg font-bold uppercase text-foreground">
-                Eco Laundry Sheets
+                Laundry Detergent Sheets
               </h3>
             </div>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-              Dissolvable, eco-conscious detergent sheets designed for standard and HE
-              washers. Eliminates plastic heavy bottles, fights tough stains, and
-              delivers zero waste. Available in 32, 64, and 96-count packs.
+              The Clean People ultra-concentrated detergent sheets in recyclable
+              paper packaging. Hypoallergenic, vegan, and effective on stains and
+              odors. Available in 32, 96, and 192-count packs with 6 scent options.
             </p>
           </div>
           <div className="mt-6">
@@ -128,9 +130,9 @@ export default function HomeCareLaundryCollection() {
               </div>
               <div
                 className="flex flex-wrap gap-2"
-                data-testid="picker-eco-laundry-sheets-pack"
+                data-testid="picker-laundry-detergent-sheets-pack"
               >
-                {ECO_LAUNDRY_SHEETS_PACKS.map((pack, i) => {
+                {LAUNDRY_DETERGENT_SHEETS_PACKS.map((pack, i) => {
                   const isSelected = i === selectedPackIdx;
                   return (
                     <button
@@ -142,7 +144,7 @@ export default function HomeCareLaundryCollection() {
                           ? "border-primary bg-primary/10 text-primary"
                           : "border-border text-muted-foreground hover:border-primary/40"
                       }`}
-                      data-testid={`button-eco-laundry-pack-${pack.count}`}
+                      data-testid={`button-laundry-detergent-pack-${pack.count}`}
                     >
                       {pack.count} Count — ${formatDollars(pack.priceCents)}
                     </button>
@@ -156,7 +158,7 @@ export default function HomeCareLaundryCollection() {
             <Link href={`/product/${selectedPack.priceId}`}>
               <Button
                 className="w-full font-display uppercase tracking-wider"
-                data-testid="link-buy-eco-laundry-sheets"
+                data-testid="link-buy-laundry-detergent-sheets"
               >
                 Buy Now
               </Button>

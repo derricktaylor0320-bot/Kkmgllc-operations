@@ -40,6 +40,14 @@ import {
   ecoLaundrySheetsDescription,
   ecoLaundrySheetsPackLabel,
   MACHINE_CLEANER_TABLETS_IMAGE,
+  LAUNDRY_DETERGENT_SHEETS_AMAZON_LINK,
+  LAUNDRY_DETERGENT_SHEETS_IMAGE,
+  LAUNDRY_DETERGENT_SHEETS_PACKS,
+  LAUNDRY_DETERGENT_SHEETS_SCENT_OPTIONS,
+  LAUNDRY_DETERGENT_SHEETS_VARIANT_GROUP,
+  laundryDetergentSheetsDescription,
+  laundryDetergentSheetsName,
+  laundryDetergentSheetsPackLabel,
 } from "@shared/homeCareLaundry";
 
 // Catalog facts that must be true in whatever database this server is connected
@@ -266,54 +274,21 @@ const TUMBLER_30_META = {
   variantLabel: "30 oz",
 };
 
-// Laundry Detergent Sheets — Amazon-fulfilled (The Clean People, ASIN B095J2SZWV /
-// https://a.co/d/0igKXrSW). Two pack sizes share one storefront card via
-// `variantGroup`; shoppers pick scent at checkout.
-const LAUNDRY_DETERGENT_VARIANT_GROUP = "Laundry Detergent Sheets";
-const LAUNDRY_DETERGENT_IMAGE = "/assets/kk_elements_laundry_detergent_sheets.jpg";
-const LAUNDRY_DETERGENT_AMAZON_LINK = "https://a.co/d/0igKXrSW";
-const LAUNDRY_DETERGENT_SCENT_OPTIONS =
-  "Fresh Scent, Fragrance Free, Lavender, Peppermint, Spring Scent, Sweet Petals";
-
-function laundryDetergentDescription(count: number): string {
-  return `The Clean People Laundry Detergent Sheets — ultra-concentrated, plant-derived laundry soap in recyclable paper packaging. Hypoallergenic, vegan, and effective on stains and odors. Works in all washing machines including HE. ${count}-count pack. SELECT YOUR SCENT at checkout. Amazon-fulfilled. Available in 6 scents: Fresh Scent, Fragrance Free, Lavender, Peppermint, Spring Scent, and Sweet Petals.`;
-}
-
+// Laundry Detergent Sheets — Amazon-fulfilled (The Clean People). Three pack
+// sizes (32 / 96 / 192) share one storefront card via `variantGroup`; shoppers
+// pick scent at checkout. Lives in Accessories → Home Care only.
 const LAUNDRY_DETERGENT_META_BASE = {
-  category: "Elements",
-  productType: "elements",
-  sortOrder: "119",
-  imageUrl: LAUNDRY_DETERGENT_IMAGE,
+  category: "Home Care",
+  productType: "accessory",
+  sortOrder: "51",
+  imageUrl: LAUNDRY_DETERGENT_SHEETS_IMAGE,
   customize: "none",
   fulfillment: "Amazon",
-  amazonLink: LAUNDRY_DETERGENT_AMAZON_LINK,
+  amazonLink: LAUNDRY_DETERGENT_SHEETS_AMAZON_LINK,
   scented: "true",
-  scentOptions: LAUNDRY_DETERGENT_SCENT_OPTIONS,
-  variantGroup: LAUNDRY_DETERGENT_VARIANT_GROUP,
-};
-
-const LAUNDRY_DETERGENT_96_PRODUCT_ID = "prod_kkelemslaundry96";
-const LAUNDRY_DETERGENT_96_PRICE_ID = "price_kkelemslaundry96";
-const LAUNDRY_DETERGENT_96_NAME = "96 Count Laundry Detergent Sheets";
-const LAUNDRY_DETERGENT_96_PRICE_CENTS = 5000;
-const LAUNDRY_DETERGENT_96_DESCRIPTION = laundryDetergentDescription(96);
-const LAUNDRY_DETERGENT_96_META = {
-  ...LAUNDRY_DETERGENT_META_BASE,
-  cost: "33.00",
-  profitMargin: "17.00",
-  variantLabel: "96 Count",
-};
-
-const LAUNDRY_DETERGENT_192_PRODUCT_ID = "prod_kkelemslaundry192";
-const LAUNDRY_DETERGENT_192_PRICE_ID = "price_kkelemslaundry192";
-const LAUNDRY_DETERGENT_192_NAME = "192 Count Laundry Detergent Sheets";
-const LAUNDRY_DETERGENT_192_PRICE_CENTS = 7049;
-const LAUNDRY_DETERGENT_192_DESCRIPTION = laundryDetergentDescription(192);
-const LAUNDRY_DETERGENT_192_META = {
-  ...LAUNDRY_DETERGENT_META_BASE,
-  cost: "55.49",
-  profitMargin: "15.00",
-  variantLabel: "192 Count",
+  scentOptions: LAUNDRY_DETERGENT_SHEETS_SCENT_OPTIONS,
+  variantGroup: LAUNDRY_DETERGENT_SHEETS_VARIANT_GROUP,
+  gender: "Unisex",
 };
 
 // Our Exotic Body Butter Scents. New consumable product ($15, 4 oz jar; 3 for $36). Same
@@ -415,6 +390,10 @@ const RETIRED_PRODUCT_NAMES = [
   "Matte Black Mug",
   // Not selling — pulled from storefront; can be re-added later.
   "Personalized Coffee Cup Sleeve",
+  // Replaced by The Clean People Laundry Detergent Sheets (32 / 96 / 192 count).
+  "32 Count Eco Laundry Sheets",
+  "64 Count Eco Laundry Sheets",
+  "96 Count Eco Laundry Sheets",
 ];
 
 // Vintage Baltimore collection ($30 graphic tees). The 10 real designs that
@@ -2332,26 +2311,21 @@ export async function ensureCatalogData() {
       `);
     }
 
-    // 5a2) Laundry Detergent Sheets (96 / 192 count, Amazon-fulfilled). Same
-    //      variant-group pattern as the branded tumblers above.
-    const laundryDetergentVariants = [
-      {
-        productId: LAUNDRY_DETERGENT_96_PRODUCT_ID,
-        priceId: LAUNDRY_DETERGENT_96_PRICE_ID,
-        name: LAUNDRY_DETERGENT_96_NAME,
-        priceCents: LAUNDRY_DETERGENT_96_PRICE_CENTS,
-        description: LAUNDRY_DETERGENT_96_DESCRIPTION,
-        meta: LAUNDRY_DETERGENT_96_META,
+    // 5a2) Laundry Detergent Sheets (32 / 96 / 192 count, Amazon-fulfilled).
+    //      Same variant-group pattern as the branded tumblers above.
+    const laundryDetergentVariants = LAUNDRY_DETERGENT_SHEETS_PACKS.map((pack) => ({
+      productId: pack.productId,
+      priceId: pack.priceId,
+      name: laundryDetergentSheetsName(pack.count),
+      priceCents: pack.priceCents,
+      description: laundryDetergentSheetsDescription(pack.count),
+      meta: {
+        ...LAUNDRY_DETERGENT_META_BASE,
+        cost: (pack.costCents / 100).toFixed(2),
+        profitMargin: pack.profitMargin,
+        variantLabel: laundryDetergentSheetsPackLabel(pack.count),
       },
-      {
-        productId: LAUNDRY_DETERGENT_192_PRODUCT_ID,
-        priceId: LAUNDRY_DETERGENT_192_PRICE_ID,
-        name: LAUNDRY_DETERGENT_192_NAME,
-        priceCents: LAUNDRY_DETERGENT_192_PRICE_CENTS,
-        description: LAUNDRY_DETERGENT_192_DESCRIPTION,
-        meta: LAUNDRY_DETERGENT_192_META,
-      },
-    ];
+    }));
 
     for (const v of laundryDetergentVariants) {
       const productRaw = JSON.stringify({
