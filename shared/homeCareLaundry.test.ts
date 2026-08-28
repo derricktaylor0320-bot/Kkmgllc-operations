@@ -1,30 +1,35 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  ECO_LAUNDRY_SHEETS_PACKS,
-  ECO_LAUNDRY_SHEETS_PRICE_CENTS,
-  ECO_LAUNDRY_SHEETS_VARIANT_GROUP,
-  ecoLaundrySheetsDescription,
-  ecoLaundrySheetsPackLabel,
+  LAUNDRY_DETERGENT_SHEETS_PACKS,
+  LAUNDRY_DETERGENT_SHEETS_PRICE_CENTS,
+  LAUNDRY_DETERGENT_SHEETS_VARIANT_GROUP,
+  laundryDetergentSheetsDescription,
+  laundryDetergentSheetsName,
+  laundryDetergentSheetsPackLabel,
 } from "./homeCareLaundry.ts";
 
-test("eco laundry sheets has three pack sizes", () => {
-  assert.equal(ECO_LAUNDRY_SHEETS_PACKS.length, 3);
+test("laundry detergent sheets has three pack sizes (32, 96, 192)", () => {
+  assert.equal(LAUNDRY_DETERGENT_SHEETS_PACKS.length, 3);
   assert.deepEqual(
-    ECO_LAUNDRY_SHEETS_PACKS.map((pack) => pack.count),
-    [32, 64, 96],
+    LAUNDRY_DETERGENT_SHEETS_PACKS.map((pack) => pack.count),
+    [32, 96, 192],
   );
 });
 
-test("32-count eco laundry sheets retail at $18.00", () => {
-  const starterPack = ECO_LAUNDRY_SHEETS_PACKS[0];
+test("32-count laundry detergent sheets retail at $18.00", () => {
+  const starterPack = LAUNDRY_DETERGENT_SHEETS_PACKS[0];
   assert.equal(starterPack.count, 32);
   assert.equal(starterPack.priceCents, 1800);
-  assert.equal(ECO_LAUNDRY_SHEETS_PRICE_CENTS, 1800);
+  assert.equal(LAUNDRY_DETERGENT_SHEETS_PRICE_CENTS, 1800);
 });
 
-test("eco laundry sheets pack helpers include count in copy", () => {
-  assert.equal(ecoLaundrySheetsPackLabel(32), "32 Count");
-  assert.match(ecoLaundrySheetsDescription(32), /32-count pack/);
-  assert.equal(ECO_LAUNDRY_SHEETS_VARIANT_GROUP, "Eco Laundry Sheets");
+test("laundry detergent sheets pack helpers include count in copy", () => {
+  assert.equal(laundryDetergentSheetsPackLabel(32), "32 Count");
+  assert.equal(
+    laundryDetergentSheetsName(32),
+    "32 Count Laundry Detergent Sheets",
+  );
+  assert.match(laundryDetergentSheetsDescription(32), /32-count pack/);
+  assert.equal(LAUNDRY_DETERGENT_SHEETS_VARIANT_GROUP, "Laundry Detergent Sheets");
 });
