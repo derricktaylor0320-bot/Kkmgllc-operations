@@ -17,9 +17,9 @@ declare module "http" {
 
 function getDatabaseUrl(): string {
   try {
-    const replitDbPath = '/tmp/replitdb';
-    if (fs.existsSync(replitDbPath)) {
-      const url = fs.readFileSync(replitDbPath, 'utf-8').trim();
+    const snapshotDbPath = '/tmp/replitdb';
+    if (fs.existsSync(snapshotDbPath)) {
+      const url = fs.readFileSync(snapshotDbPath, 'utf-8').trim();
       if (url) {
         console.log('Using database URL from /tmp/replitdb for production');
         return url;

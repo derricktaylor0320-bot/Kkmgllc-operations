@@ -15,7 +15,7 @@ export default function FR2P() {
         <EmbedAuthBanner appName="The FR2P Club" />
         <div className="bg-secondary text-secondary-foreground py-4 text-center">
           <h1 className="font-display text-xl md:text-2xl font-bold uppercase tracking-wider text-primary">
-            Financial Roadway 2 Prosperity Club
+            The FR2P Club
           </h1>
           <p className="mt-2 text-xs md:text-sm text-secondary-foreground/70">
             Pocket Booster&apos;s eight program tabs (S1–S8) live on{" "}

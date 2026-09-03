@@ -26,8 +26,8 @@ export function resolvePublicSiteUrl(
   const explicit = env.APP_URL || env.PUBLIC_URL;
   if (explicit) return explicit.replace(/\/$/, "");
 
-  const replitDomain = env.REPLIT_DOMAINS?.split(",")[0]?.trim();
-  if (replitDomain) return `https://${replitDomain}`;
+  const legacyHostedDomain = env.REPLIT_DOMAINS?.split(",")[0]?.trim();
+  if (legacyHostedDomain) return `https://${legacyHostedDomain}`;
 
   return null;
 }

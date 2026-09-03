@@ -309,7 +309,7 @@ export const EXPENSE_RELIEF_RULES = [
   {
     id: "not_fr2p",
     title: "Not a rewards / affiliate program",
-    body: "TCE Expense Advantage reimburses verified expenses. Pocket Booster handles cash cushions. FR2P / FARSUP stay separate for rewards.",
+    body: "TCE Expense Advantage reimburses verified expenses. Pocket Booster handles cash cushions. The FR2P Club / FARSUP stay separate for rewards.",
   },
   {
     id: "wait_or_accelerate",
@@ -468,7 +468,7 @@ export const NOT_ACCEPTABLE_CLAIMS = [
     items: [
       "Monthly insurance premiums as the claim itself",
       "TCE Expense Advantage membership or $125 Early Activation fees",
-      "Pocket Booster, FR2P, or FARSUP program fees",
+      "Pocket Booster, The FR2P Club, or FARSUP program fees",
     ],
   },
 ] as const;

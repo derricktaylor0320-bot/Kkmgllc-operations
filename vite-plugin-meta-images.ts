@@ -4,7 +4,7 @@ import path from 'path';
 
 /**
  * Vite plugin that updates og:image / twitter:image (and og:url when present)
- * to absolute URLs on the public site origin (APP_URL, custom domain, or Replit).
+ * to absolute URLs on the public site origin (APP_URL or custom domain).
  */
 export function metaImagesPlugin(): Plugin {
   return {

@@ -143,7 +143,7 @@ export const SITE_LINKS: SiteLink[] = [
   {
     href: "/fr2p",
     label: "The FR2P Club",
-    compactLabel: "FR2P Club",
+    compactLabel: "The FR2P Club",
     category: "programs",
   },
   {

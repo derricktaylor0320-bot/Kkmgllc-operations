@@ -2,8 +2,7 @@
 //
 // Resolves a Resend API key from (in order):
 //   1. RESEND_API_KEY env var (works anywhere: Railway, local, etc.)
-//   2. The Replit "resend" connector (when running on Replit with the
-//      integration connected)
+//   2. A hosted connector env when present (legacy deployments)
 // If no key is available we fall back to logging the message to the server
 // console so the flow still works end-to-end in development/testing.
 //
@@ -23,7 +22,7 @@ async function getResendApiKey(): Promise<string | null> {
     return process.env.RESEND_API_KEY;
   }
 
-  // Fall back to the Replit Resend connector when running on Replit.
+  // Fall back to a hosted connector when connector env vars are present.
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
   const xReplitToken = process.env.REPL_IDENTITY
     ? "repl " + process.env.REPL_IDENTITY

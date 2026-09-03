@@ -56,7 +56,7 @@ import {
 // `_raw_data` jsonb, so all writes go through `_raw_data`.
 //
 // Two environments:
-//  - Replit dev: Stripe sync is live. seedProducts() creates/updates products in
+//  - Local dev: seedProducts() creates/updates products in
 //    Stripe (synced to the DB). We still need to add tumbler logo metadata +
 //    force any leftover tumbler price. Direct `_raw_data` edits survive the
 //    incremental sync because they don't change anything in Stripe (so Stripe

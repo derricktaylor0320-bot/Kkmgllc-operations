@@ -7,11 +7,11 @@ import { sql } from "drizzle-orm";
 const { Pool } = pg;
 
 function getDatabaseUrl(): string {
-  // For Replit production deployments, check /tmp/replitdb first
+  // Legacy snapshot deployments may provide /tmp/replitdb.
   try {
-    const replitDbPath = "/tmp/replitdb";
-    if (fs.existsSync(replitDbPath)) {
-      const url = fs.readFileSync(replitDbPath, "utf-8").trim();
+    const snapshotDbPath = "/tmp/replitdb";
+    if (fs.existsSync(snapshotDbPath)) {
+      const url = fs.readFileSync(snapshotDbPath, "utf-8").trim();
       if (url) {
         console.log("Using database URL from /tmp/replitdb");
         return url;
@@ -34,7 +34,7 @@ function getDatabaseUrl(): string {
 
 // Decide whether to use SSL based on the connection target.
 // Internal/local hosts (Railway private network, localhost) don't use SSL;
-// hosted providers (Neon, Replit, Railway public proxy) require it.
+// hosted providers (Neon, Railway public proxy) require it.
 function shouldUseSSL(url: string): boolean {
   if (/sslmode=disable/.test(url)) return false;
   try {
@@ -139,7 +139,7 @@ export async function ensureTablesExist() {
     `);
 
     // Media gallery items (singing video clips + audio projects). Created here
-    // so the table exists on both Replit dev and the Railway prod snapshot
+    // so the table exists in local dev and the Railway prod snapshot
     // (which has no migration step).
     await db.execute(sql`
       CREATE TABLE IF NOT EXISTS media_items (

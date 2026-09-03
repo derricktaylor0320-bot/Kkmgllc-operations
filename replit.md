@@ -51,7 +51,7 @@ Preferred communication style: Simple, everyday language.
 - Apparel/Accessories: Product listing pages filtered by type
 - Canvas: Brand logo and badge showcase gallery
 - Studio: Coming soon placeholder for recording studio
-- FR2P/GuardConnect: Embedded iframes to external Replit apps
+- FR2P/GuardConnect: Embedded iframes to external partner apps
 - Checkout Success/Cancel: Post-payment confirmation pages
 
 ### Backend Architecture
@@ -60,7 +60,7 @@ Preferred communication style: Simple, everyday language.
 - **Runtime:** Node.js with TypeScript (compiled via esbuild)
 - **Framework:** Express.js
 - **Database ORM:** Drizzle ORM with Neon serverless PostgreSQL
-- **Payment Processing:** Stripe with stripe-replit-sync for webhook management
+- **Payment Processing:** Stripe with catalog schema sync for webhook management
 - **Session Management:** Express-session with connect-pg-simple store
 
 **API Design:**
@@ -76,13 +76,13 @@ The application uses two database schemas:
 1. **Application Schema (public):**
    - `products` table with fields: id, title, price, category, description, imageUrl, productType
 
-2. **Stripe Schema (managed by stripe-replit-sync):**
+2. **Stripe Schema (catalog sync library):**
    - Automatically synced tables for Stripe resources (products, prices, customers, etc.)
    - Webhook tracking and event processing
 
 **Data Flow:**
 - Products are managed in Stripe as the source of truth
-- stripe-replit-sync automatically mirrors Stripe data to PostgreSQL
+- Catalog sync library automatically mirrors Stripe data to PostgreSQL
 - Frontend queries joined product+price data via custom storage layer
 - Checkout sessions redirect to Stripe Checkout, then return to success/cancel pages
 
@@ -114,7 +114,7 @@ The application uses two database schemas:
 
 **Current Implementation:**
 - Shared hub sign-in (single sign-in across the whole hub site)
-- Self-contained, host-agnostic session auth (no Replit Auth coupling) so it runs on Replit, Railway, or anywhere
+- Self-contained, host-agnostic session auth so it runs on Railway or anywhere
 - Email/password accounts with scrypt-hashed passwords (Node crypto), passport-local strategy
 - Auth endpoints under `/api/auth` (register, login, logout, user); `server/auth.ts` holds setup + a `requireAuth` middleware
 - Public e-commerce storefront still works without login; Stripe handles payment security and PCI compliance
@@ -124,7 +124,7 @@ The application uses two database schemas:
 - 30-day rolling cookie; secret from `SESSION_SECRET` env (dev fallback present — set in production)
 
 **Cross-app note:**
-- The embedded apps (Pocket Booster, Prospect Identity, FR2P Club, GuardConnect) are separate Replit deployments and cannot share this session. The hub shows clear login status on each embedded-app page (EmbedAuthBanner), but true SSO into those apps requires them to adopt a shared auth provider.
+- The embedded apps (Pocket Booster, Prospect Identity, The FR2P Club, GuardConnect) are separate deployments and cannot share this session. The hub shows clear login status on each embedded-app page (EmbedAuthBanner), but true SSO into those apps requires them to adopt a shared auth provider.
 
 **Frontend auth:**
 - `client/src/hooks/useAuth.ts` (TanStack Query against `/api/auth/user`)
@@ -134,9 +134,8 @@ The application uses two database schemas:
 
 **Payment Processing:**
 - **Stripe:** Payment gateway and product catalog
-  - Uses Replit Connectors for credential management
   - Environment-based configuration (development vs. production)
-  - stripe-replit-sync library for automatic data synchronization
+  - Catalog schema migration library for automatic data synchronization
   - Managed webhooks for event processing
 
 **Database Services:**
@@ -144,18 +143,10 @@ The application uses two database schemas:
   - WebSocket connections for serverless compatibility
   - Connection pooling via @neondatabase/serverless
 
-**Replit Platform Integration:**
-- **Connectors API:** Fetches Stripe credentials dynamically
-- **Environment Detection:** Differentiates between dev and production deployments
-- **Vite Plugins:**
-  - `@replit/vite-plugin-runtime-error-modal`: Development error overlay
-  - `@replit/vite-plugin-cartographer`: Code navigation
-  - `@replit/vite-plugin-dev-banner`: Development mode indicator
-  - Custom `metaImagesPlugin`: Updates OpenGraph meta tags for Replit domains
-
 **Embedded Applications:**
-- FR2P Club: External Replit app embedded via iframe
-- GuardConnect: External Replit app embedded via iframe
+- The FR2P Club: External app embedded via iframe
+- GuardConnect: External app embedded via iframe
+- FR2P Fuel Rewards: Hub-embedded fuel perks sub-brand at `/fuel-perks`
 
 **Third-Party Libraries:**
 - **UI Components:** Radix UI primitives (@radix-ui/*)
