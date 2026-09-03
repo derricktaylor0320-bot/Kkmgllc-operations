@@ -15,6 +15,7 @@ import { setupAuth, requireAuth, requireOwner, toPublicUser } from "./auth";
 import { registerPocketBoosterRoutes } from "./pocketBooster";
 import { registerLiquidityRoutes } from "./liquidityRouter";
 import { registerExpenseReliefRoutes } from "./expenseRelief";
+import { registerFuelPerksRoutes } from "./fuelPerks";
 import { PROGRAM_PATHWAY, PROGRAM_STAGES } from "@shared/programStages";
 import { checkCustomization, customizationErrorMessage, isDefaultLogoCustomizable, apparelSizesFor, scentsFor, FULL_LOGO_CATALOG_OPTION, placementSurchargeDollars } from "@shared/customization";
 import {
@@ -217,6 +218,9 @@ export async function registerRoutes(
 
   // Consolidated Expense Relief — one Premier plan, OOP claim compensation vault
   registerExpenseReliefRoutes(app);
+
+  // FR2P Fuel Rewards — tiered community fuel pool ($10–$60/mo)
+  registerFuelPerksRoutes(app);
 
   // P2P Liquidity Loop — bridge investor capital into Pocket Booster vault + yield
   registerLiquidityRoutes(app);

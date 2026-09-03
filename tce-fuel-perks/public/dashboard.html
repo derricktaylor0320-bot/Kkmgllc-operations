@@ -30,7 +30,7 @@
                 <p id="memberName">Loading member details...</p>
             </div>
             <div>
-                <span style="background: rgba(212,175,55,0.2); color: var(--accent); padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;" id="memberTier">Active ($29.99/mo)</span>
+                <span style="background: rgba(212,175,55,0.2); color: var(--accent); padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;" id="memberTier">Active</span>
             </div>
         </div>
 
@@ -65,7 +65,8 @@
             .then(res => res.json())
             .then(data => {
                 document.getElementById('memberName').innerText = `${data.name} | ID: ${data.memberId}`;
-                document.getElementById('memberTier').innerText = data.tier;
+                const savings = data.centsPerGallon ? ` · ${data.centsPerGallon}¢/gal` : '';
+                document.getElementById('memberTier').innerText = `${data.tier}${savings}`;
                 document.getElementById('affLink').value = data.affiliateLink;
                 document.getElementById('qrImage').src = data.qrCodeApiUrl;
             })

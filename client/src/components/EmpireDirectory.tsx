@@ -4,6 +4,7 @@ import { SITE_LINKS } from "@/lib/siteNavigation";
 import {
   BedDouble,
   Beef,
+  Fuel,
   Feather,
   Heart,
   HeartPulse,
@@ -137,6 +138,13 @@ const DIRECTORY_ITEMS: DirectoryItem[] = [
     title: "Empire Invest",
     description: "Explore Empire programs, opportunities, and investor resources.",
     Icon: Landmark,
+  },
+  {
+    href: "/fuel-perks",
+    title: "FR2P Fuel Rewards",
+    description:
+      "Four budget-friendly fuel tiers ($10–$60/mo) with community pool savings and QR magnets.",
+    Icon: Fuel,
   },
 ];
 

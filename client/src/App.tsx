@@ -19,6 +19,7 @@ import Bedding from "@/pages/Bedding";
 import Elements from "@/pages/Elements";
 import PocketBooster from "@/pages/PocketBooster";
 import ExpenseRelief from "@/pages/ExpenseRelief";
+import FuelPerks from "@/pages/FuelPerks";
 import Invest from "@/pages/Invest";
 import Hub from "@/pages/Hub";
 import CheckoutSuccess from "@/pages/CheckoutSuccess";
@@ -62,6 +63,7 @@ function Router() {
       </Route>
       <Route path="/pocket-booster" component={PocketBooster} />
       <Route path="/expense-relief" component={ExpenseRelief} />
+      <Route path="/fuel-perks" component={FuelPerks} />
       <Route path="/out-of-pocket-booster" component={ExpenseRelief} />
       <Route path="/consolidated-expense-relief" component={ExpenseRelief} />
       <Route path="/invest" component={Invest} />
