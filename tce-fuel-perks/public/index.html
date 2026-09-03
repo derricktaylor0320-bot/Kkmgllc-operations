@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FR2P Fuel Rewards | The FR2P Club</title>
+    <style>
+        :root { --primary: #0A192F; --accent: #D4AF37; --light: #F8F9FA; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--primary); color: white; }
+        header { padding: 2rem; text-align: center; border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
+        h1 { color: var(--accent); margin-bottom: 0.5rem; }
+        .hero { max-width: 800px; margin: 3rem auto; padding: 2rem; text-align: center; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(212,175,55,0.2); }
+        .price-tag { font-size: 2.5rem; color: var(--accent); font-weight: bold; margin: 1.5rem 0; }
+        .btn { background: var(--accent); color: var(--primary); padding: 1rem 2rem; font-size: 1.2rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
+        .btn:hover { background: #f3c644; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 3rem auto; padding: 0 1rem; }
+        .card { background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FR2P Fuel Rewards</h1>
+        <p>A Standalone Initiative Powered by The Consolidatus Empire LLC &amp; The FR2P Club</p>
+    </header>
+
+    <div class="hero">
+        <h2>Stop Letting High Gas Prices Drain Your Wallet</h2>
+        <p>Leverage community buying power and turn your everyday commute into cash-back savings and residual affiliate income.</p>
+        <div class="price-tag">$29.99<span style="font-size:1rem; color:white;">/month recurring</span></div>
+        <button class="btn" onclick="openSignupModal()">Join The Exclusive Circle</button>
+    </div>
+
+    <div class="features">
+        <div class="card">
+            <h3>⛽ Community Fuel Pool</h3>
+            <p>Direct subsidies and cash-back rewards engineered to offset rising pump prices automatically.</p>
+        </div>
+        <div class="card">
+            <h3>🧲 QR Car &amp; Station Magnets</h3>
+            <p>Deploy physical magnets at local stations or your vehicle to capture scans and build your downline effortlessly.</p>
+        </div>
+        <div class="card">
+            <h3>💼 Digital Business Suite</h3>
+            <p>Get your own standalone back-office, automated QR code generator, and digital business cards instantly.</p>
+        </div>
+    </div>
+
+    <script>
+        function openSignupModal() {
+            const email = prompt("Enter your email address to join The FR2P Club Fuel Program ($29.99/mo):");
+            if (!email) return;
+            const name = prompt("Enter your full name:");
+
+            fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    alert(`Welcome! Your Member ID is: ${data.data.memberId}\nRedirecting to your back office...`);
+                    window.location.href = `/dashboard.html?id=${data.data.memberId}`;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(err => console.error(err));
+        }
+    </script>
+</body>
+</html>
