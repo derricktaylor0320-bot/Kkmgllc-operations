@@ -41,6 +41,7 @@ export default function Footer() {
               <li><Link href="/pocket-booster" className="hover:text-primary transition-colors">Pocket Booster</Link></li>
               <li><Link href="/expense-relief" className="hover:text-primary transition-colors">TCE Expense Advantage</Link></li>
               <li><Link href="/fr2p" className="hover:text-primary transition-colors">The FR2P Club</Link></li>
+              <li><Link href="/fuel-perks" className="hover:text-primary transition-colors">FR2P Fuel Rewards</Link></li>
               <li><Link href="/invest" className="hover:text-primary transition-colors">Empire Invest</Link></li>
             </ul>
           </div>

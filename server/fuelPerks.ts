@@ -1,0 +1,69 @@
+import express, { type Express, type Router } from "express";
+import path from "path";
+
+const membersDB = new Map<string, Record<string, string>>();
+
+function createFuelPerksRouter(): Router {
+  const router = express.Router();
+  const publicDir = path.resolve(process.cwd(), "tce-fuel-perks", "public");
+
+  router.use(express.json());
+
+  router.post("/api/subscribe", (req, res) => {
+    const { name, email, phone } = req.body ?? {};
+    if (!email) return res.status(400).json({ error: "Email is required." });
+
+    const memberId =
+      "FR2P-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    const affiliateLink = `https://tceholdings.org/fuel/ref?code=${memberId}`;
+
+    const newMember = {
+      memberId,
+      name: name || "Valued Member",
+      email,
+      phone: phone || "",
+      tier: "Standard Fuel Member ($29.99/mo)",
+      status: "Active",
+      joinedDate: new Date().toISOString(),
+      affiliateLink,
+      qrCodeApiUrl: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(affiliateLink)}`,
+    };
+
+    membersDB.set(memberId, newMember);
+    res.json({
+      success: true,
+      message: "Successfully enrolled in The FR2P Club Fuel Program!",
+      data: newMember,
+    });
+  });
+
+  router.get("/api/member/:id", (req, res) => {
+    const member = membersDB.get(req.params.id);
+    if (!member) {
+      return res.json({
+        memberId: req.params.id,
+        name: "Derrick Taylor",
+        tier: "Standard Fuel Member ($29.99/mo)",
+        affiliateLink: `https://tceholdings.org/fuel/ref?code=${req.params.id}`,
+        qrCodeApiUrl: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://tceholdings.org/fuel/ref?code=${req.params.id}`,
+      });
+    }
+    res.json(member);
+  });
+
+  router.use(express.static(publicDir));
+
+  return router;
+}
+
+export function registerFuelPerksRoutes(app: Express) {
+  app.use("/fuel-perks/embed", createFuelPerksRouter());
+
+  app.get("/fuel/ref", (req, res) => {
+    const code = typeof req.query.code === "string" ? req.query.code : "";
+    const target = code
+      ? `/fuel-perks?ref=${encodeURIComponent(code)}`
+      : "/fuel-perks";
+    res.redirect(302, target);
+  });
+}

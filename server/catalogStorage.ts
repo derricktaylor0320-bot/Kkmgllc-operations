@@ -5,7 +5,7 @@ import { db } from "./db";
 //
 // The catalog rows physically live in the `stripe.products` / `stripe.prices`
 // tables. That schema name is only an artifact of the migration helper that
-// creates the tables (`runMigrations` from `stripe-replit-sync`, used purely as
+// creates the tables (`runMigrations` from the catalog sync library, used purely as
 // local storage) — there is NO live Stripe integration and no Stripe account is
 // ever contacted. The catalog is populated by `ensureCatalogData()` and
 // payments run entirely through Square. This accessor just reads that local

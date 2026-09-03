@@ -1,7 +1,7 @@
 # Cross-App SSO — Integration Guide for Embedded Apps
 
 The hub (Consolidatus Empire) owns the login. Embedded apps (Pocket Booster,
-Prospect Identity, FR2P Club) are separate deployments and cannot
+Prospect Identity, The FR2P Club) are separate deployments and cannot
 read the hub's session cookie. To "log in once and have it carry into all the
 apps", the hub hands each app a short-lived **signed handoff token** that the app
 exchanges for the hub identity, then uses to bootstrap its own session.

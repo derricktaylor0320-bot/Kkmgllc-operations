@@ -35,9 +35,9 @@
         </div>
 
         <div class="nav-links">
-            <a href="/dashboard.html">🏠 Dashboard</a>
-            <a href="/assets.html">🧲 Marketing Assets &amp; Magnet Templates</a>
-            <a href="/">🚪 Exit Portal</a>
+            <a href="dashboard.html">🏠 Dashboard</a>
+            <a href="assets.html">🧲 Marketing Assets &amp; Magnet Templates</a>
+            <a href="./">🚪 Exit Portal</a>
         </div>
 
         <div class="grid">
@@ -61,7 +61,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const memberId = urlParams.get('id') || 'DEMO-01';
 
-        fetch(`/api/member/${memberId}`)
+        fetch(`api/member/${memberId}`)
             .then(res => res.json())
             .then(data => {
                 document.getElementById('memberName').innerText = `${data.name} | ID: ${data.memberId}`;

@@ -46,7 +46,7 @@ export default function CompassNavigation({
               ? "group h-auto min-h-10 max-w-[min(100%,20rem)] flex-col gap-0.5 border-primary/70 bg-primary/15 px-3 py-1.5 text-primary shadow-[0_0_22px_hsl(var(--primary)/0.22)] hover:bg-primary hover:text-primary-foreground sm:px-4 sm:py-2"
               : "h-10 border-primary/60 bg-primary/10 px-3 text-primary shadow-[0_0_18px_hsl(var(--primary)/0.16)] hover:bg-primary hover:text-primary-foreground"
           }
-          aria-label="Open the Empire site directory — all 21 numbered destinations"
+          aria-label={`Open the Empire site directory — all ${SITE_LINKS.length} numbered destinations`}
           data-testid="button-compass-navigation"
         >
           <span className="flex items-center gap-2">

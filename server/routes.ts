@@ -15,6 +15,7 @@ import { setupAuth, requireAuth, requireOwner, toPublicUser } from "./auth";
 import { registerPocketBoosterRoutes } from "./pocketBooster";
 import { registerLiquidityRoutes } from "./liquidityRouter";
 import { registerExpenseReliefRoutes } from "./expenseRelief";
+import { registerFuelPerksRoutes } from "./fuelPerks";
 import { PROGRAM_PATHWAY, PROGRAM_STAGES } from "@shared/programStages";
 import { checkCustomization, customizationErrorMessage, isDefaultLogoCustomizable, apparelSizesFor, scentsFor, FULL_LOGO_CATALOG_OPTION, placementSurchargeDollars } from "@shared/customization";
 import {
@@ -220,6 +221,9 @@ export async function registerRoutes(
 
   // P2P Liquidity Loop — bridge investor capital into Pocket Booster vault + yield
   registerLiquidityRoutes(app);
+
+  // FR2P Fuel Rewards — standalone sub-brand (static embed + member API)
+  registerFuelPerksRoutes(app);
 
   // Empire Pathway — S1–S8 Financial Roadway program stage definitions
   app.get("/api/program-stages", (_req, res) => {
