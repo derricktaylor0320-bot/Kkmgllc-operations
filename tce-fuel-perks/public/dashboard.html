@@ -1,148 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Member Dashboard — TCE Fuel Perks</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/app.css" />
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  </head>
-  <body>
-    <div id="auth-banner" class="status-banner signed-out">Loading session…</div>
-
-    <header class="site-header">
-      <div class="container inner">
-        <a href="/" class="brand">
-          <div class="brand-mark">FP</div>
-          <div>
-            <h1>Member Dashboard</h1>
-            <p>TCE Fuel Perks Back Office</p>
-          </div>
-        </a>
-        <nav class="nav">
-          <a href="/">Home</a>
-          <a href="/dashboard.html" class="active">Dashboard</a>
-          <a href="/assets.html">Assets</a>
-        </nav>
-      </div>
-    </header>
-
-    <main class="container section">
-      <div id="guest-panel" class="card hidden">
-        <h3>Sign in to unlock your dashboard</h3>
-        <p style="color: var(--muted)">
-          Fuel Perks syncs with your Consolidatus Empire hub account. Sign in at the hub, then return here — or complete a plan on the landing page in demo mode.
-        </p>
-        <a class="btn btn-primary" href="https://tceholdings.org/auth">Sign in at TCE Hub</a>
-        <a class="btn" href="/" style="margin-left: 0.5rem">View Plans</a>
-      </div>
-
-      <div id="member-panel" class="hidden">
-        <div class="dashboard-grid">
-          <section class="card">
-            <h3>Account Overview</h3>
-            <p style="color: var(--muted); font-size: 0.9rem">Member ID: <span id="member-id">—</span></p>
-            <p>Tier: <span id="member-tier" class="badge">—</span></p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem">
-              <div>
-                <div class="stat" id="stat-gallons">0</div>
-                <div style="font-size: 0.8rem; color: var(--muted); text-transform: uppercase">Gallons tracked</div>
-              </div>
-              <div>
-                <div class="stat" id="stat-perks">$0.00</div>
-                <div style="font-size: 0.8rem; color: var(--muted); text-transform: uppercase">Perks balance</div>
-              </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Back Office | FR2P Fuel Rewards</title>
+    <style>
+        :root { --primary: #0A192F; --accent: #D4AF37; --light: #F8F9FA; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--primary); color: white; padding: 2rem; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header-box { background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 12px; border: 1px solid rgba(212,175,55,0.3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        h1 { color: var(--accent); margin: 0; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+        @media(max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+        .panel { background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        input, button { width: 100%; padding: 0.8rem; margin-top: 0.5rem; border-radius: 4px; border: none; font-size: 1rem; box-sizing: border-box; }
+        input { background: rgba(255,255,255,0.1); color: white; }
+        .btn-action { background: var(--accent); color: var(--primary); font-weight: bold; cursor: pointer; }
+        .qr-box { text-align: center; }
+        .qr-box img { max-width: 200px; background: white; padding: 10px; border-radius: 8px; margin-top: 1rem; }
+        .nav-links { margin-top: 1.5rem; }
+        .nav-links a { color: var(--accent); text-decoration: none; margin-right: 1.5rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-box">
+            <div>
+                <h1>Back Office Dashboard</h1>
+                <p id="memberName">Loading member details...</p>
             </div>
-          </section>
-
-          <section class="card">
-            <h3>Referral Program</h3>
-            <p style="color: var(--muted); font-size: 0.9rem">Share your code to grow your fleet rewards.</p>
-            <p>Code: <strong id="referral-code">—</strong></p>
-            <p style="word-break: break-all; font-size: 0.85rem; color: var(--muted)" id="referral-link">—</p>
-          </section>
+            <div>
+                <span style="background: rgba(212,175,55,0.2); color: var(--accent); padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;" id="memberTier">Active ($29.99/mo)</span>
+            </div>
         </div>
 
-        <section class="card" style="margin-top: 1.5rem">
-          <h3>Member QR Code</h3>
-          <p style="color: var(--muted); font-size: 0.9rem">
-            Show this code at partner pumps to apply your per-gallon discount.
-          </p>
-          <div class="qr-wrap">
-            <canvas id="member-qr"></canvas>
-            <button class="btn" type="button" id="download-qr">Download QR PNG</button>
-          </div>
-        </section>
-      </div>
-    </main>
+        <div class="nav-links">
+            <a href="/dashboard.html">🏠 Dashboard</a>
+            <a href="/assets.html">🧲 Marketing Assets &amp; Magnet Templates</a>
+            <a href="/">🚪 Exit Portal</a>
+        </div>
 
-    <footer class="site-footer">
-      <div class="container">
-        <p>&copy; The Consolidatus Empire LLC · TCE Fuel Perks</p>
-      </div>
-    </footer>
+        <div class="grid">
+            <div class="panel">
+                <h3>🔗 Your Affiliate &amp; QR Link</h3>
+                <p>Share this link or deploy your car/station magnets to build your downline inside The FR2P Club.</p>
+                <label>Your Tracking Link:</label>
+                <input type="text" id="affLink" readonly>
+                <button class="btn-action" onclick="copyLink()" style="margin-top:1rem;">Copy Affiliate Link</button>
+            </div>
 
-    <script src="/js/app.js"></script>
+            <div class="panel qr-box">
+                <h3>🧲 Dynamic QR Code</h3>
+                <p>Scan to test your direct funnel routing:</p>
+                <img id="qrImage" src="" alt="Dynamic QR Code">
+            </div>
+        </div>
+    </div>
+
     <script>
-      function renderDashboard(member) {
-        if (!member) {
-          document.getElementById("guest-panel").classList.remove("hidden");
-          document.getElementById("member-panel").classList.add("hidden");
-          return;
+        const urlParams = new URLSearchParams(window.location.search);
+        const memberId = urlParams.get('id') || 'DEMO-01';
+
+        fetch(`/api/member/${memberId}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('memberName').innerText = `${data.name} | ID: ${data.memberId}`;
+                document.getElementById('memberTier').innerText = data.tier;
+                document.getElementById('affLink').value = data.affiliateLink;
+                document.getElementById('qrImage').src = data.qrCodeApiUrl;
+            })
+            .catch(err => console.error(err));
+
+        function copyLink() {
+            const copyText = document.getElementById("affLink");
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert("Copied affiliate link to clipboard!");
         }
-
-        document.getElementById("guest-panel").classList.add("hidden");
-        document.getElementById("member-panel").classList.remove("hidden");
-
-        document.getElementById("member-id").textContent = member.id;
-        document.getElementById("member-tier").textContent = member.tier;
-        document.getElementById("stat-gallons").textContent = member.gallonsSaved ?? 0;
-        document.getElementById("stat-perks").textContent = `$${((member.perksBalance ?? 0) / 100).toFixed(2)}`;
-        document.getElementById("referral-code").textContent = member.referralCode;
-
-        const link = FuelPerks.referralUrl(member.referralCode);
-        document.getElementById("referral-link").textContent = link;
-
-        const qrPayload = JSON.stringify({
-          type: "tce-fuel-perks",
-          memberId: member.id,
-          referralCode: member.referralCode,
-          tier: member.tier,
-        });
-
-        FuelPerks.renderQr("member-qr", qrPayload);
-
-        document.getElementById("download-qr").onclick = () => {
-          FuelPerks.downloadCanvas("member-qr", `fuel-perks-${member.id}.png`);
-        };
-      }
-
-      document.addEventListener("DOMContentLoaded", async () => {
-        await FuelPerks.adoptHubIdentity();
-        FuelPerks.updateAuthBanner();
-
-        let member = FuelPerks.member;
-        const tier = new URLSearchParams(location.search).get("tier");
-        if (!member && tier) {
-          member = {
-            id: "FP-DEMO",
-            displayName: "Demo Member",
-            tier,
-            referralCode: "DEMO01",
-            gallonsSaved: 0,
-            perksBalance: 0,
-          };
-          sessionStorage.setItem("fuelPerksMember", JSON.stringify(member));
-        }
-
-        renderDashboard(member || FuelPerks.member);
-      });
     </script>
-  </body>
+</body>
 </html>
