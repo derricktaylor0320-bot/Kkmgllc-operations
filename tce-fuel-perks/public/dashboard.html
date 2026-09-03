@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Member Dashboard — TCE Fuel Perks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/app.css" />
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  </head>
+  <body>
+    <div id="auth-banner" class="status-banner signed-out">Loading session…</div>
+
+    <header class="site-header">
+      <div class="container inner">
+        <a href="/" class="brand">
+          <div class="brand-mark">FP</div>
+          <div>
+            <h1>Member Dashboard</h1>
+            <p>TCE Fuel Perks Back Office</p>
+          </div>
+        </a>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/dashboard.html" class="active">Dashboard</a>
+          <a href="/assets.html">Assets</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container section">
+      <div id="guest-panel" class="card hidden">
+        <h3>Sign in to unlock your dashboard</h3>
+        <p style="color: var(--muted)">
+          Fuel Perks syncs with your Consolidatus Empire hub account. Sign in at the hub, then return here — or complete a plan on the landing page in demo mode.
+        </p>
+        <a class="btn btn-primary" href="https://tceholdings.org/auth">Sign in at TCE Hub</a>
+        <a class="btn" href="/" style="margin-left: 0.5rem">View Plans</a>
+      </div>
+
+      <div id="member-panel" class="hidden">
+        <div class="dashboard-grid">
+          <section class="card">
+            <h3>Account Overview</h3>
+            <p style="color: var(--muted); font-size: 0.9rem">Member ID: <span id="member-id">—</span></p>
+            <p>Tier: <span id="member-tier" class="badge">—</span></p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem">
+              <div>
+                <div class="stat" id="stat-gallons">0</div>
+                <div style="font-size: 0.8rem; color: var(--muted); text-transform: uppercase">Gallons tracked</div>
+              </div>
+              <div>
+                <div class="stat" id="stat-perks">$0.00</div>
+                <div style="font-size: 0.8rem; color: var(--muted); text-transform: uppercase">Perks balance</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h3>Referral Program</h3>
+            <p style="color: var(--muted); font-size: 0.9rem">Share your code to grow your fleet rewards.</p>
+            <p>Code: <strong id="referral-code">—</strong></p>
+            <p style="word-break: break-all; font-size: 0.85rem; color: var(--muted)" id="referral-link">—</p>
+          </section>
+        </div>
+
+        <section class="card" style="margin-top: 1.5rem">
+          <h3>Member QR Code</h3>
+          <p style="color: var(--muted); font-size: 0.9rem">
+            Show this code at partner pumps to apply your per-gallon discount.
+          </p>
+          <div class="qr-wrap">
+            <canvas id="member-qr"></canvas>
+            <button class="btn" type="button" id="download-qr">Download QR PNG</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; The Consolidatus Empire LLC · TCE Fuel Perks</p>
+      </div>
+    </footer>
+
+    <script src="/js/app.js"></script>
+    <script>
+      function renderDashboard(member) {
+        if (!member) {
+          document.getElementById("guest-panel").classList.remove("hidden");
+          document.getElementById("member-panel").classList.add("hidden");
+          return;
+        }
+
+        document.getElementById("guest-panel").classList.add("hidden");
+        document.getElementById("member-panel").classList.remove("hidden");
+
+        document.getElementById("member-id").textContent = member.id;
+        document.getElementById("member-tier").textContent = member.tier;
+        document.getElementById("stat-gallons").textContent = member.gallonsSaved ?? 0;
+        document.getElementById("stat-perks").textContent = `$${((member.perksBalance ?? 0) / 100).toFixed(2)}`;
+        document.getElementById("referral-code").textContent = member.referralCode;
+
+        const link = FuelPerks.referralUrl(member.referralCode);
+        document.getElementById("referral-link").textContent = link;
+
+        const qrPayload = JSON.stringify({
+          type: "tce-fuel-perks",
+          memberId: member.id,
+          referralCode: member.referralCode,
+          tier: member.tier,
+        });
+
+        FuelPerks.renderQr("member-qr", qrPayload);
+
+        document.getElementById("download-qr").onclick = () => {
+          FuelPerks.downloadCanvas("member-qr", `fuel-perks-${member.id}.png`);
+        };
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await FuelPerks.adoptHubIdentity();
+        FuelPerks.updateAuthBanner();
+
+        let member = FuelPerks.member;
+        const tier = new URLSearchParams(location.search).get("tier");
+        if (!member && tier) {
+          member = {
+            id: "FP-DEMO",
+            displayName: "Demo Member",
+            tier,
+            referralCode: "DEMO01",
+            gallonsSaved: 0,
+            perksBalance: 0,
+          };
+          sessionStorage.setItem("fuelPerksMember", JSON.stringify(member));
+        }
+
+        renderDashboard(member || FuelPerks.member);
+      });
+    </script>
+  </body>
+</html>

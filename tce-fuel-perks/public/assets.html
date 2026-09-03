@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketing Assets — TCE Fuel Perks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/app.css" />
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  </head>
+  <body>
+    <div id="auth-banner" class="status-banner signed-out">Loading session…</div>
+
+    <header class="site-header">
+      <div class="container inner">
+        <a href="/" class="brand">
+          <div class="brand-mark">FP</div>
+          <div>
+            <h1>Marketing Toolkit</h1>
+            <p>Assets &amp; Vehicle Magnets</p>
+          </div>
+        </a>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/assets.html" class="active">Assets</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container section">
+      <p style="text-align: center; color: var(--muted); max-width: 640px; margin: 0 auto 2rem">
+        Download branded creatives and generate vehicle magnet previews with your referral QR.
+        Empire Elite members get print-ready files for local sign shops.
+      </p>
+
+      <div class="asset-grid">
+        <article class="card">
+          <div class="asset-preview">
+            <div>
+              <div class="brand-mark" style="margin: 0 auto 0.75rem">FP</div>
+              <strong style="font-family: var(--font-display); text-transform: uppercase">Save at the Pump</strong>
+            </div>
+          </div>
+          <h3>Social Banner</h3>
+          <p style="color: var(--muted); font-size: 0.9rem">1200×630 share image — burgundy &amp; gold TCE branding.</p>
+          <button class="btn" type="button" onclick="alert('Connect Canva or upload final PNG to /public/assets/ in production.')">
+            Download Banner
+          </button>
+        </article>
+
+        <article class="card">
+          <div class="asset-preview">
+            <div class="magnet-mock" id="magnet-preview">
+              TCE Fuel<br />Perks<br /><span id="magnet-code" style="font-size: 0.7rem; color: var(--gold)">REF</span>
+            </div>
+          </div>
+          <h3>Vehicle Magnet</h3>
+          <p style="color: var(--muted); font-size: 0.9rem">Round 7″ magnet mock with your referral code.</p>
+          <div class="form-group">
+            <label for="magnet-referral">Referral code</label>
+            <input id="magnet-referral" type="text" placeholder="ABC123" />
+          </div>
+          <button class="btn btn-primary" type="button" id="update-magnet">Update Preview</button>
+        </article>
+
+        <article class="card">
+          <div class="asset-preview">
+            <div class="qr-wrap" style="background: transparent; padding: 0">
+              <canvas id="asset-qr"></canvas>
+            </div>
+          </div>
+          <h3>Referral QR Sticker</h3>
+          <p style="color: var(--muted); font-size: 0.9rem">Square sticker layout for pumps, windows, and flyers.</p>
+          <button class="btn" type="button" id="download-asset-qr">Download QR</button>
+        </article>
+
+        <article class="card">
+          <div class="asset-preview" style="aspect-ratio: auto; min-height: 140px">
+            <p style="font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.08em">
+              "I save with TCE Fuel Perks — ask me how."
+            </p>
+          </div>
+          <h3>Elevator Pitch Card</h3>
+          <p style="color: var(--muted); font-size: 0.9rem">Copy block for texts, emails, and FR2P Club promos.</p>
+          <button class="btn" type="button" id="copy-pitch">Copy Pitch</button>
+        </article>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; The Consolidatus Empire LLC · TCE Fuel Perks Marketing Kit</p>
+      </div>
+    </footer>
+
+    <script src="/js/app.js"></script>
+    <script>
+      const pitch =
+        "I save at the pump with TCE Fuel Perks — a fuel rewards sub-brand under The Consolidatus Empire and The FR2P Club. Join with my link and we both stack fleet rewards.";
+
+      async function refreshAssetQr(code) {
+        const url = FuelPerks.referralUrl(code || "JOIN");
+        await FuelPerks.renderQr("asset-qr", url);
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await FuelPerks.adoptHubIdentity();
+        FuelPerks.updateAuthBanner();
+
+        const member = FuelPerks.member;
+        const code = member?.referralCode || "JOIN";
+        document.getElementById("magnet-referral").value = code;
+        document.getElementById("magnet-code").textContent = code;
+
+        await refreshAssetQr(code);
+
+        document.getElementById("update-magnet").onclick = async () => {
+          const val = document.getElementById("magnet-referral").value.trim() || "JOIN";
+          document.getElementById("magnet-code").textContent = val;
+          await refreshAssetQr(val);
+        };
+
+        document.getElementById("download-asset-qr").onclick = () => {
+          FuelPerks.downloadCanvas("asset-qr", "fuel-perks-referral-qr.png");
+        };
+
+        document.getElementById("copy-pitch").onclick = async () => {
+          const link = FuelPerks.referralUrl(document.getElementById("magnet-referral").value.trim() || code);
+          await navigator.clipboard.writeText(`${pitch} ${link}`);
+          alert("Pitch copied to clipboard.");
+        };
+      });
+    </script>
+  </body>
+</html>
