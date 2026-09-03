@@ -91,6 +91,7 @@ function RowLayoutGrid({
             className={cn(
               "grid list-none gap-2 p-0 m-0",
               rowCount === 6 && "grid-cols-2 sm:grid-cols-3 lg:grid-cols-6",
+              rowCount === 7 && "grid-cols-2 sm:grid-cols-4 lg:grid-cols-7",
               rowCount === 8 && "grid-cols-2 sm:grid-cols-4 lg:grid-cols-8",
             )}
           >

@@ -51,7 +51,7 @@
             if (!email) return;
             const name = prompt("Enter your full name:");
 
-            fetch('/api/subscribe', {
+            fetch('api/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email })
@@ -60,7 +60,7 @@
             .then(data => {
                 if(data.success) {
                     alert(`Welcome! Your Member ID is: ${data.data.memberId}\nRedirecting to your back office...`);
-                    window.location.href = `/dashboard.html?id=${data.data.memberId}`;
+                    window.location.href = `dashboard.html?id=${data.data.memberId}`;
                 } else {
                     alert('Error: ' + data.error);
                 }

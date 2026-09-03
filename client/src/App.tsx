@@ -39,6 +39,7 @@ import SsoDemo from "@/pages/SsoDemo";
 import Orders from "@/pages/Orders";
 import Profile from "@/pages/Profile";
 import FootballTeams from "@/pages/FootballTeams";
+import FuelPerks from "@/pages/FuelPerks";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
 
@@ -65,6 +66,7 @@ function Router() {
       <Route path="/out-of-pocket-booster" component={ExpenseRelief} />
       <Route path="/consolidated-expense-relief" component={ExpenseRelief} />
       <Route path="/invest" component={Invest} />
+      <Route path="/fuel-perks" component={FuelPerks} />
       <Route path="/apparel" component={Apparel} />
       <Route path="/football-teams" component={FootballTeams} />
       <Route path="/feminine" component={Feminine} />
